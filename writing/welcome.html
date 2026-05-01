@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Why I'm writing this down — Harsh Kumar Arya</title>
+  <meta name="description" content="Most operating playbooks live in their owner's head. Here's mine, getting out." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="writing.css" />
+</head>
+<body>
+
+  <nav class="nav" id="nav">
+    <div class="container nav-inner">
+      <a href="../" class="logo">Harsh<span>.</span></a>
+      <div class="nav-links">
+        <a href="../#about">About</a>
+        <a href="../#work">Work</a>
+        <a href="../#off">Life</a>
+        <a href="./">Notes</a>
+        <a href="../#contact">Contact</a>
+      </div>
+    </div>
+  </nav>
+
+  <article class="post container">
+    <header class="post-header">
+      <a href="./" class="post-back">← All notes</a>
+      <div class="post-meta">
+        <span class="post-date">May 2026</span>
+        <span class="post-dot">·</span>
+        <span class="post-tag">Intro</span>
+      </div>
+      <h1 class="post-title">Why I'm writing this down</h1>
+      <p class="post-description">Most operating playbooks live in their owner's head. Here's mine, getting out.</p>
+    </header>
+    <div class="post-body">
+      <p>A few years after the Josh Talks keynote — the one about turning ₹24,000 into a multi-crore agency — I noticed something uncomfortable.</p>
+      <p>The talk had millions of views. People wrote in saying the playbook was useful. And yet most of what I'd actually learned in those four years wasn't in the keynote. It lived as half-memories: the deal that almost killed us, the campaign that worked for reasons I couldn't fully explain, the hire I should have made six months earlier than I did.</p>
+      <p>That's how operating knowledge usually behaves. It accretes inside one person and stays there until they either retire, write it down, or repeat the same mistakes in their next company.</p>
+      <p>I've decided to write it down.</p>
+      <p>This page is a slow project to capture the things I think I've actually figured out — and a few I'm still confused about — across:</p>
+      <ul>
+        <li>Bootstrapping a marketing &amp; talent agency from a five-figure check to ₹15Cr in revenue.</li>
+        <li>Running a Founder's Office where I had to design the system I was operating inside of.</li>
+        <li>The mechanics of go-to-market in an emerging market when the playbooks you read on the internet were written for somewhere else.</li>
+        <li>Indian sports — what the next decade looks like and where the operator gaps are.</li>
+        <li>Smaller things: golf, design taste, the books that shifted how I think.</li>
+      </ul>
+      <p>I'm aiming for honest more than polished. Posts will be short when short is right and long when something genuinely needs unpacking. If a piece holds up six months from now I'll keep it; if it doesn't, I'll rewrite it.</p>
+      <p>If something here lands or doesn't, write to me — the email's at the bottom of every page.</p>
+      <p>— H.</p>
+    </div>
+    <footer class="post-footer">
+      <a href="./">← All notes</a>
+      <a href="../#contact">Get in touch →</a>
+    </footer>
+  </article>
+
+  <footer class="site-footer">
+    <div class="container">
+      <span>© <span id="year"></span> Harsh Kumar Arya</span>
+      <span>Built simply · Hosted on GitHub Pages</span>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+    const nav = document.getElementById("nav");
+    window.addEventListener("scroll", () => {
+      if (window.scrollY > 8) nav.classList.add("scrolled"); else nav.classList.remove("scrolled");
+    });
+  </script>
+</body>
+</html>

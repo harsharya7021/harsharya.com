@@ -4,455 +4,881 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Harsh Kumar Arya</title>
-  <meta name="description" content="Harsh Kumar Arya — strategy and growth operator. ISB '25, Founder of Ninety-Eight Entertainment (exited), Founder's Office at Intellewings." />
+  <meta name="description" content="Strategy, growth and storytelling. Harsh Kumar Arya — ISB '25, Georgia Tech research, Founder of Ninety-Eight Entertainment (exited), Founder's Office at Intellewings." />
+  <meta property="og:title" content="Harsh Kumar Arya" />
+  <meta property="og:description" content="Strategy, growth and storytelling. Founder, operator, ISB '25." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://harsharya.com/" />
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+
   <style>
     :root {
-      --bg: #fafaf7;
+      --bg: #f6f3eb;
+      --bg-elev: #ffffff;
       --text: #1a1a1a;
-      --muted: #6b6b6b;
-      --line: #e5e5e0;
+      --muted: #6b6358;
+      --line: #d6cfc1;
       --accent: #1a1a1a;
-      --accent-hover: #555;
-      --card-bg: #ffffff;
-      --tag-bg: #f0efe9;
+      --placeholder-bg: #ece5d3;
+      --placeholder-text: #98907f;
+      --tag-bg: rgba(26, 26, 26, 0.06);
+      --highlight: #b85c2c;
     }
 
     @media (prefers-color-scheme: dark) {
       :root {
         --bg: #14140f;
+        --bg-elev: #1c1c16;
         --text: #f0eee6;
-        --muted: #999488;
-        --line: #2a2a23;
+        --muted: #9a9485;
+        --line: #2c2c23;
         --accent: #f0eee6;
-        --accent-hover: #b8b4a8;
-        --card-bg: #1c1c16;
-        --tag-bg: #25251c;
+        --placeholder-bg: #2a2a21;
+        --placeholder-text: #6e6856;
+        --tag-bg: rgba(240, 238, 230, 0.06);
+        --highlight: #d68a5e;
       }
     }
 
-    * {
-      box-sizing: border-box;
-      margin: 0;
-      padding: 0;
-    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
 
-    html {
-      scroll-behavior: smooth;
-    }
+    html { scroll-behavior: smooth; }
 
     body {
-      font-family: -apple-system, BlinkMacSystemFont, "Inter", "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+      font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
       background: var(--bg);
       color: var(--text);
       line-height: 1.6;
-      font-size: 17px;
+      font-size: 16px;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
     }
 
     .container {
-      max-width: 720px;
+      max-width: 1120px;
       margin: 0 auto;
-      padding: 80px 28px 120px;
+      padding: 0 32px;
     }
 
-    header {
-      margin-bottom: 64px;
-    }
+    /* ─── NAV ───────────────────────────────────────────── */
 
-    .eyebrow {
-      font-size: 14px;
-      color: var(--muted);
-      letter-spacing: 0.04em;
-      text-transform: uppercase;
-      margin-bottom: 14px;
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: color-mix(in srgb, var(--bg) 88%, transparent);
+      backdrop-filter: saturate(160%) blur(12px);
+      -webkit-backdrop-filter: saturate(160%) blur(12px);
+      border-bottom: 1px solid transparent;
     }
+    .nav.scrolled { border-bottom-color: var(--line); }
 
-    h1 {
-      font-size: 42px;
-      font-weight: 600;
-      letter-spacing: -0.02em;
-      line-height: 1.15;
-      margin-bottom: 18px;
-    }
-
-    .lead {
-      font-size: 19px;
-      color: var(--muted);
-      max-width: 560px;
-    }
-
-    nav {
-      margin-top: 32px;
+    .nav-inner {
       display: flex;
-      flex-wrap: wrap;
-      gap: 18px 24px;
-      font-size: 15px;
+      align-items: center;
+      justify-content: space-between;
+      padding: 18px 0;
     }
 
-    nav a {
+    .logo {
+      font-family: "Fraunces", serif;
+      font-weight: 500;
+      font-size: 18px;
+      letter-spacing: 0.02em;
+      color: var(--text);
+      text-decoration: none;
+    }
+    .logo span { color: var(--muted); }
+
+    .nav-links {
+      display: flex;
+      gap: 28px;
+      font-size: 14px;
+    }
+    .nav-links a {
       color: var(--muted);
       text-decoration: none;
-      border-bottom: 1px solid transparent;
-      transition: color 0.15s, border-color 0.15s;
+      transition: color 0.15s;
+    }
+    .nav-links a:hover { color: var(--text); }
+
+    /* ─── HERO ──────────────────────────────────────────── */
+
+    .hero {
+      padding: 88px 0 72px;
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 64px;
+      align-items: end;
     }
 
-    nav a:hover {
-      color: var(--accent);
-      border-bottom-color: var(--accent);
-    }
-
-    section {
-      margin-top: 72px;
-      padding-top: 8px;
-    }
-
-    h2 {
-      font-size: 13px;
-      font-weight: 600;
+    .hero-eyebrow {
+      font-family: ui-monospace, "SF Mono", Menlo, monospace;
+      font-size: 12px;
+      letter-spacing: 0.18em;
       text-transform: uppercase;
-      letter-spacing: 0.08em;
       color: var(--muted);
       margin-bottom: 28px;
-      padding-bottom: 14px;
+    }
+
+    .hero h1 {
+      font-family: "Fraunces", serif;
+      font-weight: 400;
+      font-size: clamp(48px, 7vw, 92px);
+      line-height: 1.02;
+      letter-spacing: -0.02em;
+      margin-bottom: 32px;
+    }
+    .hero h1 em {
+      font-style: italic;
+      font-weight: 300;
+      color: var(--muted);
+    }
+
+    .hero-tagline {
+      font-size: 19px;
+      line-height: 1.55;
+      color: var(--text);
+      max-width: 540px;
+      margin-bottom: 32px;
+    }
+
+    .hero-creds {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px 10px;
+    }
+    .cred-tag {
+      font-size: 13px;
+      padding: 6px 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--muted);
+      background: var(--bg-elev);
+    }
+    .cred-tag strong {
+      color: var(--text);
+      font-weight: 600;
+    }
+
+    .hero-photo { position: relative; }
+
+    /* ─── PHOTO PLACEHOLDERS ─────────────────────────────── */
+
+    .photo-slot {
+      background: var(--placeholder-bg);
+      border: 1px dashed var(--line);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 6px;
+      color: var(--placeholder-text);
+      font-family: ui-monospace, "SF Mono", Menlo, monospace;
+      font-size: 11px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      text-align: center;
+      padding: 16px;
+    }
+    .photo-slot::before {
+      content: "";
+      width: 24px;
+      height: 24px;
+      border: 1px solid currentColor;
+      opacity: 0.5;
+    }
+    .photo-slot small {
+      font-size: 10px;
+      opacity: 0.65;
+      letter-spacing: 0.1em;
+    }
+    .photo-slot--portrait { aspect-ratio: 4 / 5; }
+    .photo-slot--landscape { aspect-ratio: 4 / 3; }
+    .photo-slot--square { aspect-ratio: 1 / 1; }
+    .photo-slot--wide { aspect-ratio: 16 / 9; }
+
+    /* ─── SECTION GENERICS ───────────────────────────────── */
+
+    section { padding: 80px 0; }
+
+    .section-label {
+      font-family: ui-monospace, "SF Mono", Menlo, monospace;
+      font-size: 12px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 32px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    .section-label::after {
+      content: "";
+      flex: 1;
+      height: 1px;
+      background: var(--line);
+    }
+
+    .section-title {
+      font-family: "Fraunces", serif;
+      font-weight: 400;
+      font-size: clamp(36px, 4.5vw, 56px);
+      line-height: 1.05;
+      letter-spacing: -0.015em;
+      margin-bottom: 48px;
+      max-width: 880px;
+    }
+    .section-title em {
+      font-style: italic;
+      color: var(--muted);
+      font-weight: 300;
+    }
+
+    /* ─── PRESS STRIP ────────────────────────────────────── */
+
+    .press {
+      padding: 32px 0 !important;
+      border-top: 1px solid var(--line);
       border-bottom: 1px solid var(--line);
     }
-
-    h3 {
-      font-size: 19px;
-      font-weight: 600;
-      letter-spacing: -0.005em;
-      margin-bottom: 6px;
+    .press-inner {
+      display: flex;
+      align-items: center;
+      gap: 40px;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+    .press-label {
+      font-family: ui-monospace, "SF Mono", Menlo, monospace;
+      font-size: 11px;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+    .press-list {
+      display: flex;
+      gap: 36px;
+      flex-wrap: wrap;
+      align-items: center;
+    }
+    .press-list span {
+      font-family: "Fraunces", serif;
+      font-size: 18px;
+      font-weight: 500;
+      color: var(--text);
+      letter-spacing: 0.01em;
     }
 
-    p {
-      margin-bottom: 14px;
-    }
+    /* ─── ABOUT ──────────────────────────────────────────── */
 
-    p:last-child {
-      margin-bottom: 0;
-    }
-
-    .about p {
-      font-size: 17px;
-    }
-
-    .skills-grid {
+    .about-grid {
       display: grid;
-      grid-template-columns: 160px 1fr;
-      gap: 24px 32px;
-      margin-top: 8px;
+      grid-template-columns: 1fr 1fr;
+      gap: 64px;
+      align-items: start;
     }
-
-    .skills-grid dt {
-      font-weight: 600;
-      font-size: 15px;
+    .about-prose p {
+      font-size: 18px;
+      line-height: 1.6;
+      margin-bottom: 20px;
       color: var(--text);
     }
-
-    .skills-grid dd {
+    .about-prose p:last-child { margin-bottom: 0; }
+    .about-prose strong { font-weight: 600; }
+    .about-photo { position: sticky; top: 96px; }
+    .about-photo .photo-slot { aspect-ratio: 4 / 5; }
+    .about-photo-caption {
+      font-family: ui-monospace, "SF Mono", Menlo, monospace;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
       color: var(--muted);
-      font-size: 16px;
+      margin-top: 12px;
+      text-align: right;
     }
 
-    .project {
-      padding: 24px 0 28px;
-      border-bottom: 1px solid var(--line);
+    /* ─── CREDENTIALS ────────────────────────────────────── */
+
+    .creds-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 32px;
+    }
+    .cred {
+      padding: 36px;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      background: var(--bg-elev);
+    }
+    .cred-school {
+      font-family: "Fraunces", serif;
+      font-size: 28px;
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      margin-bottom: 6px;
+    }
+    .cred-program {
+      font-size: 14px;
+      color: var(--muted);
+      margin-bottom: 24px;
+    }
+    .cred-divider {
+      height: 1px;
+      background: var(--line);
+      margin: 24px 0;
+    }
+    .cred-highlight {
+      font-size: 14px;
+      line-height: 1.55;
+      color: var(--text);
+      margin-bottom: 12px;
+    }
+    .cred-highlight strong { color: var(--highlight); font-weight: 600; }
+    .cred-meta {
+      font-family: ui-monospace, "SF Mono", Menlo, monospace;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-top: 16px;
     }
 
-    .project:last-child {
-      border-bottom: none;
-    }
+    /* ─── WORK GRID ──────────────────────────────────────── */
 
-    .project-header {
+    .work-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 48px 32px;
+    }
+    .work-item { display: block; text-decoration: none; color: inherit; }
+    .work-item .photo-slot {
+      aspect-ratio: 4 / 3;
+      transition: transform 0.4s ease;
+    }
+    .work-item:hover .photo-slot { transform: translateY(-4px); }
+    .work-meta {
+      margin-top: 16px;
       display: flex;
       justify-content: space-between;
       align-items: baseline;
       gap: 16px;
-      flex-wrap: wrap;
-      margin-bottom: 8px;
     }
-
-    .project-status {
+    .work-title {
+      font-family: "Fraunces", serif;
+      font-size: 22px;
+      font-weight: 500;
+      letter-spacing: -0.005em;
+    }
+    .work-year {
+      font-family: ui-monospace, "SF Mono", Menlo, monospace;
       font-size: 12px;
+      letter-spacing: 0.1em;
       color: var(--muted);
-      text-transform: uppercase;
-      letter-spacing: 0.06em;
       white-space: nowrap;
     }
-
-    .project-why {
+    .work-role {
       font-size: 14px;
       color: var(--muted);
-      font-style: italic;
-      margin-bottom: 10px;
+      margin-top: 4px;
     }
-
-    .project p {
+    .work-desc {
+      font-size: 15px;
       color: var(--text);
-      font-size: 16px;
-    }
-
-    .project-links {
       margin-top: 12px;
-      display: flex;
-      gap: 16px;
-      flex-wrap: wrap;
-      font-size: 14px;
+      line-height: 1.55;
     }
 
-    .project-links a {
-      color: var(--accent);
-      text-decoration: none;
-      border-bottom: 1px solid var(--line);
-      padding-bottom: 1px;
-      transition: border-color 0.15s;
-    }
+    /* ─── PERSONAL / OFF THE CLOCK ───────────────────────── */
 
-    .project-links a:hover {
-      border-bottom-color: var(--accent);
-    }
-
-    .achievements {
-      list-style: none;
-    }
-
-    .achievements li {
-      padding: 14px 0;
-      border-bottom: 1px solid var(--line);
+    .off-grid {
       display: grid;
-      grid-template-columns: 80px 1fr;
-      gap: 24px;
+      grid-template-columns: repeat(6, 1fr);
+      gap: 16px;
+    }
+    .off-grid .photo-slot { aspect-ratio: 1/1; }
+    .off-1 { grid-column: span 2; grid-row: span 2; }
+    .off-1 .photo-slot { aspect-ratio: auto; height: 100%; min-height: 320px; }
+    .off-2 { grid-column: span 2; }
+    .off-3 { grid-column: span 2; }
+    .off-4 { grid-column: span 3; }
+    .off-4 .photo-slot { aspect-ratio: 16/10; }
+    .off-5 { grid-column: span 3; }
+    .off-5 .photo-slot { aspect-ratio: 16/10; }
+
+    .off-caption {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 32px;
+      margin-top: 36px;
+      font-size: 15px;
+    }
+    .off-caption h4 {
+      font-family: "Fraunces", serif;
+      font-weight: 500;
+      font-size: 18px;
+      margin-bottom: 6px;
+    }
+    .off-caption p { color: var(--muted); line-height: 1.55; }
+
+    /* ─── NOTES / WRITING ────────────────────────────────── */
+
+    .notes-list { display: grid; gap: 0; }
+    .note-item {
+      display: grid;
+      grid-template-columns: 100px 1fr auto;
+      gap: 32px;
+      padding: 24px 0;
+      border-top: 1px solid var(--line);
       align-items: baseline;
+      text-decoration: none;
+      color: inherit;
+      transition: padding 0.2s ease;
+    }
+    .note-item:last-child { border-bottom: 1px solid var(--line); }
+    .note-item:hover { padding-left: 8px; }
+    .note-date {
+      font-family: ui-monospace, "SF Mono", Menlo, monospace;
+      font-size: 12px;
+      letter-spacing: 0.05em;
+      color: var(--muted);
+    }
+    .note-title {
+      font-family: "Fraunces", serif;
+      font-size: 22px;
+      font-weight: 500;
+      letter-spacing: -0.005em;
+    }
+    .note-tag {
+      font-family: ui-monospace, "SF Mono", Menlo, monospace;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      color: var(--muted);
+      text-transform: uppercase;
+    }
+    .all-notes {
+      margin-top: 32px;
+      display: inline-block;
+      font-size: 15px;
+      color: var(--text);
+      text-decoration: none;
+      border-bottom: 1px solid var(--text);
+      padding-bottom: 2px;
     }
 
-    .achievements li:last-child {
-      border-bottom: none;
-    }
+    /* ─── CONTACT ────────────────────────────────────────── */
 
-    .achievements .year {
+    .contact-block { padding: 96px 0; }
+    .contact-line {
+      font-family: "Fraunces", serif;
+      font-weight: 400;
+      font-size: clamp(36px, 5vw, 64px);
+      line-height: 1.1;
+      letter-spacing: -0.015em;
+      margin-bottom: 32px;
+      max-width: 900px;
+    }
+    .contact-line em { font-style: italic; color: var(--muted); font-weight: 300; }
+    .contact-email {
+      font-family: "Fraunces", serif;
+      font-size: clamp(28px, 4vw, 48px);
+      color: var(--text);
+      text-decoration: none;
+      border-bottom: 2px solid var(--text);
+      padding-bottom: 4px;
+      display: inline-block;
+      margin-bottom: 36px;
+    }
+    .contact-email:hover { color: var(--highlight); border-bottom-color: var(--highlight); }
+    .contact-socials {
+      display: flex;
+      gap: 28px;
+      flex-wrap: wrap;
+    }
+    .contact-socials a {
       font-size: 14px;
       color: var(--muted);
-      font-variant-numeric: tabular-nums;
-    }
-
-    .achievements .what {
-      font-size: 16px;
-    }
-
-    .contact-links {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 12px 20px;
-      margin-top: 8px;
-    }
-
-    .contact-links a {
-      color: var(--accent);
       text-decoration: none;
-      font-size: 16px;
-      border-bottom: 1px solid var(--line);
-      padding-bottom: 2px;
-      transition: border-color 0.15s;
+      letter-spacing: 0.02em;
     }
+    .contact-socials a:hover { color: var(--text); }
 
-    .contact-links a:hover {
-      border-bottom-color: var(--accent);
-    }
+    /* ─── FOOTER ─────────────────────────────────────────── */
 
     footer {
-      margin-top: 96px;
-      padding-top: 28px;
+      padding: 28px 0 40px;
       border-top: 1px solid var(--line);
-      font-size: 13px;
+      font-family: ui-monospace, "SF Mono", Menlo, monospace;
+      font-size: 11px;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
       color: var(--muted);
     }
+    footer .container {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
 
-    @media (max-width: 600px) {
-      .container {
-        padding: 56px 22px 80px;
-      }
+    /* ─── RESPONSIVE ─────────────────────────────────────── */
 
-      h1 {
-        font-size: 32px;
-      }
-
-      .lead {
-        font-size: 17px;
-      }
-
-      .skills-grid {
+    @media (max-width: 880px) {
+      .container { padding: 0 22px; }
+      .hero {
         grid-template-columns: 1fr;
-        gap: 6px;
+        gap: 36px;
+        padding: 56px 0 48px;
       }
-
-      .skills-grid dt {
-        margin-top: 14px;
-      }
-
-      .skills-grid dt:first-child {
-        margin-top: 0;
-      }
-
-      .achievements li {
-        grid-template-columns: 60px 1fr;
-        gap: 16px;
-      }
+      .hero-photo { order: -1; max-width: 280px; }
+      .about-grid { grid-template-columns: 1fr; gap: 36px; }
+      .about-photo { position: static; }
+      .creds-grid { grid-template-columns: 1fr; gap: 16px; }
+      .work-grid { grid-template-columns: 1fr; gap: 40px; }
+      .off-grid { grid-template-columns: repeat(2, 1fr); }
+      .off-1, .off-2, .off-3, .off-4, .off-5 { grid-column: span 2; grid-row: auto; }
+      .off-1 .photo-slot, .off-4 .photo-slot, .off-5 .photo-slot { aspect-ratio: 4/3; min-height: auto; }
+      .off-caption { grid-template-columns: 1fr; gap: 20px; }
+      .nav-links { gap: 18px; font-size: 13px; }
+      .note-item { grid-template-columns: 80px 1fr; gap: 16px; }
+      .note-item .note-tag { display: none; }
+      section { padding: 56px 0; }
     }
   </style>
 </head>
 <body>
-  <div class="container">
 
-    <header>
-      <div class="eyebrow">Strategy · Growth · GTM</div>
-      <h1>Hi, I'm Harsh Kumar Arya.</h1>
-      <p class="lead">
-        I build and grow businesses. Founder &amp; CEO of Ninety-Eight Entertainment (exited), then ran the Founder's Office at Intellewings, an AI-native financial-crime platform. ISB '25. I work at the intersection of go-to-market, partnerships, and the next decade of Indian sports.
-      </p>
-      <nav>
+  <!-- ─── NAV ───────────────────────────────────────────── -->
+  <nav class="nav" id="nav">
+    <div class="container nav-inner">
+      <a href="#" class="logo">Harsh<span>.</span></a>
+      <div class="nav-links">
         <a href="#about">About</a>
-        <a href="#projects">Projects</a>
-        <a href="#achievements">Past work</a>
+        <a href="#work">Work</a>
+        <a href="#off">Life</a>
+        <a href="writing/">Notes</a>
         <a href="#contact">Contact</a>
-      </nav>
-    </header>
-
-    <section id="about" class="about">
-      <h2>About</h2>
-      <p>
-        I started Ninety-Eight Entertainment out of college — a marketing and talent management agency that grew to ₹15Cr+ in revenue (65x ROI), 18 people, and a roster of 12 athletes, 500+ influencers, and 60+ F&amp;B and hospitality clients before I exited to head to ISB. Along the way I signed Ishant Sharma as exclusive talent, ran award-winning campaigns for Happy Dent and Borges, and built a hyperlocal influencer engine that brands like TrulyMadly and Slay Coffee rode for growth.
-      </p>
-      <p>
-        After business school I joined Intellewings as Founder's Office, where I owned commercial GTM in MENA, helped close a $1M ARR upsell with Jio, and ran an 8-week reset that lifted productivity 40%+ and cut cloud spend 30%. I'm now spending my time on go-to-market, founder advisory, and the early build-out of ISB's first Sports Management course — a long bet on India's $10B+ sports industry.
-      </p>
-      <p>
-        Open to: GTM and partnerships work, founder advisory, and conversations about Indian sports, talent, and creator economy.
-      </p>
-
-      <h2 style="margin-top: 56px;">What I do</h2>
-      <dl class="skills-grid">
-        <dt>Go-to-market</dt>
-        <dd>Segment discovery, partner-led GTM, vertical playbooks, enterprise sales motion. Built international revenue streams across MENA, Africa, and the US.</dd>
-
-        <dt>Strategy &amp; ops</dt>
-        <dd>Fundraising narratives, OKR cadences, PMO build-outs, FinOps. ISB PGP — Strategy &amp; Leadership / Marketing.</dd>
-
-        <dt>Talent &amp; brand</dt>
-        <dd>Athlete and creator partnerships, influencer marketing at scale, brand activation, omni-channel campaigns.</dd>
-
-        <dt>Background</dt>
-        <dd>B.Tech CSE (Bennett); research scholar at Georgia Tech on GPU optimization (CUDA / PARADISO). GMAT 760.</dd>
-      </dl>
-    </section>
-
-    <section id="projects">
-      <h2>Current projects</h2>
-
-      <article class="project">
-        <div class="project-header">
-          <h3>ISB Sports Management Course</h3>
-          <span class="project-status">In progress</span>
-        </div>
-        <p class="project-why">Why I started: India has a $10B+ sports industry but no serious management curriculum to feed it. The talent gap is real, and ISB has the platform to fix it.</p>
-        <p>
-          Designing and building the school's first Sports Management course end-to-end — curriculum, industry partnerships, and a guest faculty pipeline of operators actually running the business of Indian sports. Goal is to graduate a cohort that can step directly into franchise, league, and federation roles.
-        </p>
-        <div class="project-links">
-          <a href="#" target="_blank" rel="noopener">More soon →</a>
-        </div>
-      </article>
-
-      <article class="project">
-        <div class="project-header">
-          <h3>GTM &amp; Founder Advisory</h3>
-          <span class="project-status">Ongoing</span>
-        </div>
-        <p class="project-why">Why I'm doing this: I've sat on both sides — bootstrapped my own company to ₹15Cr, then ran the founder's office at a venture-backed startup. The gap between "we have a product" and "we have a repeatable revenue motion" is where most early teams stall.</p>
-        <p>
-          Selectively partnering with early-stage founders on go-to-market: segment selection, partner-led entry into new geographies, enterprise sales playbooks, and the operating cadence (OKRs, RACI, weekly reviews) that turns a six-person team into a ten-person one without breaking. Currently working with [add company / sector here].
-        </p>
-        <div class="project-links">
-          <a href="mailto:harsharya7021@gmail.com">Get in touch →</a>
-        </div>
-      </article>
-
-      <article class="project">
-        <div class="project-header">
-          <h3>Writing &amp; Talks</h3>
-          <span class="project-status">Ongoing</span>
-        </div>
-        <p class="project-why">Why I started: After the Josh Talks keynote on turning ₹24,000 into a multi-crore agency, I realised most of the playbook lives in my head. Writing it down forces me to be honest about what actually worked vs. what I got lucky with.</p>
-        <p>
-          Long-form notes on talent management, GTM in emerging markets, and lessons from running an agency in your early twenties. Drop me a line if there's a topic you'd want me to write about.
-        </p>
-        <div class="project-links">
-          <a href="#" target="_blank" rel="noopener">Josh Talks keynote →</a>
-        </div>
-      </article>
-    </section>
-
-    <section id="achievements">
-      <h2>Past work &amp; achievements</h2>
-      <ul class="achievements">
-        <li>
-          <span class="year">2025</span>
-          <span class="what">Founder's Office, Intellewings — closed $1M ARR upsell with Jio, opened MENA (first Saudi client, 200+ UAE SMEs), raised 50% of the DVC round.</span>
-        </li>
-        <li>
-          <span class="year">2025</span>
-          <span class="what">Graduated ISB PGP — Strategy &amp; Leadership / Marketing. National Finalist (10/15K) at ABInBev for a $120M Gen-Z energy drink GTM.</span>
-        </li>
-        <li>
-          <span class="year">2024</span>
-          <span class="what">GMAT 760 (top 1%). Top finalist in GameX (25/1000) and ISPROUTE (29/800) — both data-driven revenue models in e-sports.</span>
-        </li>
-        <li>
-          <span class="year">2023</span>
-          <span class="what">Digies'23 award-winning Happy Dent campaign — 10x brand awareness; Borges premium sales up 12% with 40% Instagram lift.</span>
-        </li>
-        <li>
-          <span class="year">2022</span>
-          <span class="what">Architected Ishant Sharma × RuPay IPL'22 partnership — 300M+ impressions across TV, OTT, and digital.</span>
-        </li>
-        <li>
-          <span class="year">2022</span>
-          <span class="what">Josh Talks keynote on building a marketing agency from ₹24,000 — reached 4M people. Featured in Outlook, The Week, Mid-Day, PTI.</span>
-        </li>
-        <li>
-          <span class="year">2021</span>
-          <span class="what">Founded Ninety-Eight Entertainment — bootstrapped to ₹15Cr+ revenue, 65x ROI, team of 18, exited 2024.</span>
-        </li>
-        <li>
-          <span class="year">2020</span>
-          <span class="what">Finalist at Collision Conference Canada (3/300) and Startup Istanbul (100/4000+); pitched a $1M-valued professional networking platform.</span>
-        </li>
-        <li>
-          <span class="year">2019</span>
-          <span class="what">Research Scholar at Georgia Tech — 29% faster GPU optimization using CUDA and PARADISO.</span>
-        </li>
-      </ul>
-    </section>
-
-    <section id="contact">
-      <h2>Get in touch</h2>
-      <p style="color: var(--muted); margin-bottom: 18px;">
-        Reach out about GTM, partnerships, founder advisory, Indian sports, or just to say hi. Email is fastest.
-      </p>
-      <div class="contact-links">
-        <a href="mailto:harsharya7021@gmail.com">harsharya7021@gmail.com</a>
-        <a href="#" target="_blank" rel="noopener">LinkedIn</a>
-        <a href="#" target="_blank" rel="noopener">X / Twitter</a>
       </div>
-    </section>
+    </div>
+  </nav>
 
-    <footer>
-      © <span id="year"></span> Harsh Kumar Arya.
-    </footer>
-  </div>
+  <!-- ─── HERO ──────────────────────────────────────────── -->
+  <header class="container">
+    <div class="hero">
+      <div class="hero-text">
+        <div class="hero-eyebrow">Strategy · Growth · Stories</div>
+        <h1>I build and<br>grow <em>businesses</em>.</h1>
+        <p class="hero-tagline">
+          Operator working at the intersection of strategy, talent and storytelling. Founder of Ninety-Eight Entertainment (exited), then Founder's Office at Intellewings. Now spending most of my time on go-to-market, founder advisory, and the future of Indian sports.
+        </p>
+        <div class="hero-creds">
+          <span class="cred-tag"><strong>ISB</strong> &nbsp;PGP '25</span>
+          <span class="cred-tag"><strong>Georgia Tech</strong> &nbsp;Research Scholar</span>
+          <span class="cred-tag"><strong>GMAT</strong> &nbsp;760 / Top 1%</span>
+          <span class="cred-tag">ex-Founder · Strategy &amp; Growth</span>
+        </div>
+      </div>
+      <div class="hero-photo">
+        <div class="photo-slot photo-slot--portrait">
+          PORTRAIT
+          <small>assets/portrait.jpg</small>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <!-- ─── PRESS STRIP ────────────────────────────────────── -->
+  <section class="press">
+    <div class="container press-inner">
+      <div class="press-label">As featured in</div>
+      <div class="press-list">
+        <span>Outlook</span>
+        <span>The Week</span>
+        <span>Mid-Day</span>
+        <span>PTI</span>
+        <span>Josh Talks</span>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── ABOUT ─────────────────────────────────────────── -->
+  <section id="about">
+    <div class="container">
+      <div class="section-label">About</div>
+      <div class="about-grid">
+        <div class="about-prose">
+          <p>
+            I started my first company, <strong>Ninety-Eight Entertainment</strong>, out of college — a full-service marketing and talent management agency. We grew it to ₹15Cr+ in revenue, 65x ROI, a team of 18, and a roster of 12 athletes, 500+ influencers, and 60+ F&amp;B and hospitality clients before I exited to head to ISB.
+          </p>
+          <p>
+            Along the way I signed cricketer <strong>Ishant Sharma</strong> as exclusive talent, architected his RuPay × IPL partnership (300M+ impressions), ran award-winning campaigns for Happy Dent and Borges, and built a hyperlocal influencer engine that brands like TrulyMadly and Slay Coffee rode for growth.
+          </p>
+          <p>
+            After business school I joined <strong>Intellewings</strong> as Founder's Office — owned commercial GTM in MENA, helped close a $1M ARR upsell with Jio, secured 50% of the venture round, and ran an 8-week reset that lifted productivity 40% and cut cloud spend 30%.
+          </p>
+          <p>
+            Today I split my time between go-to-market and founder advisory work, the early build-out of <strong>ISB's first Sports Management course</strong>, and writing about the operating playbook I've collected the hard way.
+          </p>
+          <p>
+            Off the clock you'll find me on a golf course (12 handicap, longest drive at the BMW tournament), in a notebook designing something, or deep in a podcast about how India is changing.
+          </p>
+        </div>
+        <div class="about-photo">
+          <div class="photo-slot photo-slot--portrait">
+            CANDID / WORKING
+            <small>assets/about.jpg</small>
+          </div>
+          <div class="about-photo-caption">New Delhi · 2026</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── CREDENTIALS ────────────────────────────────────── -->
+  <section id="credentials">
+    <div class="container">
+      <div class="section-label">Credentials</div>
+      <h2 class="section-title">Trained at <em>two</em> of the world's sharpest schools.</h2>
+      <div class="creds-grid">
+        <div class="cred">
+          <div class="cred-school">Indian School of Business</div>
+          <div class="cred-program">PGP · Strategy &amp; Leadership / Marketing · Class of 2025</div>
+          <div class="cred-divider"></div>
+          <p class="cred-highlight">National Finalist (10 of 15,000) at <strong>ABInBev</strong>, identifying a $120M white space and crafting a Gen-Z energy-drink GTM.</p>
+          <p class="cred-highlight">Top finalist in <strong>GameX</strong> (25/1000) and <strong>ISPROUTE</strong> (29/800) — pioneered scalable revenue models in e-sports.</p>
+          <p class="cred-highlight">Awarded <strong>"P2P Champ"</strong> for sessions on marketing strategy with 100+ batchmates · 95% positive feedback.</p>
+          <div class="cred-meta">GMAT 760 · Top 1%</div>
+        </div>
+        <div class="cred">
+          <div class="cred-school">Georgia Institute of Technology</div>
+          <div class="cred-program">Research Scholar · Computer Science &amp; Engineering</div>
+          <div class="cred-divider"></div>
+          <p class="cred-highlight">Achieved <strong>29% faster computational efficiency</strong> in GPU optimization using CUDA and PARADISO under faculty mentorship.</p>
+          <p class="cred-highlight">Work supported broader research on parallel scientific computing pipelines and high-throughput numerical simulation.</p>
+          <p class="cred-highlight">Concurrent B.Tech in CSE at <strong>Bennett University</strong> (2017–21); Vice-President of the Student Council.</p>
+          <div class="cred-meta">Atlanta · 2019</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── WORK ───────────────────────────────────────────── -->
+  <section id="work">
+    <div class="container">
+      <div class="section-label">Selected Work</div>
+      <h2 class="section-title">Things I've built, scaled or shipped.</h2>
+      <div class="work-grid">
+
+        <a class="work-item" href="#">
+          <div class="photo-slot photo-slot--landscape">
+            NINETY-EIGHT
+            <small>assets/work/ninety-eight.jpg</small>
+          </div>
+          <div class="work-meta">
+            <div>
+              <div class="work-title">Ninety-Eight Entertainment</div>
+              <div class="work-role">Founder &amp; CEO · Exited</div>
+            </div>
+            <span class="work-year">2021 — 2024</span>
+          </div>
+          <p class="work-desc">Bootstrapped a marketing &amp; talent agency to ₹15Cr+ revenue, 65x ROI and a team of 18. Roster of 12 athletes and 500+ influencers across hospitality, F&amp;B and lifestyle.</p>
+        </a>
+
+        <a class="work-item" href="#">
+          <div class="photo-slot photo-slot--landscape">
+            INTELLEWINGS
+            <small>assets/work/intellewings.jpg</small>
+          </div>
+          <div class="work-meta">
+            <div>
+              <div class="work-title">Intellewings</div>
+              <div class="work-role">Founder's Office · GTM &amp; Ops</div>
+            </div>
+            <span class="work-year">2025</span>
+          </div>
+          <p class="work-desc">Owned MENA GTM — first Saudi client, 200+ UAE SMEs. Secured 50% of the venture round. Closed a $1M ARR upsell with Jio. 40%+ productivity lift in 8 weeks.</p>
+        </a>
+
+        <a class="work-item" href="#">
+          <div class="photo-slot photo-slot--landscape">
+            ISB SPORTS
+            <small>assets/work/isb-sports.jpg</small>
+          </div>
+          <div class="work-meta">
+            <div>
+              <div class="work-title">ISB Sports Management Course</div>
+              <div class="work-role">Curriculum Architect · Ongoing</div>
+            </div>
+            <span class="work-year">2025 —</span>
+          </div>
+          <p class="work-desc">Designing the school's first Sports Management course end-to-end — curriculum, industry partnerships, and a guest faculty pipeline of operators running the business of Indian sports.</p>
+        </a>
+
+        <a class="work-item" href="#">
+          <div class="photo-slot photo-slot--landscape">
+            ISHANT × RUPAY
+            <small>assets/work/ishant-rupay.jpg</small>
+          </div>
+          <div class="work-meta">
+            <div>
+              <div class="work-title">Ishant Sharma × RuPay</div>
+              <div class="work-role">Talent Architect · IPL '22</div>
+            </div>
+            <span class="work-year">2022</span>
+          </div>
+          <p class="work-desc">Architected the RuPay partnership for cricketer Ishant Sharma during IPL '22 — 300M+ impressions across TV, OTT and digital. Same year: Digies'23 award-winning Happy Dent campaign.</p>
+        </a>
+
+        <a class="work-item" href="#">
+          <div class="photo-slot photo-slot--landscape">
+            JOSH TALKS
+            <small>assets/work/josh-talks.jpg</small>
+          </div>
+          <div class="work-meta">
+            <div>
+              <div class="work-title">Josh Talks Keynote</div>
+              <div class="work-role">Speaker · 4M reach</div>
+            </div>
+            <span class="work-year">2022</span>
+          </div>
+          <p class="work-desc">Delivered "Secrets of Turning ₹24,000 Into Crores" — a keynote on building a marketing agency from zero. Featured on Outlook, The Week, Mid-Day and PTI.</p>
+        </a>
+
+        <a class="work-item" href="#">
+          <div class="photo-slot photo-slot--landscape">
+            GTM ADVISORY
+            <small>assets/work/advisory.jpg</small>
+          </div>
+          <div class="work-meta">
+            <div>
+              <div class="work-title">GTM &amp; Founder Advisory</div>
+              <div class="work-role">Independent · Selective</div>
+            </div>
+            <span class="work-year">Ongoing</span>
+          </div>
+          <p class="work-desc">Selectively partnering with early-stage founders on go-to-market — segment selection, partner-led entry into new geographies, enterprise sales playbooks, and operating cadence.</p>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── OFF THE CLOCK ─────────────────────────────────── -->
+  <section id="off">
+    <div class="container">
+      <div class="section-label">Off the clock</div>
+      <h2 class="section-title">Golf, design and a <em>varied</em> life.</h2>
+
+      <div class="off-grid">
+        <div class="off-1">
+          <div class="photo-slot">
+            ON THE COURSE
+            <small>assets/life/golf-1.jpg</small>
+          </div>
+        </div>
+        <div class="off-2">
+          <div class="photo-slot">
+            DESIGN MOMENT
+            <small>assets/life/design-1.jpg</small>
+          </div>
+        </div>
+        <div class="off-3">
+          <div class="photo-slot">
+            TRAVEL
+            <small>assets/life/travel-1.jpg</small>
+          </div>
+        </div>
+        <div class="off-4">
+          <div class="photo-slot">
+            EVENT / STAGE
+            <small>assets/life/stage-1.jpg</small>
+          </div>
+        </div>
+        <div class="off-5">
+          <div class="photo-slot">
+            FRIENDS / TEAM
+            <small>assets/life/people-1.jpg</small>
+          </div>
+        </div>
+      </div>
+
+      <div class="off-caption">
+        <div>
+          <h4>Golf</h4>
+          <p>12 handicap. Longest-drive award at the BMW tournament. Four tournaments and counting, mostly playing alongside pros and trying not to embarrass myself.</p>
+        </div>
+        <div>
+          <h4>Design</h4>
+          <p>I sketch most ideas before I write them. Brand systems, decks and the occasional album cover for friends. The fastest way to know if an idea has legs is to draw it.</p>
+        </div>
+        <div>
+          <h4>Other lives</h4>
+          <p>Avid podcast listener on India's transition decade. Spent some time studying for a sommelier exam. Always reading two books at once — one history, one operator memoir.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── NOTES ─────────────────────────────────────────── -->
+  <section id="notes">
+    <div class="container">
+      <div class="section-label">Notes</div>
+      <h2 class="section-title">Stories from the operator's seat.</h2>
+
+      <div class="notes-list">
+        <a class="note-item" href="writing/welcome.html">
+          <span class="note-date">May 2026</span>
+          <span class="note-title">Why I'm writing this down</span>
+          <span class="note-tag">Intro</span>
+        </a>
+        <a class="note-item" href="#">
+          <span class="note-date">Coming soon</span>
+          <span class="note-title">From ₹24,000 to ₹15Cr — the ten things that actually mattered</span>
+          <span class="note-tag">Agency</span>
+        </a>
+        <a class="note-item" href="#">
+          <span class="note-date">Coming soon</span>
+          <span class="note-title">What I learned running a Founder's Office</span>
+          <span class="note-tag">Ops</span>
+        </a>
+      </div>
+
+      <a class="all-notes" href="writing/">All notes →</a>
+    </div>
+  </section>
+
+  <!-- ─── CONTACT ───────────────────────────────────────── -->
+  <section id="contact" class="contact-block">
+    <div class="container">
+      <p class="contact-line">Got something to <em>build</em>, hire, or chat about?<br>Send a note.</p>
+      <a class="contact-email" href="mailto:harsharya7021@gmail.com">harsharya7021@gmail.com</a>
+      <div class="contact-socials">
+        <a href="#" target="_blank" rel="noopener">LinkedIn ↗</a>
+        <a href="#" target="_blank" rel="noopener">X / Twitter ↗</a>
+        <a href="https://github.com/harsharya7021" target="_blank" rel="noopener">GitHub ↗</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── FOOTER ────────────────────────────────────────── -->
+  <footer>
+    <div class="container">
+      <span>© <span id="year"></span> Harsh Kumar Arya</span>
+      <span>Built simply · Hosted on GitHub Pages</span>
+    </div>
+  </footer>
 
   <script>
     document.getElementById("year").textContent = new Date().getFullYear();
+    const nav = document.getElementById("nav");
+    window.addEventListener("scroll", () => {
+      if (window.scrollY > 8) nav.classList.add("scrolled");
+      else nav.classList.remove("scrolled");
+    });
   </script>
+
 </body>
 </html>

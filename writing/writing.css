@@ -1,0 +1,237 @@
+:root {
+  --bg: #f6f3eb;
+  --bg-elev: #ffffff;
+  --text: #1a1a1a;
+  --muted: #6b6358;
+  --line: #d6cfc1;
+  --accent: #1a1a1a;
+  --highlight: #b85c2c;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #14140f;
+    --bg-elev: #1c1c16;
+    --text: #f0eee6;
+    --muted: #9a9485;
+    --line: #2c2c23;
+    --accent: #f0eee6;
+    --highlight: #d68a5e;
+  }
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: var(--bg); color: var(--text);
+  line-height: 1.6; font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+}
+.container { max-width: 760px; margin: 0 auto; padding: 0 32px; }
+
+/* nav */
+.nav {
+  position: sticky; top: 0; z-index: 50;
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter: saturate(160%) blur(12px);
+  -webkit-backdrop-filter: saturate(160%) blur(12px);
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s;
+}
+.nav.scrolled { border-bottom-color: var(--line); }
+.nav .container { max-width: 1120px; }
+.nav-inner {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 0;
+}
+.logo {
+  font-family: "Fraunces", serif; font-weight: 500;
+  font-size: 18px; letter-spacing: 0.02em;
+  color: var(--text); text-decoration: none;
+}
+.logo span { color: var(--muted); }
+.nav-links { display: flex; gap: 28px; font-size: 14px; }
+.nav-links a {
+  color: var(--muted); text-decoration: none;
+  transition: color 0.15s;
+}
+.nav-links a:hover { color: var(--text); }
+.hero-eyebrow {
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 12px; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--muted);
+  margin-bottom: 28px;
+}
+
+/* post page */
+.post { padding: 64px 0 96px; max-width: 720px; }
+.post-header { margin-bottom: 48px; }
+.post-back {
+  display: inline-block;
+  font-size: 13px; color: var(--muted);
+  text-decoration: none; margin-bottom: 32px;
+  letter-spacing: 0.02em;
+  transition: color 0.15s;
+}
+.post-back:hover { color: var(--text); }
+.post-meta {
+  display: flex; gap: 12px;
+  align-items: center; flex-wrap: wrap;
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 12px; letter-spacing: 0.06em;
+  color: var(--muted);
+  text-transform: uppercase;
+  margin-bottom: 24px;
+}
+.post-title {
+  font-family: "Fraunces", serif;
+  font-weight: 400;
+  font-size: clamp(36px, 5vw, 56px);
+  line-height: 1.1;
+  letter-spacing: -0.02em;
+  margin-bottom: 16px;
+}
+.post-description {
+  font-size: 19px; color: var(--muted);
+  line-height: 1.55;
+  max-width: 600px;
+}
+.post-body { font-size: 18px; line-height: 1.7; }
+.post-body > * + * { margin-top: 22px; }
+.post-body h2 {
+  font-family: "Fraunces", serif;
+  font-weight: 500;
+  font-size: 28px; line-height: 1.2;
+  margin-top: 56px !important;
+  letter-spacing: -0.01em;
+}
+.post-body h3 {
+  font-family: "Fraunces", serif;
+  font-weight: 500;
+  font-size: 22px; line-height: 1.3;
+  margin-top: 40px !important;
+}
+.post-body p { color: var(--text); }
+.post-body strong { font-weight: 600; }
+.post-body em { font-style: italic; }
+.post-body a {
+  color: var(--text);
+  border-bottom: 1px solid var(--line);
+  text-decoration: none;
+  transition: border-color 0.15s;
+}
+.post-body a:hover { border-bottom-color: var(--text); }
+.post-body ul, .post-body ol {
+  padding-left: 24px;
+  color: var(--text);
+}
+.post-body li { margin-bottom: 6px; }
+.post-body blockquote {
+  padding: 4px 0 4px 24px;
+  border-left: 2px solid var(--line);
+  color: var(--muted);
+  font-style: italic;
+}
+.post-body code {
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 0.92em;
+  background: var(--bg-elev);
+  padding: 2px 6px; border-radius: 3px;
+}
+.post-body pre {
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 14px;
+  background: var(--bg-elev);
+  padding: 20px;
+  border-radius: 4px;
+  overflow-x: auto;
+  border: 1px solid var(--line);
+}
+.post-body pre code { background: transparent; padding: 0; }
+.post-body hr {
+  border: 0;
+  border-top: 1px solid var(--line);
+  margin: 40px 0 !important;
+}
+.post-footer {
+  margin-top: 72px;
+  padding-top: 32px;
+  border-top: 1px solid var(--line);
+  display: flex;
+  justify-content: space-between;
+  gap: 16px;
+  flex-wrap: wrap;
+  font-size: 14px;
+}
+.post-footer a {
+  color: var(--muted);
+  text-decoration: none;
+  transition: color 0.15s;
+}
+.post-footer a:hover { color: var(--text); }
+
+/* index page */
+.index-header { padding: 80px 0 48px; max-width: 1120px; }
+.index-title {
+  font-family: "Fraunces", serif;
+  font-weight: 400;
+  font-size: clamp(48px, 7vw, 80px);
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  margin-bottom: 24px;
+}
+.index-title em { font-style: italic; font-weight: 300; color: var(--muted); }
+.index-lead {
+  font-size: 19px; color: var(--muted);
+  max-width: 560px; line-height: 1.55;
+  margin-bottom: 32px;
+}
+main.container { max-width: 1120px; padding-bottom: 96px; }
+.notes-list { display: grid; gap: 0; }
+.note-item {
+  display: grid;
+  grid-template-columns: 120px 1fr auto;
+  gap: 32px;
+  padding: 24px 0;
+  border-top: 1px solid var(--line);
+  align-items: baseline;
+  text-decoration: none; color: inherit;
+  transition: padding 0.2s ease;
+}
+.note-item:last-child { border-bottom: 1px solid var(--line); }
+.note-item:hover { padding-left: 8px; }
+.note-date {
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 12px; letter-spacing: 0.05em; color: var(--muted);
+}
+.note-title {
+  font-family: "Fraunces", serif;
+  font-size: 22px; font-weight: 500;
+  letter-spacing: -0.005em;
+}
+.note-tag {
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 11px; letter-spacing: 0.12em;
+  color: var(--muted); text-transform: uppercase;
+}
+
+/* footer */
+.site-footer {
+  padding: 28px 0 40px;
+  border-top: 1px solid var(--line);
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 11px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--muted);
+}
+.site-footer .container {
+  max-width: 1120px;
+  display: flex; justify-content: space-between;
+  gap: 16px; flex-wrap: wrap;
+}
+@media (max-width: 720px) {
+  .container { padding: 0 22px; }
+  .nav-links { gap: 16px; font-size: 13px; }
+  .post { padding: 40px 0 64px; }
+  .index-header { padding: 56px 0 32px; }
+  .note-item { grid-template-columns: 80px 1fr; gap: 16px; }
+  .note-tag { display: none; }
+}
