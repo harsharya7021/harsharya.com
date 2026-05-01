@@ -189,14 +189,26 @@
       text-transform: uppercase; color: var(--muted);
     }
     .press-list {
-      display: flex; gap: 36px;
+      display: flex; gap: 14px 18px;
       flex-wrap: wrap; align-items: center;
     }
     .press-list span {
-      font-family: "Fraunces", serif;
-      font-size: 18px; font-weight: 500;
-      color: var(--text); letter-spacing: 0.01em;
+      font-family: ui-monospace, "SF Mono", Menlo, monospace;
+      font-size: 12px; font-weight: 500;
+      color: var(--text); letter-spacing: 0.14em;
+      text-transform: uppercase;
+      padding: 8px 14px 7px;
+      border: 1px dashed var(--line);
+      border-radius: 2px;
+      display: inline-block;
+      transition: transform 0.3s ease, border-color 0.3s ease;
     }
+    .press-list span:hover { transform: rotate(0deg) !important; border-color: var(--text); }
+    .press-list span:nth-child(1) { transform: rotate(-1.4deg); }
+    .press-list span:nth-child(2) { transform: rotate(0.8deg); }
+    .press-list span:nth-child(3) { transform: rotate(-0.6deg); }
+    .press-list span:nth-child(4) { transform: rotate(1.2deg); }
+    .press-list span:nth-child(5) { transform: rotate(-0.9deg); }
 
     /* ─── ABOUT ──────────────────────────────────────────── */
     .about-grid {
@@ -472,16 +484,14 @@
   <header class="container">
     <div class="hero">
       <div class="hero-text">
-        <div class="hero-eyebrow">Operator. With footnotes.</div>
-        <h1>I build and grow <em>businesses</em>.</h1>
+        <div class="hero-eyebrow">Founder. Operator. With footnotes.</div>
+        <h1>I like <em>big</em> businesses, and I can't lie.</h1>
         <p class="hero-tagline">
-          Founder of Ninety-Eight Entertainment (exited). Founder's Office at Intellewings, an AI-native financial-crime platform. Currently: go-to-market and founder advisory work, the early build-out of ISB's first Sports Management course, and writing about Indian sports, talent, and the operating playbook I've collected the hard way. Off-duty: golf, an Argentine-cinema rabbit hole, Mandeville on luxury, and a sneaker rotation that doubles as a mood board.
+          Started Ninety-Eight Entertainment at 21 on a five-figure check; sold it five years later doing ₹15Cr — a roster that included one of India's most prominent cricketers and a campaign wall most agencies twice my age were chasing. Spent 2025 in the Founder's Office at Intellewings, an AI-native fincrime platform — opened MENA, closed our biggest enterprise upsell, raised half the round. Now: putting together ISB's first Sports Management course, working with early-stage founders trying to find their first repeatable revenue motion, and writing about Indian sports, talent, and what I keep getting wrong.
         </p>
         <div class="hero-creds">
           <span class="cred-tag"><strong>ISB</strong> &nbsp;PGP '25</span>
           <span class="cred-tag"><strong>Georgia Tech</strong> &nbsp;Research Scholar</span>
-          <span class="cred-tag"><strong>GMAT</strong> &nbsp;760 / Top 1%</span>
-          <span class="cred-tag">ex-Founder · Strategy &amp; Growth</span>
         </div>
       </div>
       <div class="hero-photo">
@@ -517,7 +527,7 @@
           <p>Along the way I signed cricketer <strong>Ishant Sharma</strong> as exclusive talent, architected his RuPay × IPL partnership (300M+ impressions), ran award-winning campaigns for Happy Dent and Borges, and built a hyperlocal influencer engine that brands like TrulyMadly and Slay Coffee rode for growth.</p>
           <p>After business school I joined <strong>Intellewings</strong> as Founder's Office — owned commercial GTM in MENA, helped close a $1M ARR upsell with Jio, secured 50% of the venture round, and ran an 8-week reset that lifted productivity 40% and cut cloud spend 30%.</p>
           <p>Today I split my time between go-to-market and founder advisory work, the early build-out of <strong>ISB's first Sports Management course</strong>, and writing about Indian sports, talent and the operating playbook I've collected the hard way.</p>
-          <p>Off the clock you'll find me on a golf course (12 handicap, longest-drive at the BMW tournament — swing still inconsistent), in a notebook designing something, or two books deep — usually one history and one operator memoir, lately falling for Argentine cinema. Born in Ratlam (population ~270K, on the Mumbai–Delhi line, on no one's map) and still mildly surprised when people don't know it.</p>
+          <p>Off the clock you'll find me on a golf course (12 handicap, longest-drive at the BMW tournament — swing still inconsistent), in a notebook designing something, or two books deep — usually one history, one operator memoir. I keep a watchlist of films from places most people skip past on the festival map. Born in Ratlam (population ~270K, on the Mumbai–Delhi line, on no one's map) and still mildly surprised when people don't know it.</p>
         </div>
         <div class="about-photo">
           <img class="photo photo--portrait" src="assets/about.jpg" alt="Harsh Kumar Arya" loading="lazy" />
@@ -680,8 +690,8 @@
           <p>I sketch most ideas before I write them. Brand systems, decks, the occasional album cover for a friend, and a sneaker collection that doubles as a mood board. Style is design you carry everywhere.</p>
         </div>
         <div>
-          <h4>Reading &amp; ideas</h4>
-          <p>Two books at once: usually one history, one operator memoir. Lately: Mandeville on luxury, Frankl on meaning, the soft-power machinery behind Saudi/UAE sports investment. Argentine cinema rabbit hole — Lucrecia Martel, then Lisandro Alonso, then back. Started a sommelier reading list, mostly to stop pretending at restaurants.</p>
+          <h4>Reading &amp; watching</h4>
+          <p>Two books at once — usually one history, one operator memoir. Lately: Mandeville on luxury, Frankl on meaning, the soft-power machinery behind Saudi/UAE sports investment. World cinema watchlist that runs heavy on the festival circuit nobody else is bothering with. Started a sommelier reading list, mostly to stop pretending at restaurants.</p>
         </div>
       </div>
     </div>
