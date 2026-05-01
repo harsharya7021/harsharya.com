@@ -209,6 +209,16 @@
     .press-list span:nth-child(3) { transform: rotate(-0.6deg); }
     .press-list span:nth-child(4) { transform: rotate(1.2deg); }
     .press-list span:nth-child(5) { transform: rotate(-0.9deg); }
+    .press-fineprint {
+      margin-top: 18px;
+      font-family: ui-monospace, "SF Mono", Menlo, monospace;
+      font-size: 11.5px;
+      letter-spacing: 0.04em;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+    .press-fineprint strong { color: var(--text); font-weight: 600; }
+    .press-fineprint em { font-style: italic; }
 
     /* ─── ABOUT ──────────────────────────────────────────── */
     .about-grid {
@@ -505,15 +515,18 @@
 
   <!-- ─── PRESS ─────────────────────────────────────────── -->
   <section class="press">
-    <div class="container press-inner">
-      <div class="press-label">As featured in</div>
-      <div class="press-list">
-        <span>Outlook</span>
-        <span>The Week</span>
-        <span>Mid-Day</span>
-        <span>PTI</span>
-        <span>Josh Talks</span>
+    <div class="container">
+      <div class="press-inner">
+        <div class="press-label">As featured in</div>
+        <div class="press-list">
+          <span>Outlook</span>
+          <span>The Week</span>
+          <span>Mid-Day</span>
+          <span>PTI</span>
+          <span>Josh Talks</span>
+        </div>
       </div>
+      <p class="press-fineprint">Not featured: <strong>Forbes 30 Under 30.</strong> <em>(Have you seen the alumni? Filing it as a feature, not a bug.)</em></p>
     </div>
   </section>
 
