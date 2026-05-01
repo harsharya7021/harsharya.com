@@ -3,3 +3,6 @@
 .idea/
 node_modules/
 *.log
+# scratch files from the build pipeline
+_tmp-*
+**/_tmp-*

@@ -126,6 +126,31 @@
     }
     .cred-tag strong { color: var(--text); font-weight: 600; }
     .hero-photo { position: relative; }
+    .hero-photo .passport-frame {
+      background: var(--bg-elev);
+      padding: 12px;
+      border: 1px solid var(--line);
+      box-shadow: 0 18px 38px rgba(0, 0, 0, 0.10), 0 4px 10px rgba(0, 0, 0, 0.06);
+      transform: rotate(-1.2deg);
+      transition: transform 0.4s ease;
+    }
+    .hero-photo .passport-frame:hover { transform: rotate(0deg); }
+    .hero-photo .passport-frame img {
+      display: block;
+      width: 100%;
+      aspect-ratio: 1485 / 1000;
+      object-fit: cover;
+    }
+    .passport-caption {
+      font-family: ui-monospace, "SF Mono", Menlo, monospace;
+      font-size: 11px;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      text-align: center;
+      margin-top: 16px;
+      line-height: 1.5;
+    }
 
     /* ─── SECTIONS ───────────────────────────────────────── */
     section { padding: 80px 0; }
@@ -447,10 +472,10 @@
   <header class="container">
     <div class="hero">
       <div class="hero-text">
-        <div class="hero-eyebrow">Operator · Reflector · Student of the long game</div>
-        <h1>I build companies and try to <em>understand</em> them after.</h1>
+        <div class="hero-eyebrow">Operator. With footnotes.</div>
+        <h1>I build and grow <em>businesses</em>.</h1>
         <p class="hero-tagline">
-          Founder of Ninety-Eight Entertainment (exited). Founder's Office at Intellewings, an AI-native financial-crime platform. Now: go-to-market and founder advisory work, the early build-out of ISB's first Sports Management course, and a slow archive of what I've actually learned. Trying to do the next ten years with the armour down.
+          Founder of Ninety-Eight Entertainment (exited). Founder's Office at Intellewings, an AI-native financial-crime platform. Currently: go-to-market and founder advisory work, the early build-out of ISB's first Sports Management course, and writing about Indian sports, talent, and the operating playbook I've collected the hard way. Off-duty: golf, an Argentine-cinema rabbit hole, Mandeville on luxury, and a sneaker rotation that doubles as a mood board.
         </p>
         <div class="hero-creds">
           <span class="cred-tag"><strong>ISB</strong> &nbsp;PGP '25</span>
@@ -460,7 +485,10 @@
         </div>
       </div>
       <div class="hero-photo">
-        <img class="photo photo--portrait" src="assets/portrait.jpg" alt="Harsh Kumar Arya" loading="eager" />
+        <div class="passport-frame">
+          <img src="assets/portrait.jpg" alt="Harsh Kumar Arya — first passport, age 8" loading="eager" />
+        </div>
+        <div class="passport-caption">Passport No. 1 · Born Ratlam, MP<br>Issued Ghaziabad · 2008</div>
       </div>
     </div>
   </header>
@@ -488,9 +516,8 @@
           <p>I started my first company, <strong>Ninety-Eight Entertainment</strong>, out of college — a full-service marketing and talent management agency. We grew it to ₹15Cr+ in revenue, 65x ROI, a team of 18, and a roster of 12 athletes, 500+ influencers, and 60+ F&amp;B and hospitality clients before I exited to head to ISB.</p>
           <p>Along the way I signed cricketer <strong>Ishant Sharma</strong> as exclusive talent, architected his RuPay × IPL partnership (300M+ impressions), ran award-winning campaigns for Happy Dent and Borges, and built a hyperlocal influencer engine that brands like TrulyMadly and Slay Coffee rode for growth.</p>
           <p>After business school I joined <strong>Intellewings</strong> as Founder's Office — owned commercial GTM in MENA, helped close a $1M ARR upsell with Jio, secured 50% of the venture round, and ran an 8-week reset that lifted productivity 40% and cut cloud spend 30%.</p>
-          <p>Today I split my time between go-to-market and founder advisory work, the early build-out of <strong>ISB's first Sports Management course</strong>, and writing about the operating playbook I've collected the hard way.</p>
-          <p>The version of me that built the agency in his early twenties was, in part, a costume — the genius, the hustler, the golden child. Useful armour for a founder, also exhausting, also not entirely true. The shape of the next decade is to keep building, with less of it. Therapy and meditation help. So does the writing here.</p>
-          <p>Off the clock you'll find me on a golf course (12 handicap, longest drive at the BMW tournament), in a notebook designing something, or deep in an audiobook on philosophy or behavioural economics.</p>
+          <p>Today I split my time between go-to-market and founder advisory work, the early build-out of <strong>ISB's first Sports Management course</strong>, and writing about Indian sports, talent and the operating playbook I've collected the hard way.</p>
+          <p>Off the clock you'll find me on a golf course (12 handicap, longest-drive at the BMW tournament — swing still inconsistent), in a notebook designing something, or two books deep — usually one history and one operator memoir, lately falling for Argentine cinema. Born in Ratlam (population ~270K, on the Mumbai–Delhi line, on no one's map) and still mildly surprised when people don't know it.</p>
         </div>
         <div class="about-photo">
           <img class="photo photo--portrait" src="assets/about.jpg" alt="Harsh Kumar Arya" loading="lazy" />
@@ -623,7 +650,7 @@
   <section id="off">
     <div class="container">
       <div class="section-label">Off the clock</div>
-      <h2 class="section-title">Golf, design, and an <em>inner</em> life.</h2>
+      <h2 class="section-title">Golf, design, and a <em>varied</em> life.</h2>
 
       <div class="off-grid">
         <div class="off-1">
@@ -650,11 +677,11 @@
         </div>
         <div>
           <h4>Design</h4>
-          <p>I sketch most ideas before I write them. Brand systems, decks, a sneaker collection that doubles as a mood board. Style is design you carry everywhere — and the fastest way to know if an idea has legs is to draw it.</p>
+          <p>I sketch most ideas before I write them. Brand systems, decks, the occasional album cover for a friend, and a sneaker collection that doubles as a mood board. Style is design you carry everywhere.</p>
         </div>
         <div>
-          <h4>The inside game</h4>
-          <p>Therapy, meditation, the kind of audiobooks that come back at 2am — Frankl, Foroux, Tuesdays with Morrie, the Mandeville–Adam Smith argument no one wants to have at dinner. Most of what I'm becoming gets built quietly between Zoom calls.</p>
+          <h4>Reading &amp; ideas</h4>
+          <p>Two books at once: usually one history, one operator memoir. Lately: Mandeville on luxury, Frankl on meaning, the soft-power machinery behind Saudi/UAE sports investment. Argentine cinema rabbit hole — Lucrecia Martel, then Lisandro Alonso, then back. Started a sommelier reading list, mostly to stop pretending at restaurants.</p>
         </div>
       </div>
     </div>
@@ -679,13 +706,28 @@
         </a>
         <a class="note-item" href="#">
           <span class="note-date">Coming soon</span>
-          <span class="note-title">On burning down the facade — building without the armour</span>
-          <span class="note-tag">Personal</span>
+          <span class="note-title">The talent management playbook nobody wrote — what I learned signing Ishant Sharma</span>
+          <span class="note-tag">Talent</span>
         </a>
         <a class="note-item" href="#">
           <span class="note-date">Coming soon</span>
-          <span class="note-title">The books that rewired how I think</span>
-          <span class="note-tag">Reading</span>
+          <span class="note-title">Sports washing in Europe — and why it didn't work for the UAE</span>
+          <span class="note-tag">Sports</span>
+        </a>
+        <a class="note-item" href="#">
+          <span class="note-date">Coming soon</span>
+          <span class="note-title">What sovereign wealth funds should actually invest in for the next decade</span>
+          <span class="note-tag">Strategy</span>
+        </a>
+        <a class="note-item" href="#">
+          <span class="note-date">Coming soon</span>
+          <span class="note-title">The next decade of Indian sports — operator gaps and where the money goes</span>
+          <span class="note-tag">Sports</span>
+        </a>
+        <a class="note-item" href="#">
+          <span class="note-date">Coming soon</span>
+          <span class="note-title">Mandeville vs. Rousseau — the argument behind every consumption decision</span>
+          <span class="note-tag">Ideas</span>
         </a>
       </div>
 
