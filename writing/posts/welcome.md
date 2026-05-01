@@ -2,26 +2,22 @@
 title: Why I'm writing this down
 date: 2026-05-01
 tag: Intro
-description: Most operating playbooks live in their owner's head. Here's mine, getting out.
+description: A page for the version of me that doesn't show up on a CV.
 ---
 
 A few years after the Josh Talks keynote — the one about turning ₹24,000 into a multi-crore agency — I noticed something uncomfortable.
 
-The talk had millions of views. People wrote in saying the playbook was useful. And yet most of what I'd actually learned in those four years wasn't in the keynote. It lived as half-memories: the deal that almost killed us, the campaign that worked for reasons I couldn't fully explain, the hire I should have made six months earlier than I did.
+The talk had millions of views. People wrote in saying the playbook was useful. And yet most of what I'd actually learned in those four years lived as half-memories: the deal that almost killed us, the campaign that worked for reasons I couldn't fully explain, the hire I should have made six months earlier than I did. The 80% of operating work that doesn't get into the deck.
 
-That's how operating knowledge usually behaves. It accretes inside one person and stays there until they either retire, write it down, or repeat the same mistakes in their next company.
+There was also a parallel layer I hadn't been honest about. The version of me that built the company was, in part, a costume. The genius. The hustler. The golden child. It was useful armour for a founder in his early twenties. It was also exhausting, and not entirely true.
 
-I've decided to write it down.
+Two questions sit on top of each other in this archive:
 
-This page is a slow project to capture the things I think I've actually figured out — and a few I'm still confused about — across:
+What did I actually learn from running a marketing &amp; talent agency from a five-figure check to ₹15Cr? And what was I doing to *myself* in the process — and what would the next decade of building look like with the armour down?
 
-- Bootstrapping a marketing & talent agency from a five-figure check to ₹15Cr in revenue
-- Running a Founder's Office where I had to design the system I was operating inside of
-- The mechanics of go-to-market in an emerging market when the playbooks you read on the internet were written for somewhere else
-- Indian sports — what the next decade looks like and where the operator gaps are
-- Smaller things: golf, design taste, the books that shifted how I think
+Posts will swing between the two. Some will be operator notes — go-to-market in emerging markets, talent management, founder's-office work, the early build-out of ISB's Sports Management course, what's actually changing in Indian sports. Others will be quieter — what therapy gave me that ISB couldn't, the books that keep coming back at 2am, what I keep getting wrong.
 
-I'm aiming for honest more than polished. Posts will be short when short is right and long when something genuinely needs unpacking. If a piece holds up six months from now I'll keep it; if it doesn't, I'll rewrite it.
+I'm aiming for honest more than polished. If a piece holds up six months from now I'll keep it; if it doesn't, I'll rewrite it.
 
 If something here lands or doesn't, write to me — the email's at the bottom of every page.
 
