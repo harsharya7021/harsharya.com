@@ -9,6 +9,7 @@
   <meta property="og:description" content="Strategy, growth and storytelling. Founder, operator, ISB '25." />
   <meta property="og:type" content="website" />
   <meta property="og:url" content="https://harsharya.com/" />
+  <meta property="og:image" content="https://harsharya.com/assets/portrait.jpg" />
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -22,12 +23,10 @@
       --muted: #6b6358;
       --line: #d6cfc1;
       --accent: #1a1a1a;
-      --placeholder-bg: #ece5d3;
-      --placeholder-text: #98907f;
       --tag-bg: rgba(26, 26, 26, 0.06);
       --highlight: #b85c2c;
+      --photo-bg: #ece5d3;
     }
-
     @media (prefers-color-scheme: dark) {
       :root {
         --bg: #14140f;
@@ -36,511 +35,390 @@
         --muted: #9a9485;
         --line: #2c2c23;
         --accent: #f0eee6;
-        --placeholder-bg: #2a2a21;
-        --placeholder-text: #6e6856;
         --tag-bg: rgba(240, 238, 230, 0.06);
         --highlight: #d68a5e;
+        --photo-bg: #2a2a21;
       }
     }
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
-
     html { scroll-behavior: smooth; }
-
     body {
-      font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
-      background: var(--bg);
-      color: var(--text);
-      line-height: 1.6;
-      font-size: 16px;
+      font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg); color: var(--text);
+      line-height: 1.6; font-size: 16px;
       -webkit-font-smoothing: antialiased;
       -moz-osx-font-smoothing: grayscale;
     }
-
-    .container {
-      max-width: 1120px;
-      margin: 0 auto;
-      padding: 0 32px;
-    }
+    .container { max-width: 1120px; margin: 0 auto; padding: 0 32px; }
 
     /* ─── NAV ───────────────────────────────────────────── */
-
     .nav {
-      position: sticky;
-      top: 0;
-      z-index: 50;
+      position: sticky; top: 0; z-index: 50;
       background: color-mix(in srgb, var(--bg) 88%, transparent);
       backdrop-filter: saturate(160%) blur(12px);
       -webkit-backdrop-filter: saturate(160%) blur(12px);
       border-bottom: 1px solid transparent;
+      transition: border-color 0.2s;
     }
     .nav.scrolled { border-bottom-color: var(--line); }
-
     .nav-inner {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
+      display: flex; align-items: center; justify-content: space-between;
       padding: 18px 0;
     }
-
     .logo {
-      font-family: "Fraunces", serif;
-      font-weight: 500;
-      font-size: 18px;
-      letter-spacing: 0.02em;
-      color: var(--text);
-      text-decoration: none;
+      font-family: "Fraunces", serif; font-weight: 500;
+      font-size: 18px; letter-spacing: 0.02em;
+      color: var(--text); text-decoration: none;
     }
     .logo span { color: var(--muted); }
-
-    .nav-links {
-      display: flex;
-      gap: 28px;
-      font-size: 14px;
-    }
+    .nav-links { display: flex; gap: 28px; font-size: 14px; }
     .nav-links a {
-      color: var(--muted);
-      text-decoration: none;
+      color: var(--muted); text-decoration: none;
       transition: color 0.15s;
     }
     .nav-links a:hover { color: var(--text); }
 
-    /* ─── HERO ──────────────────────────────────────────── */
+    /* ─── PHOTOS ─────────────────────────────────────────── */
+    .photo {
+      display: block; width: 100%;
+      background: var(--photo-bg);
+      object-fit: cover;
+    }
+    .photo--portrait { aspect-ratio: 4 / 5; }
+    .photo--square { aspect-ratio: 1 / 1; }
+    .photo--portrait-tall { aspect-ratio: 3 / 4; }
 
+    /* ─── HERO ──────────────────────────────────────────── */
     .hero {
       padding: 88px 0 72px;
       display: grid;
       grid-template-columns: 1.4fr 1fr;
-      gap: 64px;
-      align-items: end;
+      gap: 64px; align-items: end;
     }
-
     .hero-eyebrow {
       font-family: ui-monospace, "SF Mono", Menlo, monospace;
-      font-size: 12px;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--muted);
+      font-size: 12px; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--muted);
       margin-bottom: 28px;
     }
-
     .hero h1 {
       font-family: "Fraunces", serif;
       font-weight: 400;
       font-size: clamp(48px, 7vw, 92px);
-      line-height: 1.02;
-      letter-spacing: -0.02em;
+      line-height: 1.02; letter-spacing: -0.02em;
       margin-bottom: 32px;
     }
-    .hero h1 em {
-      font-style: italic;
-      font-weight: 300;
-      color: var(--muted);
-    }
-
+    .hero h1 em { font-style: italic; font-weight: 300; color: var(--muted); }
     .hero-tagline {
-      font-size: 19px;
-      line-height: 1.55;
-      color: var(--text);
-      max-width: 540px;
+      font-size: 19px; line-height: 1.55;
+      color: var(--text); max-width: 540px;
       margin-bottom: 32px;
     }
-
     .hero-creds {
-      display: flex;
-      flex-wrap: wrap;
+      display: flex; flex-wrap: wrap;
       gap: 8px 10px;
     }
     .cred-tag {
-      font-size: 13px;
-      padding: 6px 12px;
-      border: 1px solid var(--line);
-      border-radius: 999px;
-      color: var(--muted);
-      background: var(--bg-elev);
+      font-size: 13px; padding: 6px 12px;
+      border: 1px solid var(--line); border-radius: 999px;
+      color: var(--muted); background: var(--bg-elev);
     }
-    .cred-tag strong {
-      color: var(--text);
-      font-weight: 600;
-    }
-
+    .cred-tag strong { color: var(--text); font-weight: 600; }
     .hero-photo { position: relative; }
 
-    /* ─── PHOTO PLACEHOLDERS ─────────────────────────────── */
-
-    .photo-slot {
-      background: var(--placeholder-bg);
-      border: 1px dashed var(--line);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-direction: column;
-      gap: 6px;
-      color: var(--placeholder-text);
-      font-family: ui-monospace, "SF Mono", Menlo, monospace;
-      font-size: 11px;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      text-align: center;
-      padding: 16px;
-    }
-    .photo-slot::before {
-      content: "";
-      width: 24px;
-      height: 24px;
-      border: 1px solid currentColor;
-      opacity: 0.5;
-    }
-    .photo-slot small {
-      font-size: 10px;
-      opacity: 0.65;
-      letter-spacing: 0.1em;
-    }
-    .photo-slot--portrait { aspect-ratio: 4 / 5; }
-    .photo-slot--landscape { aspect-ratio: 4 / 3; }
-    .photo-slot--square { aspect-ratio: 1 / 1; }
-    .photo-slot--wide { aspect-ratio: 16 / 9; }
-
-    /* ─── SECTION GENERICS ───────────────────────────────── */
-
+    /* ─── SECTIONS ───────────────────────────────────────── */
     section { padding: 80px 0; }
-
     .section-label {
       font-family: ui-monospace, "SF Mono", Menlo, monospace;
-      font-size: 12px;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--muted);
+      font-size: 12px; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--muted);
       margin-bottom: 32px;
-      display: flex;
-      align-items: center;
-      gap: 16px;
+      display: flex; align-items: center; gap: 16px;
     }
     .section-label::after {
-      content: "";
-      flex: 1;
-      height: 1px;
-      background: var(--line);
+      content: ""; flex: 1; height: 1px; background: var(--line);
     }
-
     .section-title {
-      font-family: "Fraunces", serif;
-      font-weight: 400;
+      font-family: "Fraunces", serif; font-weight: 400;
       font-size: clamp(36px, 4.5vw, 56px);
-      line-height: 1.05;
-      letter-spacing: -0.015em;
-      margin-bottom: 48px;
-      max-width: 880px;
+      line-height: 1.05; letter-spacing: -0.015em;
+      margin-bottom: 48px; max-width: 880px;
     }
-    .section-title em {
-      font-style: italic;
-      color: var(--muted);
-      font-weight: 300;
-    }
+    .section-title em { font-style: italic; color: var(--muted); font-weight: 300; }
 
     /* ─── PRESS STRIP ────────────────────────────────────── */
-
     .press {
       padding: 32px 0 !important;
       border-top: 1px solid var(--line);
       border-bottom: 1px solid var(--line);
     }
     .press-inner {
-      display: flex;
-      align-items: center;
-      gap: 40px;
-      flex-wrap: wrap;
+      display: flex; align-items: center;
+      gap: 40px; flex-wrap: wrap;
       justify-content: space-between;
     }
     .press-label {
       font-family: ui-monospace, "SF Mono", Menlo, monospace;
-      font-size: 11px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--muted);
+      font-size: 11px; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--muted);
     }
     .press-list {
-      display: flex;
-      gap: 36px;
-      flex-wrap: wrap;
-      align-items: center;
+      display: flex; gap: 36px;
+      flex-wrap: wrap; align-items: center;
     }
     .press-list span {
       font-family: "Fraunces", serif;
-      font-size: 18px;
-      font-weight: 500;
-      color: var(--text);
-      letter-spacing: 0.01em;
+      font-size: 18px; font-weight: 500;
+      color: var(--text); letter-spacing: 0.01em;
     }
 
     /* ─── ABOUT ──────────────────────────────────────────── */
-
     .about-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 64px;
-      align-items: start;
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 64px; align-items: start;
     }
     .about-prose p {
-      font-size: 18px;
-      line-height: 1.6;
-      margin-bottom: 20px;
-      color: var(--text);
+      font-size: 18px; line-height: 1.6;
+      margin-bottom: 20px; color: var(--text);
     }
     .about-prose p:last-child { margin-bottom: 0; }
     .about-prose strong { font-weight: 600; }
     .about-photo { position: sticky; top: 96px; }
-    .about-photo .photo-slot { aspect-ratio: 4 / 5; }
     .about-photo-caption {
       font-family: ui-monospace, "SF Mono", Menlo, monospace;
-      font-size: 11px;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-top: 12px;
-      text-align: right;
+      font-size: 11px; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--muted);
+      margin-top: 12px; text-align: right;
     }
 
     /* ─── CREDENTIALS ────────────────────────────────────── */
-
     .creds-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
+      display: grid; grid-template-columns: 1fr 1fr;
       gap: 32px;
     }
     .cred {
       padding: 36px;
-      border: 1px solid var(--line);
-      border-radius: 4px;
+      border: 1px solid var(--line); border-radius: 4px;
       background: var(--bg-elev);
     }
     .cred-school {
       font-family: "Fraunces", serif;
-      font-size: 28px;
-      font-weight: 500;
-      letter-spacing: -0.01em;
-      margin-bottom: 6px;
+      font-size: 28px; font-weight: 500;
+      letter-spacing: -0.01em; margin-bottom: 6px;
     }
     .cred-program {
-      font-size: 14px;
-      color: var(--muted);
+      font-size: 14px; color: var(--muted);
       margin-bottom: 24px;
     }
     .cred-divider {
-      height: 1px;
-      background: var(--line);
-      margin: 24px 0;
+      height: 1px; background: var(--line); margin: 24px 0;
     }
     .cred-highlight {
-      font-size: 14px;
-      line-height: 1.55;
-      color: var(--text);
-      margin-bottom: 12px;
+      font-size: 14px; line-height: 1.55;
+      color: var(--text); margin-bottom: 12px;
     }
     .cred-highlight strong { color: var(--highlight); font-weight: 600; }
     .cred-meta {
       font-family: ui-monospace, "SF Mono", Menlo, monospace;
-      font-size: 11px;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--muted);
+      font-size: 11px; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--muted);
       margin-top: 16px;
     }
 
     /* ─── WORK GRID ──────────────────────────────────────── */
-
     .work-grid {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
+      display: grid; grid-template-columns: 1fr 1fr;
       gap: 48px 32px;
     }
-    .work-item { display: block; text-decoration: none; color: inherit; }
-    .work-item .photo-slot {
-      aspect-ratio: 4 / 3;
+    .work-item {
+      display: block; text-decoration: none; color: inherit;
+    }
+    .work-item .photo {
       transition: transform 0.4s ease;
     }
-    .work-item:hover .photo-slot { transform: translateY(-4px); }
+    .work-item:hover .photo { transform: translateY(-4px); }
     .work-meta {
       margin-top: 16px;
-      display: flex;
-      justify-content: space-between;
-      align-items: baseline;
-      gap: 16px;
+      display: flex; justify-content: space-between;
+      align-items: baseline; gap: 16px;
     }
     .work-title {
       font-family: "Fraunces", serif;
-      font-size: 22px;
-      font-weight: 500;
+      font-size: 22px; font-weight: 500;
       letter-spacing: -0.005em;
     }
     .work-year {
       font-family: ui-monospace, "SF Mono", Menlo, monospace;
-      font-size: 12px;
-      letter-spacing: 0.1em;
-      color: var(--muted);
-      white-space: nowrap;
+      font-size: 12px; letter-spacing: 0.1em;
+      color: var(--muted); white-space: nowrap;
     }
     .work-role {
-      font-size: 14px;
-      color: var(--muted);
-      margin-top: 4px;
+      font-size: 14px; color: var(--muted); margin-top: 4px;
     }
     .work-desc {
-      font-size: 15px;
-      color: var(--text);
-      margin-top: 12px;
-      line-height: 1.55;
+      font-size: 15px; color: var(--text);
+      margin-top: 12px; line-height: 1.55;
     }
 
-    /* ─── PERSONAL / OFF THE CLOCK ───────────────────────── */
+    /* ─── HIGHLIGHTS ─────────────────────────────────────── */
+    .highlights {
+      margin-top: 72px; padding-top: 48px;
+      border-top: 1px solid var(--line);
+    }
+    .highlights-label {
+      font-family: ui-monospace, "SF Mono", Menlo, monospace;
+      font-size: 11px; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--muted);
+      margin-bottom: 28px;
+    }
+    .highlights-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 4px 48px;
+    }
+    .highlight-row {
+      padding: 18px 0;
+      border-top: 1px solid var(--line);
+      display: grid;
+      grid-template-columns: 80px 1fr;
+      gap: 24px;
+      align-items: baseline;
+    }
+    .highlight-year {
+      font-family: ui-monospace, "SF Mono", Menlo, monospace;
+      font-size: 12px; color: var(--muted);
+      letter-spacing: 0.05em;
+    }
+    .highlight-text {
+      font-size: 15px; color: var(--text); line-height: 1.5;
+    }
+    .highlight-text strong { font-weight: 600; }
 
+    /* ─── OFF THE CLOCK ──────────────────────────────────── */
     .off-grid {
       display: grid;
-      grid-template-columns: repeat(6, 1fr);
+      grid-template-columns: repeat(4, 1fr);
+      grid-template-rows: 1fr 1fr;
       gap: 16px;
     }
-    .off-grid .photo-slot { aspect-ratio: 1/1; }
-    .off-1 { grid-column: span 2; grid-row: span 2; }
-    .off-1 .photo-slot { aspect-ratio: auto; height: 100%; min-height: 320px; }
-    .off-2 { grid-column: span 2; }
-    .off-3 { grid-column: span 2; }
-    .off-4 { grid-column: span 3; }
-    .off-4 .photo-slot { aspect-ratio: 16/10; }
-    .off-5 { grid-column: span 3; }
-    .off-5 .photo-slot { aspect-ratio: 16/10; }
+    .off-1 { grid-column: 1 / 3; grid-row: 1 / 3; }
+    .off-2 { grid-column: 3 / 4; grid-row: 1; }
+    .off-3 { grid-column: 4 / 5; grid-row: 1; }
+    .off-4 { grid-column: 3 / 4; grid-row: 2; }
+    .off-5 { grid-column: 4 / 5; grid-row: 2; }
+    .off-1 .photo { aspect-ratio: auto; height: 100%; }
+    .off-grid > div .photo {
+      width: 100%; height: 100%;
+    }
 
     .off-caption {
-      display: grid;
-      grid-template-columns: 1fr 1fr 1fr;
-      gap: 32px;
-      margin-top: 36px;
-      font-size: 15px;
+      display: grid; grid-template-columns: 1fr 1fr 1fr;
+      gap: 32px; margin-top: 36px; font-size: 15px;
     }
     .off-caption h4 {
       font-family: "Fraunces", serif;
-      font-weight: 500;
-      font-size: 18px;
-      margin-bottom: 6px;
+      font-weight: 500; font-size: 18px; margin-bottom: 6px;
     }
     .off-caption p { color: var(--muted); line-height: 1.55; }
 
-    /* ─── NOTES / WRITING ────────────────────────────────── */
-
+    /* ─── NOTES ─────────────────────────────────────────── */
     .notes-list { display: grid; gap: 0; }
     .note-item {
       display: grid;
       grid-template-columns: 100px 1fr auto;
-      gap: 32px;
-      padding: 24px 0;
+      gap: 32px; padding: 24px 0;
       border-top: 1px solid var(--line);
       align-items: baseline;
-      text-decoration: none;
-      color: inherit;
+      text-decoration: none; color: inherit;
       transition: padding 0.2s ease;
     }
     .note-item:last-child { border-bottom: 1px solid var(--line); }
     .note-item:hover { padding-left: 8px; }
     .note-date {
       font-family: ui-monospace, "SF Mono", Menlo, monospace;
-      font-size: 12px;
-      letter-spacing: 0.05em;
-      color: var(--muted);
+      font-size: 12px; letter-spacing: 0.05em; color: var(--muted);
     }
     .note-title {
       font-family: "Fraunces", serif;
-      font-size: 22px;
-      font-weight: 500;
+      font-size: 22px; font-weight: 500;
       letter-spacing: -0.005em;
     }
     .note-tag {
       font-family: ui-monospace, "SF Mono", Menlo, monospace;
-      font-size: 11px;
-      letter-spacing: 0.12em;
-      color: var(--muted);
-      text-transform: uppercase;
+      font-size: 11px; letter-spacing: 0.12em;
+      color: var(--muted); text-transform: uppercase;
     }
     .all-notes {
-      margin-top: 32px;
-      display: inline-block;
-      font-size: 15px;
-      color: var(--text);
+      margin-top: 32px; display: inline-block;
+      font-size: 15px; color: var(--text);
       text-decoration: none;
       border-bottom: 1px solid var(--text);
       padding-bottom: 2px;
     }
 
     /* ─── CONTACT ────────────────────────────────────────── */
-
     .contact-block { padding: 96px 0; }
     .contact-line {
-      font-family: "Fraunces", serif;
-      font-weight: 400;
+      font-family: "Fraunces", serif; font-weight: 400;
       font-size: clamp(36px, 5vw, 64px);
-      line-height: 1.1;
-      letter-spacing: -0.015em;
-      margin-bottom: 32px;
-      max-width: 900px;
+      line-height: 1.1; letter-spacing: -0.015em;
+      margin-bottom: 32px; max-width: 900px;
     }
     .contact-line em { font-style: italic; color: var(--muted); font-weight: 300; }
     .contact-email {
       font-family: "Fraunces", serif;
       font-size: clamp(28px, 4vw, 48px);
-      color: var(--text);
-      text-decoration: none;
+      color: var(--text); text-decoration: none;
       border-bottom: 2px solid var(--text);
-      padding-bottom: 4px;
-      display: inline-block;
+      padding-bottom: 4px; display: inline-block;
       margin-bottom: 36px;
     }
     .contact-email:hover { color: var(--highlight); border-bottom-color: var(--highlight); }
     .contact-socials {
-      display: flex;
-      gap: 28px;
-      flex-wrap: wrap;
+      display: flex; gap: 28px; flex-wrap: wrap;
     }
     .contact-socials a {
-      font-size: 14px;
-      color: var(--muted);
-      text-decoration: none;
-      letter-spacing: 0.02em;
+      font-size: 14px; color: var(--muted);
+      text-decoration: none; letter-spacing: 0.02em;
     }
     .contact-socials a:hover { color: var(--text); }
 
     /* ─── FOOTER ─────────────────────────────────────────── */
-
     footer {
       padding: 28px 0 40px;
       border-top: 1px solid var(--line);
       font-family: ui-monospace, "SF Mono", Menlo, monospace;
-      font-size: 11px;
-      letter-spacing: 0.12em;
-      text-transform: uppercase;
-      color: var(--muted);
+      font-size: 11px; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--muted);
     }
     footer .container {
-      display: flex;
-      justify-content: space-between;
-      gap: 16px;
-      flex-wrap: wrap;
+      display: flex; justify-content: space-between;
+      gap: 16px; flex-wrap: wrap;
     }
 
     /* ─── RESPONSIVE ─────────────────────────────────────── */
-
     @media (max-width: 880px) {
       .container { padding: 0 22px; }
       .hero {
         grid-template-columns: 1fr;
-        gap: 36px;
-        padding: 56px 0 48px;
+        gap: 36px; padding: 56px 0 48px;
       }
       .hero-photo { order: -1; max-width: 280px; }
       .about-grid { grid-template-columns: 1fr; gap: 36px; }
       .about-photo { position: static; }
       .creds-grid { grid-template-columns: 1fr; gap: 16px; }
       .work-grid { grid-template-columns: 1fr; gap: 40px; }
-      .off-grid { grid-template-columns: repeat(2, 1fr); }
-      .off-1, .off-2, .off-3, .off-4, .off-5 { grid-column: span 2; grid-row: auto; }
-      .off-1 .photo-slot, .off-4 .photo-slot, .off-5 .photo-slot { aspect-ratio: 4/3; min-height: auto; }
+      .highlights-grid { grid-template-columns: 1fr; gap: 0; }
+      .off-grid {
+        grid-template-columns: repeat(2, 1fr);
+        grid-template-rows: auto;
+      }
+      .off-1, .off-2, .off-3, .off-4, .off-5 {
+        grid-column: auto; grid-row: auto;
+      }
+      .off-1 { grid-column: span 2; }
+      .off-1 .photo { aspect-ratio: 4/3; height: auto; }
       .off-caption { grid-template-columns: 1fr; gap: 20px; }
       .nav-links { gap: 18px; font-size: 13px; }
       .note-item { grid-template-columns: 80px 1fr; gap: 16px; }
@@ -582,15 +460,12 @@
         </div>
       </div>
       <div class="hero-photo">
-        <div class="photo-slot photo-slot--portrait">
-          PORTRAIT
-          <small>assets/portrait.jpg</small>
-        </div>
+        <img class="photo photo--portrait" src="assets/portrait.jpg" alt="Harsh Kumar Arya" loading="eager" />
       </div>
     </div>
   </header>
 
-  <!-- ─── PRESS STRIP ────────────────────────────────────── -->
+  <!-- ─── PRESS ─────────────────────────────────────────── -->
   <section class="press">
     <div class="container press-inner">
       <div class="press-label">As featured in</div>
@@ -610,27 +485,14 @@
       <div class="section-label">About</div>
       <div class="about-grid">
         <div class="about-prose">
-          <p>
-            I started my first company, <strong>Ninety-Eight Entertainment</strong>, out of college — a full-service marketing and talent management agency. We grew it to ₹15Cr+ in revenue, 65x ROI, a team of 18, and a roster of 12 athletes, 500+ influencers, and 60+ F&amp;B and hospitality clients before I exited to head to ISB.
-          </p>
-          <p>
-            Along the way I signed cricketer <strong>Ishant Sharma</strong> as exclusive talent, architected his RuPay × IPL partnership (300M+ impressions), ran award-winning campaigns for Happy Dent and Borges, and built a hyperlocal influencer engine that brands like TrulyMadly and Slay Coffee rode for growth.
-          </p>
-          <p>
-            After business school I joined <strong>Intellewings</strong> as Founder's Office — owned commercial GTM in MENA, helped close a $1M ARR upsell with Jio, secured 50% of the venture round, and ran an 8-week reset that lifted productivity 40% and cut cloud spend 30%.
-          </p>
-          <p>
-            Today I split my time between go-to-market and founder advisory work, the early build-out of <strong>ISB's first Sports Management course</strong>, and writing about the operating playbook I've collected the hard way.
-          </p>
-          <p>
-            Off the clock you'll find me on a golf course (12 handicap, longest drive at the BMW tournament), in a notebook designing something, or deep in a podcast about how India is changing.
-          </p>
+          <p>I started my first company, <strong>Ninety-Eight Entertainment</strong>, out of college — a full-service marketing and talent management agency. We grew it to ₹15Cr+ in revenue, 65x ROI, a team of 18, and a roster of 12 athletes, 500+ influencers, and 60+ F&amp;B and hospitality clients before I exited to head to ISB.</p>
+          <p>Along the way I signed cricketer <strong>Ishant Sharma</strong> as exclusive talent, architected his RuPay × IPL partnership (300M+ impressions), ran award-winning campaigns for Happy Dent and Borges, and built a hyperlocal influencer engine that brands like TrulyMadly and Slay Coffee rode for growth.</p>
+          <p>After business school I joined <strong>Intellewings</strong> as Founder's Office — owned commercial GTM in MENA, helped close a $1M ARR upsell with Jio, secured 50% of the venture round, and ran an 8-week reset that lifted productivity 40% and cut cloud spend 30%.</p>
+          <p>Today I split my time between go-to-market and founder advisory work, the early build-out of <strong>ISB's first Sports Management course</strong>, and writing about the operating playbook I've collected the hard way.</p>
+          <p>Off the clock you'll find me on a golf course (12 handicap, longest drive at the BMW tournament), in a notebook designing something, or deep in a podcast about how India is changing.</p>
         </div>
         <div class="about-photo">
-          <div class="photo-slot photo-slot--portrait">
-            CANDID / WORKING
-            <small>assets/about.jpg</small>
-          </div>
+          <img class="photo photo--portrait" src="assets/about.jpg" alt="Harsh Kumar Arya" loading="lazy" />
           <div class="about-photo-caption">New Delhi · 2026</div>
         </div>
       </div>
@@ -647,7 +509,7 @@
           <div class="cred-school">Indian School of Business</div>
           <div class="cred-program">PGP · Strategy &amp; Leadership / Marketing · Class of 2025</div>
           <div class="cred-divider"></div>
-          <p class="cred-highlight">National Finalist (10 of 15,000) at <strong>ABInBev</strong>, identifying a $120M white space and crafting a Gen-Z energy-drink GTM.</p>
+          <p class="cred-highlight">National Finalist (10 of 15,000) at <strong>ABInBev</strong> — identified a $120M white space and crafted a Gen-Z energy-drink GTM.</p>
           <p class="cred-highlight">Top finalist in <strong>GameX</strong> (25/1000) and <strong>ISPROUTE</strong> (29/800) — pioneered scalable revenue models in e-sports.</p>
           <p class="cred-highlight">Awarded <strong>"P2P Champ"</strong> for sessions on marketing strategy with 100+ batchmates · 95% positive feedback.</p>
           <div class="cred-meta">GMAT 760 · Top 1%</div>
@@ -673,10 +535,7 @@
       <div class="work-grid">
 
         <a class="work-item" href="#">
-          <div class="photo-slot photo-slot--landscape">
-            NINETY-EIGHT
-            <small>assets/work/ninety-eight.jpg</small>
-          </div>
+          <img class="photo photo--portrait-tall" src="assets/work/ninety-eight.jpg" alt="Ninety-Eight Entertainment" loading="lazy" />
           <div class="work-meta">
             <div>
               <div class="work-title">Ninety-Eight Entertainment</div>
@@ -684,14 +543,11 @@
             </div>
             <span class="work-year">2021 — 2024</span>
           </div>
-          <p class="work-desc">Bootstrapped a marketing &amp; talent agency to ₹15Cr+ revenue, 65x ROI and a team of 18. Roster of 12 athletes and 500+ influencers across hospitality, F&amp;B and lifestyle.</p>
+          <p class="work-desc">Bootstrapped a marketing &amp; talent agency to ₹15Cr+ revenue, 65x ROI, a team of 18 and a roster of 12 athletes and 500+ influencers across hospitality, F&amp;B and lifestyle.</p>
         </a>
 
         <a class="work-item" href="#">
-          <div class="photo-slot photo-slot--landscape">
-            INTELLEWINGS
-            <small>assets/work/intellewings.jpg</small>
-          </div>
+          <img class="photo photo--portrait-tall" src="assets/work/intellewings.jpg" alt="Intellewings" loading="lazy" />
           <div class="work-meta">
             <div>
               <div class="work-title">Intellewings</div>
@@ -699,59 +555,23 @@
             </div>
             <span class="work-year">2025</span>
           </div>
-          <p class="work-desc">Owned MENA GTM — first Saudi client, 200+ UAE SMEs. Secured 50% of the venture round. Closed a $1M ARR upsell with Jio. 40%+ productivity lift in 8 weeks.</p>
+          <p class="work-desc">Owned MENA GTM — first Saudi client, 200+ UAE SMEs. Closed a $1M ARR upsell with Jio. Secured 50% of the venture round. 40%+ productivity lift in 8 weeks.</p>
         </a>
 
         <a class="work-item" href="#">
-          <div class="photo-slot photo-slot--landscape">
-            ISB SPORTS
-            <small>assets/work/isb-sports.jpg</small>
-          </div>
+          <img class="photo photo--portrait-tall" src="assets/work/isb-sports.jpg" alt="ISB Sports Management Course" loading="lazy" />
           <div class="work-meta">
             <div>
-              <div class="work-title">ISB Sports Management Course</div>
-              <div class="work-role">Curriculum Architect · Ongoing</div>
+              <div class="work-title">ISB Sports Management</div>
+              <div class="work-role">Curriculum Architect</div>
             </div>
             <span class="work-year">2025 —</span>
           </div>
-          <p class="work-desc">Designing the school's first Sports Management course end-to-end — curriculum, industry partnerships, and a guest faculty pipeline of operators running the business of Indian sports.</p>
+          <p class="work-desc">Designing the school's first Sports Management course end-to-end — curriculum, industry partnerships and a guest faculty pipeline of operators running the business of Indian sports.</p>
         </a>
 
         <a class="work-item" href="#">
-          <div class="photo-slot photo-slot--landscape">
-            ISHANT × RUPAY
-            <small>assets/work/ishant-rupay.jpg</small>
-          </div>
-          <div class="work-meta">
-            <div>
-              <div class="work-title">Ishant Sharma × RuPay</div>
-              <div class="work-role">Talent Architect · IPL '22</div>
-            </div>
-            <span class="work-year">2022</span>
-          </div>
-          <p class="work-desc">Architected the RuPay partnership for cricketer Ishant Sharma during IPL '22 — 300M+ impressions across TV, OTT and digital. Same year: Digies'23 award-winning Happy Dent campaign.</p>
-        </a>
-
-        <a class="work-item" href="#">
-          <div class="photo-slot photo-slot--landscape">
-            JOSH TALKS
-            <small>assets/work/josh-talks.jpg</small>
-          </div>
-          <div class="work-meta">
-            <div>
-              <div class="work-title">Josh Talks Keynote</div>
-              <div class="work-role">Speaker · 4M reach</div>
-            </div>
-            <span class="work-year">2022</span>
-          </div>
-          <p class="work-desc">Delivered "Secrets of Turning ₹24,000 Into Crores" — a keynote on building a marketing agency from zero. Featured on Outlook, The Week, Mid-Day and PTI.</p>
-        </a>
-
-        <a class="work-item" href="#">
-          <div class="photo-slot photo-slot--landscape">
-            GTM ADVISORY
-            <small>assets/work/advisory.jpg</small>
-          </div>
+          <img class="photo photo--portrait-tall" src="assets/work/advisory.jpg" alt="GTM and founder advisory" loading="lazy" />
           <div class="work-meta">
             <div>
               <div class="work-title">GTM &amp; Founder Advisory</div>
@@ -759,10 +579,42 @@
             </div>
             <span class="work-year">Ongoing</span>
           </div>
-          <p class="work-desc">Selectively partnering with early-stage founders on go-to-market — segment selection, partner-led entry into new geographies, enterprise sales playbooks, and operating cadence.</p>
+          <p class="work-desc">Selectively partnering with early-stage founders on go-to-market — segment selection, partner-led entry into new geographies, enterprise sales playbooks and the operating cadence underneath.</p>
         </a>
 
       </div>
+
+      <!-- HIGHLIGHTS — text-only items that don't have a strong project image -->
+      <div class="highlights">
+        <div class="highlights-label">Selected highlights</div>
+        <div class="highlights-grid">
+          <div class="highlight-row">
+            <span class="highlight-year">IPL '22</span>
+            <span class="highlight-text"><strong>Ishant Sharma × RuPay</strong> — architected the partnership during IPL '22. 300M+ impressions across TV, OTT and digital.</span>
+          </div>
+          <div class="highlight-row">
+            <span class="highlight-year">2022</span>
+            <span class="highlight-text"><strong>Josh Talks keynote</strong> — "Secrets of Turning ₹24,000 Into Crores". 4M reach. Featured in Outlook, The Week, Mid-Day, PTI.</span>
+          </div>
+          <div class="highlight-row">
+            <span class="highlight-year">2023</span>
+            <span class="highlight-text"><strong>Digies'23 Award</strong> — Happy Dent campaign delivered 10x brand awareness with organic press coverage.</span>
+          </div>
+          <div class="highlight-row">
+            <span class="highlight-year">2025</span>
+            <span class="highlight-text"><strong>ABInBev National Finalist</strong> — top 10 of 15,000. $120M white-space GTM for Gen Z.</span>
+          </div>
+          <div class="highlight-row">
+            <span class="highlight-year">2019</span>
+            <span class="highlight-text"><strong>Georgia Tech</strong> — Research Scholar. 29% faster GPU optimization using CUDA and PARADISO.</span>
+          </div>
+          <div class="highlight-row">
+            <span class="highlight-year">2020</span>
+            <span class="highlight-text"><strong>Collision Conference Canada</strong> finalist (3/300) and <strong>Startup Istanbul</strong> finalist — pitched a $1M-valued professional networking platform.</span>
+          </div>
+        </div>
+      </div>
+
     </div>
   </section>
 
@@ -774,34 +626,19 @@
 
       <div class="off-grid">
         <div class="off-1">
-          <div class="photo-slot">
-            ON THE COURSE
-            <small>assets/life/golf-1.jpg</small>
-          </div>
+          <img class="photo" src="assets/life/01-style.jpg" alt="Style and sneakers" loading="lazy" />
         </div>
         <div class="off-2">
-          <div class="photo-slot">
-            DESIGN MOMENT
-            <small>assets/life/design-1.jpg</small>
-          </div>
+          <img class="photo" src="assets/life/02-golf.jpg" alt="Golf — fairway approach" loading="lazy" />
         </div>
         <div class="off-3">
-          <div class="photo-slot">
-            TRAVEL
-            <small>assets/life/travel-1.jpg</small>
-          </div>
+          <img class="photo" src="assets/life/03-tee.jpg" alt="Golf — tee box" loading="lazy" />
         </div>
         <div class="off-4">
-          <div class="photo-slot">
-            EVENT / STAGE
-            <small>assets/life/stage-1.jpg</small>
-          </div>
+          <img class="photo" src="assets/life/04-event.jpg" alt="Red Bull Dance Your Style" loading="lazy" />
         </div>
         <div class="off-5">
-          <div class="photo-slot">
-            FRIENDS / TEAM
-            <small>assets/life/people-1.jpg</small>
-          </div>
+          <img class="photo" src="assets/life/05-press.jpg" alt="Sapne vs Everyone" loading="lazy" />
         </div>
       </div>
 
@@ -812,11 +649,11 @@
         </div>
         <div>
           <h4>Design</h4>
-          <p>I sketch most ideas before I write them. Brand systems, decks and the occasional album cover for friends. The fastest way to know if an idea has legs is to draw it.</p>
+          <p>I sketch most ideas before I write them. Brand systems, decks, a sneaker collection that doubles as a mood board. Style is design you carry everywhere — and the fastest way to know if an idea has legs is to draw it.</p>
         </div>
         <div>
-          <h4>Other lives</h4>
-          <p>Avid podcast listener on India's transition decade. Spent some time studying for a sommelier exam. Always reading two books at once — one history, one operator memoir.</p>
+          <h4>Out &amp; about</h4>
+          <p>Premieres, club nights, friends' shows. Dance Your Style with Red Bull. There's a version of me that's always at the gig.</p>
         </div>
       </div>
     </div>
@@ -856,7 +693,7 @@
       <p class="contact-line">Got something to <em>build</em>, hire, or chat about?<br>Send a note.</p>
       <a class="contact-email" href="mailto:harsharya7021@gmail.com">harsharya7021@gmail.com</a>
       <div class="contact-socials">
-        <a href="#" target="_blank" rel="noopener">LinkedIn ↗</a>
+        <a href="https://www.linkedin.com/in/harsharyaa/" target="_blank" rel="noopener">LinkedIn ↗</a>
         <a href="#" target="_blank" rel="noopener">X / Twitter ↗</a>
         <a href="https://github.com/harsharya7021" target="_blank" rel="noopener">GitHub ↗</a>
       </div>
