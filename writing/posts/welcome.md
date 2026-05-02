@@ -9,13 +9,13 @@ A few years after the Josh Talks keynote — the one about turning ₹24,000 int
 
 The talk had millions of views. The playbook in it was useful. But most of what I'd actually learned in those four years lived as half-memories: the deal that almost killed us, the campaign that worked for reasons I couldn't fully explain, the hire I should have made six months earlier than I did. The 80% of operating work that never makes it into a deck.
 
-This page is a slow project to write that 80% down. Operator notes from running a marketing &amp; talent agency to ₹15Cr, signing one of India's most prominent cricketers, building a Founder's Office at Intellewings, putting together ISB's first Sports Management course, and watching where the next decade of Indian sports is going.
+This page is a slow project to write that 80% down. Operator notes from bootstrapping a marketing &amp; talent agency from zero to a national practice, signing one of India's most prominent cricketers, the year I spent operating across enterprise GTM and founder's-office work, putting together ISB's first Sports Management course, and watching where the next decade of Indian sports is going.
 
 Topics queued up to write through:
 
-- **Bootstrapping in an emerging market** — segmentation, partner-led GTM, hyperlocal influencer mechanics, and how we got from a five-figure check to ₹15Cr.
+- **Bootstrapping in an emerging market** — segmentation, partner-led GTM, hyperlocal influencer mechanics, and what actually moved the needle.
 - **Talent management** — what works in India, what doesn't, what I learned signing Ishant Sharma and architecting his RuPay × IPL play.
-- **Founder's Office** — the operating cadence I had to install at Intellewings: 1:1s, OKRs, sprint hygiene, FinOps, and what would have made it stick faster.
+- **Founder's Office** — the operating cadence that actually scales a small team: 1:1s, OKRs, sprint hygiene, FinOps, and what would have made it stick faster.
 - **Indian sports** — soft power, sovereign-wealth flows, the operator gaps in franchise/league/federation roles, and why the next decade rewrites the industry.
 - **Strategy beyond the deck** — sports washing, multipolar capital, where Saudi/UAE money should actually go, and what India can borrow.
 - **The reading list** — Mandeville, Frankl, Tuesdays with Morrie, and the less-obvious books that rebuilt how I look at operating work.
