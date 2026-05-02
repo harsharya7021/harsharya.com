@@ -9,7 +9,7 @@ A few years after the Josh Talks keynote — the one about turning ₹24,000 int
 
 The talk had millions of views. The playbook in it was useful. But most of what I'd actually learned in those four years lived as half-memories: the deal that almost killed us, the campaign that worked for reasons I couldn't fully explain, the hire I should have made six months earlier than I did. The 80% of operating work that never makes it into a deck.
 
-This page is a slow project to write that 80% down. Operator notes from bootstrapping a marketing &amp; talent agency from zero to a national practice, signing one of India's most prominent cricketers, the year I spent operating across enterprise GTM and founder's-office work, putting together ISB's first Sports Management course, and watching where the next decade of Indian sports is going.
+This page is a slow project to write that 80% down. Operator notes from bootstrapping a marketing &amp; talent agency from zero to a national practice, signing one of India's most prominent cricketers, a year operating across enterprise GTM and founder's-office work, and watching where the next decade of Indian sports is going.
 
 Topics queued up to write through:
 
