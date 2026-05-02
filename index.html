@@ -100,7 +100,7 @@
       padding: 88px 0 72px;
       display: grid;
       grid-template-columns: 1.4fr 1fr;
-      gap: 64px; align-items: end;
+      gap: 64px; align-items: start;
     }
     .hero-eyebrow {
       font-family: ui-monospace, "SF Mono", Menlo, monospace;
@@ -132,6 +132,66 @@
     }
     .cred-tag strong { color: var(--text); font-weight: 600; }
     .hero-photo { position: relative; }
+    .name-card {
+      background: var(--bg-elev);
+      border: 1px solid var(--line);
+      padding: 18px 22px;
+      margin-bottom: 22px;
+    }
+    .dict-row {
+      padding: 12px 0;
+      border-top: 1px solid var(--line);
+    }
+    .dict-row:first-child { border-top: 0; padding-top: 0; }
+    .dict-row:last-child { padding-bottom: 0; }
+    .dict-word {
+      font-family: "Fraunces", serif;
+      font-weight: 500;
+      font-size: 18px;
+      color: var(--text);
+      letter-spacing: -0.005em;
+    }
+    .dict-word sup {
+      font-size: 0.55em;
+      vertical-align: super;
+      color: var(--muted);
+      margin-left: 1px;
+    }
+    .dict-pron {
+      font-family: ui-monospace, "SF Mono", Menlo, monospace;
+      font-size: 12px;
+      color: var(--muted);
+      margin-left: 8px;
+      letter-spacing: 0.02em;
+    }
+    .dict-tag {
+      font-style: italic;
+      font-size: 12px;
+      color: var(--muted);
+      margin-left: 6px;
+    }
+    .dict-def {
+      display: block;
+      font-size: 13.5px;
+      color: var(--text);
+      margin-top: 5px;
+      line-height: 1.5;
+    }
+    .name-footnote {
+      margin-top: 16px;
+      font-family: ui-monospace, "SF Mono", Menlo, monospace;
+      font-size: 11px;
+      letter-spacing: 0.01em;
+      color: var(--muted);
+      line-height: 1.65;
+      max-width: 360px;
+    }
+    .footnote-num {
+      font-family: "Fraunces", serif;
+      font-size: 13px;
+      color: var(--text);
+      margin-right: 4px;
+    }
     .hero-photo .passport-frame {
       background: var(--bg-elev);
       padding: 12px;
@@ -607,10 +667,33 @@
         </div>
       </div>
       <div class="hero-photo">
+        <div class="name-card">
+          <div class="dict-row">
+            <span class="dict-word">harsh<sup>1</sup></span>
+            <span class="dict-pron">/həɾʂ/</span>
+            <span class="dict-tag">हर्ष · noun · Sanskrit / Hindi</span>
+            <span class="dict-def">delight, joy, euphoria — the kind that takes you by surprise.</span>
+          </div>
+          <div class="dict-row">
+            <span class="dict-word">harsh</span>
+            <span class="dict-pron">/hɑːʃ/</span>
+            <span class="dict-tag">adj. · English</span>
+            <span class="dict-def">stern, severe, unpleasant. The opposite of the above.</span>
+          </div>
+          <div class="dict-row">
+            <span class="dict-word">Harry</span>
+            <span class="dict-pron">/ˈhæri/</span>
+            <span class="dict-tag">informal</span>
+            <span class="dict-def">a workable compromise.</span>
+          </div>
+        </div>
         <div class="passport-frame">
           <img src="assets/portrait.jpg" alt="Harsh Kumar Arya — first passport, age 8" loading="eager" />
         </div>
         <div class="passport-caption">Passport No. 1 · Born Ratlam, MP<br>Issued Ghaziabad · 2008</div>
+        <p class="name-footnote">
+          <span class="footnote-num">¹</span> Adopted "Harry" at Georgia Tech because phonetics. Years later in Goa, I struck up a sunset conversation with a couple sharing a drink — the husband, an ISB visiting faculty, introduced himself as Harry too. He turned out to be a Harshadi-something. We exchanged Harry-names and never learned each other's real ones.
+        </p>
       </div>
     </div>
   </header>
