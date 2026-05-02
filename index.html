@@ -172,49 +172,57 @@
     }
     .section-title em { font-style: italic; color: var(--muted); font-weight: 300; }
 
-    /* ─── PRESS STRIP ────────────────────────────────────── */
+    /* ─── PRESS / CLIPPINGS ──────────────────────────────── */
     .press {
-      padding: 32px 0 !important;
+      padding: 64px 0 !important;
       border-top: 1px solid var(--line);
       border-bottom: 1px solid var(--line);
     }
-    .press-inner {
-      display: flex; align-items: center;
-      gap: 40px; flex-wrap: wrap;
-      justify-content: space-between;
-    }
     .press-label {
+      display: block;
       font-family: ui-monospace, "SF Mono", Menlo, monospace;
       font-size: 11px; letter-spacing: 0.2em;
       text-transform: uppercase; color: var(--muted);
+      margin-bottom: 36px;
     }
-    .press-list {
-      display: flex; gap: 14px 18px;
-      flex-wrap: wrap; align-items: center;
+    .clippings {
+      display: grid; grid-template-columns: repeat(3, 1fr);
+      gap: 36px 32px; align-items: start;
     }
-    .press-list span {
+    .clipping {
+      background: #ffffff;
+      padding: 14px 14px 22px;
+      box-shadow: 0 14px 32px rgba(0, 0, 0, 0.10), 0 4px 10px rgba(0, 0, 0, 0.06);
+      transition: transform 0.4s ease, box-shadow 0.4s ease;
+      border-radius: 1px;
+      margin: 0;
+    }
+    .clipping:nth-child(1) { transform: rotate(-1.5deg); }
+    .clipping:nth-child(2) { transform: rotate(0.7deg); }
+    .clipping:nth-child(3) { transform: rotate(-0.9deg); }
+    .clipping:hover {
+      transform: rotate(0deg) translateY(-6px);
+      box-shadow: 0 22px 48px rgba(0, 0, 0, 0.14), 0 6px 14px rgba(0, 0, 0, 0.08);
+      z-index: 2;
+    }
+    .clipping img {
+      display: block; width: 100%; height: auto;
+    }
+    .clipping-cap {
+      margin-top: 14px;
       font-family: ui-monospace, "SF Mono", Menlo, monospace;
-      font-size: 12px; font-weight: 500;
-      color: var(--text); letter-spacing: 0.14em;
-      text-transform: uppercase;
-      padding: 8px 14px 7px;
-      border: 1px dashed var(--line);
-      border-radius: 2px;
-      display: inline-block;
-      transition: transform 0.3s ease, border-color 0.3s ease;
+      font-size: 11px; letter-spacing: 0.12em;
+      text-transform: uppercase; color: #666;
+      text-align: center;
     }
-    .press-list span:hover { transform: rotate(0deg) !important; border-color: var(--text); }
-    .press-list span:nth-child(1) { transform: rotate(-1.4deg); }
-    .press-list span:nth-child(2) { transform: rotate(0.8deg); }
-    .press-list span:nth-child(3) { transform: rotate(-0.6deg); }
-    .press-list span:nth-child(4) { transform: rotate(1.2deg); }
     .press-fineprint {
-      margin-top: 18px;
+      margin-top: 44px;
       font-family: ui-monospace, "SF Mono", Menlo, monospace;
       font-size: 11.5px;
       letter-spacing: 0.04em;
       color: var(--muted);
       line-height: 1.5;
+      text-align: center;
     }
     .press-fineprint strong { color: var(--text); font-weight: 600; }
     .press-fineprint em { font-style: italic; }
@@ -456,6 +464,9 @@
       .creds-grid { grid-template-columns: 1fr; gap: 16px; }
       .work-grid { grid-template-columns: 1fr; gap: 40px; }
       .highlights-grid { grid-template-columns: 1fr; gap: 0; }
+      .clippings { grid-template-columns: 1fr; gap: 32px; max-width: 360px; margin: 0 auto; }
+      .clipping:nth-child(1), .clipping:nth-child(2), .clipping:nth-child(3) { transform: rotate(-1deg); }
+      .clipping:nth-child(2) { transform: rotate(0.8deg); }
       .off-grid {
         grid-template-columns: repeat(2, 1fr);
         grid-template-rows: auto;
@@ -515,14 +526,20 @@
   <!-- ─── PRESS ─────────────────────────────────────────── -->
   <section class="press">
     <div class="container">
-      <div class="press-inner">
-        <div class="press-label">As featured in</div>
-        <div class="press-list">
-          <span>Outlook</span>
-          <span>The Week</span>
-          <span>Mid-Day</span>
-          <span>Josh Talks</span>
-        </div>
+      <div class="press-label">As featured in</div>
+      <div class="clippings">
+        <figure class="clipping">
+          <img src="assets/press/article-outlook.jpg" alt="Outlook — Expansion and Diversification: Harsh Arya's 98 Entertainment ventures into Social Media Marketing and Podcasts" loading="lazy" />
+          <figcaption class="clipping-cap">Outlook · Entertainment Spotlight</figcaption>
+        </figure>
+        <figure class="clipping">
+          <img src="assets/press/article-theweek.jpg" alt="The Week — Tech-driven Triumph: Harsh Arya's 98 Entertainment's Innovative Approach to Influencer Marketing" loading="lazy" />
+          <figcaption class="clipping-cap">The Week · Feb 21</figcaption>
+        </figure>
+        <figure class="clipping">
+          <img src="assets/press/article-midday.jpg" alt="Mid-day — Innovative Strategies Propel 98 Entertainment to New Heights in Talent Management" loading="lazy" />
+          <figcaption class="clipping-cap">Mid-day · Talent Management</figcaption>
+        </figure>
       </div>
       <p class="press-fineprint">Not featured: <strong>Forbes 30 Under 30.</strong> <em>(Have you seen the alumni? Filing it as a feature, not a bug.)</em></p>
     </div>
