@@ -396,6 +396,77 @@
     }
     .off-caption p { color: var(--muted); line-height: 1.55; }
 
+    /* ─── SELECTED CREATIVE ──────────────────────────────── */
+    .creative-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+    }
+    .creative-tile {
+      display: block;
+      text-decoration: none; color: inherit;
+    }
+    .creative-frame {
+      position: relative;
+      aspect-ratio: 4 / 5;
+      background: var(--photo-bg);
+      border: 1px dashed var(--line);
+      overflow: hidden;
+      transition: transform 0.4s ease, border-color 0.4s ease;
+    }
+    .creative-tile:hover .creative-frame {
+      transform: translateY(-4px);
+      border-color: var(--line);
+    }
+    .creative-frame img {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+      opacity: 0;
+      transition: opacity 0.9s ease;
+    }
+    .creative-frame img.active { opacity: 1; }
+    .creative-frame .placeholder-label {
+      position: absolute; inset: 0;
+      display: flex; align-items: center; justify-content: center;
+      flex-direction: column; gap: 6px;
+      color: var(--placeholder-text);
+      font-family: ui-monospace, "SF Mono", Menlo, monospace;
+      font-size: 11px; letter-spacing: 0.18em;
+      text-transform: uppercase;
+      text-align: center; padding: 18px;
+    }
+    .creative-frame .placeholder-label::before {
+      content: "";
+      width: 24px; height: 24px;
+      border: 1px solid currentColor;
+      opacity: 0.5;
+    }
+    .creative-frame .placeholder-label small {
+      font-size: 10px; opacity: 0.7;
+      letter-spacing: 0.1em; text-transform: lowercase;
+    }
+    .creative-meta { margin-top: 18px; }
+    .creative-meta h4 {
+      font-family: "Fraunces", serif;
+      font-size: 22px; font-weight: 500;
+      letter-spacing: -0.005em;
+    }
+    .creative-meta p {
+      font-size: 14px; color: var(--muted);
+      margin-top: 6px; line-height: 1.55;
+    }
+    .creative-link-cue {
+      color: var(--text);
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 1px;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .creative-tile:hover .creative-link-cue {
+      color: var(--highlight);
+      border-bottom-color: var(--highlight);
+    }
+
     /* ─── NOTES ─────────────────────────────────────────── */
     .notes-list { display: grid; gap: 0; }
     .note-item {
@@ -485,6 +556,7 @@
       .work-grid { grid-template-columns: 1fr; gap: 40px; }
       .highlights-grid { grid-template-columns: 1fr; gap: 0; }
       .clippings { grid-template-columns: 1fr; gap: 32px; max-width: 360px; margin: 0 auto; }
+      .creative-grid { grid-template-columns: 1fr; gap: 36px; }
       .clipping:nth-child(1), .clipping:nth-child(2), .clipping:nth-child(3) { transform: rotate(-1deg); }
       .clipping:nth-child(2) { transform: rotate(0.8deg); }
       .off-grid {
@@ -741,6 +813,60 @@
     </div>
   </section>
 
+  <!-- ─── SELECTED CREATIVE ─────────────────────────────── -->
+  <section id="creative">
+    <div class="container">
+      <div class="section-label">Selected creative</div>
+      <h2 class="section-title">Photographs, designs, and the <em>occasional</em> film.</h2>
+      <div class="creative-grid">
+
+        <a class="creative-tile" href="#" data-pending>
+          <div class="creative-frame" id="photo-gallery">
+            <img src="assets/creative/01.jpg" alt="Kochi series, 35mm film" loading="lazy" />
+            <img src="assets/creative/02.jpg" alt="Kochi series, 35mm film" loading="lazy" />
+            <img src="assets/creative/03.jpg" alt="Kochi series, 35mm film" loading="lazy" />
+            <img src="assets/creative/04.jpg" alt="Kochi series, 35mm film" loading="lazy" />
+            <img src="assets/creative/05.jpg" alt="Kochi series, 35mm film" loading="lazy" />
+            <img src="assets/creative/06.jpg" alt="Kochi series, 35mm film" loading="lazy" />
+            <img src="assets/creative/07.jpg" alt="Kochi series, 35mm film" loading="lazy" />
+            <img src="assets/creative/08.jpg" alt="Kochi series, 35mm film" loading="lazy" />
+          </div>
+          <div class="creative-meta">
+            <h4>Photography</h4>
+            <p>Film and digital, mostly travel. Currently rotating: <em>Kochi</em>, shot on 35mm. <span class="creative-link-cue">Open gallery →</span></p>
+          </div>
+        </a>
+
+        <a class="creative-tile" href="https://www.behance.net/harsharya" target="_blank" rel="noopener">
+          <div class="creative-frame">
+            <div class="placeholder-label">
+              BEHANCE
+              <small>behance.net/harsharya</small>
+            </div>
+          </div>
+          <div class="creative-meta">
+            <h4>Design</h4>
+            <p>Brand systems, decks, identity work, the occasional album cover. <span class="creative-link-cue">Behance →</span></p>
+          </div>
+        </a>
+
+        <a class="creative-tile" href="https://www.youtube.com/@HarshAryaa" target="_blank" rel="noopener">
+          <div class="creative-frame">
+            <div class="placeholder-label">
+              YOUTUBE
+              <small>@HarshAryaa</small>
+            </div>
+          </div>
+          <div class="creative-meta">
+            <h4>Film &amp; video</h4>
+            <p>Short films, profiles, music videos, portraits in motion. <span class="creative-link-cue">YouTube →</span></p>
+          </div>
+        </a>
+
+      </div>
+    </div>
+  </section>
+
   <!-- ─── NOTES ─────────────────────────────────────────── -->
   <section id="notes">
     <div class="container">
@@ -816,6 +942,21 @@
       if (window.scrollY > 8) nav.classList.add("scrolled");
       else nav.classList.remove("scrolled");
     });
+
+    // Rotating photo gallery — cycles through any <img> children every 3.5s
+    (function () {
+      const gallery = document.getElementById("photo-gallery");
+      if (!gallery) return;
+      const imgs = gallery.querySelectorAll("img");
+      if (imgs.length < 2) return;
+      let i = 0;
+      imgs[0].classList.add("active");
+      setInterval(() => {
+        imgs[i].classList.remove("active");
+        i = (i + 1) % imgs.length;
+        imgs[i].classList.add("active");
+      }, 3500);
+    })();
   </script>
 
 </body>
