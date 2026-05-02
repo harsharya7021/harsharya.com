@@ -1,0 +1,212 @@
+:root {
+  --bg: #f6f3eb;
+  --bg-elev: #ffffff;
+  --text: #1a1a1a;
+  --muted: #6b6358;
+  --line: #d6cfc1;
+  --accent: #1a1a1a;
+  --highlight: #b85c2c;
+  --photo-bg: #ece5d3;
+}
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #14140f;
+    --bg-elev: #1c1c16;
+    --text: #f0eee6;
+    --muted: #9a9485;
+    --line: #2c2c23;
+    --accent: #f0eee6;
+    --highlight: #d68a5e;
+    --photo-bg: #2a2a21;
+  }
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background: var(--bg); color: var(--text);
+  line-height: 1.6; font-size: 16px;
+  -webkit-font-smoothing: antialiased;
+}
+.container { max-width: 1120px; margin: 0 auto; padding: 0 32px; }
+
+/* ─── NAV ─────────────────────────────────────────────── */
+.nav {
+  position: sticky; top: 0; z-index: 50;
+  background: color-mix(in srgb, var(--bg) 88%, transparent);
+  backdrop-filter: saturate(160%) blur(12px);
+  -webkit-backdrop-filter: saturate(160%) blur(12px);
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s;
+}
+.nav.scrolled { border-bottom-color: var(--line); }
+.nav-inner {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 18px 0;
+}
+.logo {
+  font-family: "Fraunces", serif; font-weight: 500;
+  font-size: 18px; letter-spacing: 0.02em;
+  color: var(--text); text-decoration: none;
+}
+.logo sup {
+  font-size: 0.55em; vertical-align: super;
+  color: var(--muted); margin-left: 1px;
+  font-feature-settings: "sups";
+}
+.nav-links { display: flex; gap: 28px; font-size: 14px; }
+.nav-links a {
+  color: var(--muted); text-decoration: none;
+  transition: color 0.15s;
+}
+.nav-links a:hover { color: var(--text); }
+
+/* ─── GALLERY INDEX (series list) ─────────────────────── */
+.gallery-header {
+  padding: 80px 0 56px;
+  max-width: 760px;
+}
+.gallery-eyebrow {
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 12px; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--muted);
+  margin-bottom: 28px;
+}
+.gallery-title {
+  font-family: "Fraunces", serif; font-weight: 400;
+  font-size: clamp(48px, 7vw, 80px);
+  line-height: 1.05; letter-spacing: -0.02em;
+  margin-bottom: 24px;
+}
+.gallery-title em {
+  font-style: italic; font-weight: 300; color: var(--muted);
+}
+.gallery-lead {
+  font-size: 19px; color: var(--muted);
+  max-width: 560px; line-height: 1.55;
+}
+.series-grid {
+  display: grid; grid-template-columns: repeat(2, 1fr);
+  gap: 56px 40px;
+  padding-bottom: 96px;
+}
+.series-card {
+  display: block; text-decoration: none; color: inherit;
+}
+.series-card-image {
+  aspect-ratio: 4 / 3;
+  background: var(--photo-bg);
+  overflow: hidden;
+  transition: transform 0.4s ease;
+}
+.series-card:hover .series-card-image { transform: translateY(-4px); }
+.series-card-image img {
+  display: block; width: 100%; height: 100%; object-fit: cover;
+}
+.series-card-meta { margin-top: 18px; }
+.series-card-meta h3 {
+  font-family: "Fraunces", serif;
+  font-size: 28px; font-weight: 500;
+  letter-spacing: -0.01em;
+}
+.series-card-meta p {
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 12px; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--muted);
+  margin-top: 6px;
+}
+.series-card-soon {
+  border: 1px dashed var(--line);
+  display: flex; align-items: center; justify-content: center;
+  flex-direction: column; gap: 8px;
+  padding: 24px;
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 11px; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--muted);
+}
+
+/* ─── SERIES PAGE (full set) ──────────────────────────── */
+.series-back {
+  display: inline-block;
+  font-size: 13px; color: var(--muted);
+  text-decoration: none;
+  letter-spacing: 0.02em;
+  margin-top: 56px; margin-bottom: 24px;
+  transition: color 0.15s;
+}
+.series-back:hover { color: var(--text); }
+.series-header {
+  padding: 0 0 64px;
+  max-width: 760px;
+}
+.series-meta {
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 12px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--muted);
+  margin-bottom: 20px;
+}
+.series-title {
+  font-family: "Fraunces", serif; font-weight: 400;
+  font-size: clamp(56px, 8vw, 96px);
+  line-height: 1.02; letter-spacing: -0.02em;
+  margin-bottom: 24px;
+}
+.series-title em {
+  font-style: italic; font-weight: 300; color: var(--muted);
+}
+.series-intro {
+  font-size: 18px; line-height: 1.6; color: var(--text);
+  max-width: 620px;
+}
+.series-intro + .series-intro { margin-top: 18px; }
+
+.series-photos {
+  display: flex; flex-direction: column;
+  gap: 80px;
+  max-width: 920px; margin: 0 auto;
+  padding-bottom: 96px;
+}
+.series-photo {
+  margin: 0;
+  background: var(--bg-elev);
+  padding: 18px 18px 24px;
+  border: 1px solid var(--line);
+}
+.series-photo img {
+  display: block; width: 100%; height: auto;
+}
+.series-photo figcaption {
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 11px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--muted);
+  margin-top: 14px; text-align: center;
+}
+.series-end {
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 11px; letter-spacing: 0.18em;
+  text-transform: uppercase; color: var(--muted);
+  text-align: center;
+  margin: 48px 0 80px;
+}
+
+/* ─── FOOTER ──────────────────────────────────────────── */
+.site-footer {
+  padding: 28px 0 40px;
+  border-top: 1px solid var(--line);
+  font-family: ui-monospace, "SF Mono", Menlo, monospace;
+  font-size: 11px; letter-spacing: 0.12em;
+  text-transform: uppercase; color: var(--muted);
+}
+.site-footer .container {
+  display: flex; justify-content: space-between;
+  gap: 16px; flex-wrap: wrap;
+}
+
+@media (max-width: 720px) {
+  .container { padding: 0 22px; }
+  .nav-links { gap: 16px; font-size: 13px; }
+  .gallery-header { padding: 56px 0 40px; }
+  .series-grid { grid-template-columns: 1fr; gap: 40px; }
+  .series-photos { gap: 56px; }
+  .series-photo { padding: 12px 12px 18px; }
+}

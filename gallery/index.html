@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Gallery — Harsh Kumar Arya</title>
+  <meta name="description" content="Photographic series from places I keep going back to. Film and digital, by Harsh Kumar Arya." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="gallery.css" />
+</head>
+<body>
+
+  <nav class="nav" id="nav">
+    <div class="container nav-inner">
+      <a href="../" class="logo">Harsh<sup>1</sup></a>
+      <div class="nav-links">
+        <a href="../#about">About</a>
+        <a href="../#work">Work</a>
+        <a href="../#off">Life</a>
+        <a href="../writing/">Notes</a>
+        <a href="../#contact">Contact</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="container gallery-header">
+    <div class="gallery-eyebrow">Gallery</div>
+    <h1 class="gallery-title">Series from places I <em>keep going back to.</em></h1>
+    <p class="gallery-lead">Film and digital. Long-form rather than greatest-hits — each series is a single trip, a single roll of mood, sequenced the way I'd flip through prints in a sleeve.</p>
+  </header>
+
+  <main class="container">
+    <div class="series-grid">
+
+      <a class="series-card" href="kochi.html">
+        <div class="series-card-image">
+          <img src="../assets/creative/01.jpg" alt="Kochi series — film photograph: heritage doorway and fishing boats" />
+        </div>
+        <div class="series-card-meta">
+          <h3>Kochi</h3>
+          <p>35mm film · 8 frames</p>
+        </div>
+      </a>
+
+      <div class="series-card">
+        <div class="series-card-image series-card-soon">
+          More series<br>coming
+          <small style="font-size: 9px; opacity: 0.7; letter-spacing: 0.1em; text-transform: lowercase; margin-top: 6px;">drop a folder of frames into /assets/creative/&lt;slug&gt;/</small>
+        </div>
+        <div class="series-card-meta">
+          <h3 style="color: var(--muted);">In the queue</h3>
+          <p>more rolls, more places</p>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <span>© <span id="year"></span> Harsh Kumar Arya</span>
+      <span>Built for the few people who'll actually read this far.</span>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+    const nav = document.getElementById("nav");
+    window.addEventListener("scroll", () => {
+      if (window.scrollY > 8) nav.classList.add("scrolled"); else nav.classList.remove("scrolled");
+    });
+  </script>
+</body>
+</html>

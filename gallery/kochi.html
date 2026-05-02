@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kochi — Gallery — Harsh Kumar Arya</title>
+  <meta name="description" content="Kochi, Kerala — a 35mm film series by Harsh Kumar Arya. Heritage doorways, fishing boats, palm-shadowed afternoons." />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="gallery.css" />
+</head>
+<body>
+
+  <nav class="nav" id="nav">
+    <div class="container nav-inner">
+      <a href="../" class="logo">Harsh<sup>1</sup></a>
+      <div class="nav-links">
+        <a href="../#about">About</a>
+        <a href="../#work">Work</a>
+        <a href="../#off">Life</a>
+        <a href="../writing/">Notes</a>
+        <a href="../#contact">Contact</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="container">
+    <a href="./" class="series-back">← All series</a>
+    <div class="series-header">
+      <div class="series-meta">35mm film · Kerala</div>
+      <h1 class="series-title">Kochi.</h1>
+      <p class="series-intro">A few rolls shot in Fort Kochi over a long weekend — heritage doorways, fishing boats hauled up at dusk, the green of a window framed by tamarind, a Kathakali performer holding a single beat under a stage light. Sequenced the way I remember the trip, not the way it happened.</p>
+    </div>
+  </header>
+
+  <main class="series-photos">
+
+    <figure class="series-photo">
+      <img src="../assets/creative/01.jpg" alt="Heritage doorway opening to fishing boats at dusk, Fort Kochi" loading="eager" />
+      <figcaption>Fort Kochi · doorway to the harbour</figcaption>
+    </figure>
+
+    <figure class="series-photo">
+      <img src="../assets/creative/02.jpg" alt="Woman in a polka-dot dress on a tree-lined street with lens flare" loading="lazy" />
+      <figcaption>Lens flare on a side street</figcaption>
+    </figure>
+
+    <figure class="series-photo">
+      <img src="../assets/creative/03.jpg" alt="Heritage building with palm tree, bright daylight" loading="lazy" />
+      <figcaption>Heritage façade, midday</figcaption>
+    </figure>
+
+    <figure class="series-photo">
+      <img src="../assets/creative/04.jpg" alt="A figure in a patterned dress under warm gallery light" loading="lazy" />
+      <figcaption>Inside a gallery, off Princess Street</figcaption>
+    </figure>
+
+    <figure class="series-photo">
+      <img src="../assets/creative/05.jpg" alt="Painterly window with green tamarind branches outside" loading="lazy" />
+      <figcaption>A window, looking out</figcaption>
+    </figure>
+
+    <figure class="series-photo">
+      <img src="../assets/creative/06.jpg" alt="Dockside view through a heritage doorway frame" loading="lazy" />
+      <figcaption>Dockside · towards the water</figcaption>
+    </figure>
+
+    <figure class="series-photo">
+      <img src="../assets/creative/07.jpg" alt="Festival night with strings of lights and a figure in a red sari" loading="lazy" />
+      <figcaption>Festival night · strings of lights</figcaption>
+    </figure>
+
+    <figure class="series-photo">
+      <img src="../assets/creative/08.jpg" alt="Cafe interior with red light leak — Lila, Fort Kochi" loading="lazy" />
+      <figcaption>Lila — cafe, patisserie, a red light leak</figcaption>
+    </figure>
+
+    <p class="series-end">— end of roll —</p>
+
+  </main>
+
+  <footer class="site-footer">
+    <div class="container">
+      <span>© <span id="year"></span> Harsh Kumar Arya</span>
+      <span>Built for the few people who'll actually read this far.</span>
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+    const nav = document.getElementById("nav");
+    window.addEventListener("scroll", () => {
+      if (window.scrollY > 8) nav.classList.add("scrolled"); else nav.classList.remove("scrolled");
+    });
+  </script>
+</body>
+</html>
