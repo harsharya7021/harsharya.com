@@ -71,7 +71,13 @@
       font-size: 18px; letter-spacing: 0.02em;
       color: var(--text); text-decoration: none;
     }
-    .logo span { color: var(--muted); }
+    .logo sup {
+      font-size: 0.55em;
+      vertical-align: super;
+      color: var(--muted);
+      margin-left: 1px;
+      font-feature-settings: "sups";
+    }
     .nav-links { display: flex; gap: 28px; font-size: 14px; }
     .nav-links a {
       color: var(--muted); text-decoration: none;
@@ -238,6 +244,20 @@
     }
     .about-prose p:last-child { margin-bottom: 0; }
     .about-prose strong { font-weight: 600; }
+    .inline-link {
+      color: inherit;
+      text-decoration: none;
+      border-bottom: 1px solid var(--line);
+      padding-bottom: 1px;
+      transition: border-color 0.2s, color 0.2s;
+    }
+    .inline-link:hover {
+      border-bottom-color: var(--highlight);
+      color: var(--highlight);
+    }
+    .inline-link[data-pending] {
+      border-bottom-style: dotted;
+    }
     .about-photo { position: sticky; top: 96px; }
     .about-photo-caption {
       font-family: ui-monospace, "SF Mono", Menlo, monospace;
@@ -489,7 +509,7 @@
   <!-- ─── NAV ───────────────────────────────────────────── -->
   <nav class="nav" id="nav">
     <div class="container nav-inner">
-      <a href="#" class="logo">Harsh<span>.</span></a>
+      <a href="#" class="logo">Harsh<sup>1</sup></a>
       <div class="nav-links">
         <a href="#about">About</a>
         <a href="#work">Work</a>
@@ -507,7 +527,7 @@
         <div class="hero-eyebrow">Founder. Operator. With footnotes.</div>
         <h1>I like <em>big</em> businesses, and I can't lie.</h1>
         <p class="hero-tagline">
-          Started Ninety-Eight Entertainment at 21 on a five-figure check; sold it five years later doing ₹15Cr — a roster that included one of India's most prominent cricketers and a campaign wall most agencies twice my age were chasing. Spent 2025 in the Founder's Office at Intellewings, an AI-native fincrime platform — opened MENA, closed our biggest enterprise upsell, raised half the round. Now: putting together ISB's first Sports Management course, working with early-stage founders trying to find their first repeatable revenue motion, and writing about Indian sports, talent, and what I keep getting wrong.
+          Started <a class="inline-link" href="https://harsharya7021.github.io/ninety-eight-web/" target="_blank" rel="noopener">Ninety-Eight Entertainment</a> at 21 on a five-figure check; sold it five years later doing ₹15Cr — a roster that included one of India's most prominent cricketers and a campaign wall most agencies twice my age were chasing. Spent 2025 in the Founder's Office at <a class="inline-link" href="https://www.intellewings.com/" target="_blank" rel="noopener">Intellewings</a>, an AI-native fincrime platform — opened MENA, closed our biggest enterprise upsell, raised half the round. Now: putting together <a class="inline-link" href="#sports-school" data-pending>ISB's first Sports Management course</a>, working with early-stage founders trying to find their first repeatable revenue motion, and writing about Indian sports, talent, and what I keep getting wrong.
         </p>
         <div class="hero-creds">
           <span class="cred-tag"><strong>ISB</strong> &nbsp;PGP '25</span>
@@ -551,15 +571,14 @@
       <div class="section-label">About</div>
       <div class="about-grid">
         <div class="about-prose">
-          <p>I started my first company, <strong>Ninety-Eight Entertainment</strong>, out of college — a full-service marketing and talent management agency. We grew it to ₹15Cr+ in revenue, 65x ROI, a team of 18, and a roster of 12 athletes, 500+ influencers, and 60+ F&amp;B and hospitality clients before I exited to head to ISB.</p>
+          <p>I started my first company, <a class="inline-link" href="https://harsharya7021.github.io/ninety-eight-web/" target="_blank" rel="noopener"><strong>Ninety-Eight Entertainment</strong></a>, out of college — a full-service marketing and talent management agency. We grew it to ₹15Cr+ in revenue, 65x ROI, a team of 18, and a roster of 12 athletes, 500+ influencers, and 60+ F&amp;B and hospitality clients before I exited to head to ISB.</p>
           <p>Along the way I signed cricketer <strong>Ishant Sharma</strong> as exclusive talent, architected his RuPay × IPL partnership (300M+ impressions), ran award-winning campaigns for Happy Dent and Borges, and built a hyperlocal influencer engine that brands like TrulyMadly and Slay Coffee rode for growth.</p>
-          <p>After business school I joined <strong>Intellewings</strong> as Founder's Office — owned commercial GTM in MENA, helped close a $1M ARR upsell with Jio, secured 50% of the venture round, and ran an 8-week reset that lifted productivity 40% and cut cloud spend 30%.</p>
-          <p>Today I split my time between go-to-market and founder advisory work, the early build-out of <strong>ISB's first Sports Management course</strong>, and writing about Indian sports, talent and the operating playbook I've collected the hard way.</p>
+          <p>After business school I joined <a class="inline-link" href="https://www.intellewings.com/" target="_blank" rel="noopener"><strong>Intellewings</strong></a> as Founder's Office — owned commercial GTM in MENA, helped close a $1M ARR upsell with Jio, secured 50% of the venture round, and ran an 8-week reset that lifted productivity 40% and cut cloud spend 30%.</p>
+          <p>Today I split my time between go-to-market and founder advisory work, the early build-out of <a class="inline-link" href="#" data-pending><strong>ISB's first Sports Management course</strong></a>, and writing about Indian sports, talent and the operating playbook I've collected the hard way.</p>
           <p>Off the clock you'll find me on a golf course (12 handicap, longest-drive at the BMW tournament — swing still inconsistent), in a notebook designing something, or two books deep — usually one history, one operator memoir. I keep a watchlist of films from places most people skip past on the festival map. Born in Ratlam (population ~270K, on the Mumbai–Delhi line, on no one's map) and still mildly surprised when people don't know it.</p>
         </div>
         <div class="about-photo">
           <img class="photo photo--portrait" src="assets/about.jpg" alt="Harsh Kumar Arya" loading="lazy" />
-          <div class="about-photo-caption">New Delhi · 2026</div>
         </div>
       </div>
     </div>
@@ -600,7 +619,7 @@
       <h2 class="section-title">Things I've built, scaled or shipped.</h2>
       <div class="work-grid">
 
-        <a class="work-item" href="#">
+        <a class="work-item" href="https://harsharya7021.github.io/ninety-eight-web/" target="_blank" rel="noopener">
           <img class="photo photo--portrait-tall" src="assets/work/ninety-eight.jpg" alt="Ninety-Eight Entertainment" loading="lazy" />
           <div class="work-meta">
             <div>
@@ -612,7 +631,7 @@
           <p class="work-desc">Bootstrapped a marketing &amp; talent agency to ₹15Cr+ revenue, 65x ROI, a team of 18 and a roster of 12 athletes and 500+ influencers across hospitality, F&amp;B and lifestyle.</p>
         </a>
 
-        <a class="work-item" href="#">
+        <a class="work-item" href="https://www.intellewings.com/" target="_blank" rel="noopener">
           <img class="photo photo--portrait-tall" src="assets/work/intellewings.jpg" alt="Intellewings" loading="lazy" />
           <div class="work-meta">
             <div>
@@ -624,7 +643,7 @@
           <p class="work-desc">Owned MENA GTM — first Saudi client, 200+ UAE SMEs. Closed a $1M ARR upsell with Jio. Secured 50% of the venture round. 40%+ productivity lift in 8 weeks.</p>
         </a>
 
-        <a class="work-item" href="#">
+        <a class="work-item" href="#" data-pending>
           <img class="photo photo--portrait-tall" src="assets/work/isb-sports.jpg" alt="ISB Sports Management Course" loading="lazy" />
           <div class="work-meta">
             <div>
@@ -636,7 +655,7 @@
           <p class="work-desc">Designing the school's first Sports Management course end-to-end — curriculum, industry partnerships and a guest faculty pipeline of operators running the business of Indian sports.</p>
         </a>
 
-        <a class="work-item" href="#">
+        <a class="work-item" href="#" data-pending>
           <img class="photo photo--portrait-tall" src="assets/work/advisory.jpg" alt="GTM and founder advisory" loading="lazy" />
           <div class="work-meta">
             <div>
@@ -777,10 +796,9 @@
   <section id="contact" class="contact-block">
     <div class="container">
       <p class="contact-line">Got something to <em>build</em>, hire, or chat about?<br>Send a note.</p>
-      <a class="contact-email" href="mailto:harsharya7021@gmail.com">harsharya7021@gmail.com</a>
+      <a class="contact-email" href="mailto:hi@harsharya.com">hi@harsharya.com</a>
       <div class="contact-socials">
         <a href="https://www.linkedin.com/in/harsharyaa/" target="_blank" rel="noopener">LinkedIn ↗</a>
-        <a href="#" target="_blank" rel="noopener">X / Twitter ↗</a>
         <a href="https://github.com/harsharya7021" target="_blank" rel="noopener">GitHub ↗</a>
       </div>
     </div>
@@ -790,7 +808,7 @@
   <footer>
     <div class="container">
       <span>© <span id="year"></span> Harsh Kumar Arya</span>
-      <span>Built simply · Hosted on GitHub Pages</span>
+      <span>Hand-built. No popups. No newsletter. No Forbes.</span>
     </div>
   </footer>
 
