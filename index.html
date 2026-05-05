@@ -580,6 +580,53 @@
       margin-bottom: 36px;
     }
     .contact-email:hover { color: var(--highlight); border-bottom-color: var(--highlight); }
+    .contact-uses {
+      margin: 24px 0 36px;
+      max-width: 640px;
+    }
+    .contact-uses-label {
+      font-family: ui-monospace, "SF Mono", Menlo, monospace;
+      font-size: 11px; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--muted);
+      margin-bottom: 14px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--line);
+    }
+    .contact-uses ul {
+      list-style: none; padding: 0; margin: 0;
+    }
+    .contact-uses li {
+      padding: 6px 0;
+      font-size: 15px;
+      color: var(--text);
+      line-height: 1.55;
+      position: relative;
+      padding-left: 22px;
+    }
+    .contact-uses li::before {
+      content: "—";
+      position: absolute;
+      left: 0;
+      color: var(--muted);
+    }
+    .contact-consult-line {
+      margin-top: 18px;
+      padding-top: 14px;
+      border-top: 1px solid var(--line);
+      font-size: 14px;
+      color: var(--muted);
+    }
+    .contact-consult-line a {
+      color: var(--text);
+      border-bottom: 1px solid var(--text);
+      text-decoration: none;
+      padding-bottom: 1px;
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .contact-consult-line a:hover {
+      color: var(--highlight);
+      border-bottom-color: var(--highlight);
+    }
     .contact-socials {
       display: flex; gap: 28px; flex-wrap: wrap;
     }
@@ -1003,6 +1050,19 @@
     <div class="container">
       <p class="contact-line">Got something to <em>build</em>, hire, or chat about?<br>Send a note.</p>
       <a class="contact-email" href="mailto:hi@harsharya.com">hi@harsharya.com</a>
+
+      <div class="contact-uses">
+        <div class="contact-uses-label">Things people usually write about</div>
+        <ul>
+          <li>Introductions to athletes, creators, and the wider talent ecosystem</li>
+          <li>A second pair of eyes on a marketing or campaign brief</li>
+          <li>Founder advisory — especially first-repeatable-revenue-motion problems</li>
+          <li>Anything on Indian sports or the next decade of it</li>
+          <li>Just saying hi from a Goa sunset</li>
+        </ul>
+        <p class="contact-consult-line">Need a focused, paid hour on something specific? <a href="consult/">Book a consult →</a></p>
+      </div>
+
       <div class="contact-socials">
         <a href="https://www.linkedin.com/in/harsharyaa/" target="_blank" rel="noopener">LinkedIn ↗</a>
         <a href="https://github.com/harsharya7021" target="_blank" rel="noopener">GitHub ↗</a>

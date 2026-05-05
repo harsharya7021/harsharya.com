@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>An hour of my time — Harsh Kumar Arya</title>
+  <meta name="description" content="Book a paid consult with Harsh Kumar Arya. GTM, talent introductions, marketing brief reviews, founder advisory." />
+  <meta property="og:title" content="An hour of my time — Harsh Kumar Arya" />
+  <meta property="og:description" content="Paid consults — GTM, talent, marketing brief reviews, founder advisory. UPI to book." />
+  <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://harsharya.com/consult/" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #f6f3eb;
+      --bg-elev: #ffffff;
+      --text: #1a1a1a;
+      --muted: #6b6358;
+      --line: #d6cfc1;
+      --accent: #1a1a1a;
+      --highlight: #b85c2c;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #14140f;
+        --bg-elev: #1c1c16;
+        --text: #f0eee6;
+        --muted: #9a9485;
+        --line: #2c2c23;
+        --accent: #f0eee6;
+        --highlight: #d68a5e;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+      background: var(--bg); color: var(--text);
+      line-height: 1.6; font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+    }
+    .container { max-width: 680px; margin: 0 auto; padding: 0 28px; }
+
+    .nav {
+      padding: 24px 0;
+      border-bottom: 1px solid transparent;
+    }
+    .nav-inner { display: flex; justify-content: space-between; align-items: center; }
+    .logo {
+      font-family: "Fraunces", serif; font-weight: 500;
+      font-size: 18px; color: var(--text); text-decoration: none;
+    }
+    .logo sup {
+      font-size: 0.55em; vertical-align: super;
+      color: var(--muted); margin-left: 1px;
+    }
+    .back-link {
+      font-size: 13px; color: var(--muted);
+      text-decoration: none; letter-spacing: 0.02em;
+    }
+    .back-link:hover { color: var(--text); }
+
+    .header {
+      padding: 56px 0 40px;
+    }
+    .eyebrow {
+      font-family: ui-monospace, "SF Mono", Menlo, monospace;
+      font-size: 12px; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--muted);
+      margin-bottom: 24px;
+    }
+    h1 {
+      font-family: "Fraunces", serif; font-weight: 400;
+      font-size: clamp(40px, 6vw, 64px);
+      line-height: 1.05; letter-spacing: -0.02em;
+      margin-bottom: 20px;
+    }
+    h1 em { font-style: italic; font-weight: 300; color: var(--muted); }
+    .lead {
+      font-size: 18px; line-height: 1.6;
+      color: var(--text);
+      max-width: 540px;
+    }
+
+    section {
+      padding: 32px 0;
+      border-top: 1px solid var(--line);
+    }
+    .section-label {
+      font-family: ui-monospace, "SF Mono", Menlo, monospace;
+      font-size: 11px; letter-spacing: 0.18em;
+      text-transform: uppercase; color: var(--muted);
+      margin-bottom: 18px;
+    }
+
+    .for-list {
+      list-style: none; padding: 0; margin: 0;
+    }
+    .for-list li {
+      padding: 8px 0;
+      font-size: 16px;
+      color: var(--text);
+      line-height: 1.5;
+      position: relative;
+      padding-left: 22px;
+    }
+    .for-list li::before {
+      content: "—";
+      position: absolute;
+      left: 0;
+      color: var(--muted);
+    }
+
+    .package-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-top: 4px;
+    }
+    .package {
+      padding: 22px;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      background: var(--bg-elev);
+    }
+    .package-name {
+      font-family: "Fraunces", serif; font-weight: 500;
+      font-size: 22px; letter-spacing: -0.005em;
+      margin-bottom: 4px;
+    }
+    .package-duration {
+      font-family: ui-monospace, "SF Mono", Menlo, monospace;
+      font-size: 11px; letter-spacing: 0.12em;
+      color: var(--muted); text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+    .package-fee {
+      font-family: "Fraunces", serif; font-weight: 400;
+      font-size: 28px; color: var(--text);
+      letter-spacing: -0.01em;
+    }
+    .package-fee small {
+      font-family: "Inter", sans-serif;
+      font-size: 13px; color: var(--muted);
+      margin-left: 8px; letter-spacing: 0.02em;
+    }
+    .package-note {
+      font-size: 13px; color: var(--muted);
+      margin-top: 10px; line-height: 1.5;
+    }
+
+    .what-you-get {
+      font-size: 16px; line-height: 1.65;
+      color: var(--text);
+    }
+    .what-you-get strong { font-weight: 600; }
+
+    .booking-steps {
+      counter-reset: step;
+      list-style: none;
+      padding: 0; margin: 0;
+    }
+    .booking-steps li {
+      counter-increment: step;
+      padding: 14px 0 14px 44px;
+      position: relative;
+      font-size: 16px;
+      line-height: 1.55;
+      border-top: 1px dashed var(--line);
+    }
+    .booking-steps li:first-child { border-top: 0; }
+    .booking-steps li::before {
+      content: counter(step);
+      position: absolute;
+      left: 0; top: 14px;
+      width: 28px; height: 28px;
+      display: flex; align-items: center; justify-content: center;
+      background: var(--text);
+      color: var(--bg);
+      font-family: ui-monospace, "SF Mono", Menlo, monospace;
+      font-size: 12px; font-weight: 600;
+      border-radius: 50%;
+    }
+
+    .booking-steps a {
+      color: var(--text);
+      border-bottom: 1px solid var(--text);
+      text-decoration: none;
+      padding-bottom: 1px;
+    }
+    .booking-steps a:hover { color: var(--highlight); border-bottom-color: var(--highlight); }
+    .booking-steps code {
+      font-family: ui-monospace, "SF Mono", Menlo, monospace;
+      font-size: 14px;
+      background: var(--bg-elev);
+      padding: 2px 8px;
+      border-radius: 3px;
+      border: 1px solid var(--line);
+    }
+
+    .cta-row {
+      display: flex; gap: 12px; flex-wrap: wrap;
+      margin-top: 24px;
+    }
+    .btn {
+      display: inline-block;
+      padding: 14px 22px;
+      background: var(--text);
+      color: var(--bg);
+      text-decoration: none;
+      font-size: 14px; font-weight: 500;
+      letter-spacing: 0.02em;
+      border-radius: 3px;
+      transition: opacity 0.2s;
+    }
+    .btn:hover { opacity: 0.85; }
+    .btn-secondary {
+      background: transparent;
+      color: var(--text);
+      border: 1px solid var(--line);
+    }
+
+    .fineprint {
+      font-family: ui-monospace, "SF Mono", Menlo, monospace;
+      font-size: 11px; letter-spacing: 0.04em;
+      color: var(--muted); line-height: 1.65;
+      margin-top: 18px;
+    }
+    .fineprint em { font-style: italic; }
+
+    footer {
+      padding: 28px 0 48px;
+      border-top: 1px solid var(--line);
+      font-family: ui-monospace, "SF Mono", Menlo, monospace;
+      font-size: 11px; letter-spacing: 0.12em;
+      text-transform: uppercase; color: var(--muted);
+      text-align: center;
+      margin-top: 56px;
+    }
+
+    @media (max-width: 600px) {
+      .package-grid { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="nav">
+    <div class="container nav-inner">
+      <a href="../" class="logo">Harsh<sup>1</sup></a>
+      <a href="../" class="back-link">← back to harsharya.com</a>
+    </div>
+  </nav>
+
+  <main class="container">
+
+    <header class="header">
+      <div class="eyebrow">Consults</div>
+      <h1>An hour of my <em>time.</em></h1>
+      <p class="lead">A focused call for founders, marketers, and old contacts who want a second pair of eyes — on a brief, a launch, a talent intro, or the next quarter. I keep these short, paid, and useful.</p>
+    </header>
+
+    <section>
+      <div class="section-label">Useful for</div>
+      <ul class="for-list">
+        <li>First-repeatable-revenue-motion problems for early-stage founders</li>
+        <li>A second pair of eyes on a marketing or campaign brief</li>
+        <li>Introductions into the athlete, creator, and talent ecosystem</li>
+        <li>GTM in emerging markets — segmentation, partner-led entry, India + MENA</li>
+        <li>Indian sports — soft power, sovereign capital, where the next decade goes</li>
+      </ul>
+    </section>
+
+    <section>
+      <div class="section-label">Pick a slot</div>
+      <div class="package-grid">
+        <div class="package">
+          <div class="package-name">Quick read</div>
+          <div class="package-duration">30 min · async-friendly</div>
+          <div class="package-fee">₹3,000</div>
+          <p class="package-note">One specific question, one direction. I read your brief beforehand and we cut straight to the call.</p>
+        </div>
+        <div class="package">
+          <div class="package-name">Working session</div>
+          <div class="package-duration">60 min · recorded</div>
+          <div class="package-fee">₹6,000</div>
+          <p class="package-note">A proper session — context, options, decisions. I send a 2–3 paragraph follow-up the next day with what we landed on.</p>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="section-label">How to book</div>
+      <ol class="booking-steps">
+        <li>
+          <strong>Pay first.</strong> UPI: <code>[your-upi-id@bank]</code>. A Razorpay link is on its way for cards and international clients.
+        </li>
+        <li>
+          <strong>Email the screenshot</strong> + 2–3 lines of context (what you're working on, what you'd want from the call) to <a href="mailto:hi@harsharya.com?subject=Consult%20booking">hi@harsharya.com</a>.
+        </li>
+        <li>
+          <strong>I send back two slots</strong> within 24 hours. We confirm one. Calendar invite goes out with a Google Meet link.
+        </li>
+        <li>
+          <strong>If we don't get to it, you get refunded.</strong> No questions, no awkward follow-ups.
+        </li>
+      </ol>
+
+      <div class="cta-row">
+        <a class="btn" href="mailto:hi@harsharya.com?subject=Consult%20booking&amp;body=Hi%20Harsh%2C%0A%0AI%27d%20like%20to%20book%20a%20%5BQuick%20read%20%2F%20Working%20session%5D.%20A%20screenshot%20of%20the%20payment%20is%20attached.%0A%0AContext%3A%0A-%20%0A-%20%0A-%20%0A%0AThanks.">Email me to book →</a>
+      </div>
+
+      <p class="fineprint"><em>Note:</em> I only do one or two of these a week so they stay useful. If something's urgent, mark the email subject "URGENT" and I'll try to fit it in.</p>
+    </section>
+
+    <section>
+      <div class="section-label">Things I won't do on a call</div>
+      <ul class="for-list">
+        <li>Operational consulting — running a team or owning delivery for you. That lives in <a href="../#work" style="color: var(--text); border-bottom: 1px solid var(--line); text-decoration: none;">Ninety-Eight 2.0</a>.</li>
+        <li>Investment advice. I'm not your CA, not your CFA, please.</li>
+        <li>Cold outreach for a job at someone else's company. I'm happy to say <em>"yes I know them"</em>, less happy to be the one asking.</li>
+      </ul>
+    </section>
+
+  </main>
+
+  <footer>
+    <div class="container">
+      © <span id="year"></span> Harsh Kumar Arya · harsharya.com
+    </div>
+  </footer>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+  </script>
+</body>
+</html>
