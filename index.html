@@ -650,22 +650,39 @@
     }
 
     /* ─── RESPONSIVE ─────────────────────────────────────── */
+    /* ─── TABLET / SMALL DESKTOP ──────────────────────────── */
     @media (max-width: 880px) {
       .container { padding: 0 22px; }
+
+      /* Hero stacks: text first, then photo column */
       .hero {
         grid-template-columns: 1fr;
-        gap: 36px; padding: 56px 0 48px;
+        gap: 32px; padding: 56px 0 48px;
       }
-      .hero-photo { order: -1; max-width: 280px; }
+      .hero h1 { font-size: clamp(40px, 9vw, 64px); }
+      .hero-photo {
+        max-width: 100%;
+        display: flex; flex-direction: column; gap: 0;
+      }
+      .name-card { width: 100%; }
+      .passport-frame { max-width: 320px; align-self: center; }
+      .passport-caption { max-width: 320px; align-self: center; margin-top: 14px; }
+      .name-footnote { max-width: 100%; margin-top: 24px; }
+
+      /* About / credentials / work / highlights */
       .about-grid { grid-template-columns: 1fr; gap: 36px; }
-      .about-photo { position: static; }
+      .about-photo { position: static; max-width: 460px; }
       .creds-grid { grid-template-columns: 1fr; gap: 16px; }
       .work-grid { grid-template-columns: 1fr; gap: 40px; }
       .highlights-grid { grid-template-columns: 1fr; gap: 0; }
-      .clippings { grid-template-columns: 1fr; gap: 32px; max-width: 360px; margin: 0 auto; }
+
+      /* Press clippings — flatten the tilts */
+      .clippings { grid-template-columns: 1fr; gap: 28px; max-width: 380px; margin: 0 auto; }
+      .clipping:nth-child(1), .clipping:nth-child(3) { transform: rotate(-0.6deg); }
+      .clipping:nth-child(2) { transform: rotate(0.5deg); }
+
+      /* Creative + Life */
       .creative-grid { grid-template-columns: 1fr; gap: 36px; }
-      .clipping:nth-child(1), .clipping:nth-child(2), .clipping:nth-child(3) { transform: rotate(-1deg); }
-      .clipping:nth-child(2) { transform: rotate(0.8deg); }
       .off-grid {
         grid-template-columns: repeat(2, 1fr);
         grid-template-rows: auto;
@@ -674,12 +691,87 @@
         grid-column: auto; grid-row: auto;
       }
       .off-1 { grid-column: span 2; }
-      .off-1 .photo { aspect-ratio: 4/3; height: auto; }
+      .off-1 .photo { aspect-ratio: 4/3; height: auto; min-height: 0; }
       .off-caption { grid-template-columns: 1fr; gap: 20px; }
+
+      /* Nav, notes, sections */
       .nav-links { gap: 18px; font-size: 13px; }
       .note-item { grid-template-columns: 80px 1fr; gap: 16px; }
       .note-item .note-tag { display: none; }
       section { padding: 56px 0; }
+    }
+
+    /* ─── PHONE ────────────────────────────────────────────── */
+    @media (max-width: 520px) {
+      .container { padding: 0 18px; }
+
+      /* Tighter nav: hide "Life" on smallest screens, keep core */
+      .nav-inner { padding: 14px 0; }
+      .nav-links { gap: 14px; font-size: 12px; }
+      .nav-links a:nth-child(3) { display: none; }
+      .logo { font-size: 16px; }
+
+      /* Hero typography */
+      .hero { padding: 40px 0 36px; gap: 28px; }
+      .hero h1 { font-size: clamp(34px, 10vw, 52px); }
+      .hero-eyebrow { font-size: 11px; letter-spacing: 0.14em; margin-bottom: 20px; }
+      .hero-tagline { font-size: 17px; margin-bottom: 24px; }
+      .hero-creds { gap: 6px 8px; }
+      .cred-tag { font-size: 12px; padding: 5px 10px; }
+
+      /* Name card and footnote */
+      .name-card { padding: 14px 16px; }
+      .dict-word { font-size: 16px; }
+      .dict-pron { font-size: 11px; }
+      .dict-tag { font-size: 11px; }
+      .dict-def { font-size: 13px; }
+      .name-footnote { font-size: 11.5px; line-height: 1.6; }
+      .passport-caption { font-size: 10px; letter-spacing: 0.12em; }
+
+      /* Section titles */
+      .section-title { font-size: clamp(28px, 8vw, 42px); margin-bottom: 32px; }
+      .section-label { font-size: 11px; letter-spacing: 0.14em; margin-bottom: 24px; }
+      section { padding: 48px 0; }
+
+      /* Press strip */
+      .press { padding: 36px 0 !important; }
+      .press-label { margin-bottom: 24px; }
+      .press-fineprint { font-size: 11px; margin-top: 28px; }
+
+      /* About prose */
+      .about-prose p { font-size: 16px; }
+      .about-grid { gap: 32px; }
+      .about-photo { max-width: 100%; }
+
+      /* Credentials */
+      .cred { padding: 24px; }
+      .cred-school { font-size: 24px; }
+
+      /* Work */
+      .work-title { font-size: 19px; }
+
+      /* Highlights */
+      .highlight-row { grid-template-columns: 70px 1fr; gap: 16px; padding: 14px 0; }
+      .highlight-text { font-size: 14px; }
+
+      /* Off the clock */
+      .off-caption h4 { font-size: 17px; }
+
+      /* Notes */
+      .note-item { grid-template-columns: 64px 1fr; gap: 12px; padding: 18px 0; }
+      .note-title { font-size: 18px; }
+      .note-date { font-size: 11px; }
+
+      /* Contact */
+      .contact-block { padding: 64px 0; }
+      .contact-line { font-size: clamp(28px, 8vw, 48px); margin-bottom: 24px; }
+      .contact-email { font-size: clamp(22px, 7vw, 36px); margin-bottom: 28px; }
+      .contact-uses { margin: 20px 0 28px; }
+      .contact-uses li { font-size: 14px; padding-left: 18px; }
+
+      /* Footer */
+      footer { padding: 24px 0 32px; }
+      footer .container { font-size: 10px; flex-direction: column; align-items: flex-start; gap: 6px; }
     }
   </style>
 </head>
