@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Design A — Single bold sans + gradient</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg: #ffffff;
+      --bg-elev: #fafafa;
+      --text: #0a0a0a;
+      --muted: #71717a;
+      --line: #e4e4e7;
+      --accent: #0a0a0a;
+      --grad-start: #0a0a0a;
+      --grad-end: #a1a1aa;
+    }
+    @media (prefers-color-scheme: dark) {
+      :root {
+        --bg: #0a0a0a;
+        --bg-elev: #18181b;
+        --text: #fafafa;
+        --muted: #a1a1aa;
+        --line: #27272a;
+        --accent: #fafafa;
+        --grad-start: #fafafa;
+        --grad-end: #71717a;
+      }
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: "Inter", -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg); color: var(--text);
+      line-height: 1.55; font-size: 16px;
+      -webkit-font-smoothing: antialiased;
+      font-feature-settings: "ss01", "cv11";
+    }
+    .container { max-width: 1080px; margin: 0 auto; padding: 0 32px; }
+
+    .preview-banner {
+      background: var(--text); color: var(--bg);
+      padding: 10px 0; text-align: center;
+      font-size: 12px; font-weight: 500; letter-spacing: 0.02em;
+    }
+    .preview-banner a { color: var(--bg); border-bottom: 1px solid var(--bg); text-decoration: none; }
+
+    .nav { padding: 20px 0; border-bottom: 1px solid var(--line); }
+    .nav-inner { display: flex; justify-content: space-between; align-items: center; }
+    .logo { font-weight: 800; font-size: 17px; letter-spacing: -0.02em; color: var(--text); text-decoration: none; }
+    .nav-links { display: flex; gap: 28px; font-size: 14px; font-weight: 500; }
+    .nav-links a { color: var(--muted); text-decoration: none; }
+    .nav-links a:hover { color: var(--text); }
+
+    .hero {
+      padding: 96px 0 72px;
+      display: grid;
+      grid-template-columns: 1.4fr 1fr;
+      gap: 64px; align-items: start;
+    }
+    .eyebrow {
+      font-size: 13px; font-weight: 500;
+      color: var(--muted); margin-bottom: 28px;
+      letter-spacing: -0.005em;
+    }
+    h1 {
+      font-weight: 800;
+      font-size: clamp(52px, 8vw, 108px);
+      line-height: 0.96; letter-spacing: -0.04em;
+      margin-bottom: 32px;
+    }
+    h1 .gradient {
+      background: linear-gradient(180deg, var(--grad-start) 0%, var(--grad-end) 100%);
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+    .lead {
+      font-size: 19px; line-height: 1.55;
+      color: var(--muted); max-width: 540px;
+      margin-bottom: 32px;
+    }
+    .lead strong { color: var(--text); font-weight: 600; }
+    .creds { display: flex; flex-wrap: wrap; gap: 8px; }
+    .cred {
+      font-size: 13px; font-weight: 500;
+      padding: 6px 12px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      color: var(--muted);
+    }
+    .cred strong { color: var(--text); font-weight: 600; }
+
+    .photo-slot {
+      aspect-ratio: 4/5;
+      background: linear-gradient(135deg, #fafafa 0%, #e4e4e7 100%);
+      border-radius: 8px;
+      display: flex; align-items: center; justify-content: center;
+      color: var(--muted); font-size: 12px;
+      letter-spacing: 0.02em; font-weight: 500;
+    }
+    @media (prefers-color-scheme: dark) {
+      .photo-slot { background: linear-gradient(135deg, #18181b 0%, #27272a 100%); }
+    }
+
+    section { padding: 96px 0; border-top: 1px solid var(--line); }
+    .section-label {
+      font-size: 13px; font-weight: 500;
+      color: var(--muted); margin-bottom: 24px;
+      letter-spacing: -0.005em;
+    }
+    h2 {
+      font-weight: 800;
+      font-size: clamp(36px, 5vw, 64px);
+      line-height: 1; letter-spacing: -0.03em;
+      margin-bottom: 48px; max-width: 800px;
+    }
+    .about-prose { max-width: 640px; }
+    .about-prose p {
+      font-size: 18px; line-height: 1.65;
+      margin-bottom: 22px; color: var(--text);
+    }
+    .about-prose strong { font-weight: 700; }
+
+    footer {
+      padding: 32px 0 48px;
+      border-top: 1px solid var(--line);
+      font-size: 13px; color: var(--muted);
+      display: flex; justify-content: space-between;
+      flex-wrap: wrap; gap: 12px;
+    }
+
+    @media (max-width: 720px) {
+      .hero { grid-template-columns: 1fr; gap: 32px; padding: 56px 0 40px; }
+      .photo-slot { max-width: 320px; }
+      section { padding: 56px 0; }
+      .nav-links { gap: 16px; font-size: 13px; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="preview-banner">
+    Design preview · A — Single bold sans + gradient ·
+    <a href="../design-b/">B →</a> &nbsp;
+    <a href="../design-c/">C →</a> &nbsp;
+    <a href="../">back</a>
+  </div>
+
+  <nav class="nav">
+    <div class="container nav-inner">
+      <a href="../" class="logo">Harsh Arya</a>
+      <div class="nav-links">
+        <a href="#">About</a>
+        <a href="#">Work</a>
+        <a href="#">Notes</a>
+        <a href="#">Contact</a>
+      </div>
+    </div>
+  </nav>
+
+  <header class="container">
+    <div class="hero">
+      <div>
+        <div class="eyebrow">Founder. Operator. With footnotes.</div>
+        <h1>I like big <span class="gradient">businesses, and<br>I can't lie.</span></h1>
+        <p class="lead">
+          Founded <strong>Ninety-Eight Entertainment</strong> in early 2020. Ran it through 2023 with a roster that included one of India's most prominent cricketers. Paused for ISB. Now: relaunching 98 as a creative-and-strategy practice for founders.
+        </p>
+        <div class="creds">
+          <span class="cred"><strong>ISB</strong> · PGP '25</span>
+          <span class="cred"><strong>Georgia Tech</strong> · Research Scholar</span>
+        </div>
+      </div>
+      <div class="photo-slot">[ portrait ]</div>
+    </div>
+  </header>
+
+  <section>
+    <div class="container">
+      <div class="section-label">About</div>
+      <h2>From a 300-sq-ft office<br>to a national practice.</h2>
+      <div class="about-prose">
+        <p>I started Ninety-Eight Entertainment in January 2020 — first as a freelancer running social and design for a Delhi nightclub called Esquire, soon after as a one-person agency working out of a 300-sq-ft office. The first stable client was a cloud kitchen. Most early calls were cold ones.</p>
+        <p>By 2023 we were running social, talent management and brand campaigns for 55+ clients across Delhi, Bombay and Bangalore — a team of 18, a roster of 12 athletes and 500+ influencers.</p>
+        <p>Now, restarting Ninety-Eight as <strong>2.0</strong> — a creative-and-strategy practice for founders who need a thinking partner. Not operational consulting. Business partners for hire who've built and scaled the thing themselves.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="container" style="display: flex; justify-content: space-between; flex-wrap: wrap; gap: 12px; padding: 0;">
+      <span>© 2026 Harsh Kumar Arya</span>
+      <span>Design A — Inter 800 + gradient</span>
+    </div>
+  </footer>
+
+</body>
+</html>
