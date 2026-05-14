@@ -7,19 +7,154 @@
   <meta name="description" content="A slow archive of the operating playbook I've collected the hard way." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="writing.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo+Black&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,700;0,6..96,900;1,6..96,400&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=Inter:wght@400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles.css" />
+  <style>
+    .post { padding: 56px 0 88px; max-width: 760px; margin: 0 auto; }
+    .post-back {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 12px; letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--text);
+      background: var(--text); color: var(--bg);
+      padding: 6px 12px;
+      border: 2px solid var(--text);
+      margin-bottom: 36px;
+    }
+    .post-back:hover { background: var(--accent); color: var(--text); }
+    .post-meta {
+      display: flex; gap: 12px;
+      align-items: center; flex-wrap: wrap;
+      font-family: var(--font-mono);
+      font-size: 11px; letter-spacing: 0.14em;
+      color: var(--muted);
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+    .post-dot { color: var(--muted); }
+    .post-tag {
+      background: var(--accent);
+      color: var(--text);
+      border: 2px solid var(--text);
+      padding: 3px 10px;
+      font-weight: 700;
+    }
+    .post-title {
+      font-family: var(--font-display);
+      font-size: clamp(44px, 6.5vw, 96px);
+      line-height: 0.92; letter-spacing: -0.02em;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+    }
+    .post-title em {
+      font-family: var(--font-serif);
+      font-style: italic; font-weight: 700;
+      color: var(--accent);
+      text-transform: none;
+    }
+    .post-description {
+      font-family: var(--font-serif);
+      font-style: italic; font-weight: 400;
+      font-size: 22px; line-height: 1.45;
+      color: var(--muted);
+      max-width: 600px;
+      margin-bottom: 56px;
+    }
+    .post-body {
+      font-size: 18px; line-height: 1.7;
+      color: var(--text);
+    }
+    .post-body > * + * { margin-top: 22px; }
+    .post-body h2 {
+      font-family: var(--font-display);
+      font-size: 38px; line-height: 1.05;
+      text-transform: uppercase;
+      letter-spacing: -0.01em;
+      margin-top: 56px;
+      margin-bottom: 8px;
+    }
+    .post-body h2 em {
+      font-family: var(--font-serif); font-style: italic; font-weight: 700; color: var(--accent); text-transform: none;
+    }
+    .post-body p { color: var(--text); }
+    .post-body strong { font-weight: 600; }
+    .post-body em { font-style: italic; }
+    .post-body a {
+      color: inherit;
+      border-bottom: 2px solid var(--line);
+      padding-bottom: 1px;
+      transition: border-color 0.15s, color 0.15s;
+    }
+    .post-body a:hover {
+      background: var(--accent);
+      color: var(--text);
+      border-bottom-color: var(--text);
+      padding: 1px 4px;
+      margin: -1px -4px;
+    }
+    .post-body ul, .post-body ol {
+      padding-left: 0;
+      list-style: none;
+    }
+    .post-body li {
+      padding: 10px 0 10px 28px;
+      position: relative;
+      border-top: 1px dashed var(--line);
+    }
+    .post-body li:first-child { border-top: 0; }
+    .post-body li::before {
+      content: "→";
+      position: absolute; left: 0; top: 10px;
+      font-family: var(--font-display);
+      color: var(--accent);
+      font-size: 18px;
+    }
+    .post-body li strong { color: var(--text); }
+    .post-body blockquote {
+      padding: 14px 0 14px 24px;
+      border-left: 4px solid var(--accent);
+      color: var(--muted);
+      font-style: italic;
+      font-family: var(--font-serif);
+      font-size: 22px;
+      line-height: 1.5;
+    }
+    .post-footer {
+      margin-top: 72px;
+      padding-top: 32px;
+      border-top: 2px solid var(--text);
+      display: flex; justify-content: space-between;
+      gap: 16px; flex-wrap: wrap;
+      font-family: var(--font-mono);
+      font-size: 12px; letter-spacing: 0.12em;
+      text-transform: uppercase;
+    }
+    .post-footer a {
+      color: var(--text);
+      border-bottom: 2px solid var(--text);
+      padding-bottom: 2px;
+      font-weight: 700;
+    }
+    .post-footer a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+
+    @media (max-width: 720px) {
+      .post { padding: 32px 0 64px; }
+      .post-body { font-size: 16px; }
+      .post-body h2 { font-size: 30px; margin-top: 44px; }
+    }
+  </style>
 </head>
-<body>
+<body data-mode="warhol" data-density="normal" class="post-page">
 
   <nav class="nav" id="nav">
     <div class="container nav-inner">
-      <a href="../" class="logo">Harsh<span>.</span></a>
+      <a href="../" class="logo">Harsh<sup>1</sup></a>
       <div class="nav-links">
         <a href="../#about">About</a>
-        <a href="../#work">Work</a>
+        <a href="../#credentials">School</a>
         <a href="../#off">Life</a>
-        <a href="./">Notes</a>
+        <a href="index.html">Notes</a>
         <a href="../#contact">Contact</a>
       </div>
     </div>
@@ -27,42 +162,46 @@
 
   <article class="post container">
     <header class="post-header">
-      <a href="./" class="post-back">← All notes</a>
+      <a href="index.html" class="post-back">← All notes</a>
       <div class="post-meta">
         <span class="post-date">May 2026</span>
-        <span class="post-dot">·</span>
+        <span class="post-dot">/</span>
         <span class="post-tag">Intro</span>
       </div>
-      <h1 class="post-title">Why I'm writing this down</h1>
+      <h1 class="post-title">Why I'm <em>writing</em> this down</h1>
       <p class="post-description">A slow archive of the operating playbook I've collected the hard way.</p>
     </header>
     <div class="post-body">
       <p>A few years after the Josh Talks keynote — the one about turning ₹24,000 into a multi-crore agency — I noticed something uncomfortable.</p>
-      <p>The talk had millions of views. The playbook in it was useful. But most of what I&rsquo;d actually learned in those four years lived as half-memories: the deal that almost killed us, the campaign that worked for reasons I couldn&rsquo;t fully explain, the hire I should have made six months earlier than I did. The 80% of operating work that never makes it into a deck.</p>
-      <p>This page is a slow project to write that 80% down. Operator notes from bootstrapping a marketing &amp; talent agency from zero to a national practice, signing one of India&rsquo;s most prominent cricketers, a year operating across enterprise GTM and founder&rsquo;s-office work, and watching where the next decade of Indian sports is going.</p>
+      <p>The talk had millions of views. The playbook in it was useful. But most of what I'd actually learned in those four years lived as half-memories: the deal that almost killed us, the campaign that worked for reasons I couldn't fully explain, the hire I should have made six months earlier than I did. The 80% of operating work that never makes it into a deck.</p>
+      <p>This page is a slow project to write that 80% down. Operator notes from bootstrapping a marketing &amp; talent agency from zero to a national practice, signing one of India's most prominent cricketers, a year operating across enterprise GTM and founder's-office work, and watching where the next decade of Indian sports is going.</p>
       <p>Topics queued up to write through:</p>
       <ul>
-      <li><strong>Bootstrapping in an emerging market</strong> — segmentation, partner-led GTM, hyperlocal influencer mechanics, and what actually moved the needle.</li>
-      <li><strong>Talent management</strong> — what works in India, what doesn&rsquo;t, what I learned signing Ishant Sharma and architecting his RuPay × IPL play.</li>
-      <li><strong>Founder&rsquo;s Office</strong> — the operating cadence that actually scales a small team: 1:1s, OKRs, sprint hygiene, FinOps, and what would have made it stick faster.</li>
-      <li><strong>Indian sports</strong> — soft power, sovereign-wealth flows, the operator gaps in franchise/league/federation roles, and why the next decade rewrites the industry.</li>
-      <li><strong>Strategy beyond the deck</strong> — sports washing, multipolar capital, where Saudi/UAE money should actually go, and what India can borrow.</li>
-      <li><strong>The reading list</strong> — Mandeville, Frankl, Tuesdays with Morrie, and the less-obvious books that rebuilt how I look at operating work.</li>
+        <li><strong>Bootstrapping in an emerging market</strong> — segmentation, partner-led GTM, hyperlocal influencer mechanics, and what actually moved the needle.</li>
+        <li><strong>Talent management</strong> — what works in India, what doesn't, what I learned signing Ishant Sharma and architecting his RuPay × IPL play.</li>
+        <li><strong>Founder's Office</strong> — the operating cadence that actually scales a small team: 1:1s, OKRs, sprint hygiene, FinOps, and what would have made it stick faster.</li>
+        <li><strong>Indian sports</strong> — soft power, sovereign-wealth flows, the operator gaps in franchise/league/federation roles, and why the next decade rewrites the industry.</li>
+        <li><strong>Strategy beyond the deck</strong> — sports washing, multipolar capital, where Saudi/UAE money should actually go, and what India can borrow.</li>
+        <li><strong>The reading list</strong> — Mandeville, Frankl, Tuesdays with Morrie, and the less-obvious books that rebuilt how I look at operating work.</li>
       </ul>
-      <p>Aiming for honest more than polished. If a piece holds up six months from now I&rsquo;ll keep it; if it doesn&rsquo;t, I&rsquo;ll rewrite it.</p>
-      <p>If something here lands or doesn&rsquo;t, write to me — the email&rsquo;s at the bottom of every page.</p>
+      <p>Aiming for <em>honest</em> more than <em>polished</em>. If a piece holds up six months from now I'll keep it; if it doesn't, I'll rewrite it.</p>
+      <p>If something here lands or doesn't, write to me — the email's at the bottom of every page.</p>
       <p>— H.</p>
     </div>
     <footer class="post-footer">
-      <a href="./">← All notes</a>
+      <a href="index.html">← All notes</a>
       <a href="../#contact">Get in touch →</a>
     </footer>
   </article>
 
-  <footer class="site-footer">
+  <footer>
     <div class="container">
-      <span>© <span id="year"></span> Harsh Kumar Arya</span>
-      <span>Built simply · Hosted on GitHub Pages</span>
+      <span class="foot-left">© <span id="year"></span> Harsh Kumar Arya · <a class="foot-email" href="mailto:hi@harsharya.com">hi@harsharya.com</a></span>
+      <span class="foot-socials">
+        <a href="https://www.linkedin.com/in/harsharyaa/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://github.com/harsharya7021" target="_blank" rel="noopener">GitHub</a>
+      </span>
+      <span class="foot-right">Built for the few people who'll actually read this far.</span>
     </div>
   </footer>
 

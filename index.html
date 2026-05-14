@@ -13,826 +13,105 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo+Black&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,700;0,6..96,900;1,6..96,400&family=Inter:wght@300;400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Unbounded:wght@300;400;500;700;900&display=swap" rel="stylesheet">
 
-  <style>
-    :root {
-      --bg: #f6f3eb;
-      --bg-elev: #ffffff;
-      --text: #1a1a1a;
-      --muted: #6b6358;
-      --line: #d6cfc1;
-      --accent: #1a1a1a;
-      --tag-bg: rgba(26, 26, 26, 0.06);
-      --highlight: #b85c2c;
-      --photo-bg: #ece5d3;
-    }
-    @media (prefers-color-scheme: dark) {
-      :root {
-        --bg: #14140f;
-        --bg-elev: #1c1c16;
-        --text: #f0eee6;
-        --muted: #9a9485;
-        --line: #2c2c23;
-        --accent: #f0eee6;
-        --tag-bg: rgba(240, 238, 230, 0.06);
-        --highlight: #d68a5e;
-        --photo-bg: #2a2a21;
-      }
-    }
-
-    * { box-sizing: border-box; margin: 0; padding: 0; }
-    html { scroll-behavior: smooth; }
-    body {
-      font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
-      background: var(--bg); color: var(--text);
-      line-height: 1.6; font-size: 16px;
-      -webkit-font-smoothing: antialiased;
-      -moz-osx-font-smoothing: grayscale;
-    }
-    .container { max-width: 1120px; margin: 0 auto; padding: 0 32px; }
-
-    /* ─── NAV ───────────────────────────────────────────── */
-    .nav {
-      position: sticky; top: 0; z-index: 50;
-      background: color-mix(in srgb, var(--bg) 88%, transparent);
-      backdrop-filter: saturate(160%) blur(12px);
-      -webkit-backdrop-filter: saturate(160%) blur(12px);
-      border-bottom: 1px solid transparent;
-      transition: border-color 0.2s;
-    }
-    .nav.scrolled { border-bottom-color: var(--line); }
-    .nav-inner {
-      display: flex; align-items: center; justify-content: space-between;
-      padding: 18px 0;
-    }
-    .logo {
-      font-family: "Fraunces", serif; font-weight: 500;
-      font-size: 18px; letter-spacing: 0.02em;
-      color: var(--text); text-decoration: none;
-    }
-    .logo sup {
-      font-size: 0.55em;
-      vertical-align: super;
-      color: var(--muted);
-      margin-left: 1px;
-      font-feature-settings: "sups";
-    }
-    .nav-links { display: flex; gap: 28px; font-size: 14px; }
-    .nav-links a {
-      color: var(--muted); text-decoration: none;
-      transition: color 0.15s;
-    }
-    .nav-links a:hover { color: var(--text); }
-
-    /* ─── PHOTOS ─────────────────────────────────────────── */
-    .photo {
-      display: block; width: 100%;
-      background: var(--photo-bg);
-      object-fit: cover;
-    }
-    .photo--portrait { aspect-ratio: 2 / 3; }
-    .photo--square { aspect-ratio: 1 / 1; }
-    .photo--portrait-tall { aspect-ratio: 3 / 4; }
-
-    /* ─── HERO ──────────────────────────────────────────── */
-    .hero {
-      padding: 88px 0 72px;
-      display: grid;
-      grid-template-columns: 1.4fr 1fr;
-      gap: 64px; align-items: start;
-    }
-    .hero-eyebrow {
-      font-family: ui-monospace, "SF Mono", Menlo, monospace;
-      font-size: 12px; letter-spacing: 0.18em;
-      text-transform: uppercase; color: var(--muted);
-      margin-bottom: 28px;
-    }
-    .hero h1 {
-      font-family: "Fraunces", serif;
-      font-weight: 400;
-      font-size: clamp(48px, 7vw, 92px);
-      line-height: 1.02; letter-spacing: -0.02em;
-      margin-bottom: 32px;
-    }
-    .hero h1 em { font-style: italic; font-weight: 300; color: var(--muted); }
-    .hero-tagline {
-      font-size: 19px; line-height: 1.55;
-      color: var(--text); max-width: 540px;
-      margin-bottom: 32px;
-    }
-    .hero-creds {
-      display: flex; flex-wrap: wrap;
-      gap: 8px 10px;
-    }
-    .cred-tag {
-      font-size: 13px; padding: 6px 12px;
-      border: 1px solid var(--line); border-radius: 999px;
-      color: var(--muted); background: var(--bg-elev);
-    }
-    .cred-tag strong { color: var(--text); font-weight: 600; }
-    .hero-photo { position: relative; }
-    .name-card {
-      background: var(--bg-elev);
-      border: 1px solid var(--line);
-      padding: 18px 22px;
-      margin-bottom: 22px;
-    }
-    .dict-row {
-      padding: 12px 0;
-      border-top: 1px solid var(--line);
-    }
-    .dict-row:first-child { border-top: 0; padding-top: 0; }
-    .dict-row:last-child { padding-bottom: 0; }
-    .dict-word {
-      font-family: "Fraunces", serif;
-      font-weight: 500;
-      font-size: 18px;
-      color: var(--text);
-      letter-spacing: -0.005em;
-    }
-    .dict-word sup {
-      font-size: 0.55em;
-      vertical-align: super;
-      color: var(--muted);
-      margin-left: 1px;
-    }
-    .dict-pron {
-      font-family: ui-monospace, "SF Mono", Menlo, monospace;
-      font-size: 12px;
-      color: var(--muted);
-      margin-left: 8px;
-      letter-spacing: 0.02em;
-    }
-    .dict-tag {
-      font-style: italic;
-      font-size: 12px;
-      color: var(--muted);
-      margin-left: 6px;
-    }
-    .dict-def {
-      display: block;
-      font-size: 13.5px;
-      color: var(--text);
-      margin-top: 5px;
-      line-height: 1.5;
-    }
-    .name-footnote {
-      margin-top: 16px;
-      font-family: ui-monospace, "SF Mono", Menlo, monospace;
-      font-size: 11px;
-      letter-spacing: 0.01em;
-      color: var(--muted);
-      line-height: 1.65;
-      max-width: 360px;
-    }
-    .footnote-num {
-      font-family: "Fraunces", serif;
-      font-size: 13px;
-      color: var(--text);
-      margin-right: 4px;
-    }
-    .hero-photo .passport-frame {
-      background: var(--bg-elev);
-      padding: 12px;
-      border: 1px solid var(--line);
-      box-shadow: 0 18px 38px rgba(0, 0, 0, 0.10), 0 4px 10px rgba(0, 0, 0, 0.06);
-      transform: rotate(-1.2deg);
-      transition: transform 0.4s ease;
-    }
-    .hero-photo .passport-frame:hover { transform: rotate(0deg); }
-    .hero-photo .passport-frame img {
-      display: block;
-      width: 100%;
-      aspect-ratio: 1485 / 1000;
-      object-fit: cover;
-    }
-    .passport-caption {
-      font-family: ui-monospace, "SF Mono", Menlo, monospace;
-      font-size: 11px;
-      letter-spacing: 0.14em;
-      text-transform: uppercase;
-      color: var(--muted);
-      text-align: center;
-      margin-top: 16px;
-      line-height: 1.5;
-    }
-
-    /* ─── SECTIONS ───────────────────────────────────────── */
-    section { padding: 80px 0; }
-    .section-label {
-      font-family: ui-monospace, "SF Mono", Menlo, monospace;
-      font-size: 12px; letter-spacing: 0.18em;
-      text-transform: uppercase; color: var(--muted);
-      margin-bottom: 32px;
-      display: flex; align-items: center; gap: 16px;
-    }
-    .section-label::after {
-      content: ""; flex: 1; height: 1px; background: var(--line);
-    }
-    .section-title {
-      font-family: "Fraunces", serif; font-weight: 400;
-      font-size: clamp(36px, 4.5vw, 56px);
-      line-height: 1.05; letter-spacing: -0.015em;
-      margin-bottom: 48px; max-width: 880px;
-    }
-    .section-title em { font-style: italic; color: var(--muted); font-weight: 300; }
-
-    /* ─── PRESS / CLIPPINGS ──────────────────────────────── */
-    .press {
-      padding: 64px 0 !important;
-      border-top: 1px solid var(--line);
-      border-bottom: 1px solid var(--line);
-    }
-    .press-label {
-      display: block;
-      font-family: ui-monospace, "SF Mono", Menlo, monospace;
-      font-size: 11px; letter-spacing: 0.2em;
-      text-transform: uppercase; color: var(--muted);
-      margin-bottom: 36px;
-    }
-    .clippings {
-      display: grid; grid-template-columns: repeat(3, 1fr);
-      gap: 36px 32px; align-items: start;
-    }
-    .clipping {
-      background: #ffffff;
-      padding: 14px 14px 22px;
-      box-shadow: 0 14px 32px rgba(0, 0, 0, 0.10), 0 4px 10px rgba(0, 0, 0, 0.06);
-      transition: transform 0.4s ease, box-shadow 0.4s ease;
-      border-radius: 1px;
-      margin: 0;
-    }
-    .clipping:nth-child(1) { transform: rotate(-1.5deg); }
-    .clipping:nth-child(2) { transform: rotate(0.7deg); }
-    .clipping:nth-child(3) { transform: rotate(-0.9deg); }
-    .clipping:hover {
-      transform: rotate(0deg) translateY(-6px);
-      box-shadow: 0 22px 48px rgba(0, 0, 0, 0.14), 0 6px 14px rgba(0, 0, 0, 0.08);
-      z-index: 2;
-    }
-    .clipping img {
-      display: block; width: 100%; height: auto;
-    }
-    .clipping-cap {
-      margin-top: 14px;
-      font-family: ui-monospace, "SF Mono", Menlo, monospace;
-      font-size: 11px; letter-spacing: 0.12em;
-      text-transform: uppercase; color: #666;
-      text-align: center;
-    }
-    .press-fineprint {
-      margin-top: 44px;
-      font-family: ui-monospace, "SF Mono", Menlo, monospace;
-      font-size: 11.5px;
-      letter-spacing: 0.04em;
-      color: var(--muted);
-      line-height: 1.5;
-      text-align: center;
-    }
-    .press-fineprint strong { color: var(--text); font-weight: 600; }
-    .press-fineprint em { font-style: italic; }
-
-    /* ─── ABOUT ──────────────────────────────────────────── */
-    .about-grid {
-      display: grid; grid-template-columns: 1fr 1fr;
-      gap: 64px; align-items: start;
-    }
-    .about-prose p {
-      font-size: 18px; line-height: 1.6;
-      margin-bottom: 20px; color: var(--text);
-    }
-    .about-prose p:last-child { margin-bottom: 0; }
-    .about-prose strong { font-weight: 600; }
-    .inline-link {
-      color: inherit;
-      text-decoration: none;
-      border-bottom: 1px solid var(--line);
-      padding-bottom: 1px;
-      transition: border-color 0.2s, color 0.2s;
-    }
-    .inline-link:hover {
-      border-bottom-color: var(--highlight);
-      color: var(--highlight);
-    }
-    .inline-link[data-pending] {
-      border-bottom-style: dotted;
-    }
-    .about-photo { position: sticky; top: 96px; }
-    .about-photo-caption {
-      font-family: ui-monospace, "SF Mono", Menlo, monospace;
-      font-size: 11px; letter-spacing: 0.12em;
-      text-transform: uppercase; color: var(--muted);
-      margin-top: 12px; text-align: right;
-    }
-
-    /* ─── CREDENTIALS ────────────────────────────────────── */
-    .creds-grid {
-      display: grid; grid-template-columns: 1fr 1fr;
-      gap: 32px;
-    }
-    .cred {
-      padding: 36px;
-      border: 1px solid var(--line); border-radius: 4px;
-      background: var(--bg-elev);
-    }
-    .cred-school {
-      font-family: "Fraunces", serif;
-      font-size: 28px; font-weight: 500;
-      letter-spacing: -0.01em; margin-bottom: 6px;
-    }
-    .cred-program {
-      font-size: 14px; color: var(--muted);
-      margin-bottom: 24px;
-    }
-    .cred-divider {
-      height: 1px; background: var(--line); margin: 24px 0;
-    }
-    .cred-highlight {
-      font-size: 14px; line-height: 1.55;
-      color: var(--text); margin-bottom: 12px;
-    }
-    .cred-highlight strong { color: var(--highlight); font-weight: 600; }
-    .cred-meta {
-      font-family: ui-monospace, "SF Mono", Menlo, monospace;
-      font-size: 11px; letter-spacing: 0.12em;
-      text-transform: uppercase; color: var(--muted);
-      margin-top: 16px;
-    }
-
-    /* ─── WORK GRID ──────────────────────────────────────── */
-    .work-grid {
-      display: grid; grid-template-columns: 1fr 1fr;
-      gap: 48px 32px;
-    }
-    .work-item {
-      display: block; text-decoration: none; color: inherit;
-    }
-    .work-item .photo {
-      transition: transform 0.4s ease;
-    }
-    .work-item:hover .photo { transform: translateY(-4px); }
-    .work-meta {
-      margin-top: 16px;
-      display: flex; justify-content: space-between;
-      align-items: baseline; gap: 16px;
-    }
-    .work-title {
-      font-family: "Fraunces", serif;
-      font-size: 22px; font-weight: 500;
-      letter-spacing: -0.005em;
-    }
-    .work-year {
-      font-family: ui-monospace, "SF Mono", Menlo, monospace;
-      font-size: 12px; letter-spacing: 0.1em;
-      color: var(--muted); white-space: nowrap;
-    }
-    .work-role {
-      font-size: 14px; color: var(--muted); margin-top: 4px;
-    }
-    .work-desc {
-      font-size: 15px; color: var(--text);
-      margin-top: 12px; line-height: 1.55;
-    }
-
-    /* ─── HIGHLIGHTS ─────────────────────────────────────── */
-    .highlights {
-      margin-top: 72px; padding-top: 48px;
-      border-top: 1px solid var(--line);
-    }
-    .highlights-label {
-      font-family: ui-monospace, "SF Mono", Menlo, monospace;
-      font-size: 11px; letter-spacing: 0.18em;
-      text-transform: uppercase; color: var(--muted);
-      margin-bottom: 28px;
-    }
-    .highlights-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 4px 48px;
-    }
-    .highlight-row {
-      padding: 18px 0;
-      border-top: 1px solid var(--line);
-      display: grid;
-      grid-template-columns: 80px 1fr;
-      gap: 24px;
-      align-items: baseline;
-    }
-    .highlight-year {
-      font-family: ui-monospace, "SF Mono", Menlo, monospace;
-      font-size: 12px; color: var(--muted);
-      letter-spacing: 0.05em;
-    }
-    .highlight-text {
-      font-size: 15px; color: var(--text); line-height: 1.5;
-    }
-    .highlight-text strong { font-weight: 600; }
-
-    /* ─── OFF THE CLOCK ──────────────────────────────────── */
-    .off-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      grid-template-rows: 1fr 1fr;
-      gap: 16px;
-    }
-    .off-1 { grid-column: 1 / 3; grid-row: 1 / 3; }
-    .off-2 { grid-column: 3 / 4; grid-row: 1; }
-    .off-3 { grid-column: 4 / 5; grid-row: 1; }
-    .off-4 { grid-column: 3 / 4; grid-row: 2; }
-    .off-5 { grid-column: 4 / 5; grid-row: 2; }
-    .off-1 .photo { aspect-ratio: auto; height: 100%; }
-    .off-grid > div .photo {
-      width: 100%; height: 100%;
-    }
-
-    .off-caption {
-      display: grid; grid-template-columns: 1fr 1fr 1fr;
-      gap: 32px; margin-top: 36px; font-size: 15px;
-    }
-    .off-caption h4 {
-      font-family: "Fraunces", serif;
-      font-weight: 500; font-size: 18px; margin-bottom: 6px;
-    }
-    .off-caption p { color: var(--muted); line-height: 1.55; }
-
-    /* ─── SELECTED CREATIVE ──────────────────────────────── */
-    .creative-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 32px;
-    }
-    .creative-tile {
-      display: block;
-      text-decoration: none; color: inherit;
-    }
-    .creative-frame {
-      position: relative;
-      aspect-ratio: 4 / 5;
-      background: var(--photo-bg);
-      border: 1px dashed var(--line);
-      overflow: hidden;
-      transition: transform 0.4s ease, border-color 0.4s ease;
-    }
-    .creative-tile:hover .creative-frame {
-      transform: translateY(-4px);
-      border-color: var(--line);
-    }
-    .creative-frame img {
-      position: absolute; inset: 0;
-      width: 100%; height: 100%;
-      object-fit: cover;
-      opacity: 0;
-      transition: opacity 0.9s ease;
-    }
-    .creative-frame img.active { opacity: 1; }
-    .creative-frame .placeholder-label {
-      position: absolute; inset: 0;
-      display: flex; align-items: center; justify-content: center;
-      flex-direction: column; gap: 6px;
-      color: var(--placeholder-text);
-      font-family: ui-monospace, "SF Mono", Menlo, monospace;
-      font-size: 11px; letter-spacing: 0.18em;
-      text-transform: uppercase;
-      text-align: center; padding: 18px;
-    }
-    .creative-frame .placeholder-label::before {
-      content: "";
-      width: 24px; height: 24px;
-      border: 1px solid currentColor;
-      opacity: 0.5;
-    }
-    .creative-frame .placeholder-label small {
-      font-size: 10px; opacity: 0.7;
-      letter-spacing: 0.1em; text-transform: lowercase;
-    }
-    .creative-meta { margin-top: 18px; }
-    .creative-meta h4 {
-      font-family: "Fraunces", serif;
-      font-size: 22px; font-weight: 500;
-      letter-spacing: -0.005em;
-    }
-    .creative-meta p {
-      font-size: 14px; color: var(--muted);
-      margin-top: 6px; line-height: 1.55;
-    }
-    .creative-link-cue {
-      color: var(--text);
-      border-bottom: 1px solid var(--line);
-      padding-bottom: 1px;
-      transition: border-color 0.2s, color 0.2s;
-    }
-    .creative-tile:hover .creative-link-cue {
-      color: var(--highlight);
-      border-bottom-color: var(--highlight);
-    }
-
-    /* ─── NOTES ─────────────────────────────────────────── */
-    .notes-list { display: grid; gap: 0; }
-    .note-item {
-      display: grid;
-      grid-template-columns: 100px 1fr auto;
-      gap: 32px; padding: 24px 0;
-      border-top: 1px solid var(--line);
-      align-items: baseline;
-      text-decoration: none; color: inherit;
-      transition: padding 0.2s ease;
-    }
-    .note-item:last-child { border-bottom: 1px solid var(--line); }
-    .note-item:hover { padding-left: 8px; }
-    .note-date {
-      font-family: ui-monospace, "SF Mono", Menlo, monospace;
-      font-size: 12px; letter-spacing: 0.05em; color: var(--muted);
-    }
-    .note-title {
-      font-family: "Fraunces", serif;
-      font-size: 22px; font-weight: 500;
-      letter-spacing: -0.005em;
-    }
-    .note-tag {
-      font-family: ui-monospace, "SF Mono", Menlo, monospace;
-      font-size: 11px; letter-spacing: 0.12em;
-      color: var(--muted); text-transform: uppercase;
-    }
-    .all-notes {
-      margin-top: 32px; display: inline-block;
-      font-size: 15px; color: var(--text);
-      text-decoration: none;
-      border-bottom: 1px solid var(--text);
-      padding-bottom: 2px;
-    }
-
-    /* ─── CONTACT ────────────────────────────────────────── */
-    .contact-block { padding: 96px 0; }
-    .contact-line {
-      font-family: "Fraunces", serif; font-weight: 400;
-      font-size: clamp(36px, 5vw, 64px);
-      line-height: 1.1; letter-spacing: -0.015em;
-      margin-bottom: 32px; max-width: 900px;
-    }
-    .contact-line em { font-style: italic; color: var(--muted); font-weight: 300; }
-    .contact-email {
-      font-family: "Fraunces", serif;
-      font-size: clamp(28px, 4vw, 48px);
-      color: var(--text); text-decoration: none;
-      border-bottom: 2px solid var(--text);
-      padding-bottom: 4px; display: inline-block;
-      margin-bottom: 36px;
-    }
-    .contact-email:hover { color: var(--highlight); border-bottom-color: var(--highlight); }
-    .contact-uses {
-      margin: 24px 0 36px;
-      max-width: 640px;
-    }
-    .contact-uses-label {
-      font-family: ui-monospace, "SF Mono", Menlo, monospace;
-      font-size: 11px; letter-spacing: 0.18em;
-      text-transform: uppercase; color: var(--muted);
-      margin-bottom: 14px;
-      padding-bottom: 10px;
-      border-bottom: 1px solid var(--line);
-    }
-    .contact-uses ul {
-      list-style: none; padding: 0; margin: 0;
-    }
-    .contact-uses li {
-      padding: 6px 0;
-      font-size: 15px;
-      color: var(--text);
-      line-height: 1.55;
-      position: relative;
-      padding-left: 22px;
-    }
-    .contact-uses li::before {
-      content: "—";
-      position: absolute;
-      left: 0;
-      color: var(--muted);
-    }
-    .contact-consult-line {
-      margin-top: 18px;
-      padding-top: 14px;
-      border-top: 1px solid var(--line);
-      font-size: 14px;
-      color: var(--muted);
-    }
-    .contact-consult-line a {
-      color: var(--text);
-      border-bottom: 1px solid var(--text);
-      text-decoration: none;
-      padding-bottom: 1px;
-      transition: color 0.2s, border-color 0.2s;
-    }
-    .contact-consult-line a:hover {
-      color: var(--highlight);
-      border-bottom-color: var(--highlight);
-    }
-    .contact-socials {
-      display: flex; gap: 28px; flex-wrap: wrap;
-    }
-    .contact-socials a {
-      font-size: 14px; color: var(--muted);
-      text-decoration: none; letter-spacing: 0.02em;
-    }
-    .contact-socials a:hover { color: var(--text); }
-
-    /* ─── FOOTER ─────────────────────────────────────────── */
-    footer {
-      padding: 28px 0 40px;
-      border-top: 1px solid var(--line);
-      font-family: ui-monospace, "SF Mono", Menlo, monospace;
-      font-size: 11px; letter-spacing: 0.12em;
-      text-transform: uppercase; color: var(--muted);
-    }
-    footer .container {
-      display: flex; justify-content: space-between;
-      gap: 16px; flex-wrap: wrap;
-    }
-
-    /* ─── RESPONSIVE ─────────────────────────────────────── */
-    /* ─── TABLET / SMALL DESKTOP ──────────────────────────── */
-    @media (max-width: 880px) {
-      .container { padding: 0 22px; }
-
-      /* Hero stacks: text first, then photo column */
-      .hero {
-        grid-template-columns: 1fr;
-        gap: 32px; padding: 56px 0 48px;
-      }
-      .hero h1 { font-size: clamp(40px, 9vw, 64px); }
-      .hero-photo {
-        max-width: 100%;
-        display: flex; flex-direction: column; gap: 0;
-      }
-      .name-card { width: 100%; }
-      .passport-frame { max-width: 320px; align-self: center; }
-      .passport-caption { max-width: 320px; align-self: center; margin-top: 14px; }
-      .name-footnote { max-width: 100%; margin-top: 24px; }
-
-      /* About / credentials / work / highlights */
-      .about-grid { grid-template-columns: 1fr; gap: 36px; }
-      .about-photo { position: static; max-width: 460px; }
-      .creds-grid { grid-template-columns: 1fr; gap: 16px; }
-      .work-grid { grid-template-columns: 1fr; gap: 40px; }
-      .highlights-grid { grid-template-columns: 1fr; gap: 0; }
-
-      /* Press clippings — flatten the tilts */
-      .clippings { grid-template-columns: 1fr; gap: 28px; max-width: 380px; margin: 0 auto; }
-      .clipping:nth-child(1), .clipping:nth-child(3) { transform: rotate(-0.6deg); }
-      .clipping:nth-child(2) { transform: rotate(0.5deg); }
-
-      /* Creative + Life */
-      .creative-grid { grid-template-columns: 1fr; gap: 36px; }
-      .off-grid {
-        grid-template-columns: repeat(2, 1fr);
-        grid-template-rows: auto;
-      }
-      .off-1, .off-2, .off-3, .off-4, .off-5 {
-        grid-column: auto; grid-row: auto;
-      }
-      .off-1 { grid-column: span 2; }
-      .off-1 .photo { aspect-ratio: 4/3; height: auto; min-height: 0; }
-      .off-caption { grid-template-columns: 1fr; gap: 20px; }
-
-      /* Nav, notes, sections */
-      .nav-links { gap: 18px; font-size: 13px; }
-      .note-item { grid-template-columns: 80px 1fr; gap: 16px; }
-      .note-item .note-tag { display: none; }
-      section { padding: 56px 0; }
-    }
-
-    /* ─── PHONE ────────────────────────────────────────────── */
-    @media (max-width: 520px) {
-      .container { padding: 0 18px; }
-
-      /* Tighter nav: hide "Life" on smallest screens, keep core */
-      .nav-inner { padding: 14px 0; }
-      .nav-links { gap: 14px; font-size: 12px; }
-      .nav-links a:nth-child(3) { display: none; }
-      .logo { font-size: 16px; }
-
-      /* Hero typography */
-      .hero { padding: 40px 0 36px; gap: 28px; }
-      .hero h1 { font-size: clamp(34px, 10vw, 52px); }
-      .hero-eyebrow { font-size: 11px; letter-spacing: 0.14em; margin-bottom: 20px; }
-      .hero-tagline { font-size: 17px; margin-bottom: 24px; }
-      .hero-creds { gap: 6px 8px; }
-      .cred-tag { font-size: 12px; padding: 5px 10px; }
-
-      /* Name card and footnote */
-      .name-card { padding: 14px 16px; }
-      .dict-word { font-size: 16px; }
-      .dict-pron { font-size: 11px; }
-      .dict-tag { font-size: 11px; }
-      .dict-def { font-size: 13px; }
-      .name-footnote { font-size: 11.5px; line-height: 1.6; }
-      .passport-caption { font-size: 10px; letter-spacing: 0.12em; }
-
-      /* Section titles */
-      .section-title { font-size: clamp(28px, 8vw, 42px); margin-bottom: 32px; }
-      .section-label { font-size: 11px; letter-spacing: 0.14em; margin-bottom: 24px; }
-      section { padding: 48px 0; }
-
-      /* Press strip */
-      .press { padding: 36px 0 !important; }
-      .press-label { margin-bottom: 24px; }
-      .press-fineprint { font-size: 11px; margin-top: 28px; }
-
-      /* About prose */
-      .about-prose p { font-size: 16px; }
-      .about-grid { gap: 32px; }
-      .about-photo { max-width: 100%; }
-
-      /* Credentials */
-      .cred { padding: 24px; }
-      .cred-school { font-size: 24px; }
-
-      /* Work */
-      .work-title { font-size: 19px; }
-
-      /* Highlights */
-      .highlight-row { grid-template-columns: 70px 1fr; gap: 16px; padding: 14px 0; }
-      .highlight-text { font-size: 14px; }
-
-      /* Off the clock */
-      .off-caption h4 { font-size: 17px; }
-
-      /* Notes */
-      .note-item { grid-template-columns: 64px 1fr; gap: 12px; padding: 18px 0; }
-      .note-title { font-size: 18px; }
-      .note-date { font-size: 11px; }
-
-      /* Contact */
-      .contact-block { padding: 64px 0; }
-      .contact-line { font-size: clamp(28px, 8vw, 48px); margin-bottom: 24px; }
-      .contact-email { font-size: clamp(22px, 7vw, 36px); margin-bottom: 28px; }
-      .contact-uses { margin: 20px 0 28px; }
-      .contact-uses li { font-size: 14px; padding-left: 18px; }
-
-      /* Footer */
-      footer { padding: 24px 0 32px; }
-      footer .container { font-size: 10px; flex-direction: column; align-items: flex-start; gap: 6px; }
-    }
-  </style>
+  <link rel="stylesheet" href="styles.css">
 </head>
-<body>
+<body data-mode="warhol" data-density="normal" data-about-photo="wash" data-fx-marilyn="false" data-fx-halftone="false" data-fx-misprint="false" data-fx-stamp="false" data-fx-flood="true" style="--accent:#ff5a00;--font-display:'Anton',sans-serif;--font-serif:'Bodoni Moda',serif;--about-wash:#00b3ff;--about-shadow:#ffc700;">
 
   <!-- ─── NAV ───────────────────────────────────────────── -->
   <nav class="nav" id="nav">
     <div class="container nav-inner">
       <a href="#" class="logo">Harsh<sup>1</sup></a>
+      <div class="issue-meta">
+        <span class="issue-no">№ 01</span>
+        <span class="issue-date">VOL. 26 / SUMMER</span>
+        <span class="issue-price">FREE WITH FOOTNOTES</span>
+      </div>
       <div class="nav-links">
         <a href="#about">About</a>
-        <a href="#work">Work</a>
+        <a href="#credentials">School</a>
         <a href="#off">Life</a>
-        <a href="writing/">Notes</a>
+        <a href="writing/index.html">Notes</a>
         <a href="#contact">Contact</a>
       </div>
     </div>
   </nav>
 
   <!-- ─── HERO ──────────────────────────────────────────── -->
-  <header class="container">
-    <div class="hero">
-      <div class="hero-text">
-        <div class="hero-eyebrow">Founder. Operator. With footnotes.</div>
-        <h1>I like <em>big</em> businesses, and I can't lie.</h1>
-        <p class="hero-tagline">
-          Founded <a class="inline-link" href="https://harsharya7021.github.io/ninety-eight-web/" target="_blank" rel="noopener">Ninety-Eight Entertainment</a> in early 2020 — first as a freelancer for a Delhi nightclub, soon a one-person agency working out of a 300-sq-ft office. Ran it through 2023 with a roster that included one of India's most prominent cricketers. Paused for ISB. Now: relaunching 98 as a creative-and-strategy practice for founders, and writing about Indian sports, talent and what I keep getting wrong.
-        </p>
-        <div class="hero-creds">
-          <span class="cred-tag"><strong>ISB</strong> &nbsp;PGP '25</span>
-          <span class="cred-tag"><strong>Georgia Tech</strong> &nbsp;Research Scholar</span>
+  <header class="hero-wrap">
+    <div class="container">
+
+      <!-- ISSUE/MARGIELA: masthead -->
+      <div class="masthead" aria-hidden="true">
+        <span class="mast-side mast-left">N°01</span>
+        <span class="mast-word">HARSH</span>
+        <span class="mast-side mast-right">'26</span>
+      </div>
+
+      <div class="hero">
+        <div class="hero-text">
+          <div class="hero-eyebrow">Founder. Operator. With footnotes.</div>
+          <h1 class="hero-h1">I like <em>big</em> businesses, <span class="break"></span>and I can't lie.</h1>
+          <p class="hero-tagline">
+            Founded <a class="inline-link" href="https://harsharya7021.github.io/ninety-eight-web/" target="_blank" rel="noopener">Ninety-Eight Entertainment</a> in early 2020 — first as a freelancer for a Delhi nightclub, soon a one-person agency working out of a 300-sq-ft office. Ran it through 2023 with a roster that included one of India's most prominent cricketers. Paused for ISB. Now: relaunching 98 as a creative-and-strategy practice for founders, and writing about Indian sports, talent and what I keep getting wrong.
+          </p>
+          <div class="hero-creds">
+            <span class="cred-tag"><strong>ISB</strong> MBA · Class of '25</span>
+            <span class="cred-tag"><strong>Georgia Tech</strong> Research Scholar</span>
+          </div>
+        </div>
+
+        <div class="hero-photo">
+          <!-- WARHOL 4-UP -->
+          <div class="warhol-grid" aria-hidden="true">
+            <div class="warhol-cell c1"><img src="assets/portrait.jpg" alt="" loading="eager"/></div>
+            <div class="warhol-cell c2"><img src="assets/portrait.jpg" alt="" loading="eager"/></div>
+            <div class="warhol-cell c3"><img src="assets/portrait.jpg" alt="" loading="eager"/></div>
+            <div class="warhol-cell c4"><img src="assets/portrait.jpg" alt="" loading="eager"/></div>
+          </div>
+
+          <!-- ISSUE / TABLOID single passport -->
+          <div class="passport-frame">
+            <img src="assets/portrait.jpg" alt="Harsh Kumar Arya — first passport, age 8" loading="eager" />
+            <div class="passport-stamp">PASSPORT №01 · 2008</div>
+          </div>
+
+          <!-- NAME DICTIONARY -->
+          <div class="name-card">
+            <div class="card-tag" aria-hidden="true">SPECIMEN / NAME ENTRY · A1</div>
+            <div class="dict-row">
+              <span class="dict-word">harsh<sup>1</sup></span>
+              <span class="dict-pron">/həɾʂ/</span>
+              <span class="dict-tag">हर्ष · noun · Sanskrit / Hindi</span>
+              <span class="dict-def">delight, joy, euphoria — the kind that takes you by surprise.</span>
+            </div>
+            <div class="dict-row">
+              <span class="dict-word">harsh</span>
+              <span class="dict-pron">/hɑːʃ/</span>
+              <span class="dict-tag">adj. · English</span>
+              <span class="dict-def">stern, severe; my parents had no way of knowing.</span>
+            </div>
+            <div class="dict-row">
+              <span class="dict-word">Harry</span>
+              <span class="dict-pron">/ˈhæri/</span>
+              <span class="dict-tag">informal</span>
+              <span class="dict-def">a workable compromise.</span>
+            </div>
+          </div>
+
+          <p class="name-footnote">
+            <span class="footnote-num">¹</span> Adopted <span class="dict-ref">"Harry"</span> at Georgia Tech because phonetics. Years later in Goa, I struck up a sunset conversation with a couple sharing a drink — the husband, an ISB visiting faculty, introduced himself as <span class="dict-ref">Harry</span> too. He turned out to be Harinder or something. We exchanged <span class="dict-ref">Harry</span>-names and never learned each other's real ones.
+          </p>
         </div>
       </div>
-      <div class="hero-photo">
-        <div class="name-card">
-          <div class="dict-row">
-            <span class="dict-word">harsh<sup>1</sup></span>
-            <span class="dict-pron">/həɾʂ/</span>
-            <span class="dict-tag">हर्ष · noun · Sanskrit / Hindi</span>
-            <span class="dict-def">delight, joy, euphoria — the kind that takes you by surprise.</span>
-          </div>
-          <div class="dict-row">
-            <span class="dict-word">harsh</span>
-            <span class="dict-pron">/hɑːʃ/</span>
-            <span class="dict-tag">adj. · English</span>
-            <span class="dict-def">stern, severe; my parents had no way of knowing.</span>
-          </div>
-          <div class="dict-row">
-            <span class="dict-word">Harry</span>
-            <span class="dict-pron">/ˈhæri/</span>
-            <span class="dict-tag">informal</span>
-            <span class="dict-def">a workable compromise.</span>
-          </div>
-        </div>
-        <div class="passport-frame">
-          <img src="assets/portrait.jpg" alt="Harsh Kumar Arya — first passport, age 8" loading="eager" />
-        </div>
-        <div class="passport-caption">Passport No. 1 · Born Ratlam, MP<br>Issued Ghaziabad · 2008</div>
-        <p class="name-footnote">
-          <span class="footnote-num">¹</span> Adopted "Harry" at Georgia Tech because phonetics. Years later in Goa, I struck up a sunset conversation with a couple sharing a drink — the husband, an ISB visiting faculty, introduced himself as Harry too. He turned out to be Harinder or something. We exchanged Harry-names and never learned each other's real ones.
-        </p>
+
+      <!-- ISSUE: sells strip on cover -->
+      <div class="cover-sells" aria-hidden="true">
+        <div class="sell"><span class="sell-num">01</span> A nightclub gig and a 300-sq-ft office.</div>
+        <div class="sell"><span class="sell-num">02</span> How signing Ishant Sharma actually happened.</div>
+        <div class="sell"><span class="sell-num">03</span> Closing the agency at the top — and why.</div>
+        <div class="sell"><span class="sell-num">04</span> Ninety-Eight 2.0: business partners for hire.</div>
       </div>
     </div>
   </header>
@@ -840,18 +119,21 @@
   <!-- ─── PRESS ─────────────────────────────────────────── -->
   <section class="press">
     <div class="container">
-      <div class="press-label">As featured in</div>
+      <div class="press-label"><span>As featured in</span><span class="press-side">PRESS · 2022—24</span></div>
       <div class="clippings">
         <figure class="clipping">
-          <img src="assets/press/article-outlook.jpg" alt="Outlook — Expansion and Diversification: Harsh Arya's 98 Entertainment ventures into Social Media Marketing and Podcasts" loading="lazy" />
+          <div class="clip-tape" aria-hidden="true"></div>
+          <img src="assets/press/article-outlook.jpg" alt="Outlook — Expansion and Diversification: Harsh Arya's 98 Entertainment" loading="lazy" />
           <figcaption class="clipping-cap">Outlook · Entertainment Spotlight</figcaption>
         </figure>
         <figure class="clipping">
-          <img src="assets/press/article-theweek.jpg" alt="The Week — Tech-driven Triumph: Harsh Arya's 98 Entertainment's Innovative Approach to Influencer Marketing" loading="lazy" />
+          <div class="clip-tape" aria-hidden="true"></div>
+          <img src="assets/press/article-theweek.jpg" alt="The Week — Tech-driven Triumph" loading="lazy" />
           <figcaption class="clipping-cap">The Week · Feb 21</figcaption>
         </figure>
         <figure class="clipping">
-          <img src="assets/press/article-midday.jpg" alt="Mid-day — Innovative Strategies Propel 98 Entertainment to New Heights in Talent Management" loading="lazy" />
+          <div class="clip-tape" aria-hidden="true"></div>
+          <img src="assets/press/article-midday.jpg" alt="Mid-day — Innovative Strategies" loading="lazy" />
           <figcaption class="clipping-cap">Mid-day · Talent Management</figcaption>
         </figure>
       </div>
@@ -862,7 +144,8 @@
   <!-- ─── ABOUT ─────────────────────────────────────────── -->
   <section id="about">
     <div class="container">
-      <div class="section-label">About</div>
+      <div class="section-label"><span>01 / About</span><span class="section-side">A LONG VERSION</span></div>
+      <h2 class="section-title">Started from a 300-sq-ft office. Now we're <em>here</em>.</h2>
       <div class="about-grid">
         <div class="about-prose">
           <p>I started <a class="inline-link" href="https://harsharya7021.github.io/ninety-eight-web/" target="_blank" rel="noopener"><strong>Ninety-Eight Entertainment</strong></a> in January 2020 — first as a freelancer running social and design for a Delhi nightclub called Esquire, soon after as a one-person agency working out of a 300-sq-ft office. The first stable client was a cloud kitchen. Most early calls were cold ones. The first pitch I ever made was to <strong>Pratima Singh</strong> — former India basketball captain, from one of the country's most decorated sporting families — and that's the door that eventually opened to signing cricketer <strong>Ishant Sharma</strong> as exclusive talent.</p>
@@ -873,7 +156,10 @@
           <p>Off the clock you'll find me on a golf course (12 handicap, swing still inconsistent), in a notebook designing something, or two books deep — one history, one operator memoir. I keep a watchlist of films from places most people skip past on the festival map. Born in Ratlam (population ~270K, on the Mumbai–Delhi line, on no one's map) and still mildly surprised when people don't know it.</p>
         </div>
         <div class="about-photo">
-          <img class="photo photo--portrait" src="assets/about.jpg" alt="Harsh Kumar Arya" loading="lazy" />
+          <div class="about-photo-frame">
+            <img src="assets/about.jpg" alt="Harsh Kumar Arya" loading="lazy" />
+            <div class="about-photo-label">FIG. 01 · OPERATOR / IN PROFILE</div>
+          </div>
         </div>
       </div>
     </div>
@@ -882,19 +168,27 @@
   <!-- ─── CREDENTIALS ────────────────────────────────────── -->
   <section id="credentials">
     <div class="container">
-      <div class="section-label">Credentials</div>
+      <div class="section-label"><span>02 / School</span><span class="section-side">TWO ROOMS, TWO REPS</span></div>
       <h2 class="section-title">Trained at <em>two</em> of the world's sharpest schools.</h2>
       <div class="creds-grid">
-        <div class="cred">
+        <div class="cred cred-isb">
+          <div class="cred-stamp">
+            <img src="assets/credentials/isb-seal.png" alt="ISB Seal" class="cred-seal" onerror="this.style.display='none';this.nextElementSibling.style.display='inline-block'" />
+            <span class="cred-stamp-fallback">CLASS OF '25</span>
+          </div>
           <div class="cred-school">Indian School of Business</div>
-          <div class="cred-program">PGP · Strategy &amp; Leadership / Marketing · Class of 2025</div>
+          <div class="cred-program">MBA · Strategy &amp; Leadership / Marketing · Class of 2025</div>
           <div class="cred-divider"></div>
           <p class="cred-highlight">National Finalist (10 of 15,000) at <strong>ABInBev</strong> — identified a $120M white space and crafted a Gen-Z energy-drink GTM.</p>
           <p class="cred-highlight">Top finalist in <strong>GameX</strong> (25/1000) and <strong>ISPROUTE</strong> (29/800) — pioneered scalable revenue models in e-sports.</p>
           <p class="cred-highlight">Awarded <strong>"P2P Champ"</strong> for sessions on marketing strategy with 100+ batchmates · 95% positive feedback.</p>
           <div class="cred-meta">GMAT 760 · Top 1%</div>
         </div>
-        <div class="cred">
+        <div class="cred cred-gt">
+          <div class="cred-stamp">
+            <img src="assets/credentials/gt-seal.png" alt="Georgia Tech Seal" class="cred-seal" onerror="this.style.display='none';this.nextElementSibling.style.display='inline-block'" />
+            <span class="cred-stamp-fallback">ATLANTA / 2019</span>
+          </div>
           <div class="cred-school">Georgia Institute of Technology</div>
           <div class="cred-program">Research Scholar · Computer Science &amp; Engineering</div>
           <div class="cred-divider"></div>
@@ -907,114 +201,47 @@
     </div>
   </section>
 
-  <!-- ─── WORK ───────────────────────────────────────────── -->
-  <section id="work">
-    <div class="container">
-      <div class="section-label">Selected Work</div>
-      <h2 class="section-title">Things I've built, scaled or shipped.</h2>
-      <div class="work-grid">
-
-        <a class="work-item" href="https://harsharya7021.github.io/ninety-eight-web/" target="_blank" rel="noopener">
-          <img class="photo photo--portrait-tall" src="assets/work/ninety-eight.jpg" alt="Ninety-Eight Entertainment" loading="lazy" />
-          <div class="work-meta">
-            <div>
-              <div class="work-title">Ninety-Eight 2.0</div>
-              <div class="work-role">Founder · Re-launching</div>
-            </div>
-            <span class="work-year">2020 — 2023 / 2026 —</span>
-          </div>
-          <p class="work-desc">Started 2020 in a 300-sq-ft Delhi office. Grew across Delhi, Bombay and Bangalore — a team of 18 and a roster of 12 athletes and 500+ influencers. Paused for ISB. Now relaunching as a creative-and-strategy practice for founders — consulting, marketing, advertising, financial modelling, market research. Not operational consulting. Business partners for hire who've built the thing themselves.</p>
-        </a>
-
-<a class="work-item" href="#" data-pending>
-          <img class="photo photo--portrait-tall" src="assets/work/advisory.jpg" alt="GenZ Economics" loading="lazy" />
-          <div class="work-meta">
-            <div>
-              <div class="work-title">GenZ Economics</div>
-              <div class="work-role">Co-author · with Prof. Tantri (ISB)</div>
-            </div>
-            <span class="work-year">Ongoing</span>
-          </div>
-          <p class="work-desc">A blog and slow-research project with ISB's Prof. Prasanna Tantri on what India's transition decade looks like through a Gen-Z lens — capital flows, demographic dividend, and what a generation raised online thinks about the systems it's about to inherit.</p>
-        </a>
-
-      </div>
-
-      <!-- HIGHLIGHTS — text-only items that don't have a strong project image -->
-      <div class="highlights">
-        <div class="highlights-label">Selected highlights</div>
-        <div class="highlights-grid">
-          <div class="highlight-row">
-            <span class="highlight-year">Jan 2020</span>
-            <span class="highlight-text"><strong>Esquire Club, Delhi</strong> — first paid gig. Pitched the founder over a one-on-one on Day One of the decade. Turned into a freelance social/design/branding contract.</span>
-          </div>
-          <div class="highlight-row">
-            <span class="highlight-year">2021</span>
-            <span class="highlight-text"><strong>Pratima Singh</strong> — first major pitch, to the former India basketball captain. Started managing her social, then her brand deals. The door that eventually opened to Ishant.</span>
-          </div>
-          <div class="highlight-row">
-            <span class="highlight-year">Feb 26, 2022</span>
-            <span class="highlight-text"><strong>Ishant Sharma signed exclusive</strong> — two years to the day after 98 began. Same week I got my ISB admit.</span>
-          </div>
-          <div class="highlight-row">
-            <span class="highlight-year">IPL '22</span>
-            <span class="highlight-text"><strong>Ishant × RuPay</strong> — architected the partnership during IPL '22. 300M+ impressions across TV, OTT and digital.</span>
-          </div>
-          <div class="highlight-row">
-            <span class="highlight-year">2022</span>
-            <span class="highlight-text"><strong>Josh Talks keynote</strong> — "Secrets of Turning ₹24,000 Into Crores". 4M reach. Featured in Outlook, The Week, Mid-Day.</span>
-          </div>
-          <div class="highlight-row">
-            <span class="highlight-year">2023</span>
-            <span class="highlight-text"><strong>Digies'23 Award</strong> — Happy Dent campaign delivered 10x brand awareness with organic press coverage.</span>
-          </div>
-          <div class="highlight-row">
-            <span class="highlight-year">2025</span>
-            <span class="highlight-text"><strong>ABInBev National Finalist</strong> — top 10 of 15,000. $120M white-space GTM for Gen Z.</span>
-          </div>
-          <div class="highlight-row">
-            <span class="highlight-year">In progress</span>
-            <span class="highlight-text"><strong>Documentary on influencer culture</strong> — long-form film, in development. <a class="inline-link" href="#" data-pending>Preview soon</a>.</span>
-          </div>
-          <div class="highlight-row">
-            <span class="highlight-year">In progress</span>
-            <span class="highlight-text"><strong>Founder playbook</strong> — a book for people my age making sense of less-privileged starts. <a class="inline-link" href="#" data-pending>Preview soon</a>.</span>
-          </div>
-          <div class="highlight-row">
-            <span class="highlight-year">2019</span>
-            <span class="highlight-text"><strong>Georgia Tech</strong> — Research Scholar. 29% faster GPU optimization using CUDA and PARADISO.</span>
-          </div>
-          <div class="highlight-row">
-            <span class="highlight-year">2020</span>
-            <span class="highlight-text"><strong>Collision Conference Canada</strong> finalist (3/300) and <strong>Startup Istanbul</strong> finalist — earlier shot at a $1M-valued professional networking platform.</span>
-          </div>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
   <!-- ─── OFF THE CLOCK ─────────────────────────────────── -->
   <section id="off">
     <div class="container">
-      <div class="section-label">Off the clock</div>
+      <div class="section-label"><span>03 / Off the clock</span><span class="section-side">NOT ALL OF IT IS WORK</span></div>
       <h2 class="section-title">Golf, design, and a <em>varied</em> life.</h2>
 
       <div class="off-grid">
-        <div class="off-1">
-          <img class="photo" src="assets/life/01-style.jpg" alt="Style and sneakers" loading="lazy" />
+        <div class="off-1 off-cell" data-theme="style">
+          <div class="off-photos">
+            <img class="photo active" src="assets/life/01-style.jpg" alt="Style and sneakers" loading="lazy" />
+            <!-- Drop more <img class="photo"> here — slideshow on hover. -->
+          </div>
+          <span class="off-tag">STYLE</span>
         </div>
-        <div class="off-2">
-          <img class="photo" src="assets/life/02-golf.jpg" alt="Golf — fairway approach" loading="lazy" />
+        <div class="off-2 off-cell" data-theme="golf">
+          <div class="off-photos">
+            <img class="photo active" src="assets/life/02-golf.jpg" alt="Golf — fairway approach" loading="lazy" />
+            <img class="photo" src="assets/life/03-tee.jpg" alt="Golf — tee box" loading="lazy" />
+          </div>
+          <span class="off-tag">GOLF</span>
         </div>
-        <div class="off-3">
-          <img class="photo" src="assets/life/03-tee.jpg" alt="Golf — tee box" loading="lazy" />
+        <div class="off-3 off-cell" data-theme="isb">
+          <div class="off-photos">
+            <img class="photo active" src="assets/life/03-tee.jpg" alt="Placeholder — ISB block" loading="lazy" />
+            <!-- ISB photos go here — replace placeholder src. -->
+          </div>
+          <span class="off-tag">ISB</span>
         </div>
-        <div class="off-4">
-          <img class="photo" src="assets/life/04-event.jpg" alt="Red Bull Dance Your Style" loading="lazy" />
+        <div class="off-4 off-cell" data-theme="ninety-eight">
+          <div class="off-photos">
+            <img class="photo active" src="assets/life/04-event.jpg" alt="Ninety-Eight Entertainment" loading="lazy" />
+            <!-- 98 photos go here — add more for hover slideshow. -->
+          </div>
+          <span class="off-tag">98</span>
         </div>
-        <div class="off-5">
-          <img class="photo" src="assets/life/05-press.jpg" alt="Sapne vs Everyone" loading="lazy" />
+        <div class="off-5 off-cell" data-theme="press">
+          <div class="off-photos">
+            <img class="photo active" src="assets/life/05-press.jpg" alt="Press / events" loading="lazy" />
+            <!-- More press shots / event photos here. -->
+          </div>
+          <span class="off-tag">PRESS</span>
         </div>
       </div>
 
@@ -1029,7 +256,7 @@
         </div>
         <div>
           <h4>Reading &amp; watching</h4>
-          <p>Two books at once — usually one history, one operator memoir. Lately: Mandeville on luxury, Frankl on meaning, the soft-power machinery behind Saudi/UAE sports investment. World cinema watchlist that runs heavy on the festival circuit nobody else is bothering with. Started a sommelier reading list, mostly to stop pretending at restaurants. <a class="inline-link" href="stack/">The stack →</a></p>
+          <p>Two books at once — usually one history, one operator memoir. Lately: Mandeville on luxury, Frankl on meaning, the soft-power machinery behind Saudi/UAE sports investment. World cinema watchlist heavy on the festival circuit nobody else is bothering with. <a class="inline-link" href="stack/index.html">The stack →</a></p>
         </div>
       </div>
     </div>
@@ -1038,49 +265,82 @@
   <!-- ─── SELECTED CREATIVE ─────────────────────────────── -->
   <section id="creative">
     <div class="container">
-      <div class="section-label">Selected creative</div>
+      <div class="section-label"><span>04 / Selected creative</span><span class="section-side">PHOTOGRAPHS / DESIGNS / FILM</span></div>
       <h2 class="section-title">Photographs, designs, and the <em>occasional</em> film.</h2>
       <div class="creative-grid">
 
-        <a class="creative-tile" href="gallery/">
-          <div class="creative-frame" id="photo-gallery">
-            <img src="assets/creative/01.jpg" alt="Kochi series, 35mm film" loading="lazy" />
-            <img src="assets/creative/02.jpg" alt="Kochi series, 35mm film" loading="lazy" />
-            <img src="assets/creative/03.jpg" alt="Kochi series, 35mm film" loading="lazy" />
-            <img src="assets/creative/04.jpg" alt="Kochi series, 35mm film" loading="lazy" />
-            <img src="assets/creative/05.jpg" alt="Kochi series, 35mm film" loading="lazy" />
-            <img src="assets/creative/06.jpg" alt="Kochi series, 35mm film" loading="lazy" />
-            <img src="assets/creative/07.jpg" alt="Kochi series, 35mm film" loading="lazy" />
-            <img src="assets/creative/08.jpg" alt="Kochi series, 35mm film" loading="lazy" />
+        <a class="creative-tile" href="gallery/index.html">
+          <div class="folder folder-1">
+            <div class="peek-stack">
+              <div class="peek peek-back-a peek-polaroid" aria-hidden="true">
+                <div class="polaroid-img"></div>
+                <div class="polaroid-cap">KOCHI / 35MM</div>
+              </div>
+              <div class="peek peek-front" id="photo-gallery">
+                <img src="assets/creative/01.jpg" alt="Kochi series" loading="lazy" />
+                <img src="assets/creative/02.jpg" alt="Kochi series" loading="lazy" />
+                <img src="assets/creative/03.jpg" alt="Kochi series" loading="lazy" />
+                <img src="assets/creative/04.jpg" alt="Kochi series" loading="lazy" />
+                <img src="assets/creative/05.jpg" alt="Kochi series" loading="lazy" />
+                <img src="assets/creative/06.jpg" alt="Kochi series" loading="lazy" />
+                <img src="assets/creative/07.jpg" alt="Kochi series" loading="lazy" />
+                <img src="assets/creative/08.jpg" alt="Kochi series" loading="lazy" />
+              </div>
+            </div>
           </div>
           <div class="creative-meta">
-            <h4>Photography</h4>
+            <h4><em>Photography</em></h4>
             <p>Film and digital, mostly travel. Currently rotating: <em>Kochi</em>, shot on 35mm. <span class="creative-link-cue">Open gallery →</span></p>
           </div>
         </a>
 
         <a class="creative-tile" href="https://www.behance.net/harsharya" target="_blank" rel="noopener">
-          <div class="creative-frame">
-            <div class="placeholder-label">
-              BEHANCE
-              <small>behance.net/harsharya</small>
+          <div class="folder folder-2">
+            <div class="peek-stack">
+              <div class="peek peek-back-b peek-notebook" aria-hidden="true">
+                <div class="notebook-head">SKETCH</div>
+                <div class="notebook-line w-90"></div>
+                <div class="notebook-line w-70"></div>
+                <div class="notebook-line w-85"></div>
+                <div class="notebook-line w-60"></div>
+              </div>
+              <div class="peek peek-front peek-card">
+                <span class="ph-mark">B°</span>
+                <span class="ph-label">BEHANCE</span>
+                <span class="ph-sub">behance.net/harsharya</span>
+              </div>
             </div>
           </div>
           <div class="creative-meta">
-            <h4>Design</h4>
+            <h4><em>Design</em></h4>
             <p>Brand systems, decks, identity work, the occasional album cover. <span class="creative-link-cue">Behance →</span></p>
           </div>
         </a>
 
         <a class="creative-tile" href="https://www.youtube.com/@HarshAryaa" target="_blank" rel="noopener">
-          <div class="creative-frame">
-            <div class="placeholder-label">
-              YOUTUBE
-              <small>@HarshAryaa</small>
+          <div class="folder folder-3">
+            <div class="peek-stack">
+              <div class="peek peek-back-a peek-slate" aria-hidden="true">
+                <div class="slate-stripes"></div>
+                <div class="slate-body">
+                  <div class="slate-row"><span>SC</span><b>04</b></div>
+                  <div class="slate-row"><span>TK</span><b>02</b></div>
+                </div>
+              </div>
+              <div class="peek peek-back-b peek-timecode" aria-hidden="true">
+                <div class="tc-time">00:01:24:18</div>
+                <div class="tc-meta">REC · 4K · 24FPS</div>
+                <div class="tc-bar"><span></span></div>
+              </div>
+              <div class="peek peek-front peek-card">
+                <span class="ph-mark">▶</span>
+                <span class="ph-label">YOUTUBE</span>
+                <span class="ph-sub">@HarshAryaa</span>
+              </div>
             </div>
           </div>
           <div class="creative-meta">
-            <h4>Film &amp; video</h4>
+            <h4><em>Film &amp; video</em></h4>
             <p>Short films, profiles, music videos, portraits in motion. <span class="creative-link-cue">YouTube →</span></p>
           </div>
         </a>
@@ -1092,72 +352,96 @@
   <!-- ─── NOTES ─────────────────────────────────────────── -->
   <section id="notes">
     <div class="container">
-      <div class="section-label">Notes</div>
+      <div class="section-label"><span>05 / Notes</span><span class="section-side">THE OPERATOR'S SEAT</span></div>
       <h2 class="section-title">Stories from the operator's seat.</h2>
 
       <div class="notes-list">
         <a class="note-item" href="writing/welcome.html">
+          <span class="note-num">N°01</span>
           <span class="note-date">May 2026</span>
           <span class="note-title">Why I'm writing this down</span>
           <span class="note-tag">Intro</span>
         </a>
         <a class="note-item" href="#">
+          <span class="note-num">N°02</span>
           <span class="note-date">Coming soon</span>
           <span class="note-title">Bootstrapping in an emerging market — what actually mattered, and what didn't</span>
           <span class="note-tag">Agency</span>
         </a>
         <a class="note-item" href="#">
+          <span class="note-num">N°03</span>
           <span class="note-date">Coming soon</span>
           <span class="note-title">The talent management playbook nobody wrote — what I learned signing Ishant Sharma</span>
           <span class="note-tag">Talent</span>
         </a>
         <a class="note-item" href="#">
+          <span class="note-num">N°04</span>
           <span class="note-date">Coming soon</span>
           <span class="note-title">Sports washing in Europe — and why it didn't work for the UAE</span>
           <span class="note-tag">Sports</span>
         </a>
         <a class="note-item" href="#">
+          <span class="note-num">N°05</span>
           <span class="note-date">Coming soon</span>
           <span class="note-title">What sovereign wealth funds should actually invest in for the next decade</span>
           <span class="note-tag">Strategy</span>
         </a>
         <a class="note-item" href="#">
+          <span class="note-num">N°06</span>
           <span class="note-date">Coming soon</span>
           <span class="note-title">The next decade of Indian sports — operator gaps and where the money goes</span>
           <span class="note-tag">Sports</span>
         </a>
         <a class="note-item" href="#">
+          <span class="note-num">N°07</span>
           <span class="note-date">Coming soon</span>
           <span class="note-title">Mandeville vs. Rousseau — the argument behind every consumption decision</span>
           <span class="note-tag">Ideas</span>
         </a>
       </div>
 
-      <a class="all-notes" href="writing/">All notes →</a>
+      <a class="all-notes" href="writing/index.html">All notes →</a>
     </div>
   </section>
 
   <!-- ─── CONTACT ───────────────────────────────────────── -->
   <section id="contact" class="contact-block">
     <div class="container">
-      <p class="contact-line">Got something to <em>build</em>, hire, or chat about?<br>Send a note.</p>
-      <a class="contact-email" href="mailto:hi@harsharya.com">hi@harsharya.com</a>
+      <div class="section-label section-label--contact"><span>06 / Contact</span><span class="section-side">SEND A NOTE</span></div>
+      <p class="contact-line">Got something to <em>build</em>, hire, or chat about?</p>
 
-      <div class="contact-uses">
-        <div class="contact-uses-label">Things people usually write about</div>
-        <ul>
-          <li>Introductions to athletes, creators, and the wider talent ecosystem</li>
-          <li>A second pair of eyes on a marketing or campaign brief</li>
-          <li>Founder advisory — especially first-repeatable-revenue-motion problems</li>
-          <li>Anything on Indian sports or the next decade of it</li>
-          <li>Just saying hi from a Goa sunset</li>
-        </ul>
-        <p class="contact-consult-line">Need a focused, paid hour on something specific? <a href="consult/">Book a consult →</a></p>
-      </div>
+      <form class="contact-form" id="contact-form" novalidate>
+        <div class="form-prose">
+          <span class="form-text">Hi Harsh, I'm</span>
+          <input type="text" name="name" placeholder="your name" class="form-blank form-blank--name" required autocomplete="name" />
+          <span class="form-text">from</span>
+          <input type="text" name="org" placeholder="company / context" class="form-blank form-blank--org" autocomplete="organization" />
+          <span class="form-text">. Reach me at</span>
+          <input type="email" name="email" placeholder="email@yours.com" class="form-blank form-blank--email" required autocomplete="email" />
+          <span class="form-text">.</span>
+        </div>
 
-      <div class="contact-socials">
-        <a href="https://www.linkedin.com/in/harsharyaa/" target="_blank" rel="noopener">LinkedIn ↗</a>
-        <a href="https://github.com/harsharya7021" target="_blank" rel="noopener">GitHub ↗</a>
+        <div class="form-gist-row">
+          <label class="form-gist-label" for="form-gist">The gist —</label>
+          <textarea id="form-gist" name="message" class="form-gist" placeholder="A few lines. Or many. Or none." rows="5"></textarea>
+        </div>
+
+        <div class="form-foot">
+          <button type="submit" class="form-send">Send it →</button>
+          <p class="contact-consult-line">Or, for something specific and paid: <a href="consult/index.html">book a consult →</a></p>
+        </div>
+      </form>
+
+      <div class="contact-stamp" aria-hidden="true">
+        <svg viewBox="0 0 200 200">
+          <defs>
+            <path id="stamp-circle" d="M100,100 m-72,0 a72,72 0 1,1 144,0 a72,72 0 1,1 -144,0" />
+          </defs>
+          <text class="stamp-ring">
+            <textPath href="#stamp-circle">★ APPROVED ★ SEND A NOTE ★ VOL. 26 ★ HARSH ARYA ★</textPath>
+          </text>
+        </svg>
+        <span class="stamp-core">APPROVED</span>
       </div>
     </div>
   </section>
@@ -1165,8 +449,12 @@
   <!-- ─── FOOTER ────────────────────────────────────────── -->
   <footer>
     <div class="container">
-      <span>© <span id="year"></span> Harsh Kumar Arya</span>
-      <span>Built for the few people who'll actually read this far.</span>
+      <span class="foot-left">© <span id="year"></span> Harsh Kumar Arya · <a class="foot-email" href="mailto:hi@harsharya.com">hi@harsharya.com</a></span>
+      <span class="foot-socials">
+        <a href="https://www.linkedin.com/in/harsharyaa/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://github.com/harsharya7021" target="_blank" rel="noopener">GitHub</a>
+      </span>
+      <span class="foot-right">Built for the few people who'll actually read this far.</span>
     </div>
   </footer>
 
@@ -1177,8 +465,7 @@
       if (window.scrollY > 8) nav.classList.add("scrolled");
       else nav.classList.remove("scrolled");
     });
-
-    // Rotating photo gallery — cycles through any <img> children every 3.5s
+    // Photo gallery rotation
     (function () {
       const gallery = document.getElementById("photo-gallery");
       if (!gallery) return;
@@ -1191,6 +478,82 @@
         i = (i + 1) % imgs.length;
         imgs[i].classList.add("active");
       }, 3500);
+    })();
+
+    // Hover slideshow on off-grid cells — cycles photos while mouse is over
+    (function () {
+      document.querySelectorAll(".off-cell").forEach((cell) => {
+        const photos = cell.querySelectorAll(".photo");
+        if (photos.length < 2) return;
+
+        // Build carousel-dot indicator so users see there are multiple photos
+        const dotWrap = document.createElement("div");
+        dotWrap.className = "off-dots";
+        photos.forEach((_, i) => {
+          const d = document.createElement("span");
+          if (i === 0) d.classList.add("active");
+          dotWrap.appendChild(d);
+        });
+        cell.appendChild(dotWrap);
+        const dots = dotWrap.querySelectorAll("span");
+
+        // Append photo count to the off-tag so it reads e.g. "GOLF · 2"
+        const tag = cell.querySelector(".off-tag");
+        if (tag) {
+          const count = document.createElement("em");
+          count.className = "off-tag-count";
+          count.textContent = " · " + photos.length;
+          tag.appendChild(count);
+        }
+        cell.classList.add("off-cell--multi");
+
+        let idx = 0;
+        let interval = null;
+        function setActive(i) {
+          photos[idx].classList.remove("active");
+          dots[idx].classList.remove("active");
+          idx = i;
+          photos[idx].classList.add("active");
+          dots[idx].classList.add("active");
+        }
+        cell.addEventListener("mouseenter", () => {
+          cell.classList.add("is-playing");
+          // Let the watercolor wash fade out (~550ms) before the gallery starts cycling
+          setTimeout(() => {
+            if (!cell.classList.contains("is-playing")) return;
+            setActive((idx + 1) % photos.length);
+            interval = setInterval(() => setActive((idx + 1) % photos.length), 900);
+          }, 600);
+        });
+        cell.addEventListener("mouseleave", () => {
+          cell.classList.remove("is-playing");
+          if (interval) { clearInterval(interval); interval = null; }
+          setActive(0);
+        });
+      });
+    })();
+    (function () {
+      const cf = document.getElementById("contact-form");
+      if (!cf) return;
+      cf.addEventListener("submit", (e) => {
+        e.preventDefault();
+        const fd = new FormData(cf);
+        const name = (fd.get("name") || "").toString().trim();
+        const org = (fd.get("org") || "").toString().trim();
+        const email = (fd.get("email") || "").toString().trim();
+        const message = (fd.get("message") || "").toString().trim();
+        if (!name || !email) {
+          cf.reportValidity();
+          return;
+        }
+        const subject = `${name}${org ? " / " + org : ""} — a note via harsharya.com`;
+        const lines = [];
+        if (message) lines.push(message, "");
+        lines.push(`— ${name}${org ? ", " + org : ""}`);
+        lines.push(email);
+        const body = lines.join("\n");
+        window.location.href = `mailto:hi@harsharya.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+      });
     })();
   </script>
 

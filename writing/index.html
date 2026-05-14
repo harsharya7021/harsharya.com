@@ -7,44 +7,171 @@
   <meta name="description" content="Writing on go-to-market, talent management, founder's-office work, and Indian sports — by Harsh Kumar Arya." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="writing.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo+Black&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,700;0,6..96,900;1,6..96,400&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=Inter:wght@400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles.css" />
+  <style>
+    /* Page header */
+    .page-wrap { padding: 64px 0 32px; max-width: 1100px; margin: 0 auto; }
+    .page-eyebrow {
+      display: inline-block;
+      font-family: var(--font-mono);
+      font-size: 12px; letter-spacing: 0.2em;
+      text-transform: uppercase; color: var(--text);
+      background: var(--accent-3);
+      border: 2px solid var(--text);
+      padding: 5px 12px;
+      margin-bottom: 28px;
+    }
+    .page-title {
+      font-family: var(--font-display);
+      font-size: clamp(56px, 8vw, 132px);
+      line-height: 0.92; letter-spacing: -0.02em;
+      text-transform: uppercase;
+      margin-bottom: 24px;
+      max-width: 1100px;
+    }
+    .page-title em {
+      font-family: var(--font-serif);
+      font-style: italic; font-weight: 700;
+      color: var(--accent);
+      text-transform: none;
+      letter-spacing: -0.02em;
+    }
+    .page-lead {
+      font-size: 19px; line-height: 1.55;
+      max-width: 640px;
+      margin-bottom: 16px;
+      text-wrap: pretty;
+    }
+    .page-stamp {
+      font-family: var(--font-mono);
+      font-size: 11px; letter-spacing: 0.16em;
+      text-transform: uppercase; color: var(--muted);
+    }
+
+    /* Notes list — Warhol-styled rows with color-coded tags */
+    .notes-page main { padding: 32px 0 96px; max-width: 1100px; margin: 0 auto; }
+    .notes-list { display: grid; gap: 0; }
+    .note-item {
+      display: grid;
+      grid-template-columns: 60px 110px 1fr auto;
+      gap: 24px; padding: 22px 0;
+      border-top: 1px solid var(--line);
+      align-items: baseline;
+      transition: padding-left 0.2s ease, background 0.2s ease;
+    }
+    .note-item:last-child { border-bottom: 1px solid var(--line); }
+    .note-item:hover { padding-left: 10px; background: color-mix(in srgb, var(--accent) 6%, transparent); }
+    .note-num   { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.12em; color: var(--muted); background: var(--text); color: var(--bg); padding: 3px 6px; font-weight: 700; }
+    .note-date  { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.05em; color: var(--muted); }
+    .note-title {
+      font-family: var(--font-display);
+      font-size: 28px; font-weight: 400;
+      text-transform: uppercase;
+      letter-spacing: 0.005em; line-height: 1.05;
+    }
+    .note-tag {
+      font-family: var(--font-mono);
+      font-size: 11px; letter-spacing: 0.16em;
+      text-transform: uppercase;
+      padding: 4px 10px;
+      border: 2px solid var(--text);
+      font-weight: 700;
+    }
+    .note-item:nth-child(7n+1) .note-tag { background: var(--accent);   color: var(--text); }
+    .note-item:nth-child(7n+2) .note-tag { background: var(--accent-2); color: var(--text); }
+    .note-item:nth-child(7n+3) .note-tag { background: var(--accent-3); color: var(--text); }
+    .note-item:nth-child(7n+4) .note-tag { background: var(--accent-4); color: var(--text); }
+    .note-item:nth-child(7n+5) .note-tag { background: #ff5a36;        color: var(--text); }
+    .note-item:nth-child(7n+6) .note-tag { background: #b557ff;        color: var(--text); }
+    .note-item:nth-child(7n)   .note-tag { background: var(--text);    color: var(--bg); }
+
+    .note-item[data-pending] { opacity: 0.65; pointer-events: none; }
+    .note-item[data-pending] .note-tag { background: transparent; border-style: dashed; color: var(--muted); }
+
+    @media (max-width: 720px) {
+      .note-item { grid-template-columns: 90px 1fr; gap: 12px; padding: 18px 0; }
+      .note-num, .note-tag { display: none; }
+    }
+  </style>
 </head>
-<body>
+<body data-mode="warhol" data-density="normal" class="notes-page">
 
   <nav class="nav" id="nav">
     <div class="container nav-inner">
-      <a href="../" class="logo">Harsh<span>.</span></a>
+      <a href="../" class="logo">Harsh<sup>1</sup></a>
       <div class="nav-links">
         <a href="../#about">About</a>
-        <a href="../#work">Work</a>
+        <a href="../#credentials">School</a>
         <a href="../#off">Life</a>
-        <a href="./">Notes</a>
+        <a href="index.html">Notes</a>
         <a href="../#contact">Contact</a>
       </div>
     </div>
   </nav>
 
-  <header class="container index-header">
-    <div class="hero-eyebrow">Notes</div>
-    <h1 class="index-title">Stories from the<br><em>operator's seat.</em></h1>
-    <p class="index-lead">A slow archive on agency-building, go-to-market, founder's-office work, Indian sports, and the books and ideas in between.</p>
+  <header class="container page-wrap">
+    <span class="page-eyebrow">05 / Notes</span>
+    <h1 class="page-title">Stories from the <em>operator's</em> seat.</h1>
+    <p class="page-lead">A slow archive on agency-building, go-to-market, founder's-office work, Indian sports, and the books and ideas in between.</p>
+    <p class="page-stamp">Refreshed May 2026 · one post live, more queued</p>
   </header>
 
   <main class="container">
     <div class="notes-list">
       <a class="note-item" href="welcome.html">
+        <span class="note-num">N°01</span>
         <span class="note-date">May 2026</span>
         <span class="note-title">Why I'm writing this down</span>
         <span class="note-tag">Intro</span>
       </a>
+      <a class="note-item" href="#" data-pending>
+        <span class="note-num">N°02</span>
+        <span class="note-date">Coming soon</span>
+        <span class="note-title">Bootstrapping in an emerging market — what actually mattered, and what didn't</span>
+        <span class="note-tag">Agency</span>
+      </a>
+      <a class="note-item" href="#" data-pending>
+        <span class="note-num">N°03</span>
+        <span class="note-date">Coming soon</span>
+        <span class="note-title">The talent management playbook nobody wrote — what I learned signing Ishant Sharma</span>
+        <span class="note-tag">Talent</span>
+      </a>
+      <a class="note-item" href="#" data-pending>
+        <span class="note-num">N°04</span>
+        <span class="note-date">Coming soon</span>
+        <span class="note-title">Sports washing in Europe — and why it didn't work for the UAE</span>
+        <span class="note-tag">Sports</span>
+      </a>
+      <a class="note-item" href="#" data-pending>
+        <span class="note-num">N°05</span>
+        <span class="note-date">Coming soon</span>
+        <span class="note-title">What sovereign wealth funds should actually invest in for the next decade</span>
+        <span class="note-tag">Strategy</span>
+      </a>
+      <a class="note-item" href="#" data-pending>
+        <span class="note-num">N°06</span>
+        <span class="note-date">Coming soon</span>
+        <span class="note-title">The next decade of Indian sports — operator gaps and where the money goes</span>
+        <span class="note-tag">Sports</span>
+      </a>
+      <a class="note-item" href="#" data-pending>
+        <span class="note-num">N°07</span>
+        <span class="note-date">Coming soon</span>
+        <span class="note-title">Mandeville vs. Rousseau — the argument behind every consumption decision</span>
+        <span class="note-tag">Ideas</span>
+      </a>
     </div>
   </main>
 
-  <footer class="site-footer">
+  <footer>
     <div class="container">
-      <span>© <span id="year"></span> Harsh Kumar Arya</span>
-      <span>Built simply · Hosted on GitHub Pages</span>
+      <span class="foot-left">© <span id="year"></span> Harsh Kumar Arya · <a class="foot-email" href="mailto:hi@harsharya.com">hi@harsharya.com</a></span>
+      <span class="foot-socials">
+        <a href="https://www.linkedin.com/in/harsharyaa/" target="_blank" rel="noopener">LinkedIn</a>
+        <a href="https://github.com/harsharya7021" target="_blank" rel="noopener">GitHub</a>
+      </span>
+      <span class="foot-right">Built for the few people who'll actually read this far.</span>
     </div>
   </footer>
 
