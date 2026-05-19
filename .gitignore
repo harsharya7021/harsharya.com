@@ -6,3 +6,5 @@ node_modules/
 # scratch files from the build pipeline
 _tmp-*
 **/_tmp-*
+# archived superseded files (kept locally for reference, not in git)
+_archive/
