@@ -154,6 +154,423 @@ strong { font-weight: 600; }
   text-wrap: balance;
 }
 .hero-h1 em { font-style: italic; }
+
+/* New hero structure — identity stack, pointer, story */
+.hero-roles {
+  list-style: none;
+  padding: 16px 0;
+  margin: 32px 0 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-family: var(--font-body);
+  font-size: clamp(17px, 1.5vw, 20px);
+  line-height: 1.45;
+  font-weight: 500;
+  color: var(--text);
+  border-top: 1px solid var(--text);
+  border-bottom: 1px solid var(--text);
+  text-wrap: pretty;
+}
+.hero-roles li { padding: 0; }
+
+.hero-bridge {
+  font-family: var(--font-body);
+  font-size: clamp(17px, 1.5vw, 20px);
+  line-height: 1.45;
+  color: var(--text);
+  margin: 0 0 24px;
+  max-width: 56ch;
+  text-wrap: pretty;
+  font-weight: 500;
+}
+
+.hero-pointer {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin: 24px 0 32px;
+  cursor: pointer;
+  user-select: none;
+}
+.hero-pointer-arrow {
+  font-family: var(--font-serif);
+  font-style: normal;
+  font-size: 22px;
+  color: var(--accent);
+  margin-right: 8px;
+  letter-spacing: 0;
+  display: inline-block;
+  transform: translateY(3px);
+  transition: transform 280ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.hero-pointer:hover .hero-pointer-arrow {
+  transform: translate(7px, 2px) rotate(-3deg);
+}
+.hero-pointer.is-pointing .hero-pointer-arrow {
+  animation: pointer-jab 700ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes pointer-jab {
+  0%   { transform: translateY(3px); }
+  22%  { transform: translateX(14px) translateY(1px) rotate(-4deg); }
+  55%  { transform: translateX(-4px) translateY(3px) rotate(1deg); }
+  100% { transform: translateY(3px); }
+}
+
+/* Portrait wink — two passport images stacked; the wink composite
+   reveals itself with an angular tilt. Click/scroll-past plays a one-shot
+   snap-and-hold; hover holds the tilted-wink state. */
+.warhol-cell.c1,
+.passport-frame {
+  position: relative;
+  transform-origin: center;
+  transition: transform 360ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+/* will-change applied only during active interaction to avoid permanent GPU
+   layer (which causes text inside the frame to render slightly blurry) */
+.warhol-cell.c1.is-winking,
+.passport-frame.is-winking {
+  will-change: transform;
+}
+
+.wink-overlay {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  opacity: 0;
+  pointer-events: none;
+  display: none;            /* truly removed from render pipeline at rest */
+  z-index: 1;
+}
+.passport-frame .wink-overlay {
+  aspect-ratio: 1485 / 1000;
+}
+
+/* Hover state: tilt + reveal wink, held while hovered */
+.warhol-cell.c1:hover,
+.passport-frame:hover {
+  transform: rotate(-4deg) scale(1.03);
+  will-change: transform;
+}
+.warhol-cell.c1:hover .wink-overlay,
+.passport-frame:hover .wink-overlay {
+  display: block;
+  opacity: 1;
+  transition: opacity 220ms ease-out;
+}
+
+/* One-shot snap: scroll-past or click on the pointer line */
+.warhol-cell.c1.is-winking,
+.passport-frame.is-winking {
+  animation: portrait-snap 1700ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+.warhol-cell.c1.is-winking .wink-overlay,
+.passport-frame.is-winking .wink-overlay {
+  display: block;
+  animation: portrait-snap-overlay 1700ms ease-out;
+}
+@keyframes portrait-snap-overlay {
+  0%   { opacity: 0; }
+  18%  { opacity: 1; }
+  85%  { opacity: 1; }
+  100% { opacity: 0; }
+}
+@keyframes portrait-snap {
+  0%   { transform: rotate(0deg) scale(1); }
+  18%  { transform: rotate(-6deg) scale(1.05); }
+  32%  { transform: rotate(-3deg) scale(1.025); }
+  82%  { transform: rotate(-3deg) scale(1.025); }
+  100% { transform: rotate(0deg) scale(1); }
+}
+/* Wink fx layer — tweakable single-point effect anchored on the photo.
+   Render content via body[data-wink-fx]; animate on .is-winking + :hover. */
+.wink-fx {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+  opacity: 0;
+  overflow: hidden;
+}
+
+/* ── SHINE ── diagonal light sweep across the photo */
+body[data-wink-fx="shine"] .wink-fx {
+  background: linear-gradient(105deg,
+    transparent 35%,
+    rgba(255,255,255,0.85) 50%,
+    transparent 65%);
+  background-size: 220% 100%;
+  background-position: 200% 0;
+  mix-blend-mode: overlay;
+}
+body[data-wink-fx="shine"] .warhol-cell.c1.is-winking .wink-fx,
+body[data-wink-fx="shine"] .passport-frame.is-winking .wink-fx,
+body[data-wink-fx="shine"] .warhol-cell.c1:hover .wink-fx,
+body[data-wink-fx="shine"] .passport-frame:hover .wink-fx {
+  animation: wink-fx-shine 1500ms ease-out;
+}
+@keyframes wink-fx-shine {
+  0%   { background-position: 200% 0; opacity: 1; }
+  100% { background-position: -120% 0; opacity: 1; }
+}
+
+/* ── DOTS ── halftone screen-print pulse */
+body[data-wink-fx="dots"] .wink-fx {
+  background: radial-gradient(circle, rgba(0,0,0,0.65) 1.3px, transparent 2px);
+  background-size: 7px 7px;
+  mix-blend-mode: multiply;
+}
+body[data-wink-fx="dots"] .warhol-cell.c1.is-winking .wink-fx,
+body[data-wink-fx="dots"] .passport-frame.is-winking .wink-fx,
+body[data-wink-fx="dots"] .warhol-cell.c1:hover .wink-fx,
+body[data-wink-fx="dots"] .passport-frame:hover .wink-fx {
+  animation: wink-fx-dots 1500ms ease-out;
+}
+@keyframes wink-fx-dots {
+  0%   { opacity: 0; transform: scale(0.6); }
+  20%  { opacity: 1; transform: scale(1); }
+  82%  { opacity: 0.6; transform: scale(1.04); }
+  100% { opacity: 0; transform: scale(1.08); }
+}
+
+/* ── RAYS ── comic-burst lines radiating from center */
+body[data-wink-fx="rays"] .wink-fx {
+  background: repeating-conic-gradient(
+    from 0deg at 50% 45%,
+    rgba(0,0,0,0.55) 0deg 4deg,
+    transparent 4deg 18deg
+  );
+  mix-blend-mode: multiply;
+}
+body[data-wink-fx="rays"] .warhol-cell.c1.is-winking .wink-fx,
+body[data-wink-fx="rays"] .passport-frame.is-winking .wink-fx,
+body[data-wink-fx="rays"] .warhol-cell.c1:hover .wink-fx,
+body[data-wink-fx="rays"] .passport-frame:hover .wink-fx {
+  animation: wink-fx-rays 1600ms ease-out;
+}
+@keyframes wink-fx-rays {
+  0%   { opacity: 0; transform: scale(0.4) rotate(-30deg); }
+  18%  { opacity: 0.85; transform: scale(1) rotate(0deg); }
+  80%  { opacity: 0.55; transform: scale(1.12) rotate(20deg); }
+  100% { opacity: 0; transform: scale(1.2) rotate(36deg); }
+}
+
+/* ── FLASH ── accent-color tint pulse across the photo */
+body[data-wink-fx="flash"] .wink-fx {
+  background: var(--accent-3);
+  mix-blend-mode: multiply;
+}
+body[data-wink-fx="flash"] .warhol-cell.c1.is-winking .wink-fx,
+body[data-wink-fx="flash"] .passport-frame.is-winking .wink-fx,
+body[data-wink-fx="flash"] .warhol-cell.c1:hover .wink-fx,
+body[data-wink-fx="flash"] .passport-frame:hover .wink-fx {
+  animation: wink-fx-flash 1500ms ease-out;
+}
+@keyframes wink-fx-flash {
+  0%   { opacity: 0; background: var(--accent-3); }
+  16%  { opacity: 0.7; background: var(--accent-3); }
+  38%  { opacity: 0.3; background: var(--accent-2); }
+  58%  { opacity: 0.5; background: var(--accent); }
+  100% { opacity: 0; background: var(--accent-3); }
+}
+
+/* ── VIGNETTE ── photo darkens at edges, focusing eye on center */
+body[data-wink-fx="vignette"] .wink-fx {
+  background: radial-gradient(ellipse at 50% 42%,
+    transparent 40%,
+    rgba(0,0,0,0.55) 100%);
+  mix-blend-mode: multiply;
+}
+body[data-wink-fx="vignette"] .warhol-cell.c1.is-winking .wink-fx,
+body[data-wink-fx="vignette"] .passport-frame.is-winking .wink-fx,
+body[data-wink-fx="vignette"] .warhol-cell.c1:hover .wink-fx,
+body[data-wink-fx="vignette"] .passport-frame:hover .wink-fx {
+  animation: wink-fx-vignette 1500ms ease-out;
+}
+@keyframes wink-fx-vignette {
+  0%   { opacity: 0; }
+  20%  { opacity: 1; }
+  80%  { opacity: 0.85; }
+  100% { opacity: 0; }
+}
+
+/* ── MARILYN ── rapid screenprint color cycle (Warhol's signature) */
+body[data-wink-fx="marilyn"] .wink-fx {
+  mix-blend-mode: multiply;
+}
+body[data-wink-fx="marilyn"] .warhol-cell.c1.is-winking .wink-fx,
+body[data-wink-fx="marilyn"] .passport-frame.is-winking .wink-fx,
+body[data-wink-fx="marilyn"] .warhol-cell.c1:hover .wink-fx,
+body[data-wink-fx="marilyn"] .passport-frame:hover .wink-fx {
+  animation: wink-fx-marilyn 1700ms steps(1, end);
+}
+@keyframes wink-fx-marilyn {
+  0%   { background: transparent; opacity: 0; }
+  10%  { background: #ff2d87; opacity: 0.78; }
+  25%  { background: #ffc700; opacity: 0.78; }
+  40%  { background: #00b3ff; opacity: 0.78; }
+  55%  { background: #00d68f; opacity: 0.78; }
+  70%  { background: #ff5a00; opacity: 0.78; }
+  85%  { background: #ff2d87; opacity: 0.4; }
+  100% { opacity: 0; }
+}
+
+/* ── NEGATIVE ── color invert / solarization flash */
+body[data-wink-fx="negative"] .wink-fx {
+  backdrop-filter: invert(1) hue-rotate(180deg);
+  -webkit-backdrop-filter: invert(1) hue-rotate(180deg);
+  background: rgba(0,0,0,0);  /* needed for backdrop-filter to render */
+}
+body[data-wink-fx="negative"] .warhol-cell.c1.is-winking .wink-fx,
+body[data-wink-fx="negative"] .passport-frame.is-winking .wink-fx,
+body[data-wink-fx="negative"] .warhol-cell.c1:hover .wink-fx,
+body[data-wink-fx="negative"] .passport-frame:hover .wink-fx {
+  animation: wink-fx-negative 1700ms steps(1, end);
+}
+@keyframes wink-fx-negative {
+  0%, 100%   { opacity: 0; }
+  18%  { opacity: 1; }      /* hard cut to negative */
+  35%  { opacity: 0; }      /* back to normal */
+  52%  { opacity: 1; }      /* flicker again */
+  64%  { opacity: 0; }
+  78%  { opacity: 1; }
+  92%  { opacity: 0; }
+}
+
+/* ── POSTER ── extreme contrast / silkscreen posterization */
+body[data-wink-fx="poster"] .wink-fx {
+  backdrop-filter: contrast(2.4) saturate(3) brightness(1.1);
+  -webkit-backdrop-filter: contrast(2.4) saturate(3) brightness(1.1);
+  background: rgba(0,0,0,0);
+}
+body[data-wink-fx="poster"] .warhol-cell.c1.is-winking .wink-fx,
+body[data-wink-fx="poster"] .passport-frame.is-winking .wink-fx,
+body[data-wink-fx="poster"] .warhol-cell.c1:hover .wink-fx,
+body[data-wink-fx="poster"] .passport-frame:hover .wink-fx {
+  animation: wink-fx-poster 1500ms ease-out;
+}
+@keyframes wink-fx-poster {
+  0%   { opacity: 0; }
+  18%  { opacity: 1; }
+  82%  { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* ── CHROMATIC ── RGB misprint registration shift */
+body[data-wink-fx="chromatic"] .wink-fx {
+  background: var(--accent);
+  mix-blend-mode: difference;
+  opacity: 0;
+}
+body[data-wink-fx="chromatic"] .warhol-cell.c1.is-winking,
+body[data-wink-fx="chromatic"] .passport-frame.is-winking,
+body[data-wink-fx="chromatic"] .warhol-cell.c1:hover,
+body[data-wink-fx="chromatic"] .passport-frame:hover {
+  /* offset cyan + magenta shadows fake the misprint */
+  filter: drop-shadow(-4px 0 0 rgba(0, 200, 255, 0.7))
+          drop-shadow(4px 0 0 rgba(255, 0, 130, 0.7));
+}
+
+/* ── HOT ── pop-art hue rotation (everything shifts to lurid colors) */
+body[data-wink-fx="hot"] .wink-fx {
+  backdrop-filter: hue-rotate(45deg) saturate(2.6) brightness(1.05);
+  -webkit-backdrop-filter: hue-rotate(45deg) saturate(2.6) brightness(1.05);
+  background: rgba(0,0,0,0);
+}
+body[data-wink-fx="hot"] .warhol-cell.c1.is-winking .wink-fx,
+body[data-wink-fx="hot"] .passport-frame.is-winking .wink-fx,
+body[data-wink-fx="hot"] .warhol-cell.c1:hover .wink-fx,
+body[data-wink-fx="hot"] .passport-frame:hover .wink-fx {
+  animation: wink-fx-hot 1500ms ease-out;
+}
+@keyframes wink-fx-hot {
+  0%   { opacity: 0; }
+  22%  { opacity: 1; }
+  80%  { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .wink-fx { animation: none !important; }
+}
+
+.passport-stamp { z-index: 5; }
+
+/* Hide the base portrait while the wink reveals itself — otherwise
+   mix-blend-mode: multiply on both imgs darkens the result. */
+.warhol-cell.c1 > img:not(.wink-overlay),
+.passport-frame > img:not(.wink-overlay) {
+  transition: opacity 320ms ease-out;
+}
+.warhol-cell.c1:hover > img:not(.wink-overlay),
+.passport-frame:hover > img:not(.wink-overlay) {
+  opacity: 0;
+}
+.warhol-cell.c1.is-winking > img:not(.wink-overlay),
+.passport-frame.is-winking > img:not(.wink-overlay) {
+  animation: portrait-base-fade 1700ms ease-out;
+}
+@keyframes portrait-base-fade {
+  0%   { opacity: 1; }
+  18%  { opacity: 0; }
+  85%  { opacity: 0; }
+  100% { opacity: 1; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .warhol-cell.c1, .passport-frame { transition: none; }
+  .wink-overlay { transition: opacity 120ms; }
+  .warhol-cell.c1.is-winking,
+  .passport-frame.is-winking { animation: none; }
+  .warhol-cell.c1.is-winking .wink-overlay,
+  .passport-frame.is-winking .wink-overlay {
+    animation: none;
+    opacity: 1;
+  }
+  .warhol-cell.c1.is-winking > img:not(.wink-overlay),
+  .passport-frame.is-winking > img:not(.wink-overlay) {
+    animation: none;
+    opacity: 0;
+  }
+  .warhol-cell.c1:hover, .passport-frame:hover { transform: none; }
+  .hero-pointer-arrow,
+  .hero-pointer:hover .hero-pointer-arrow { transition: none; transform: translateY(2px); }
+}
+
+.hero-story p {
+  font-size: 16px;
+  line-height: 1.6;
+  margin: 0 0 16px;
+  max-width: 60ch;
+  text-wrap: pretty;
+}
+.hero-story p strong { font-weight: 600; }
+
+.hero-story .hero-synth {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: clamp(19px, 1.8vw, 24px);
+  line-height: 1.4;
+  border-top: 1px solid var(--line);
+  border-bottom: 1px solid var(--line);
+  padding: 20px 0;
+  margin: 28px 0;
+  color: var(--text);
+  max-width: 56ch;
+}
+.hero-story .hero-now {
+  font-size: 16px;
+  margin-top: 24px;
+}
+.hero-story .hero-now strong { font-weight: 700; }
+.hero-now-end {
+  font-style: italic;
+  color: var(--muted);
+}
 .hero-tagline {
   font-size: var(--type-tagline);
   line-height: 1.55; max-width: 560px;
@@ -266,6 +683,222 @@ strong { font-weight: 600; }
   font-size: 11.5px; letter-spacing: 0.01em;
   color: var(--muted); line-height: 1.75;
   width: 100%;
+}
+
+/* Exhibits card — childhood-artifact archive sitting below the Harry footnote */
+.exhibits-card {
+  position: relative;
+  margin-top: 20px;
+  padding: 22px 18px 16px;
+  background: #fff;
+  border: 1px solid var(--line);
+}
+.exhibits-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 12px;
+}
+.exhibit { margin: 0; display: flex; flex-direction: column; gap: 8px; }
+.exhibit-thumb {
+  aspect-ratio: 4 / 5;
+  background: var(--bg);
+  border: 1px dashed var(--muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.16em;
+  text-align: center;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 8px;
+  text-wrap: pretty;
+  line-height: 1.3;
+}
+.exhibit-thumb::after { content: attr(data-placeholder); }
+
+/* === Footnote system === */
+.fn-ref {
+  display: inline;
+  vertical-align: super;
+  font-size: 0.72em;
+  font-weight: 700;
+  font-family: var(--font-mono);
+  line-height: 0;
+  cursor: pointer;
+  user-select: none;
+  margin: 0 1px 0 2px;
+  padding: 0 1px;
+  color: var(--accent);
+  border-radius: 2px;
+  transition: transform 240ms cubic-bezier(0.34, 1.56, 0.64, 1), color 180ms,
+              background 180ms, padding 180ms;
+}
+.fn-ref:hover { transform: translateY(-1px) scale(1.5) rotate(8deg); }
+.fn-ref:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
+.fn-ref[data-fn-num="1"] { color: var(--accent); }
+.fn-ref[data-fn-num="2"] { color: var(--accent-2); }
+.fn-ref[data-fn-num="3"] { color: var(--accent-3); }
+.fn-ref[data-fn-num="4"] { color: var(--accent-4); }
+.fn-ref[data-fn-num="5"] { color: #ff5a00; }
+.fn-ref[data-fn-num="6"] { color: #b557ff; }
+.fn-ref[data-fn-num="7"] { color: var(--accent); }
+.fn-ref[data-fn-num="8"] { color: var(--accent-2); }
+.fn-ref[data-fn-num="9"] { color: var(--accent-3); }
+.fn-ref[data-fn-num="10"] { color: var(--accent-4); }
+.fn-ref[data-fn-num="11"] { color: #ff5a00; }
+.fn-ref.is-open {
+  background: var(--text);
+  color: var(--bg);
+  transform: scale(1.25);
+  padding: 1px 4px;
+  border-radius: 3px;
+}
+
+.fn-mount { margin: 16px 0 0; }
+.fn-mount:empty { display: none; }
+
+/* PHOTO MOUNT — image-style exhibits commandeer the portrait area */
+.hero-portrait { position: relative; }
+.fn-mount-photo {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  z-index: 12;
+  pointer-events: none;
+}
+.fn-mount-photo:empty { display: none; }
+.fn-mount-photo > * { pointer-events: auto; }
+.fn-mount-photo .fn-card {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+}
+.fn-mount-photo .fn-card-thumb {
+  flex: 1 1 auto;
+  aspect-ratio: auto;
+  min-height: 60%;
+  font-size: 14px;
+}
+.fn-mount-photo .fn-card { display: flex; flex-direction: column; }
+.hero-portrait.has-exhibit > .warhol-grid,
+.hero-portrait.has-exhibit > .passport-frame {
+  opacity: 0.1;
+  transition: opacity 280ms ease-out;
+  pointer-events: none;
+}
+.hero-portrait > .warhol-grid,
+.hero-portrait > .passport-frame {
+  transition: opacity 280ms ease-out;
+}
+
+.fn-card {
+  position: relative;
+  display: block;
+  margin: 0;
+  padding: 18px 20px 14px;
+  background: var(--bg);
+  border: 2px solid var(--text);
+  box-shadow: 6px 6px 0 var(--fn-accent, var(--accent));
+  font-family: var(--font-mono);
+  color: var(--text);
+  animation: fn-card-in 360ms cubic-bezier(0.16, 1, 0.3, 1);
+}
+/* fn-1 special: the "name" footnote gets a rainbow Warhol stripe across the top */
+.fn-card[data-fn-num="1"] { padding-top: 22px; }
+.fn-card[data-fn-num="1"]::before {
+  content: "";
+  position: absolute;
+  top: -2px; left: -2px; right: -2px;
+  height: 7px;
+  background: linear-gradient(to right,
+    var(--accent)    0%   17%,
+    var(--accent-2) 17%   34%,
+    var(--accent-3) 34%   51%,
+    var(--accent-4) 51%   68%,
+    #ff5a00         68%   85%,
+    #b557ff         85%  100%);
+}
+.fn-card-num {
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text);
+  font-weight: 700;
+  margin-bottom: 12px;
+  padding-right: 28px;
+}
+.fn-card-body {
+  font-family: var(--font-mono);
+  font-size: 11.5px;
+  line-height: 1.75;
+  letter-spacing: 0.005em;
+  color: var(--text);
+}
+.fn-card-body .dict-ref {
+  background: var(--fn-accent, var(--accent));
+  padding: 1px 4px;
+  color: var(--text);
+  font-weight: 700;
+}
+.fn-card-thumb {
+  aspect-ratio: 4 / 3;
+  width: 100%;
+  margin: 4px 0 10px;
+  background: var(--bg);
+  border: 1px dashed var(--text);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--text);
+  text-align: center;
+  padding: 12px;
+  font-weight: 700;
+  text-wrap: pretty;
+}
+.fn-card-thumb::after { content: attr(data-placeholder); }
+.fn-card-meta {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 12.5px;
+  line-height: 1.4;
+  color: var(--muted);
+  margin-top: 6px;
+}
+.fn-card-close {
+  position: absolute;
+  top: 6px;
+  right: 8px;
+  background: transparent;
+  border: 0;
+  padding: 4px 8px;
+  font-family: var(--font-mono);
+  font-size: 18px;
+  font-weight: 700;
+  line-height: 1;
+  color: var(--text);
+  cursor: pointer;
+  transition: transform 220ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.fn-card-close:hover { transform: rotate(90deg) scale(1.1); }
+
+@keyframes fn-card-in {
+  0%   { opacity: 0; transform: translateY(-8px) scale(0.97); }
+  100% { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .fn-ref { transition: none; }
+  .fn-ref:hover { transform: none; }
+  .fn-card { animation: none; }
+  .fn-card-close { transition: none; }
 }
 .footnote-num {
   font-family: var(--font-serif);
@@ -394,8 +1027,378 @@ section { padding: var(--section-pad-y) 0; }
   text-align: right;
 }
 
+/* ─── WORK ──────────────────────────────────────────────── */
+#work {
+  position: relative;
+}
+
+/* CURRENTLY card */
+.work-now {
+  margin-top: 32px;
+  margin-bottom: 64px;
+}
+.work-now-stamp {
+  display: inline-block;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  background: var(--text);
+  color: var(--bg);
+  padding: 6px 14px;
+  position: relative;
+  z-index: 2;
+}
+.work-now-card {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 36px;
+  padding: 40px 36px;
+  background: #fff;
+  border: 1px solid var(--text);
+  position: relative;
+}
+.work-now-side { }
+.work-now-role {
+  font-family: var(--font-display);
+  font-size: 44px;
+  line-height: 1.0;
+  letter-spacing: -0.02em;
+  margin-bottom: 10px;
+}
+.work-now-co {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 20px;
+}
+.work-now-co em {
+  font-style: italic;
+  color: var(--accent);
+  font-family: var(--font-serif);
+  text-transform: none;
+  letter-spacing: 0;
+  font-size: 14px;
+}
+.work-now-summary {
+  font-size: 16px;
+  line-height: 1.55;
+  margin-bottom: 22px;
+  max-width: 60ch;
+}
+.work-now-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.work-now-list li {
+  font-size: 14px;
+  line-height: 1.6;
+  padding-left: 22px;
+  position: relative;
+  margin-bottom: 6px;
+  color: var(--muted);
+}
+.work-now-list li::before {
+  content: "→";
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-weight: 700;
+  color: var(--accent);
+}
+
+/* Logo placeholders — show "LOGO" text via data-placeholder attr */
+.work-logo {
+  width: 100%;
+  aspect-ratio: 1;
+  background: var(--bg);
+  border: 1px dashed var(--muted);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  color: var(--muted);
+  position: relative;
+}
+.work-logo::after {
+  content: attr(data-placeholder);
+}
+.work-logo-lg {
+  width: 200px;
+}
+
+/* STATS STRIP */
+.work-stats {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+  margin: 0 0 80px;
+}
+.stat {
+  padding: 28px 24px 22px;
+  border: 1px solid var(--text);
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  min-height: 160px;
+}
+.stat-num {
+  font-family: var(--font-display);
+  font-size: 56px;
+  line-height: 1.0;
+  letter-spacing: -0.025em;
+  margin-bottom: 18px;
+}
+.stat-label {
+  font-family: var(--font-mono);
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  line-height: 1.45;
+  color: var(--muted);
+  text-wrap: pretty;
+}
+
+/* PAST LIFE */
+.work-past {
+  margin-top: 0;
+}
+.work-past-head {
+  font-family: var(--font-display);
+  font-size: 28px;
+  letter-spacing: -0.01em;
+  margin-bottom: 32px;
+  padding-bottom: 10px;
+  border-bottom: 2px solid var(--text);
+  display: inline-block;
+}
+.work-role {
+  display: grid;
+  grid-template-columns: 160px 1fr;
+  gap: 48px;
+  padding: 36px 0;
+  border-top: 1px solid var(--line);
+}
+.work-role:last-child { border-bottom: 1px solid var(--line); }
+.work-role-side {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.work-role-dates {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.work-role-title {
+  font-family: var(--font-display);
+  font-size: 34px;
+  line-height: 1.0;
+  letter-spacing: -0.015em;
+  margin-bottom: 8px;
+}
+.work-role-co {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 18px;
+}
+.work-role-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+.work-role-list li {
+  font-size: 15px;
+  line-height: 1.6;
+  padding-left: 18px;
+  position: relative;
+  margin-bottom: 8px;
+}
+.work-role-list li::before {
+  content: "·";
+  position: absolute;
+  left: 4px;
+  top: -3px;
+  font-weight: 900;
+  font-size: 22px;
+  color: var(--text);
+}
+.work-role-list strong { font-weight: 700; }
+
+@media (max-width: 760px) {
+  .work-now-card { grid-template-columns: 1fr; gap: 20px; padding: 28px 22px; }
+  .work-logo-lg { width: 120px; }
+  .work-now-role { font-size: 32px; }
+  .work-stats { grid-template-columns: repeat(2, 1fr); }
+  .stat-num { font-size: 44px; }
+  .work-role { grid-template-columns: 1fr; gap: 22px; padding: 28px 0; }
+  .work-role-side { flex-direction: row; align-items: center; gap: 18px; }
+  .work-role-side .work-logo { width: 80px; }
+  .work-role-title { font-size: 28px; }
+}
+
 /* ─── CREDENTIALS ───────────────────────────────────────── */
-.creds-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+#credentials { position: relative; padding-top: 32px; }
+#credentials > .container { position: relative; z-index: 1; }
+.creds-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 28px;
+  position: relative;
+  padding-top: 240px;        /* room for building crests above each card */
+}
+
+/* Building silhouettes — rise ABOVE each card like architectural crests.
+   The institution dominates; the card becomes a caption. */
+.creds-grid::before,
+.creds-grid::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  height: 230px;
+  width: calc(50% - 14px);
+  background-repeat: no-repeat;
+  background-position: center bottom;
+  background-size: contain;
+  pointer-events: none;
+  opacity: 0.22;
+  filter: saturate(0.85);
+  z-index: 0;
+}
+.creds-grid::before { left: 0;  background-image: url("assets/credentials/isb-campus.png"); }
+.creds-grid::after  { right: 0; background-image: url("assets/credentials/gt-campus.png");  }
+.cred { position: relative; z-index: 1; }
+
+/* ─── School logos — placement modes (data-creds-logo on <body>) ─── */
+/* Default: hidden unless a mode is selected */
+.cred-logo {
+  display: none;
+  height: auto;
+  user-select: none;
+  pointer-events: none;
+}
+
+/* ── MODE: watermark — giant faded crest BEHIND the building silhouette,
+   sitting in the top column area. Two scales of identity = institutional weight. */
+body[data-creds-logo="watermark"] .creds-grid::before,
+body[data-creds-logo="watermark"] .creds-grid::after {
+  /* Push the silhouette slightly forward */
+  z-index: 1;
+}
+body[data-creds-logo="watermark"] .cred-logo {
+  display: block;
+  position: absolute;
+  top: -228px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 220px;
+  height: 220px;
+  object-fit: contain;
+  opacity: 0.12;
+  z-index: 0;
+  /* White logo → invert back to dark for visibility on cream background */
+  filter: invert(1) saturate(0.4);
+}
+
+/* ── MODE: chip — small logo inline before the school name, on colored card */
+body[data-creds-logo="chip"] .cred-logo {
+  display: block;
+  width: 56px;
+  height: 36px;
+  object-fit: contain;
+  object-position: left center;
+  margin-bottom: 14px;
+}
+
+/* ── MODE: seal — small mark in the top-right corner of the card */
+body[data-creds-logo="seal"] .cred-logo {
+  display: block;
+  position: absolute;
+  top: 28px;
+  right: 28px;
+  width: 72px;
+  height: 36px;
+  object-fit: contain;
+  object-position: right center;
+  opacity: 0.9;
+}
+body[data-creds-logo="seal"] .cred { padding-right: 116px; }
+
+/* ── MODE: footer — logo sits inline with the meta strip at the bottom */
+body[data-creds-logo="footer"] .cred { padding-bottom: 88px; }
+body[data-creds-logo="footer"] .cred-logo {
+  display: block;
+  position: absolute;
+  left: 36px;
+  bottom: 24px;
+  width: 72px;
+  height: 36px;
+  object-fit: contain;
+  object-position: left center;
+}
+body[data-creds-logo="footer"] .cred-meta {
+  position: absolute;
+  right: 36px;
+  bottom: 36px;
+  margin-top: 0;
+}
+
+/* ── MODE: combo — large watermark behind silhouette + small corner seal on card */
+body[data-creds-logo="combo"] .cred-logo {
+  display: block;
+  position: absolute;
+  top: 22px;
+  right: 24px;
+  width: 64px;
+  height: 32px;
+  object-fit: contain;
+  object-position: right center;
+  z-index: 2;
+}
+body[data-creds-logo="combo"] .cred { padding-right: 104px; }
+body[data-creds-logo="combo"] .cred::before {
+  content: "";
+  position: absolute;
+  top: -228px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 220px;
+  height: 220px;
+  background: var(--combo-watermark) no-repeat center / contain;
+  opacity: 0.12;
+  filter: invert(1) saturate(0.4);
+  z-index: 0;
+  pointer-events: none;
+}
+body[data-creds-logo="combo"] .cred-isb { --combo-watermark: url("assets/credentials/isb-seal.png"); }
+body[data-creds-logo="combo"] .cred-gt  { --combo-watermark: url("assets/credentials/gt-seal.png");  }
+body[data-creds-logo="combo"] .creds-grid::before,
+body[data-creds-logo="combo"] .creds-grid::after { z-index: 1; }
+
+@media (max-width: 760px) {
+  body[data-creds-logo="watermark"] .cred-logo { width: 160px; height: 160px; top: -168px; }
+  body[data-creds-logo="seal"] .cred-logo { width: 44px; height: 44px; top: 18px; right: 18px; }
+  body[data-creds-logo="seal"] .cred { padding-right: 72px; }
+  body[data-creds-logo="combo"] .cred::before { width: 160px; height: 160px; top: -168px; }
+}
+
+@media (max-width: 760px) {
+  .creds-grid { padding-top: 160px; }
+  .creds-grid::before,
+  .creds-grid::after { height: 150px; width: calc(50% - 8px); }
+}
+
 .cred {
   position: relative;
   padding: 40px 36px 32px;
@@ -427,8 +1430,60 @@ section { padding: var(--section-pad-y) 0; }
   margin-bottom: 24px;
 }
 .cred-divider { height: 1px; background: var(--line); margin: 24px 0; }
+
+/* ID band — passport-style header strip at the top of each credential card */
+.cred-id-band {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 14px;
+  flex-wrap: wrap;
+  padding-bottom: 10px;
+  margin-bottom: 22px;
+  border-bottom: 1px dashed var(--text);
+  font-family: var(--font-mono);
+  font-size: 9.5px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--text);
+  line-height: 1.4;
+}
+.cred-id-country {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  letter-spacing: 0.04em;
+  text-transform: none;
+  font-size: 12px;
+}
+.cred-id-type {
+  color: var(--muted);
+  font-weight: 500;
+  flex: 1;
+  text-align: center;
+  letter-spacing: 0.18em;
+}
+.cred-id-num {
+  letter-spacing: 0.06em;
+  background: var(--text);
+  color: var(--bg);
+  padding: 3px 7px;
+}
+
 .cred-highlight { font-size: 15px; line-height: 1.55; margin-bottom: 12px; }
 .cred-highlight strong { color: var(--text); font-weight: 600; }
+.cred-highlight--reflection {
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px dashed var(--line);
+  font-style: italic;
+  font-family: var(--font-serif);
+  font-size: 16px;
+  line-height: 1.5;
+  color: var(--muted);
+  text-wrap: pretty;
+}
 .cred-meta {
   font-family: var(--font-mono);
   font-size: 11px; letter-spacing: 0.16em;
@@ -1137,6 +2192,27 @@ body[data-mode="warhol"] .dict-row { border-top-color: var(--text); border-top-s
 body[data-mode="warhol"] .dict-word { font-family: var(--font-display); font-size: 22px; text-transform: uppercase; letter-spacing: 0.01em; }
 body[data-mode="warhol"] .passport-caption { color: var(--text); font-weight: 700; }
 body[data-mode="warhol"] .name-footnote { padding: 16px 18px; border: 3px solid var(--text); background: var(--bg); box-shadow: 8px 8px 0 var(--accent-2); }
+/* Exhibits card — matches Warhol pop treatment */
+body[data-mode="warhol"] .exhibits-card {
+  border: 3px solid var(--text);
+  background: var(--bg);
+  box-shadow: 8px 8px 0 var(--accent-3);
+  padding: 26px 18px 18px;
+}
+body[data-mode="warhol"] .exhibits-card .card-tag {
+  display: inline-block;
+  background: var(--accent);
+  border: 2px solid var(--text);
+  color: var(--text);
+  font-weight: 700;
+}
+body[data-mode="warhol"] .exhibit-thumb {
+  border: 2px dashed var(--text);
+  color: var(--text);
+  font-weight: 700;
+  background: #fff;
+}
+body[data-mode="warhol"] .exhibit-title { font-weight: 700; }
 body[data-mode="warhol"] .name-footnote .dict-ref {
   background: linear-gradient(to top,
     var(--accent-3) 0,
@@ -1208,8 +2284,192 @@ body[data-mode="warhol"][data-about-photo="plain"] .about-photo-frame img {
 }
 
 body[data-mode="warhol"] .cred { border: 3px solid var(--text); }
-body[data-mode="warhol"] .cred-isb { background: var(--accent); color: var(--text); box-shadow: 8px 8px 0 var(--text); }
-body[data-mode="warhol"] .cred-gt  { background: var(--accent-2); color: var(--text); box-shadow: 8px 8px 0 var(--text); }
+body[data-mode="warhol"] .cred-isb { background: var(--accent-2); color: var(--text); box-shadow: 8px 8px 0 var(--text); }
+body[data-mode="warhol"] .cred-gt  { background: var(--accent-3); color: var(--text); box-shadow: 8px 8px 0 var(--text); }
+
+/* WARHOL · Hero pointer line — pop-art stamp */
+body[data-mode="warhol"] .hero-pointer {
+  display: inline-block;
+  max-width: 100%;
+  background: var(--accent-3);
+  color: var(--text);
+  border: 2px solid var(--text);
+  box-shadow: 4px 4px 0 var(--accent);
+  padding: 9px 14px 8px;
+  margin: 22px 0 30px;
+  font-weight: 700;
+  line-height: 1.55;
+  transform: rotate(-1.5deg);
+  transform-origin: left center;
+  transition: transform 280ms cubic-bezier(0.34, 1.56, 0.64, 1),
+              box-shadow 280ms ease-out;
+}
+body[data-mode="warhol"] .hero-pointer:hover {
+  transform: rotate(-0.5deg);
+  box-shadow: 6px 6px 0 var(--accent);
+}
+body[data-mode="warhol"] .hero-pointer.is-pointing {
+  animation: warhol-pointer-jab 700ms cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+@keyframes warhol-pointer-jab {
+  0%   { transform: rotate(-1.5deg); }
+  22%  { transform: rotate(3deg) translateX(6px); }
+  55%  { transform: rotate(-2.5deg) translateX(-2px); }
+  100% { transform: rotate(-1.5deg); }
+}
+body[data-mode="warhol"] .hero-pointer-arrow {
+  color: var(--accent);
+}
+
+/* === Hero pointer stamp treatment overrides (mode-agnostic) === */
+
+/* NEW YORKER — italic serif deck with a short yellow Warhol accent rule */
+body[data-pointer-stamp="newyorker"] .hero-pointer {
+  display: block;
+  width: fit-content;
+  max-width: 100%;
+  background: transparent;
+  color: var(--text);
+  border: 0;
+  box-shadow: none;
+  padding: 18px 0 0;
+  margin: 24px 0 32px;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-size: 19px;
+  font-weight: 400;
+  text-transform: none;
+  letter-spacing: 0.005em;
+  line-height: 1.55;
+  transform: none;
+  position: relative;
+}
+body[data-pointer-stamp="newyorker"] .hero-pointer::before {
+  content: "";
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: var(--text);
+}
+body[data-pointer-stamp="newyorker"] .hero-pointer::after {
+  content: "";
+  position: absolute;
+  top: -2px;
+  left: 0;
+  width: 56px;
+  height: 4px;
+  background: var(--accent-3);   /* Warhol hint: yellow accent on the rule */
+}
+body[data-pointer-stamp="newyorker"] .hero-pointer:hover {
+  transform: none;
+  box-shadow: none;
+}
+body[data-pointer-stamp="newyorker"] .hero-pointer-arrow {
+  color: var(--accent);          /* Warhol hint: hot-pink manicule */
+  font-family: var(--font-serif);
+  font-style: normal;
+  font-size: 22px;
+}
+body[data-pointer-stamp="newyorker"] .hero-pointer.is-pointing {
+  animation: none;
+}
+
+/* HBR — clean sans-serif with a thick hot-pink left rule */
+body[data-pointer-stamp="hbr"] .hero-pointer {
+  display: block;
+  width: fit-content;
+  max-width: 100%;
+  background: transparent;
+  color: var(--text);
+  border: 0;
+  border-left: 4px solid var(--accent);   /* Warhol hint: hot pink rule */
+  box-shadow: none;
+  padding: 4px 0 4px 16px;
+  margin: 24px 0 32px;
+  font-family: var(--font-body);
+  font-style: normal;
+  font-size: 16px;
+  font-weight: 500;
+  text-transform: none;
+  letter-spacing: 0;
+  line-height: 1.55;
+  transform: none;
+  transition: border-color 220ms ease-out, border-left-width 220ms ease-out;
+}
+body[data-pointer-stamp="hbr"] .hero-pointer:hover {
+  transform: none;
+  box-shadow: none;
+  border-left-width: 6px;
+  border-left-color: var(--accent-3);     /* hover swap: yellow Warhol accent */
+}
+body[data-pointer-stamp="hbr"] .hero-pointer-arrow {
+  color: var(--accent);
+  font-family: var(--font-body);
+  font-style: normal;
+  font-size: 18px;
+}
+body[data-pointer-stamp="hbr"] .hero-pointer.is-pointing {
+  animation: none;
+}
+
+/* WARHOL · WORK section */
+body[data-mode="warhol"] .work-now-stamp {
+  border: 2px solid var(--text);
+  font-weight: 700;
+  transform: rotate(-1deg);
+  margin-bottom: -2px;
+  margin-left: 8px;
+}
+body[data-mode="warhol"] .work-now-card {
+  border: 2px solid var(--text);
+  box-shadow: 8px 8px 0 var(--text);
+}
+body[data-mode="warhol"] .work-now-role {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  font-size: 48px;
+  letter-spacing: -0.02em;
+}
+body[data-mode="warhol"] .work-now-list li::before { color: var(--accent); }
+
+body[data-mode="warhol"] .work-logo {
+  background: var(--bg);
+  border: 2px dashed var(--text);
+  color: var(--text);
+}
+
+/* Stats — each in a different accent for pop-art rhythm */
+body[data-mode="warhol"] .stat {
+  border: 2px solid var(--text);
+  box-shadow: 4px 4px 0 var(--text);
+}
+body[data-mode="warhol"] .stat-1 { background: var(--accent); }
+body[data-mode="warhol"] .stat-2 { background: var(--accent-2); }
+body[data-mode="warhol"] .stat-3 { background: var(--accent-3); }
+body[data-mode="warhol"] .stat-4 { background: var(--accent-4); }
+body[data-mode="warhol"] .stat-num {
+  font-family: var(--font-display);
+  color: var(--text);
+}
+body[data-mode="warhol"] .stat-label {
+  color: var(--text);
+  font-weight: 700;
+}
+
+/* Past life — sharper timeline with thicker rules */
+body[data-mode="warhol"] .work-past-head {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  font-size: 32px;
+  border-bottom: 3px solid var(--text);
+}
+body[data-mode="warhol"] .work-role { border-top: 2px solid var(--text); }
+body[data-mode="warhol"] .work-role:last-child { border-bottom: 2px solid var(--text); }
+body[data-mode="warhol"] .work-role-title {
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  font-size: 38px;
+}
 body[data-mode="warhol"] .cred-stamp-fallback { background: var(--text); color: var(--bg); padding: 4px 8px; }
 body[data-mode="warhol"] .cred-school { font-family: var(--font-display); text-transform: uppercase; font-size: 42px; line-height: 0.95; }
 body[data-mode="warhol"] .cred-divider { background: var(--text); height: 2px; }
@@ -1277,6 +2537,30 @@ body[data-mode="warhol"] .hero-h1 em {
   box-shadow: 4px 4px 0 var(--text);
   border: 2px solid var(--text);
 }
+
+/* Extend the yellow-box treatment to section titles + contact line so every
+   italicized hook reads as an accented stamp, not just hero. Each gets a
+   slightly different tilt for visual rhythm. */
+body[data-mode="warhol"] .section-title em,
+body[data-mode="warhol"] .contact-line em {
+  background: var(--accent-3);
+  padding: 0 10px;
+  margin: 0 -2px;
+  display: inline-block;
+  transform: rotate(-1deg);
+  box-shadow: 3px 3px 0 var(--text);
+  border: 2px solid var(--text);
+  font-style: italic;
+  font-family: var(--font-serif);
+  color: var(--accent);
+  font-weight: 700;
+}
+/* Per-section tilt variation so they don't all lean the same way */
+body[data-mode="warhol"] #about     .section-title em { transform: rotate(-2deg); }
+body[data-mode="warhol"] #credentials .section-title em { transform: rotate(1deg); box-shadow: -3px 3px 0 var(--text); }
+body[data-mode="warhol"] #off       .section-title em { transform: rotate(-1.5deg); }
+body[data-mode="warhol"] #creative  .section-title em { transform: rotate(2deg); box-shadow: -3px 3px 0 var(--text); }
+body[data-mode="warhol"] .contact-line em { transform: rotate(-1deg); padding: 2px 12px; }
 
 /* Wry stamp decorations injected via pseudo-elements */
 body[data-mode="warhol"] .hero-text {
