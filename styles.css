@@ -138,6 +138,47 @@ strong { font-weight: 600; }
   display: grid; grid-template-columns: 1.35fr 1fr;
   gap: var(--gap-block); align-items: start;
 }
+
+.hero-kid-anchor {
+  /* the noun the pointer sentence calls out — already accent (inherits
+     from .hero-pointer-text), just stays italic + bolder */
+  font-style: italic;
+  font-weight: 600;
+}
+
+/* Anchor lead — anchor-led wink arrival mode pulses the .hero-kid-anchor
+   with a soft accent wash so the reader's eye is led from the sentence
+   up to the portrait before the wink fires. Background-only so layout
+   never shifts; box-decoration-break clones the wash across line breaks. */
+.hero-kid-anchor.is-leading {
+  animation: kid-anchor-lead 760ms cubic-bezier(0.22, 1, 0.36, 1);
+  -webkit-box-decoration-break: clone;
+  box-decoration-break: clone;
+  border-radius: 2px;
+}
+@keyframes kid-anchor-lead {
+  0%   { background: transparent; }
+  25%  { background: color-mix(in oklab, var(--accent) 26%, transparent); }
+  60%  { background: color-mix(in oklab, var(--accent) 18%, transparent); }
+  100% { background: transparent; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .hero-kid-anchor.is-leading { animation: none; }
+}
+
+/* Both intro sentences — the editor's-note hint and the pointer opener
+   — wear the accent color so they read as a coordinated kicker pair
+   leading into the kid-story body. */
+.hero-pointer-text,
+.fn-hint-body,
+.fn-hint-body .fn-hint-soft {
+  color: var(--accent);
+}
+.fn-hint-body .fn-hint-soft {
+  /* keep the italic + lower-intensity feel via opacity, not via mixing
+     the accent away — preserves the family relationship to the line above */
+  opacity: 0.72;
+}
 .hero-eyebrow {
   font-family: var(--font-mono);
   font-size: 12px; letter-spacing: 0.2em;
@@ -186,37 +227,143 @@ strong { font-weight: 600; }
 }
 
 .hero-pointer {
-  font-family: var(--font-mono);
-  font-size: 11.5px;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-  color: var(--muted);
-  margin: 24px 0 32px;
+  /* .hero-pointer is now an inline <span> wrapping the opener sentence
+     of the kid-story. The base rule is just the click-affordance hook;
+     the *visual* affordance is opted in via body[data-pointer-affordance]
+     and only when the stamp treatment is "auto" — the newyorker / hbr
+     stamps carry their own block-level chrome. */
   cursor: pointer;
   user-select: none;
+  transition: text-decoration-color 180ms ease-out,
+              text-decoration-style 180ms ease-out,
+              background-color 180ms ease-out,
+              background-size 220ms ease-out;
 }
-.hero-pointer-arrow {
+.hero-pointer:focus-visible { outline: none; }
+
+/* DOTTED — faint editorial citation underline, promotes to solid on
+   hover / focus / wink. Echoes .inline-link[data-pending]. */
+body[data-pointer-stamp="auto"][data-pointer-affordance="dotted"] .hero-pointer {
+  text-decoration-line: underline;
+  text-decoration-style: dotted;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 4px;
+  text-decoration-color: color-mix(in oklab, var(--accent) 38%, transparent);
+}
+body[data-pointer-stamp="auto"][data-pointer-affordance="dotted"] .hero-pointer:hover,
+body[data-pointer-stamp="auto"][data-pointer-affordance="dotted"] .hero-pointer:focus-visible {
+  text-decoration-color: var(--accent);
+}
+body[data-pointer-stamp="auto"][data-pointer-affordance="dotted"] .hero-pointer:active,
+body[data-pointer-stamp="auto"][data-pointer-affordance="dotted"] .hero-pointer.is-pointing {
+  text-decoration-color: var(--accent);
+  text-decoration-style: solid;
+}
+@media (hover: none) {
+  body[data-pointer-stamp="auto"][data-pointer-affordance="dotted"] .hero-pointer {
+    text-decoration-color: color-mix(in oklab, var(--accent) 60%, transparent);
+  }
+}
+
+/* WAVY — handwritten editorial mark, like a margin annotation. */
+body[data-pointer-stamp="auto"][data-pointer-affordance="wavy"] .hero-pointer {
+  text-decoration-line: underline;
+  text-decoration-style: wavy;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 5px;
+  text-decoration-color: color-mix(in oklab, var(--accent) 55%, transparent);
+}
+body[data-pointer-stamp="auto"][data-pointer-affordance="wavy"] .hero-pointer:hover,
+body[data-pointer-stamp="auto"][data-pointer-affordance="wavy"] .hero-pointer:focus-visible {
+  text-decoration-color: var(--accent);
+}
+body[data-pointer-stamp="auto"][data-pointer-affordance="wavy"] .hero-pointer.is-pointing {
+  text-decoration-color: var(--accent);
+}
+
+/* HIGHLIGHT — magazine highlighter wash. Uses a background gradient so
+   it animates: 0 → 100% width on hover, full width when winking. */
+body[data-pointer-stamp="auto"][data-pointer-affordance="highlight"] .hero-pointer {
+  background-image: linear-gradient(
+    transparent 62%,
+    color-mix(in oklab, var(--accent) 22%, transparent) 62%,
+    color-mix(in oklab, var(--accent) 22%, transparent) 96%,
+    transparent 96%
+  );
+  background-repeat: no-repeat;
+  background-size: 100% 100%;
+  background-position: 0 0;
+  padding: 0 2px;
+  margin: 0 -2px;
+  box-decoration-break: clone;
+  -webkit-box-decoration-break: clone;
+}
+body[data-pointer-stamp="auto"][data-pointer-affordance="highlight"] .hero-pointer:hover,
+body[data-pointer-stamp="auto"][data-pointer-affordance="highlight"] .hero-pointer:focus-visible,
+body[data-pointer-stamp="auto"][data-pointer-affordance="highlight"] .hero-pointer.is-pointing {
+  background-image: linear-gradient(
+    transparent 58%,
+    color-mix(in oklab, var(--accent) 38%, transparent) 58%,
+    color-mix(in oklab, var(--accent) 38%, transparent) 96%,
+    transparent 96%
+  );
+}
+
+/* MANICULE — pointing-hand glyph ☞ in the accent, before the sentence.
+   Old-print device that's perfectly on-theme for "the kid in the corner". */
+body[data-pointer-stamp="auto"][data-pointer-affordance="manicule"] .hero-pointer::before {
+  content: "☞";
+  display: inline-block;
+  margin-right: 0.35em;
+  color: var(--accent);
   font-family: var(--font-serif);
   font-style: normal;
-  font-size: 22px;
-  color: var(--accent);
-  margin-right: 8px;
-  letter-spacing: 0;
+  font-weight: 400;
+  font-size: 1.05em;
+  vertical-align: -0.04em;
+  transition: transform 220ms ease-out;
+}
+body[data-pointer-stamp="auto"][data-pointer-affordance="manicule"] .hero-pointer:hover::before,
+body[data-pointer-stamp="auto"][data-pointer-affordance="manicule"] .hero-pointer:focus-visible::before {
+  transform: translateX(2px);
+}
+body[data-pointer-stamp="auto"][data-pointer-affordance="manicule"] .hero-pointer.is-pointing::before {
+  transform: translateX(4px);
+}
+
+/* TAG — mono "[click]" tag tucked after the sentence; reads like a
+   stage direction. Sits inline so it follows the line wrap. */
+body[data-pointer-stamp="auto"][data-pointer-affordance="tag"] .hero-pointer::after {
+  content: "[click]";
   display: inline-block;
-  transform: translateY(3px);
-  transition: transform 280ms cubic-bezier(0.34, 1.56, 0.64, 1);
+  margin-left: 0.5em;
+  padding: 1px 6px;
+  border: 1px solid color-mix(in oklab, var(--accent) 45%, transparent);
+  border-radius: 2px;
+  color: var(--accent);
+  font-family: var(--font-mono);
+  font-style: normal;
+  font-weight: 500;
+  font-size: 0.72em;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  vertical-align: 0.12em;
+  transition: border-color 180ms ease-out, background-color 180ms ease-out;
 }
-.hero-pointer:hover .hero-pointer-arrow {
-  transform: translate(7px, 2px) rotate(-3deg);
+body[data-pointer-stamp="auto"][data-pointer-affordance="tag"] .hero-pointer:hover::after,
+body[data-pointer-stamp="auto"][data-pointer-affordance="tag"] .hero-pointer:focus-visible::after {
+  border-color: var(--accent);
+  background: color-mix(in oklab, var(--accent) 14%, transparent);
 }
-.hero-pointer.is-pointing .hero-pointer-arrow {
-  animation: pointer-jab 700ms cubic-bezier(0.34, 1.56, 0.64, 1);
+body[data-pointer-stamp="auto"][data-pointer-affordance="tag"] .hero-pointer.is-pointing::after {
+  border-color: var(--accent);
+  background: color-mix(in oklab, var(--accent) 24%, transparent);
 }
-@keyframes pointer-jab {
-  0%   { transform: translateY(3px); }
-  22%  { transform: translateX(14px) translateY(1px) rotate(-4deg); }
-  55%  { transform: translateX(-4px) translateY(3px) rotate(1deg); }
-  100% { transform: translateY(3px); }
+.hero-pointer-arrow {
+  /* legacy — the manicule was dropped when the pointer became the
+     opener sentence; kept as a no-op so any residual references
+     don't break. */
+  display: none;
 }
 
 /* Portrait wink — two passport images stacked; the wink composite
@@ -273,10 +420,12 @@ strong { font-weight: 600; }
   display: block;
   animation: portrait-snap-overlay 1700ms ease-out;
 }
+/* Overlay leads on the way in (0→1 by 10%) and trails on the way out
+   (1→0 from 92→100%) so the base image's fade never leaves a gap. */
 @keyframes portrait-snap-overlay {
   0%   { opacity: 0; }
-  18%  { opacity: 1; }
-  85%  { opacity: 1; }
+  10%  { opacity: 1; }
+  92%  { opacity: 1; }
   100% { opacity: 0; }
 }
 @keyframes portrait-snap {
@@ -514,11 +663,29 @@ body[data-wink-fx="hot"] .passport-frame:hover .wink-fx {
 .passport-frame.is-winking > img:not(.wink-overlay) {
   animation: portrait-base-fade 1700ms ease-out;
 }
+/* Base holds visible until the overlay has fully arrived (10%), then fades.
+   Returns to opacity 1 by 92% — before the overlay fades — so the combined
+   alpha never drops below 1 and the portrait never goes invisible. */
 @keyframes portrait-base-fade {
   0%   { opacity: 1; }
-  18%  { opacity: 0; }
-  85%  { opacity: 0; }
+  10%  { opacity: 1; }
+  22%  { opacity: 0; }
+  80%  { opacity: 0; }
+  92%  { opacity: 1; }
   100% { opacity: 1; }
+}
+
+/* Backdrop-filter modes (hot / negative / poster) need their own
+   compositing layer while the parent is mid-transform, otherwise Chromium
+   can drop a frame and the filter renders as transparent. */
+body[data-wink-fx="hot"] .is-winking .wink-fx,
+body[data-wink-fx="negative"] .is-winking .wink-fx,
+body[data-wink-fx="poster"] .is-winking .wink-fx,
+body[data-wink-fx="hot"] :hover > .wink-fx,
+body[data-wink-fx="negative"] :hover > .wink-fx,
+body[data-wink-fx="poster"] :hover > .wink-fx {
+  will-change: opacity, backdrop-filter;
+  transform: translateZ(0);
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -549,6 +716,47 @@ body[data-wink-fx="hot"] .passport-frame:hover .wink-fx {
   text-wrap: pretty;
 }
 .hero-story p strong { font-weight: 600; }
+
+/* === STORY OPENER variants — editorial dress on first paragraph ========
+   data-story-opener on <body>: off (default), dropcap (New Yorker T),
+   smallcaps (first line in caps), rule (hairline rule above).
+   Targets :first-of-type so the .fn-hint <aside> sitting above doesn't
+   steal the drop cap from the first real paragraph. */
+body[data-story-opener="dropcap"] .hero-story > p:first-of-type::first-letter {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 500;
+  font-size: 4.6em;
+  line-height: 0.82;
+  float: left;
+  padding: 6px 10px 0 0;
+  margin: 6px 4px 0 -2px;
+  color: var(--text);
+  text-shadow: 0 0 0 var(--text);
+}
+body[data-story-opener="dropcap"][data-mode="warhol"] .hero-story > p:first-of-type::first-letter {
+  color: var(--accent);
+}
+body[data-story-opener="smallcaps"] .hero-story > p:first-of-type::first-line {
+  font-variant: small-caps;
+  letter-spacing: 0.04em;
+  font-weight: 500;
+}
+body[data-story-opener="rule"] .hero-story > p:first-of-type {
+  border-top: 1px solid color-mix(in oklab, var(--text) 30%, var(--bg));
+  padding-top: 22px;
+  margin-top: 8px;
+  position: relative;
+}
+body[data-story-opener="rule"] .hero-story > p:first-of-type::before {
+  content: "";
+  position: absolute;
+  top: -1.5px;
+  left: 0;
+  width: 36px;
+  height: 2px;
+  background: var(--accent);
+}
 
 .hero-story .hero-synth {
   font-family: var(--font-serif);
@@ -587,6 +795,149 @@ body[data-wink-fx="hot"] .passport-frame:hover .wink-fx {
 .cred-tag strong { font-weight: 700; }
 
 .hero-photo { position: relative; }
+
+/* === KID LABEL — visual anchor for the pointer-line referent ============
+   Off by default. Tweakable to plain / arrowed / tag — sits above the
+   photo element (Warhol grid or passport frame), in lowercase italic
+   serif, magazine-caption tone. */
+.kid-label {
+  position: absolute;
+  z-index: 6;
+  top: -18px;
+  left: 4px;
+  display: none;
+  align-items: baseline;
+  gap: 6px;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 17px;
+  letter-spacing: 0.005em;
+  color: color-mix(in oklab, var(--text) 72%, var(--bg));
+  pointer-events: none;
+  user-select: none;
+}
+.kid-label-arrow {
+  font-family: var(--font-mono);
+  font-style: normal;
+  font-size: 14px;
+  color: var(--accent);
+  display: inline-block;
+  transform: translateY(2px);
+}
+.kid-label-text {
+  text-transform: lowercase;
+}
+
+/* Default style: arrow + lowercase serif, sitting above the photo */
+body[data-kid-label="plain"] .kid-label { display: inline-flex; }
+body[data-kid-label="plain"] .kid-label-arrow { display: none; }
+
+body[data-kid-label="arrowed"] .kid-label { display: inline-flex; }
+
+/* Chip treatment — small mono caps tag with a hairline border */
+body[data-kid-label="tag"] .kid-label {
+  display: inline-flex;
+  font-family: var(--font-mono);
+  font-style: normal;
+  font-size: 10.5px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  border: 1px solid color-mix(in oklab, var(--text) 60%, var(--bg));
+  padding: 4px 8px 3px;
+  background: var(--bg);
+  color: color-mix(in oklab, var(--text) 85%, var(--bg));
+  top: -14px;
+}
+body[data-kid-label="tag"] .kid-label-arrow { display: none; }
+body[data-kid-label="tag"] .kid-label-text { text-transform: uppercase; }
+body[data-kid-label="tag"] .kid-label-text::before { content: "Exhibit A · "; opacity: 0.55; }
+
+/* Caption treatment — sits flush, with a leading rule + italic deck */
+body[data-kid-label="caption"] .kid-label {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  top: -22px;
+}
+body[data-kid-label="caption"] .kid-label-arrow {
+  width: 24px;
+  height: 1px;
+  background: var(--accent);
+  font-size: 0;
+  transform: none;
+}
+
+body[data-kid-label="off"] .kid-label { display: none; }
+
+/* === HERO PULL-QUOTE — right-column visual weight =====================
+   Sits below the name-card to fill the void where the left column's
+   .hero-synth lands. EXHIBITS · ON DEMAND label marks the stage; the
+   exhibits fn-mount underneath populates when refs 3/4/5/12 are clicked. */
+.hero-stage {
+  margin-top: clamp(36px, 5vw, 64px);
+  display: block;
+}
+.hero-stage-label {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: color-mix(in oklab, var(--text) 60%, transparent);
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: clamp(20px, 2.4vw, 32px);
+}
+.hero-stage-label::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: color-mix(in oklab, var(--text) 22%, transparent);
+}
+.hero-stage-dot {
+  color: var(--accent);
+  font-family: var(--font-body);
+  font-weight: 700;
+  letter-spacing: 0;
+  transform: translateY(-1px);
+  display: inline-block;
+}
+
+.hero-pull {
+  margin: 0;
+  text-align: left;
+}
+.hero-pull-rule {
+  display: block;
+  width: 100%;
+  height: 1px;
+  background: var(--text);
+  opacity: 0.9;
+}
+.hero-pull-quote {
+  margin: 0;
+  padding: clamp(14px, 1.8vw, 22px) 0;
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: clamp(54px, 6.4vw, 72px);
+  line-height: 1.02;
+  letter-spacing: -0.012em;
+  color: var(--text);
+  text-wrap: balance;
+}
+.hero-pull-period {
+  color: var(--accent);
+  font-style: normal;
+  margin-left: 1px;
+}
+/* When an exhibit is open in fn-mount-exhibits below, soften the quote so
+   the eye goes to the receipt the visitor just opened. */
+.hero-stage:has(+ #fn-mount-exhibits:not(:empty)) .hero-pull-quote {
+  opacity: 0.42;
+  transition: opacity 280ms ease-out;
+}
 
 /* WARHOL 4-up grid */
 .warhol-grid {
@@ -629,7 +980,11 @@ body[data-wink-fx="hot"] .passport-frame:hover .wink-fx {
 .passport-stamp {
   position: absolute; bottom: 8px; right: 12px;
   font-family: var(--font-mono); font-size: 10px;
-  letter-spacing: 0.16em; color: var(--muted);
+  letter-spacing: 0.16em;
+  /* Derived from --text so the stamp always clears WCAG AA 4.5:1 against
+     the white passport-frame, in every mode (including Margiela where
+     --muted #7a786f on #fff lands at 4.39:1). */
+  color: color-mix(in oklab, var(--text) 72%, var(--bg));
 }
 
 /* Name card (dictionary) */
@@ -639,6 +994,30 @@ body[data-wink-fx="hot"] .passport-frame:hover .wink-fx {
   border: 1px solid var(--text);
   padding: 22px 22px 18px;
   margin-bottom: 18px;
+}
+/* Flash highlight when the nav logo's [1] is clicked — accent-4 (green)
+   matches the name-card color in the kind-coded footnote palette. */
+.name-card.is-flashing {
+  animation: name-card-flash 1.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes name-card-flash {
+  0%   { outline: 0 solid var(--accent-4); outline-offset: 0; }
+  18%  { outline: 4px solid var(--accent-4); outline-offset: 10px; }
+  60%  { outline: 2px solid var(--accent-4); outline-offset: 5px; }
+  100% { outline: 0 solid var(--accent-4); outline-offset: 0; }
+}
+
+/* Exhibit A flash — when the Hereinafter clause's [A] superscript is
+   activated, ring the portrait in the accent (matching the Exhibit A
+   corner stamp's drop-shadow) and trigger a wink. */
+.hero-portrait.is-flashing {
+  animation: hero-portrait-flash 1.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+@keyframes hero-portrait-flash {
+  0%   { outline: 0 solid var(--accent); outline-offset: 0; }
+  20%  { outline: 4px solid var(--accent); outline-offset: 12px; }
+  60%  { outline: 2px solid var(--accent); outline-offset: 6px; }
+  100% { outline: 0 solid var(--accent); outline-offset: 0; }
 }
 .card-tag {
   display: none;
@@ -719,6 +1098,112 @@ body[data-wink-fx="hot"] .passport-frame:hover .wink-fx {
 }
 .exhibit-thumb::after { content: attr(data-placeholder); }
 
+/* === Footnote hint — editorial "Editor's note" kicker that signposts
+   the footnote mechanic exactly once, between the pointer line and the
+   kid-story. Italic serif (matches the rest of the page's voice) reads
+   as editorial copy, not generic UI chrome — visitors register it
+   before they reach the first footnote ref instead of after. */
+.fn-hint {
+  font-family: var(--font-serif);
+  font-style: italic;
+  font-weight: 400;
+  font-size: 14.5px;
+  line-height: 1.5;
+  letter-spacing: 0;
+  text-transform: none;
+  color: color-mix(in oklab, var(--text) 78%, var(--bg));
+  margin: 0 0 18px;
+  max-width: 60ch;
+  display: block;
+  text-wrap: pretty;
+  position: relative;
+}
+.fn-hint::before {
+  content: "Editor's note";
+  font-family: var(--font-mono);
+  font-style: normal;
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--accent);
+  margin-right: 10px;
+  white-space: nowrap;
+}
+.fn-hint .fn-hint-soft {
+  color: color-mix(in oklab, var(--text) 55%, var(--bg));
+  font-style: italic;
+  text-transform: none;
+  letter-spacing: 0;
+}
+body[data-fn-hint="off"] .fn-hint { display: none; }
+/* "bare" hint omits the Editor's note kicker — used by the Terse copy
+   variant which already starts with its own arrow/punctuation. */
+body[data-fn-hint="bare"] .fn-hint::before { display: none; }
+
+/* Demo legend next to the hint — three category swatches.
+   At rest: bracketed numbers in their category colors — [1] [3] [6].
+   On hover any item: the number inside fades + collapses, the label
+   tag (NAMES / SKETCHES / ASIDES) expands into the same brackets in
+   the item's color. Brackets themselves stay put.
+   Each item is independent — the other two remain at rest. */
+.fn-hint-body { display: inline; }
+.fn-hint-legend {
+  display: inline-flex;
+  gap: 4px;
+  margin-left: 10px;
+  vertical-align: baseline;
+  font-family: var(--font-mono);
+  font-style: normal;
+  font-weight: 700;
+  /* match the body sentence size so the legend reads as inline with
+     the editor's-note copy, not as a separate caption */
+  font-size: inherit;
+  letter-spacing: 0.02em;
+}
+.fn-hint-legend-item {
+  display: inline-flex;
+  align-items: baseline;
+  cursor: default;
+  white-space: nowrap;
+}
+.fn-hint-legend-item--namecard { color: #ff2d87; }   /* unified */
+.fn-hint-legend-item--image    { color: #ff2d87; }           /* unified */
+.fn-hint-legend-item--text     { color: #ff2d87; }   /* unified */
+
+.fn-hint-bracket {
+  color: currentColor;
+}
+.fn-hint-num-glyph,
+.fn-hint-tag-glyph {
+  display: inline-block;
+  overflow: hidden;
+  vertical-align: baseline;
+  transition: max-width 260ms cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 200ms ease-out;
+}
+.fn-hint-num-glyph {
+  max-width: 1.4em;
+  opacity: 1;
+}
+.fn-hint-tag-glyph {
+  max-width: 0;
+  opacity: 0;
+  text-transform: uppercase;
+  font-size: 0.78em;
+  letter-spacing: 0.14em;
+  font-weight: 600;
+  padding: 0 0.15em;
+}
+.fn-hint-legend-item:hover .fn-hint-num-glyph {
+  max-width: 0;
+  opacity: 0;
+}
+.fn-hint-legend-item:hover .fn-hint-tag-glyph {
+  max-width: 10em;
+  opacity: 1;
+}
+
 /* === Footnote system === */
 .fn-ref {
   display: inline;
@@ -729,33 +1214,170 @@ body[data-wink-fx="hot"] .passport-frame:hover .wink-fx {
   line-height: 0;
   cursor: pointer;
   user-select: none;
-  margin: 0 1px 0 2px;
-  padding: 0 1px;
+  /* WCAG hit-area expansion: padding inflates the clickable box;
+     matching negative margin keeps surrounding text layout unchanged. */
+  padding: 6px 4px;
+  margin: -6px -4px;
   color: var(--accent);
   border-radius: 2px;
+  position: relative;
   transition: transform 240ms cubic-bezier(0.34, 1.56, 0.64, 1), color 180ms,
-              background 180ms, padding 180ms;
+              background 180ms, border-color 180ms, text-decoration-color 180ms;
 }
+/* ── Affordance variants (data-fn-affordance on <body>) ──────────────
+   default: "dotted" — printed-citation underline + hover background flash.
+   The variants below give the user something to audition in Tweaks.       */
+
+/* DOTTED (default) — printed-citation underline + hover background flash.
+   text-decoration follows the text glyph (not the padding box) so the
+   underline stays tight to the digit even with the expanded hit area.
+   background-clip: content-box keeps the hover flash subtle. */
+body[data-fn-affordance="dotted"] .fn-ref {
+  text-decoration: underline dotted currentColor;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+}
+body[data-fn-affordance="dotted"] .fn-ref:hover {
+  background: color-mix(in oklab, currentColor 18%, transparent);
+  background-clip: content-box;
+}
+
+/* BRACKETED — printed footnote brackets reveal on hover, hint on rest.
+   Also serves as the no-attr fallback so any page without data-fn-affordance
+   on its <body> still gets the larger hit-target bracketed style. */
+body:not([data-fn-affordance]) .fn-ref::before,
+body:not([data-fn-affordance]) .fn-ref::after,
+body[data-fn-affordance="bracketed"] .fn-ref::before,
+body[data-fn-affordance="bracketed"] .fn-ref::after {
+  color: color-mix(in oklab, currentColor 55%, transparent);
+  font-weight: 500;
+  transition: color 180ms;
+}
+body:not([data-fn-affordance]) .fn-ref::before,
+body[data-fn-affordance="bracketed"] .fn-ref::before { content: "["; margin-right: 1px; }
+body:not([data-fn-affordance]) .fn-ref::after,
+body[data-fn-affordance="bracketed"] .fn-ref::after  { content: "]"; margin-left: 1px; }
+body:not([data-fn-affordance]) .fn-ref:hover::before,
+body:not([data-fn-affordance]) .fn-ref:hover::after,
+body[data-fn-affordance="bracketed"] .fn-ref:hover::before,
+body[data-fn-affordance="bracketed"] .fn-ref:hover::after { color: currentColor; }
+
+/* BOXED — outlined chip drawn via ::before so it stays close to the digit
+   while the .fn-ref retains the full hit-area padding. */
+body[data-fn-affordance="boxed"] .fn-ref {
+  font-size: 0.62em;
+}
+body[data-fn-affordance="boxed"] .fn-ref::before {
+  content: "";
+  position: absolute;
+  inset: 5px 1px;
+  border: 1px solid color-mix(in oklab, currentColor 55%, transparent);
+  border-radius: 3px;
+  pointer-events: none;
+  transition: border-color 180ms, background 180ms;
+}
+body[data-fn-affordance="boxed"] .fn-ref:hover::before {
+  background: color-mix(in oklab, currentColor 14%, transparent);
+  border-color: currentColor;
+}
+
+/* HIGHLIGHT — soft wash via ::before, kept tight to the digit */
+body[data-fn-affordance="highlight"] .fn-ref::before {
+  content: "";
+  position: absolute;
+  inset: 5px 1px;
+  background: color-mix(in oklab, currentColor 14%, transparent);
+  border-radius: 2px;
+  pointer-events: none;
+  transition: background 180ms;
+}
+body[data-fn-affordance="highlight"] .fn-ref:hover::before {
+  background: color-mix(in oklab, currentColor 30%, transparent);
+}
+
+/* PULSE — gentle attention nudge, halo every few seconds */
+body[data-fn-affordance="pulse"] .fn-ref {
+  text-decoration: underline dotted currentColor;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 2px;
+  animation: fn-ref-pulse 3.6s ease-in-out infinite;
+}
+body[data-fn-affordance="pulse"] .fn-ref:nth-of-type(3n) { animation-delay: 1.2s; }
+body[data-fn-affordance="pulse"] .fn-ref:nth-of-type(3n+1) { animation-delay: 2.4s; }
+body[data-fn-affordance="pulse"] .fn-ref:hover {
+  background: color-mix(in oklab, currentColor 22%, transparent);
+  background-clip: content-box;
+  animation-play-state: paused;
+}
+@keyframes fn-ref-pulse {
+  0%, 70%, 100% { box-shadow: 0 0 0 0 color-mix(in oklab, currentColor 0%, transparent); }
+  82%           { box-shadow: 0 0 0 4px color-mix(in oklab, currentColor 28%, transparent); }
+}
+
+/* PLAIN — the original behavior, no extra affordance */
+body[data-fn-affordance="plain"] .fn-ref { /* default styling only */ }
+
 .fn-ref:hover { transform: translateY(-1px) scale(1.5) rotate(8deg); }
 .fn-ref:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
-.fn-ref[data-fn-num="1"] { color: var(--accent); }
-.fn-ref[data-fn-num="2"] { color: var(--accent-2); }
-.fn-ref[data-fn-num="3"] { color: var(--accent-3); }
-.fn-ref[data-fn-num="4"] { color: var(--accent-4); }
+
+/* ── Kind-coded colors (replaces the old per-num rainbow which read
+   as an oversight). Every ref now wears one of three colors:
+     • Name-card refs    (#1, #2)          → green     — dictionary entries
+     • Image exhibits    (#3, #4, #5, #12) → orange    — sketches/photos
+     • Text exhibits     (#6-#11)          → cyan      — people/asides    */
+.fn-ref[data-fn-num="1"],
+.fn-ref[data-fn-num="2"]  { color: var(--accent-4); }          /* green */
+
+.fn-ref[data-fn-num="3"],
+.fn-ref[data-fn-num="4"],
+.fn-ref[data-fn-num="5"],
+.fn-ref[data-fn-num="12"] { color: #ff5a00; }                  /* orange */
+
+.fn-ref[data-fn-num="6"],
+.fn-ref[data-fn-num="7"],
+.fn-ref[data-fn-num="8"],
+.fn-ref[data-fn-num="9"],
+.fn-ref[data-fn-num="10"],
+.fn-ref[data-fn-num="11"] { color: var(--accent-2); }          /* cyan */
+
+/* Hover background flash — applies across all affordance variants so the
+   click target reads as alive on hover, not just on focus. content-box
+   clip keeps the flash tight to the digit instead of filling the WCAG
+   hit-area padding. */
+.fn-ref:hover {
+  background: color-mix(in oklab, currentColor 16%, transparent);
+  background-clip: content-box;
+}
+.fn-ref[data-fn-num="1"] { color: var(--accent-4); }
+.fn-ref[data-fn-num="2"] { color: var(--accent-4); }
+.fn-ref[data-fn-num="3"] { color: #ff5a00; }
+.fn-ref[data-fn-num="4"] { color: #ff5a00; }
 .fn-ref[data-fn-num="5"] { color: #ff5a00; }
-.fn-ref[data-fn-num="6"] { color: #b557ff; }
-.fn-ref[data-fn-num="7"] { color: var(--accent); }
+.fn-ref[data-fn-num="6"] { color: var(--accent-2); }
+.fn-ref[data-fn-num="7"] { color: var(--accent-2); }
 .fn-ref[data-fn-num="8"] { color: var(--accent-2); }
-.fn-ref[data-fn-num="9"] { color: var(--accent-3); }
-.fn-ref[data-fn-num="10"] { color: var(--accent-4); }
-.fn-ref[data-fn-num="11"] { color: #ff5a00; }
+.fn-ref[data-fn-num="9"] { color: var(--accent-2); }
+.fn-ref[data-fn-num="10"] { color: var(--accent-2); }
+.fn-ref[data-fn-num="11"] { color: var(--accent-2); }
+.fn-ref[data-fn-num="12"] { color: #ff5a00; }
+/* Unified footnote colour — one theme colour (Warhol base pink) that
+   stays visible on cream, the blue ISB card and the yellow GT card
+   alike. Replaces per-kind green/orange/cyan, which vanished against
+   the matching card backgrounds. .fn-ref[data-fn-num] matches the
+   per-number specificity (0,2,0) and, placed later, wins. */
+.fn-ref[data-fn-num] { color: #ff2d87; }
 .fn-ref.is-open {
   background: var(--text);
   color: var(--bg);
   transform: scale(1.25);
-  padding: 1px 4px;
   border-radius: 3px;
+  /* keep the hit-area padding; clip the dark fill to just the digit so the
+     visual chip stays tight while the click box stays WCAG-sized */
+  background-clip: content-box;
+  text-decoration: none;
 }
+.fn-ref.is-open::before,
+.fn-ref.is-open::after { display: none; }
 
 .fn-mount { margin: 16px 0 0; }
 .fn-mount:empty { display: none; }
@@ -1279,6 +1901,198 @@ section { padding: var(--section-pad-y) 0; }
 .creds-grid::before { left: 0;  background-image: url("assets/credentials/isb-campus.png"); }
 .creds-grid::after  { right: 0; background-image: url("assets/credentials/gt-campus.png");  }
 .cred { position: relative; z-index: 1; }
+
+/* ID-card shadow prop — a real ID card from the school's archive
+   sits behind the credential card, casually rotated, partially
+   covered. Absolute-positioned inside the grid container (with its
+   own grid spec, absolutely-positioned children are pulled out of
+   the grid layout cleanly), z-index 0 so .cred (z-index 1) draws
+   over it.
+
+   Each prop slides IN from its outer edge as the credentials
+   section scrolls into view (CSS scroll-driven animation; falls
+   back to a static visible state on browsers without
+   `animation-timeline: view()`). Final opacity is 60% so the cards
+   read as memory/archive props, not co-equal with the cred card.
+
+   data-creds-props on <body>:
+     off       — props hidden
+     subtle    — small, mostly behind the card
+     prominent — bigger, co-equal with the card (default) */
+.cred-prop {
+  position: absolute;
+  height: auto;
+  z-index: 0;
+  pointer-events: none;
+  opacity: 0.6;
+  display: block;
+  isolation: isolate;          /* contains mix-blend-mode of inner overlays */
+  filter:
+    drop-shadow(0 12px 24px rgba(0,0,0,0.20))
+    drop-shadow(0 3px 6px rgba(0,0,0,0.12));
+  transition: width 240ms ease, top 240ms ease,
+              left 240ms ease, right 240ms ease;
+}
+.cred-prop > img {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+/* Per-card tint pair — drives the Warhol pop & halftone treatments
+   (`--cred-prop-tint` = primary fill, `--cred-prop-light` = highlight). */
+.cred-prop--isb { --cred-prop-tint: #ff2d87; --cred-prop-light: #00b3ff; }
+.cred-prop--gt  { --cred-prop-tint: #ff5a00; --cred-prop-light: #ffc700; }
+
+body[data-creds-props="off"] .cred-prop { display: none; }
+
+/* PROMINENT — default. Cards peek out roughly two-thirds past their
+   cred card, tilted outward away from the cred (ISB left, GT right).
+   ISB is bumped slightly larger so the portrait reads clearly. */
+body:not([data-creds-props]) .cred-prop--isb,
+body[data-creds-props="prominent"] .cred-prop--isb,
+body[data-creds-props="subtle"]    .cred-prop--isb {
+  width: 230px;
+  top: 252px;
+  left: -168px;
+  transform: rotate(-10deg);
+}
+body:not([data-creds-props]) .cred-prop--gt,
+body[data-creds-props="prominent"] .cred-prop--gt,
+body[data-creds-props="subtle"]    .cred-prop--gt {
+  width: 300px;
+  top: 332px;
+  right: -188px;
+  transform: rotate(8deg);
+}
+
+/* SUBTLE — smaller props, just a corner peeking past the card. */
+body[data-creds-props="subtle"] .cred-prop--isb {
+  width: 130px;
+  top: 282px;
+  left: -42px;
+  transform: rotate(-13deg);
+}
+body[data-creds-props="subtle"] .cred-prop--gt {
+  width: 200px;
+  top: 340px;
+  right: -52px;
+  transform: rotate(11deg);
+}
+
+/* SCROLL-DRIVEN ENTRANCE — each prop starts tucked under its cred
+   card (translated inward, opacity 0) and slides out + fades up to
+   60% as the credentials section enters the viewport. Uses the
+   modern `animation-timeline: view()` API; older browsers fall
+   through to the static end-state above via the @supports guard. */
+@supports (animation-timeline: view()) {
+  .cred-prop--isb {
+    animation: cred-prop-isb-in linear both;
+    animation-timeline: view(block);
+    animation-range: entry 0% entry 85%;
+  }
+  .cred-prop--gt {
+    animation: cred-prop-gt-in linear both;
+    animation-timeline: view(block);
+    animation-range: entry 0% entry 85%;
+  }
+  @keyframes cred-prop-isb-in {
+    from { opacity: 0; transform: translateX(120px) rotate(-10deg); }
+    to   { opacity: 0.6; transform: translateX(0)    rotate(-10deg); }
+  }
+  @keyframes cred-prop-gt-in {
+    from { opacity: 0; transform: translateX(-140px) rotate(8deg); }
+    to   { opacity: 0.6; transform: translateX(0)    rotate(8deg); }
+  }
+  /* Subtle mode keeps its own tilts in the keyframes */
+  body[data-creds-props="subtle"] .cred-prop--isb { animation-name: cred-prop-isb-in-subtle; }
+  body[data-creds-props="subtle"] .cred-prop--gt  { animation-name: cred-prop-gt-in-subtle; }
+  @keyframes cred-prop-isb-in-subtle {
+    from { opacity: 0; transform: translateX(60px) rotate(-13deg); }
+    to   { opacity: 0.6; transform: translateX(0)  rotate(-13deg); }
+  }
+  @keyframes cred-prop-gt-in-subtle {
+    from { opacity: 0; transform: translateX(-80px) rotate(11deg); }
+    to   { opacity: 0.6; transform: translateX(0)   rotate(11deg); }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .cred-prop--isb,
+    .cred-prop--gt { animation: none; opacity: 0.6; }
+  }
+}
+
+/* ─── ID-card treatments (data-creds-fx on <body>) ───────────────
+   Five Warhol-leaning treatments stacked over the ID-card photo.
+   Each treatment isolates within the .cred-prop wrapper so blend
+   modes mix with the IMG inside, not the page background. */
+
+/* PHOTO — natural ID card, no treatment (fallback when attr is missing). */
+
+/* POP — grayscale photo with a Warhol monotone wash (per-card tint).
+   "Every pop a different color"; ISB pops hot-pink, GT pops orange. */
+body[data-creds-fx="pop"] .cred-prop > img {
+  filter: grayscale(1) contrast(1.08) brightness(1.04);
+}
+body[data-creds-fx="pop"] .cred-prop::before,
+body[data-creds-fx="pop"] .cred-prop::after {
+  content: "";
+  position: absolute; inset: 0;
+  pointer-events: none;
+}
+body[data-creds-fx="pop"] .cred-prop::before {
+  background: var(--cred-prop-tint, var(--accent));
+  mix-blend-mode: multiply;
+  opacity: 0.88;
+}
+body[data-creds-fx="pop"] .cred-prop::after {
+  background: var(--cred-prop-light, var(--accent-3));
+  mix-blend-mode: screen;
+  opacity: 0.22;
+}
+
+/* HALFTONE — comic-book screen-print dots over the photo. */
+body[data-creds-fx="halftone"] .cred-prop::after {
+  content: "";
+  position: absolute; inset: 0;
+  pointer-events: none;
+  background-image: radial-gradient(circle, rgba(0,0,0,0.78) 22%, transparent 26%);
+  background-size: 6px 6px;
+  mix-blend-mode: multiply;
+}
+body[data-creds-fx="halftone"] .cred-prop > img {
+  filter: contrast(1.15) brightness(1.06) saturate(1.1);
+}
+
+/* NEGATIVE — full color invert + hue swing. Pop-art psychedelia. */
+body[data-creds-fx="negative"] .cred-prop > img {
+  filter: invert(1) hue-rotate(180deg) saturate(1.4) contrast(1.08);
+}
+
+/* MISPRINT — RGB channel offsets via colored drop-shadows, like a
+   four-color press out of registration. */
+body[data-creds-fx="misprint"] .cred-prop > img {
+  filter:
+    drop-shadow(-3px 0 0 rgba(255, 45, 135, 0.82))
+    drop-shadow(3px 0 0 rgba(0, 179, 255, 0.82))
+    drop-shadow(0 2px 0 rgba(255, 199, 0, 0.55));
+}
+
+@media (max-width: 760px) {
+  /* On mobile the grid collapses to a single column; shrink the props
+     and tuck them at the top-right of each card so they don't fight
+     the building silhouette above each card. */
+  .cred-prop--isb {
+    top: -16px !important;
+    left: auto !important; right: -18px !important;
+    width: 100px !important;
+    transform: rotate(9deg) !important;
+  }
+  .cred-prop--gt {
+    top: -14px !important;
+    right: -22px !important; left: auto !important;
+    width: 140px !important;
+    transform: rotate(-8deg) !important;
+  }
+}
 
 /* ─── School logos — placement modes (data-creds-logo on <body>) ─── */
 /* Default: hidden unless a mode is selected */
@@ -2287,39 +3101,16 @@ body[data-mode="warhol"] .cred { border: 3px solid var(--text); }
 body[data-mode="warhol"] .cred-isb { background: var(--accent-2); color: var(--text); box-shadow: 8px 8px 0 var(--text); }
 body[data-mode="warhol"] .cred-gt  { background: var(--accent-3); color: var(--text); box-shadow: 8px 8px 0 var(--text); }
 
-/* WARHOL · Hero pointer line — pop-art stamp */
-body[data-mode="warhol"] .hero-pointer {
-  display: inline-block;
-  max-width: 100%;
-  background: var(--accent-3);
-  color: var(--text);
-  border: 2px solid var(--text);
-  box-shadow: 4px 4px 0 var(--accent);
-  padding: 9px 14px 8px;
-  margin: 22px 0 30px;
-  font-weight: 700;
-  line-height: 1.55;
-  transform: rotate(-1.5deg);
-  transform-origin: left center;
-  transition: transform 280ms cubic-bezier(0.34, 1.56, 0.64, 1),
-              box-shadow 280ms ease-out;
-}
-body[data-mode="warhol"] .hero-pointer:hover {
-  transform: rotate(-0.5deg);
-  box-shadow: 6px 6px 0 var(--accent);
-}
-body[data-mode="warhol"] .hero-pointer.is-pointing {
-  animation: warhol-pointer-jab 700ms cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-@keyframes warhol-pointer-jab {
-  0%   { transform: rotate(-1.5deg); }
-  22%  { transform: rotate(3deg) translateX(6px); }
-  55%  { transform: rotate(-2.5deg) translateX(-2px); }
-  100% { transform: rotate(-1.5deg); }
-}
-body[data-mode="warhol"] .hero-pointer-arrow {
-  color: var(--accent);
-}
+/* WARHOL · Hero pointer line — pointer sentence is now the OPENER of the
+   kid-story (lives inside the first <p> as an inline <span>). All the
+   editorial-deck chrome (border-rule, accent tick, mono-caps, shadow)
+   has been dropped; the .is-pointing jab is gone too since the portrait
+   wink is the meaningful click feedback. */
+
+/* When .hero-pointer sits inside the kid-story as an inline <span>, it
+   inherits the paragraph's body-copy styling — no overrides needed. The
+   click-feedback animation hook stays on .hero-pointer.is-pointing for
+   the wink jab. */
 
 /* === Hero pointer stamp treatment overrides (mode-agnostic) === */
 
@@ -2332,6 +3123,7 @@ body[data-pointer-stamp="newyorker"] .hero-pointer {
   color: var(--text);
   border: 0;
   box-shadow: none;
+  text-decoration: none;
   padding: 18px 0 0;
   margin: 24px 0 32px;
   font-family: var(--font-serif);
@@ -2384,6 +3176,7 @@ body[data-pointer-stamp="hbr"] .hero-pointer {
   border: 0;
   border-left: 4px solid var(--accent);   /* Warhol hint: hot pink rule */
   box-shadow: none;
+  text-decoration: none;
   padding: 4px 0 4px 16px;
   margin: 24px 0 32px;
   font-family: var(--font-body);
@@ -2528,7 +3321,22 @@ body[data-mode="warhol"] footer { background: var(--text); color: var(--bg); bor
 body[data-mode="warhol"] .hero-h1 {
   -webkit-text-stroke: 0;
 }
-body[data-mode="warhol"] .hero-h1 em {
+
+/* "Accent word" = yellow rotated box, site-wide. One system for every
+   italicized hook so it reads as an intentional stamp — the homepage hero,
+   section titles, contact line, AND every subpage title (.stack-title,
+   .consult-title, .page-title, .post-title) all carry the same treatment.
+   Specificity (body[data-mode="warhol"] .X em ≫ .X em) beats the subpages'
+   inline pink-italic rules without needing to edit each subpage file. */
+body[data-mode="warhol"] .hero-h1 em,
+body[data-mode="warhol"] .section-title em,
+body[data-mode="warhol"] .contact-line em,
+body[data-mode="warhol"] .stack-title em,
+body[data-mode="warhol"] .stack-section-title em,
+body[data-mode="warhol"] .consult-title em,
+body[data-mode="warhol"] .page-title em,
+body[data-mode="warhol"] .post-title em,
+body[data-mode="warhol"] .post-body h2 em {
   background: var(--accent-3);
   padding: 0 12px;
   margin: 0 -4px;
@@ -2536,31 +3344,23 @@ body[data-mode="warhol"] .hero-h1 em {
   transform: rotate(-1deg);
   box-shadow: 4px 4px 0 var(--text);
   border: 2px solid var(--text);
-}
-
-/* Extend the yellow-box treatment to section titles + contact line so every
-   italicized hook reads as an accented stamp, not just hero. Each gets a
-   slightly different tilt for visual rhythm. */
-body[data-mode="warhol"] .section-title em,
-body[data-mode="warhol"] .contact-line em {
-  background: var(--accent-3);
-  padding: 0 10px;
-  margin: 0 -2px;
-  display: inline-block;
-  transform: rotate(-1deg);
-  box-shadow: 3px 3px 0 var(--text);
-  border: 2px solid var(--text);
   font-style: italic;
   font-family: var(--font-serif);
   color: var(--accent);
   font-weight: 700;
+  text-transform: none;
 }
-/* Per-section tilt variation so they don't all lean the same way */
-body[data-mode="warhol"] #about     .section-title em { transform: rotate(-2deg); }
+/* Per-instance tilt variation so they don't all lean the same way */
+body[data-mode="warhol"] #about       .section-title em { transform: rotate(-2deg); }
 body[data-mode="warhol"] #credentials .section-title em { transform: rotate(1deg); box-shadow: -3px 3px 0 var(--text); }
-body[data-mode="warhol"] #off       .section-title em { transform: rotate(-1.5deg); }
-body[data-mode="warhol"] #creative  .section-title em { transform: rotate(2deg); box-shadow: -3px 3px 0 var(--text); }
+body[data-mode="warhol"] #off         .section-title em { transform: rotate(-1.5deg); }
+body[data-mode="warhol"] #creative    .section-title em { transform: rotate(2deg);  box-shadow: -3px 3px 0 var(--text); }
 body[data-mode="warhol"] .contact-line em { transform: rotate(-1deg); padding: 2px 12px; }
+body[data-mode="warhol"] .consult-title em { transform: rotate(2deg); box-shadow: -3px 3px 0 var(--text); }
+body[data-mode="warhol"] .stack-title em { transform: rotate(-1.5deg); }
+body[data-mode="warhol"] .page-title em { transform: rotate(1.5deg); box-shadow: -3px 3px 0 var(--text); }
+body[data-mode="warhol"] .post-title em { transform: rotate(-2deg); }
+body[data-mode="warhol"] .post-body h2 em { transform: rotate(-1deg); padding: 0 8px; box-shadow: 3px 3px 0 var(--text); }
 
 /* Wry stamp decorations injected via pseudo-elements */
 body[data-mode="warhol"] .hero-text {
@@ -2571,7 +3371,7 @@ body[data-mode="warhol"] .hero-photo {
   position: relative;
 }
 body[data-mode="warhol"] .hero-photo::before {
-  content: "\2605 EST. 2000 \2605";
+  content: "Exhibit A \00B7 The Kid";
   position: absolute;
   top: -14px; left: -14px; z-index: 5;
   font-family: var(--font-display);

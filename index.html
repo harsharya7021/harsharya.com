@@ -9,14 +9,15 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo+Black&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,700;0,6..96,900;1,6..96,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Serif+Display:ital@0;1&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Inter:wght@300;400;500;600;700&family=Italiana&family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Unbounded:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" href="styles.css">
 </head>
-<body data-mode="warhol" data-density="normal" data-about-photo="wash" data-fx-marilyn="false" data-fx-halftone="false" data-fx-misprint="false" data-fx-stamp="false" data-fx-flood="true" data-creds-logo="footer" data-pointer-stamp="auto" data-wink-fx="hot" style="--accent:#ff5a00;--font-display:'Anton',sans-serif;--font-serif:'Bodoni Moda',serif;--about-wash:#00b3ff;--about-shadow:#ffc700;">
+<body data-mode="warhol" data-density="normal" data-about-photo="wash" data-fx-marilyn="false" data-fx-halftone="false" data-fx-misprint="false" data-fx-stamp="false" data-fx-flood="true" data-creds-logo="footer" data-creds-props="prominent" data-creds-fx="pop" data-wink-fx="hot" data-wink-arrival="manual" data-pointer-stamp="auto" data-pointer-affordance="dotted" data-fn-affordance="bracketed" data-kid-label="off" data-story-opener="dropcap" data-fn-hint="on" style="--accent:#ff5a00;--font-display:'Anton',sans-serif;--font-serif:'Bodoni Moda',serif;--about-wash:#00b3ff;--about-shadow:#ffc700;">
 
   <!-- ─── NAV ───────────────────────────────────────────── -->
   <nav class="nav" id="nav">
     <div class="container nav-inner">
-      <a href="#" class="logo">Harsh<sup>1</sup></a>
+      <a href="#" class="logo">Harsh<sup class="fn-ref" data-fn-num="1" data-fn-target=".name-card" role="button" tabindex="0" aria-label="Jump to the Specimen / name entry">1</sup></a>
       <div class="issue-meta">
         <span class="issue-no">№ 01</span>
         <span class="issue-date">VOL. 26 / SUMMER</span>
@@ -24,7 +25,7 @@
       </div>
       <div class="nav-links">
         <a href="#about">About</a>
-        <a href="#work">Work</a>
+        <!-- Work nav link hidden while the Work section is unpublished -->
         <a href="#credentials">School</a>
         <a href="#off">Life</a>
         <a href="writing/index.html">Notes</a>
@@ -58,10 +59,9 @@
 
           <p class="hero-bridge">The titles keep multiplying. The through-line takes a beat to explain.</p>
 
-          <p class="hero-pointer"><span class="hero-pointer-arrow" aria-hidden="true">☞&#xFE0E;</span> <span class="hero-pointer-text">To make sense of any of this, start with the enterprising kid in the corner of this page.</span></p>
-
           <div class="hero-story">
-            <p>My parents wouldn't buy me the thirty-five-rupee <strong>Trimax Gold</strong>, let alone the hundred-rupee <strong>Parker</strong>. So at nine, I started trading. Pens, mostly. I got captivated by the game and built an empire of sorts — used to walk into school with ten Trimaxes lined up in the inside pocket of my blazer, ready to move, like a dealer's arms. Then I went one step further and designed my own version of the pen — pitch deck<sup class="fn-ref" data-fn="deck" data-fn-num="3" data-fn-mount="fn-mount-exhibits" role="button" tabindex="0" aria-expanded="false" aria-label="Footnote 3 — pitch deck exhibit">3</sup> and prototype<sup class="fn-ref" data-fn="proto" data-fn-num="4" data-fn-mount="fn-mount-exhibits" role="button" tabindex="0" aria-expanded="false" aria-label="Footnote 4 — prototype exhibit">4</sup>, by hand. Never sent either. Still have both.</p>
+            <aside class="fn-hint"><span class="fn-hint-body">Numbers in the margin open exhibits. <span class="fn-hint-soft">Click anywhere you're curious.</span></span><span class="fn-hint-legend" aria-hidden="true"><span class="fn-hint-legend-item fn-hint-legend-item--namecard"><span class="fn-hint-bracket">[</span><span class="fn-hint-num-glyph">1</span><span class="fn-hint-tag-glyph">names</span><span class="fn-hint-bracket">]</span></span><span class="fn-hint-legend-item fn-hint-legend-item--image"><span class="fn-hint-bracket">[</span><span class="fn-hint-num-glyph">3</span><span class="fn-hint-tag-glyph">sketches</span><span class="fn-hint-bracket">]</span></span><span class="fn-hint-legend-item fn-hint-legend-item--text"><span class="fn-hint-bracket">[</span><span class="fn-hint-num-glyph">6</span><span class="fn-hint-tag-glyph">asides</span><span class="fn-hint-bracket">]</span></span></span></aside>
+            <p><span class="hero-pointer"><span class="hero-pointer-text">To make sense of any of this, start with the enterprising <span class="hero-kid-anchor">kid</span><sup class="fn-ref" data-fn-num="A" data-fn-target=".hero-portrait" role="button" tabindex="0" aria-label="See Exhibit A — the kid in the portrait">A</sup> in the corner of this page.</span></span> My parents wouldn't buy me the thirty-five-rupee <strong>Trimax Gold</strong>, let alone the hundred-rupee <strong>Parker</strong>. So at nine, I started trading. Pens, mostly. I got captivated by the game and built an empire of sorts — used to walk into school with ten Trimaxes lined up in the inside pocket of my blazer, ready to move, like a dealer's arms. Then I went one step further and designed my own version of the pen — pitch deck<sup class="fn-ref" data-fn="deck" data-fn-num="3" data-fn-mount="fn-mount-exhibits" role="button" tabindex="0" aria-expanded="false" aria-label="Footnote 3 — pitch deck exhibit">3</sup> and prototype<sup class="fn-ref" data-fn="proto" data-fn-num="4" data-fn-mount="fn-mount-exhibits" role="button" tabindex="0" aria-expanded="false" aria-label="Footnote 4 — prototype exhibit">4</sup>, by hand. Never sent either. Still have both.</p>
             <p>When the wrestling-card craze hit a year or two later, I ran a different play — no inventory, low CapEx, traded my way into a full set. In the back of every school file from those years, I used to sketch what merch<sup class="fn-ref" data-fn="merch" data-fn-num="5" data-fn-mount="fn-mount-exhibits" role="button" tabindex="0" aria-expanded="false" aria-label="Footnote 5 — merch sketches exhibit">5</sup> for my pretend employees would look like.</p>
             <p class="hero-synth">I'm still that kid. Been running some version of that hustle since. Just, the pretend employees became real. Allow me to take you through some of my present and past hustles.</p>
           </div>
@@ -70,6 +70,15 @@
 
         <div class="hero-photo">
           <div class="hero-portrait">
+
+          <!-- KID LABEL — tags the portrait as the referent of the pointer
+               line. Hidden by default (data-kid-label="off"), revealed via
+               Tweaks panel in 3 visual treatments. -->
+          <div class="kid-label" aria-hidden="true">
+            <span class="kid-label-arrow">↓</span>
+            <span class="kid-label-text">the kid.</span>
+          </div>
+
           <!-- WARHOL 4-UP -->
           <div class="warhol-grid" aria-hidden="true">
             <div class="warhol-cell c1">
@@ -94,10 +103,10 @@
           <div class="name-card">
             <div class="card-tag" aria-hidden="true">SPECIMEN / NAME ENTRY · A1</div>
             <div class="dict-row">
-              <span class="dict-word">harsh<sup class="fn-ref" data-fn="harsh" data-fn-num="1" data-fn-mount="fn-mount-harry" role="button" tabindex="0" aria-expanded="false" aria-label="Footnote 1 — on the name Harsh">1</sup></span>
+              <span class="dict-word">harsh</span>
               <span class="dict-pron">/həɾʂ/</span>
-              <span class="dict-tag">हर्ष · noun · Sanskrit / Hindi</span>
-              <span class="dict-def">delight, joy, euphoria — the kind that takes you by surprise.</span>
+              <span class="dict-tag">हर्ष · noun · From the Sanskrit हृष्</span>
+              <span class="dict-def">Not joy you arrive at, but joy that arrives at you; uninvited, mid-sentence, blowing your cover. My parents pinned that entire word to a seven-pound stranger and called it a name. Optimistic of them. He's spent every year since trying not to make liars of them.</span>
             </div>
             <div class="dict-row">
               <span class="dict-word">harsh</span>
@@ -115,14 +124,19 @@
 
           <!-- Mount + templates for fn-1 and fn-2 (sits OUTSIDE .hero-portrait so it can't dim the photo) -->
           <div class="fn-mount" id="fn-mount-harry" aria-live="polite"></div>
-          <template id="fn-src-harsh" data-fn-num="1" data-fn-title="On the name Harsh">From the Sanskrit <span class="dict-ref">हृष्</span> (<em>hṛṣ</em>) — to bristle with delight, involuntarily. Also a popular English adjective with the opposite vibe. My parents took the gamble; it mostly worked out.</template>
           <template id="fn-src-harry" data-fn-num="2" data-fn-title="On the name Harry">Adopted <span class="dict-ref">&ldquo;Harry&rdquo;</span> at Georgia Tech because phonetics. Years later in Goa, I struck up a sunset conversation with a couple sharing a drink &mdash; the husband, an ISB visiting faculty, introduced himself as <span class="dict-ref">Harry</span> too. He turned out to be Harinder or something. We exchanged <span class="dict-ref">Harry</span>-names and never learned each other's real ones.</template>
 
           <!-- EXHIBITS mount — image footnotes commandeer the portrait when their refs are clicked -->
           <div class="fn-mount fn-mount-photo" id="fn-mount-photo" aria-live="polite"></div>
           </div>
 
-          <!-- EXHIBITS removed in favor of photo-mount -->
+          <!-- EXHIBITS — slim mono-caps kicker above the on-demand fn-mount.
+               Labels the empty space below the portrait as an intentional
+               stage; populates with image footnotes (refs 3/4/5/12) when
+               their refs are clicked. -->
+          <div class="hero-stage" aria-hidden="true">
+            <div class="hero-stage-label">Exhibits<span class="hero-stage-dot"> · </span>On demand</div>
+          </div>
           <div class="fn-mount" id="fn-mount-exhibits" aria-live="polite"></div>
 
           <!-- Templates: image-style exhibit footnotes -->
@@ -201,7 +215,7 @@
   </section>
 
   <!-- ─── WORK ──────────────────────────────────────────── -->
-  <section id="work">
+  <section id="work" hidden aria-hidden="true">
     <div class="container">
       <div class="section-label"><span>02 / Work</span><span class="section-side">RECEIPTS, NOT RESUMES</span></div>
       <h2 class="section-title">What I've <em>actually</em> shipped.</h2>
@@ -306,12 +320,14 @@
       <div class="section-label"><span>03 / School</span><span class="section-side">TWO ROOMS, TWO REPS</span></div>
       <h2 class="section-title">Trained at <em>two</em> of the world's sharpest schools.</h2>
       <div class="creds-grid">
+        <!-- Shadow props — real ID cards lying behind each section, half-covered by the cred card on top. Wrapper around img so Warhol treatments (halftone, pop wash, etc.) can stack pseudo-elements over the photo. -->
+        <span class="cred-prop cred-prop--isb" aria-hidden="true">
+          <img src="assets/credentials/isb-id-card.png" alt="" loading="lazy" />
+        </span>
+        <span class="cred-prop cred-prop--gt" aria-hidden="true">
+          <img src="assets/credentials/gt-id-card.png" alt="" loading="lazy" />
+        </span>
         <div class="cred cred-isb">
-          <div class="cred-id-band" aria-hidden="true">
-            <span class="cred-id-country">Republic of India</span>
-            <span class="cred-id-type">Student ID</span>
-            <span class="cred-id-num">PGID 62410500</span>
-          </div>
           <img class="cred-logo" src="assets/credentials/isb-seal.png" alt="ISB" />
           <div class="cred-school">Indian School of Business</div>
           <div class="cred-program">MBA · Strategy &amp; Leadership / Marketing · Class of 2025</div>
@@ -325,11 +341,6 @@
           <template id="fn-src-abinbev" data-fn-num="11" data-fn-title="AB InBev GTM Challenge">The world's largest brewer. Their go-to-market challenge that year: a $120M Gen-Z energy-drink whitespace. National finalist — 10 of 15,000. Our deck argued for tier-2 nightclubs as the opening play.</template>
         </div>
         <div class="cred cred-gt">
-          <div class="cred-id-band" aria-hidden="true">
-            <span class="cred-id-country">United States of America</span>
-            <span class="cred-id-type">Visiting Scholar</span>
-            <span class="cred-id-num">GT 903-19-PYL</span>
-          </div>
           <img class="cred-logo" src="assets/credentials/gt-seal.png" alt="Georgia Tech" />
           <div class="cred-school">Georgia Institute of Technology</div>
           <div class="cred-program">Research Scholar · Computer Science &amp; Engineering</div>
@@ -703,9 +714,20 @@
     })();
 
     // ─── Hero pointer → portrait wink ──────────────────────────
-    // When the "Look at the kid in the corner" line scrolls into view OR
-    // the reader clicks it, the kid's portrait briefly morphs into the
-    // winking variant (image cross-fade — no transform tricks).
+    // When the kid-pointer line scrolls into the readable zone (and the
+    // reader has stopped scrolling) the kid's portrait briefly morphs
+    // into the winking variant — an image cross-fade, no transform tricks.
+    //
+    // Arrival modes (data-wink-arrival on <body>):
+    //   settle      — IO arms it, fires once the scroll-velocity is 0 AND
+    //                 the portrait is visible. Default. Avoids firing the
+    //                 wink mid-scroll, which read as janky.
+    //   anchor-led  — settle, but pulse the .hero-kid-anchor first so the
+    //                 reader's eye is led from the sentence up to the
+    //                 portrait before the wink lands.
+    //   instant     — legacy behavior: 900 ms after IO entry, scroll be
+    //                 damned.
+    //   manual      — no auto trigger; only clicks fire it.
     (function() {
       const pointer = document.querySelector('.hero-pointer');
       if (!pointer) return;
@@ -726,25 +748,89 @@
         });
       };
 
-      // First wink: when the pointer line scrolls into view, after a natural reading beat
+      // anchor-led mode: brief background-wash pulse on the .hero-kid-anchor,
+      // then wink. The CSS keyframe leads the reader's eye up to the portrait.
+      const leadThenWink = () => {
+        const anchor = pointer.querySelector('.hero-kid-anchor');
+        if (!anchor) { wink(); return; }
+        anchor.classList.remove('is-leading');
+        void anchor.offsetWidth;
+        anchor.classList.add('is-leading');
+        setTimeout(() => anchor.classList.remove('is-leading'), 760);
+        setTimeout(wink, 360);
+      };
+
+      const mode = () => document.body.dataset.winkArrival || 'settle';
+      const portraitVisible = () => {
+        const p = document.querySelector('.hero-portrait');
+        if (!p) return true;
+        const r = p.getBoundingClientRect();
+        const vh = window.innerHeight || 1;
+        // require ≥30% of portrait height to be in viewport
+        const visible = Math.max(0, Math.min(r.bottom, vh) - Math.max(r.top, 0));
+        return visible / Math.max(1, r.height) > 0.3;
+      };
+
       let played = false;
+      let armed = false;
+
+      const fire = () => {
+        if (played) return;
+        if (mode() === 'manual') return;
+        played = true;
+        if (mode() === 'anchor-led') leadThenWink();
+        else wink();
+      };
+
+      // IO arms once the pointer is well into the reading zone. The bottom
+      // root-margin makes "in view" mean "past the fold by ~12% of vh", so
+      // it never arms while the line is still entering the screen.
       const io = new IntersectionObserver((entries) => {
         entries.forEach((entry) => {
-          if (entry.isIntersecting && !played) {
-            played = true;
-            setTimeout(wink, 900);
+          if (!entry.isIntersecting) return;
+          armed = true;
+          if (mode() === 'instant') {
+            setTimeout(fire, 900);
             io.unobserve(pointer);
           }
         });
-      }, { threshold: 0.7 });
+      }, { threshold: 0.85, rootMargin: '0px 0px -12% 0px' });
       io.observe(pointer);
 
-      // Click the line to replay
+      // Scroll-settle detector — fires the wink only once the user has
+      // stopped scrolling AND the portrait is on screen. `scrollend` where
+      // supported (modern Chrome/Firefox), debounce fallback elsewhere.
+      const SETTLE_MS = 220;
+      let settleTimer;
+      const onSettle = () => {
+        if (played || !armed) return;
+        if (mode() !== 'settle' && mode() !== 'anchor-led') return;
+        if (!portraitVisible()) return;
+        fire();
+      };
+      if ('onscrollend' in window) {
+        window.addEventListener('scrollend', onSettle, { passive: true });
+      }
+      // Always also run a debounce fallback — covers the case where IO
+      // arms after the scroll has already ended (page loaded scrolled past
+      // the pointer), and platforms without scrollend.
+      window.addEventListener('scroll', () => {
+        clearTimeout(settleTimer);
+        settleTimer = setTimeout(onSettle, SETTLE_MS);
+      }, { passive: true });
+      // And if the IO armed without the user scrolling at all (pointer
+      // is already on screen at load), fire on the next idle frame.
+      setTimeout(() => { if (armed && !played) onSettle(); }, 600);
+
+      // Click the line to replay (manual mode falls through here too)
       let cooldown = false;
       pointer.addEventListener('click', () => {
         if (cooldown) return;
         cooldown = true;
-        wink();
+        // First click in manual mode counts as the "first wink" too
+        played = true;
+        if (mode() === 'anchor-led') leadThenWink();
+        else wink();
         setTimeout(() => { cooldown = false; }, 1900);
       });
     })();
@@ -755,19 +841,23 @@
     // (which sets the Warhol accent color), and data-fn-mount (target
     // mount element id; defaults to the ref's adjacent mount).
     (function() {
+      // Kind-coded accents — matches the .fn-ref color rule:
+      //   name-card (1, 2)         → green
+      //   image exhibits (3,4,5,12) → orange
+      //   text exhibits (6-11)     → cyan
       const ACCENTS = {
-        1: 'var(--accent)',
-        2: 'var(--accent-2)',
-        3: 'var(--accent-3)',
-        4: 'var(--accent-4)',
+        1: 'var(--accent-4)',
+        2: 'var(--accent-4)',
+        3: '#ff5a00',
+        4: '#ff5a00',
         5: '#ff5a00',
-        6: '#b557ff',
-        7: 'var(--accent)',
+        6: 'var(--accent-2)',
+        7: 'var(--accent-2)',
         8: 'var(--accent-2)',
-        9: 'var(--accent-3)',
-        10: 'var(--accent-4)',
-        11: '#ff5a00',
-        12: '#b557ff',
+        9: 'var(--accent-2)',
+        10: 'var(--accent-2)',
+        11: 'var(--accent-2)',
+        12: '#ff5a00',
       };
 
       function closeMount(mount) {
@@ -835,17 +925,53 @@
         const portrait = mount.closest('.hero-portrait');
         if (portrait && isImage) portrait.classList.add('has-exhibit');
 
-        card.querySelector('.fn-card-close').addEventListener('click', () => closeMount(mount));
+        const closeBtn = card.querySelector('.fn-card-close');
+        closeBtn.addEventListener('click', () => {
+          closeMount(mount);
+          // Return focus to the ref that opened the card so keyboard users
+          // don't get dropped at the top of the document.
+          ref.focus();
+        });
+        // Move focus into the newly-opened card so screen-reader and keyboard
+        // users land inside the new content, not stranded back on the ref.
+        closeBtn.focus({ preventScroll: true });
       }
 
-      document.querySelectorAll('.fn-ref').forEach((ref) => {
-        ref.addEventListener('click', (e) => { e.preventDefault(); openFootnote(ref); });
-        ref.addEventListener('keydown', (e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
-            e.preventDefault();
-            openFootnote(ref);
-          }
-        });
+      function jumpAndFlash(selector) {
+        const el = document.querySelector(selector);
+        if (!el) return;
+        const rect = el.getBoundingClientRect();
+        const top = window.scrollY + rect.top - 80;
+        window.scrollTo({ top, behavior: 'smooth' });
+        el.classList.remove('is-flashing');
+        void el.offsetWidth;
+        el.classList.add('is-flashing');
+        setTimeout(() => el.classList.remove('is-flashing'), 1600);
+      }
+
+      // Delegated click/keydown — works for fn-refs that appear after this
+      // script runs (e.g. variants written into .hero-pointer-text by the
+      // Tweaks panel's React effect, which swaps innerHTML on each change).
+      function activateRef(ref) {
+        if (ref.dataset.fnTarget) {
+          jumpAndFlash(ref.dataset.fnTarget);
+        } else {
+          openFootnote(ref);
+        }
+      }
+      document.addEventListener('click', (e) => {
+        const ref = e.target.closest('.fn-ref');
+        if (!ref) return;
+        e.preventDefault();
+        e.stopPropagation();
+        activateRef(ref);
+      });
+      document.addEventListener('keydown', (e) => {
+        if (e.key !== 'Enter' && e.key !== ' ') return;
+        const ref = e.target.closest('.fn-ref');
+        if (!ref) return;
+        e.preventDefault();
+        activateRef(ref);
       });
     })();
   </script>
