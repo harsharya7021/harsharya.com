@@ -8,3 +8,5 @@ _tmp-*
 **/_tmp-*
 # archived superseded files (kept locally for reference, not in git)
 _archive/
+# exported media for the deck — local only, not part of the site
+_deck-media/
