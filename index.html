@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo+Black&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,700;0,6..96,900;1,6..96,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Serif+Display:ital@0;1&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Inter:wght@300;400;500;600;700&family=Italiana&family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Unbounded:wght@300;400;500;700;900&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="styles.css?v=8">
+  <link rel="stylesheet" href="styles.css?v=10">
 </head>
 <body data-mode="warhol" data-density="normal" data-about-photo="wash" data-fx-marilyn="false" data-fx-halftone="false" data-fx-misprint="false" data-fx-stamp="false" data-fx-flood="true" data-creds-logo="footer" data-creds-props="prominent" data-creds-fx="pop" data-wink-fx="hot" data-wink-arrival="manual" data-pointer-stamp="auto" data-pointer-affordance="dotted" data-fn-affordance="bracketed" data-kid-label="off" data-story-opener="dropcap" data-fn-hint="on" style="--accent:#ff5a00;--font-display:'Anton',sans-serif;--font-serif:'Bodoni Moda',serif;--about-wash:#00b3ff;--about-shadow:#ffc700;">
 
@@ -288,38 +288,52 @@
       <div class="section-label"><span>03 / School</span><span class="section-side">TWO ROOMS, TWO REPS</span></div>
       <h2 class="section-title">Trained at <em>two</em> of the world's sharpest schools.</h2>
       <div class="creds-grid">
-        <!-- Shadow props — real ID cards lying behind each section, half-covered by the cred card on top. Wrapper around img so Warhol treatments (halftone, pop wash, etc.) can stack pseudo-elements over the photo. -->
-        <span class="cred-prop cred-prop--isb" aria-hidden="true">
-          <img src="assets/credentials/isb-id-card.png" alt="" loading="lazy" />
-        </span>
-        <span class="cred-prop cred-prop--gt" aria-hidden="true">
-          <img src="assets/credentials/gt-id-card.png" alt="" loading="lazy" />
-        </span>
-        <div class="cred cred-isb">
-          <img class="cred-logo" src="assets/credentials/isb-seal.png" alt="ISB" />
-          <div class="cred-school">Indian School of Business</div>
-          <div class="cred-program">MBA · Strategy &amp; Leadership / Marketing · Class of 2025</div>
-          <div class="cred-divider"></div>
-          <p class="cred-highlight">Weekly one-on-ones with Prof. <strong>Prasanna Tantri</strong><sup class="fn-ref" data-fn="tantri" data-fn-num="9" data-fn-mount="fn-mount-isb" role="button" tabindex="0" aria-expanded="false" aria-label="Footnote 9 — Prasanna Tantri">9</sup> — chairman of Power Finance Corporation, my Finance professor — and time with a string of other interesting faculty.</p>
-          <p class="cred-highlight">Designed a <strong>sports marketing course</strong> for Block Week. Taught marketing in Peer-to-Peer sessions and got awarded <strong>P2P Champ</strong> for it. Reached the finals of <strong>AB InBev's GTM challenge</strong><sup class="fn-ref" data-fn="abinbev" data-fn-num="11" data-fn-mount="fn-mount-isb" role="button" tabindex="0" aria-expanded="false" aria-label="Footnote 11 — AB InBev">11</sup> on a $120M energy-drink opportunity.</p>
-          <p class="cred-highlight cred-highlight--reflection">The year cost me my safety net and gave me a different one: structure underneath what the agency had been running on instinct.</p>
-          <div class="cred-meta">GMAT 760 · Top 1%</div>
-          <div class="fn-mount" id="fn-mount-isb" aria-live="polite"></div>
-          <template id="fn-src-tantri" data-fn-num="9" data-fn-title="Prof. Prasanna Tantri">Chairman of Power Finance Corporation. My Finance professor at ISB. Weekly one-on-ones turned into the only office-hours I've ever kept religiously. Now we co-write GenZ Economics together.</template>
-          <template id="fn-src-abinbev" data-fn-num="11" data-fn-title="AB InBev GTM Challenge">The world's largest brewer. Their go-to-market challenge that year: a $120M Gen-Z energy-drink whitespace. National finalist — 10 of 15,000. Our deck argued for tier-2 nightclubs as the opening play.</template>
+
+        <div class="cred-col">
+          <div class="cred-campus cred-campus--isb" aria-hidden="true"></div>
+          <div class="cred cred-isb">
+            <div class="cred-school">Indian School of Business</div>
+            <div class="cred-program">MBA · Strategy &amp; Leadership / Marketing · Class of 2025</div>
+            <div class="cred-divider"></div>
+            <p class="cred-highlight">Weekly one-on-ones with Prof. <strong>Prasanna Tantri</strong><sup class="fn-ref" data-fn="tantri" data-fn-num="9" data-fn-mount="fn-mount-isb" role="button" tabindex="0" aria-expanded="false" aria-label="Footnote 9 — Prasanna Tantri">9</sup> — chairman of Power Finance Corporation, my Finance professor — and time with a string of other interesting faculty.</p>
+            <p class="cred-highlight">Designed a <strong>sports marketing course</strong> for Block Week. Taught marketing in Peer-to-Peer sessions and got awarded <strong>P2P Champ</strong> for it. Reached the finals of <strong>AB InBev's GTM challenge</strong><sup class="fn-ref" data-fn="abinbev" data-fn-num="11" data-fn-mount="fn-mount-isb" role="button" tabindex="0" aria-expanded="false" aria-label="Footnote 11 — AB InBev">11</sup> on a $120M energy-drink opportunity.</p>
+            <p class="cred-highlight cred-highlight--reflection">The year cost me my safety net and gave me a different one: structure underneath what the agency had been running on instinct.</p>
+            <div class="cred-foot">
+              <span class="cred-meta"><span>GMAT 760</span><span>Top 1%</span></span>
+              <img class="cred-seal" src="assets/credentials/isb-seal.png" alt="ISB" loading="lazy" />
+            </div>
+            <figure class="idcard idcard-isb">
+              <span class="pop"><img src="assets/credentials/isb-id-card.png" alt="ISB student ID card" loading="lazy" /></span>
+              <figcaption>Student ID</figcaption>
+            </figure>
+            <div class="fn-mount" id="fn-mount-isb" aria-live="polite"></div>
+            <template id="fn-src-tantri" data-fn-num="9" data-fn-title="Prof. Prasanna Tantri">Chairman of Power Finance Corporation. My Finance professor at ISB. Weekly one-on-ones turned into the only office-hours I've ever kept religiously. Now we co-write GenZ Economics together.</template>
+            <template id="fn-src-abinbev" data-fn-num="11" data-fn-title="AB InBev GTM Challenge">The world's largest brewer. Their go-to-market challenge that year: a $120M Gen-Z energy-drink whitespace. National finalist — 10 of 15,000. Our deck argued for tier-2 nightclubs as the opening play.</template>
+          </div>
         </div>
-        <div class="cred cred-gt">
-          <img class="cred-logo" src="assets/credentials/gt-seal.png" alt="Georgia Tech" />
-          <div class="cred-school">Georgia Institute of Technology</div>
-          <div class="cred-program">Research Scholar · Computer Science &amp; Engineering</div>
-          <div class="cred-divider"></div>
-          <p class="cred-highlight">Visiting researcher under <strong>Dr Paul Yoder</strong><sup class="fn-ref" data-fn="yoder" data-fn-num="10" data-fn-mount="fn-mount-gt" role="button" tabindex="0" aria-expanded="false" aria-label="Footnote 10 — Dr Paul Yoder">10</sup>, age nineteen, programming GPUs in <strong>CUDA</strong> to linearise differential equations — the year after &ldquo;Attention Is All You Need&rdquo; lit up the academic feed and made transformers everyone's obsession.</p>
-          <p class="cred-highlight">First in the family to leave the country.</p>
-          <p class="cred-highlight cred-highlight--reflection">Came back wonderstruck at how the American startup ecosystem moved.</p>
-          <div class="cred-meta">Atlanta · 2019</div>
-          <div class="fn-mount" id="fn-mount-gt" aria-live="polite"></div>
-          <template id="fn-src-yoder" data-fn-num="10" data-fn-title="Dr Paul Yoder">Professor of Electrical &amp; Computer Engineering at Georgia Tech. Took me on at nineteen, when I was less a researcher than a tourist with a CUDA tutorial. Taught me what unhurried thinking looked like.</template>
+
+        <div class="cred-col">
+          <div class="cred-campus cred-campus--gt" aria-hidden="true"></div>
+          <div class="cred cred-gt">
+            <div class="cred-school">Georgia Institute of Technology</div>
+            <div class="cred-program">Research Scholar · Computer Science &amp; Engineering</div>
+            <div class="cred-divider"></div>
+            <p class="cred-highlight">Visiting researcher under <strong>Dr Paul Yoder</strong><sup class="fn-ref" data-fn="yoder" data-fn-num="10" data-fn-mount="fn-mount-gt" role="button" tabindex="0" aria-expanded="false" aria-label="Footnote 10 — Dr Paul Yoder">10</sup>, age nineteen, programming GPUs in <strong>CUDA</strong> to linearise differential equations — the year after &ldquo;Attention Is All You Need&rdquo; lit up the academic feed and made transformers everyone's obsession.</p>
+            <p class="cred-highlight">First in the family to leave the country.</p>
+            <p class="cred-highlight cred-highlight--reflection">Came back wonderstruck at how the American startup ecosystem moved.</p>
+            <div class="cred-foot">
+              <span class="cred-meta"><span>Atlanta</span><span>2019</span></span>
+              <img class="cred-seal" src="assets/credentials/gt-seal.png" alt="Georgia Tech" loading="lazy" />
+            </div>
+            <figure class="idcard idcard-gt">
+              <span class="pop"><img src="assets/credentials/gt-id-card.png" alt="Georgia Tech visiting scholar ID card" loading="lazy" /></span>
+              <figcaption>Visiting Scholar ID</figcaption>
+            </figure>
+            <div class="fn-mount" id="fn-mount-gt" aria-live="polite"></div>
+            <template id="fn-src-yoder" data-fn-num="10" data-fn-title="Dr Paul Yoder">Professor of Electrical &amp; Computer Engineering at Georgia Tech. Took me on at nineteen, when I was less a researcher than a tourist with a CUDA tutorial. Taught me what unhurried thinking looked like.</template>
+          </div>
         </div>
+
       </div>
     </div>
   </section>

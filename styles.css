@@ -4484,3 +4484,154 @@ body[data-mode="warhol"] #work .section-title em { transform: rotate(-1.5deg); }
   .wk-co { font-size: 19px; }
   .wk-detail ul { padding-left: 18px; }
 }
+
+/* ════════════════════════════════════════════════════════════
+   CREDENTIALS — bleed ID cards (desktop), in-flow stack (mobile)
+   Ported from _tmp-credentials-preview.html. The .idcard sits
+   absolutely inside each card, bleeding off the outer edge. On
+   mobile it drops into the flow under the copy; when a footnote
+   opens, the ID card hides so the exhibit takes its slot.
+   ════════════════════════════════════════════════════════════ */
+.creds-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 28px;
+  align-items: stretch;
+}
+/* drop the old grid-wide background; we use per-column campus art now */
+.creds-grid::before, .creds-grid::after { content: none !important; background: none !important; }
+
+.cred-col { display: flex; flex-direction: column; }
+.cred-campus {
+  height: 210px;
+  background-repeat: no-repeat;
+  background-position: center bottom;
+  background-size: contain;
+  opacity: 0.24;
+  filter: saturate(0.85);
+  pointer-events: none;
+  margin-bottom: -2px;
+}
+.cred-campus--isb { background-image: url("assets/credentials/isb-campus.png"); }
+.cred-campus--gt  { background-image: url("assets/credentials/gt-campus.png"); }
+
+.cred {
+  position: relative; overflow: hidden;
+  border: 3px solid var(--text);
+  padding: 38px 34px 30px;
+  box-shadow: 8px 8px 0 var(--text);
+  display: flex; flex-direction: column;
+  background: #fff;
+  flex: 1;
+}
+.cred-isb { background: var(--accent-2, #00b3ff); }
+.cred-gt  { background: var(--accent-3, #ffc700); }
+.cred > * { position: relative; z-index: 2; }
+
+.cred-school {
+  font-family: var(--font-display); font-weight: 400;
+  font-size: 31px; line-height: 1.04; letter-spacing: -0.02em;
+  margin: 0 0 8px; text-transform: uppercase;
+  color: var(--text);
+}
+.cred-program {
+  font-family: var(--font-mono); font-size: 10.5px;
+  letter-spacing: 0.11em; text-transform: uppercase;
+  color: #3a3a3a; margin: 0 0 18px;
+}
+#credentials .cred-divider { height: 1px; background: rgba(0,0,0,0.25); margin: 0 0 18px; }
+.cred-highlight { font-size: 14px; line-height: 1.5; margin: 0 0 9px; color: var(--text); }
+.cred-highlight strong { font-weight: 600; }
+.cred-highlight--reflection {
+  margin-top: 14px; padding-top: 12px;
+  border-top: 1px dashed rgba(0,0,0,0.4);
+  font-family: var(--font-serif); font-style: italic;
+  font-size: 14px; line-height: 1.5; color: #2c2c2c;
+}
+#credentials .cred-meta {
+  font-family: var(--font-mono); font-size: 11px;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  color: #1a1a1a; background: #fff; padding: 5px 9px;
+  display: inline-block;
+}
+#credentials .cred-meta span + span::before { content: " · "; }
+.cred-foot {
+  display: flex; align-items: center; justify-content: space-between;
+  gap: 16px; margin-top: auto; padding-top: 20px;
+}
+.cred-seal { height: 50px; width: auto; }
+
+/* ID card — big prop, behind copy, clipped by the card edge */
+.idcard {
+  position: absolute; z-index: 1;
+  background: #fff; padding: 8px 8px 10px;
+  border: 2px solid var(--text);
+  box-shadow: 6px 6px 0 rgba(0,0,0,0.45);
+}
+.idcard .pop { position: relative; overflow: hidden; display: block; }
+.idcard .pop img {
+  display: block; width: 100%; height: auto;
+  filter: grayscale(1) contrast(1.18) brightness(1.05);
+}
+.idcard .pop::before {
+  content: ""; position: absolute; inset: 0;
+  background: var(--tint); mix-blend-mode: multiply;
+}
+.idcard .pop::after {
+  content: ""; position: absolute; inset: 0;
+  background: var(--light); mix-blend-mode: screen; opacity: 0.55;
+}
+.idcard figcaption {
+  font-family: var(--font-mono); font-size: 8.5px;
+  font-weight: 700; letter-spacing: 0.16em;
+  text-transform: uppercase;
+  margin-top: 6px; text-align: center;
+}
+/* ISB — ID card bleeds off the LEFT edge; copy shifts right */
+.cred-isb { padding-left: 196px; padding-right: 34px; }
+.cred-isb .idcard-isb {
+  --tint: #ff2d87; --light: #00b3ff;
+  width: 244px; top: 152px; left: -80px;
+  transform: rotate(-4deg);
+}
+/* GT — ID card moved up, bleeds off the RIGHT edge */
+.cred-gt { padding-bottom: 30px; }
+.cred-gt .cred-highlight { max-width: 70%; }
+.cred-gt .idcard-gt {
+  --tint: #ff5a00; --light: #ffc700;
+  width: 372px; top: 140px; right: -116px;
+  transform: rotate(4deg);
+}
+
+/* footnote mount on desktop — appears in flow under the meta */
+#credentials .fn-mount { margin-top: 16px; }
+#credentials .fn-mount:empty { display: none; }
+
+/* ── MOBILE ── ID card drops in-flow, meta moves below, exhibit takes the ID slot */
+@media (max-width: 760px) {
+  .creds-grid { grid-template-columns: 1fr; gap: 34px; }
+  .cred-campus { height: 128px; }
+  .cred-isb { padding-left: 34px; padding-right: 34px; }
+  .cred-gt { padding-bottom: 30px; }
+  .cred-gt .cred-highlight { max-width: none; }
+
+  .idcard {
+    position: relative; inset: auto; z-index: 2;
+    box-shadow: 5px 5px 0 rgba(0,0,0,0.5);
+    order: 1;
+  }
+  .cred-isb .idcard-isb {
+    width: 172px; transform: rotate(-3deg); margin: 18px auto 0;
+  }
+  .cred-gt .idcard-gt {
+    width: 100%; transform: rotate(1.5deg); margin: 18px 0 0;
+  }
+  #credentials .fn-mount { order: 1; margin-top: 18px; }
+  .cred-foot { order: 2; }
+
+  /* footnote open → ID card hides, exhibit takes the slot */
+  .cred:has(.fn-mount[data-active-fn]) .idcard { display: none; }
+
+  /* meta footer — plain on mobile, no white box */
+  #credentials .cred-meta { background: none; padding: 0; }
+  #credentials .cred-meta span { display: block; }
+  #credentials .cred-meta span + span::before { content: none; }
+}
