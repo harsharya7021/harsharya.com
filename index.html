@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo+Black&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,700;0,6..96,900;1,6..96,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Serif+Display:ital@0;1&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Inter:wght@300;400;500;600;700&family=Italiana&family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Unbounded:wght@300;400;500;700;900&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="styles.css?v=2">
+  <link rel="stylesheet" href="styles.css?v=7">
 </head>
 <body data-mode="warhol" data-density="normal" data-about-photo="wash" data-fx-marilyn="false" data-fx-halftone="false" data-fx-misprint="false" data-fx-stamp="false" data-fx-flood="true" data-creds-logo="footer" data-creds-props="prominent" data-creds-fx="pop" data-wink-fx="hot" data-wink-arrival="manual" data-pointer-stamp="auto" data-pointer-affordance="dotted" data-fn-affordance="bracketed" data-kid-label="off" data-story-opener="dropcap" data-fn-hint="on" style="--accent:#ff5a00;--font-display:'Anton',sans-serif;--font-serif:'Bodoni Moda',serif;--about-wash:#00b3ff;--about-shadow:#ffc700;">
 
@@ -26,7 +26,6 @@
       <div class="nav-links">
         <a href="#about">About</a>
         <a href="#work">Work</a>
-        <a href="#credentials">School</a>
         <a href="life/index.html">Life</a>
         <a href="writing/index.html">Notes</a>
         <a href="#contact">Contact</a>
@@ -976,19 +975,20 @@
       leaf(lf3, KF3, range(p,0.28,0.54));
       var tt=ease(range(p,0.50,0.60));
       m2eye.style.opacity=tt; m2eye.style.transform='translateY('+lerp(40,0,tt)+'px)';
-      var fin=ease(range(p,0.60,0.78));
+      // ── CLIMAX ── leaflets clear out FIRST, then Forbes rises into empty space
+      var lf=1-ease(range(p,0.58,0.66));
+      lf1.style.opacity*=lf; lf2.style.opacity*=lf; lf3.style.opacity*=lf;
+      var fin=ease(range(p,0.69,0.82));
       forbes.style.opacity=fin;
       forbes.style.transform='translate(-50%,-46%) scale('+lerp(0.72,1,fin)+')';
-      var lf=1-range(p,0.60,0.76);
-      lf1.style.opacity*=lf; lf2.style.opacity*=lf; lf3.style.opacity*=lf;
-      var nw=ease(range(p,0.78,0.92));
+      var nw=ease(range(p,0.83,0.93));
       m2not.style.maxWidth=lerp(0,3,nw)+'em';
       // negative margin while collapsed pulls "As" and "Featured" together
       // so there's no pre-existing gap; positive margin once the box is in
       m2not.style.margin='0 '+lerp(-0.78,0.45,nw)+'em';
-      m2not.style.opacity=range(p,0.80,0.87);
-      m2not.style.transform='scale('+back(range(p,0.81,0.95))+')';
-      var dg=ease(range(p,0.88,0.97));
+      m2not.style.opacity=range(p,0.85,0.92);
+      m2not.style.transform='rotate(-2deg) scale('+back(range(p,0.86,0.97))+')';
+      var dg=ease(range(p,0.93,1.0));
       dig.style.opacity=dg;
       dig.style.transform='translate(-50%,calc(-50% + '+lerp(232,206,dg)+'px))';
     }

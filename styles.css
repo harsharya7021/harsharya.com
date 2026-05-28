@@ -4110,9 +4110,24 @@ body[data-mode="margiela"] .note-title { font-family: var(--font-display); font-
   to   { opacity: 1; transform: none; }
 }
 
-/* end-of-movement wink — reuses the real portrait wink overlay */
-#hc-photo .wink-overlay { transition: opacity .3s ease; }
+/* end-of-movement wink — reuses the real portrait wink overlay.
+   The site's .wink-overlay is display:none at rest; force it on within
+   the cinematic so the opacity transition actually animates. */
+#hc-photo .wink-overlay {
+  display: block !important;
+  opacity: 0;
+  transition: opacity .35s ease;
+}
 #hc-photo.winking .wink-overlay { opacity: 1; }
+/* hide the base portrait so the overlay isn't double-exposed over it */
+#hc-photo.winking .passport-frame > img:not(.wink-overlay),
+#hc-photo.winking .warhol-cell.c1 > img:not(.wink-overlay) { opacity: 0; }
+/* keep the hover wink working — restore the overlay reveal on hover */
+#hc-photo .passport-frame:hover .wink-overlay,
+#hc-photo .warhol-cell.c1:hover .wink-overlay { opacity: 1; }
+/* hold the pop-art wink-fx visible during the held cinematic wink */
+#hc-photo.winking .passport-frame .wink-fx,
+#hc-photo.winking .warhol-cell.c1 .wink-fx { opacity: 1; }
 #hc-photo .passport-frame,
 #hc-photo .warhol-cell.c1 {
   transition: transform .45s cubic-bezier(.16,1,.3,1);
@@ -4166,9 +4181,14 @@ body[data-mode="margiela"] .note-title { font-family: var(--font-display); font-
   display: inline-block; box-sizing: border-box;
   overflow: hidden; white-space: nowrap; vertical-align: middle;
   max-width: 0;
-  background: #ff2d87; color: #fff;
+  background: var(--accent-3); color: var(--accent);
   border: 2px solid var(--text);
-  padding: 0 .35em; opacity: 0;
+  box-shadow: 4px 4px 0 var(--text);
+  padding: 0 12px; opacity: 0;
+  font-family: var(--font-serif); font-style: italic;
+  font-weight: 700; text-transform: none;
+  font-size: 1.5em;
+  letter-spacing: normal;
   transform: scale(.55); transform-origin: center;
 }
 .forbes {
