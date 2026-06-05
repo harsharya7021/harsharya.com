@@ -8,9 +8,12 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo+Black&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,700;0,6..96,900;1,6..96,400&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=Inter:wght@400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../styles.css?v=2" />
+  <link rel="stylesheet" href="../styles.css?v=11" />
   <style>
-    .page-wrap { padding: 64px 0 32px; max-width: 1100px; margin: 0 auto; }
+    .page-wrap { padding: 64px var(--container-pad) 32px; max-width: 1100px; margin: 0 auto; }
+    @media (max-width: 560px) {
+      .page-title { font-size: clamp(40px, 11vw, 72px); letter-spacing: -0.01em; }
+    }
     .page-eyebrow {
       display: inline-block;
       font-family: var(--font-mono);
@@ -125,20 +128,50 @@
   <main class="container">
     <div class="series-grid">
 
-      <a class="series-card" href="kochi.html">
+      <a class="series-card" href="kerala.html">
         <div class="series-card-image">
-          <img src="../assets/creative/01.jpg" alt="Kochi series — film photograph: heritage doorway and fishing boats" />
+          <img src="../assets/life/kerala/varkala-01.jpg" alt="Kerala series — Varkala, the cliffside" />
         </div>
         <div class="series-card-meta">
-          <h3>Kochi</h3>
-          <p>35mm film · 8 frames</p>
+          <h3>Kerala</h3>
+          <p>A series in progress · ch. 01 Varkala</p>
+        </div>
+      </a>
+
+      <a class="series-card" href="jodhpur.html">
+        <div class="series-card-image">
+          <img src="../assets/life/jodhpur/jodhpur-01.jpg" alt="Jodhpur series — the blue city below Mehrangarh" />
+        </div>
+        <div class="series-card-meta">
+          <h3>Jodhpur</h3>
+          <p>Rajasthan · 7 frames</p>
+        </div>
+      </a>
+
+      <a class="series-card" href="shimla.html">
+        <div class="series-card-image">
+          <img src="../assets/life/shimla/shimla-01.jpg" alt="Shimla series — winter on the ridge" />
+        </div>
+        <div class="series-card-meta">
+          <h3>Shimla</h3>
+          <p>Himachal · 10 frames</p>
+        </div>
+      </a>
+
+      <a class="series-card" href="malaysia.html">
+        <div class="series-card-image">
+          <img src="../assets/life/malaysia/malaysia-01.jpg" alt="Malaysia series — three frames from Southeast Asia" />
+        </div>
+        <div class="series-card-meta">
+          <h3>Malaysia</h3>
+          <p>Southeast Asia · 3 frames</p>
         </div>
       </a>
 
       <div class="series-card">
         <div class="series-card-image series-card-soon">
           More series<br>coming
-          <small>drop a folder of frames into /assets/creative/&lt;slug&gt;/</small>
+          <small>Goa, Auroville, Lakshadweep, the Himalayas — when the rolls come back</small>
         </div>
         <div class="series-card-meta">
           <h3 style="color: var(--muted);">In the queue</h3>

@@ -2924,6 +2924,23 @@ body[data-mode="warhol"] .foot-email:hover { color: var(--bg); border-bottom-col
 body[data-mode="warhol"] .foot-socials a { color: var(--bg); }
 body[data-mode="warhol"] .foot-socials a:hover { color: var(--accent); }
 
+/* mobile footer — single column stack, normal word-wrapping */
+@media (max-width: 760px) {
+  footer { padding: 22px 0 32px; }
+  footer .container {
+    grid-template-columns: 1fr;
+    gap: 14px;
+    text-align: left;
+  }
+  .foot-left, .foot-socials, .foot-right { justify-self: start; }
+  .foot-socials { gap: 16px; }
+  .foot-right {
+    letter-spacing: 0.10em; line-height: 1.5;
+    text-transform: none; font-size: 12px;
+    color: var(--muted);
+  }
+}
+
 /* ═══════════════════════════════════════════════════════════
    MODE: WARHOL POP
    Pop-art screen-print: 4-up portrait, hot colors,
@@ -4247,7 +4264,12 @@ body[data-mode="margiela"] .note-title { font-family: var(--font-display); font-
     width: min(340px, 86vw);
   }
   #lf1, #lf2, #lf3 { left: auto; }
-  .forbes { position: static; transform: none !important; opacity: 1 !important; }
+  .forbes {
+    position: static; transform: none !important; opacity: 1 !important;
+    width: min(320px, 86vw); padding: 26px 20px;
+  }
+  .forbes-mast { font-size: 38px; }
+  .forbes-30 { font-size: 30px; white-space: nowrap; }
   .dig { position: static; transform: none !important; opacity: 1 !important; width: 100%; }
   .m2not { max-width: none; opacity: 1 !important; transform: none !important; }
 }
@@ -4400,15 +4422,29 @@ body[data-mode="tabloid"] .contact-email { font-family: var(--font-display); fon
   body[data-mode="tabloid"] .about-prose { columns: 1; }
   .note-item { grid-template-columns: 50px 100px 1fr; gap: 16px; }
   .note-tag { display: none; }
-  .nav-links { gap: 14px; font-size: 11px; }
+  .nav-links { gap: 14px; }
+  .nav-links a,
+  body[data-mode="warhol"] .nav-links a,
+  body[data-mode="margiela"] .nav-links a,
+  body[data-mode="tabloid"] .nav-links a,
+  body[data-mode="issue"] .nav-links a {
+    font-size: 11px; font-style: normal;
+  }
   .marquee-track span { font-size: 22px !important; }
 }
 
 @media (max-width: 560px) {
-  :root { --container-pad: 18px; }
-  .nav-inner { padding: 14px 0; }
-  .nav-links { gap: 12px; }
-  .nav-links a:nth-child(3) { display: none; }
+  :root { --container-pad: 16px; }
+  .nav-inner { padding: 14px 0; gap: 8px; }
+  .nav-links { gap: 10px; flex-wrap: nowrap; }
+  .nav-links a,
+  body[data-mode="warhol"] .nav-links a,
+  body[data-mode="margiela"] .nav-links a,
+  body[data-mode="tabloid"] .nav-links a,
+  body[data-mode="issue"] .nav-links a {
+    font-size: 10px; letter-spacing: 0.06em; font-style: normal;
+  }
+  .logo { font-size: 16px; }
   section { padding: 56px 0; }
   .section-title { margin-bottom: 36px; }
   .hero-wrap { padding: 24px 0 40px; }
@@ -4619,10 +4655,12 @@ body[data-mode="warhol"] #work .section-title em { transform: rotate(-1.5deg); }
     order: 1;
   }
   .cred-isb .idcard-isb {
-    width: 172px; transform: rotate(-3deg); margin: 18px auto 0;
+    width: 172px; top: auto; left: auto; right: auto; bottom: auto;
+    transform: rotate(-3deg); margin: 18px auto 0;
   }
   .cred-gt .idcard-gt {
-    width: 100%; transform: rotate(1.5deg); margin: 18px 0 0;
+    width: min(280px, 78%); top: auto; left: auto; right: auto; bottom: auto;
+    transform: rotate(1.5deg); margin: 18px auto 0;
   }
   #credentials .fn-mount { order: 1; margin-top: 18px; }
   .cred-foot { order: 2; }
@@ -4632,6 +4670,7 @@ body[data-mode="warhol"] #work .section-title em { transform: rotate(-1.5deg); }
 
   /* meta footer — plain on mobile, no white box */
   #credentials .cred-meta { background: none; padding: 0; }
-  #credentials .cred-meta span { display: block; }
-  #credentials .cred-meta span + span::before { content: none; }
+  #credentials .cred-meta span { display: inline-block; }
+  .cred-foot { flex-wrap: wrap; gap: 12px; padding-top: 18px; }
+  .cred-seal { height: 42px; }
 }
