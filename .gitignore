@@ -10,3 +10,5 @@ _tmp-*
 _archive/
 # exported media for the deck — local only, not part of the site
 _deck-media/
+# workshop: working notes, prototypes, draft markdown — local only
+_workshop/

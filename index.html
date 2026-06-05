@@ -388,18 +388,31 @@
         <a href="https://www.linkedin.com/in/harsharyaa/" target="_blank" rel="noopener">LinkedIn</a>
         <a href="https://github.com/harsharya7021" target="_blank" rel="noopener">GitHub</a>
       </span>
-      <span class="foot-right">Built for the few people who'll actually read this far.</span>
+      <span class="foot-right">Built for the <a class="foot-secret" href="/speakeasy/">few people</a> who'll actually read this far.</span>
     </div>
   </footer>
+
+  <button id="back-to-top" type="button" aria-label="Back to top">
+    <span class="b2t-arrow" aria-hidden="true">&uarr;</span>
+    <span class="b2t-label">Top</span>
+  </button>
 
   <div id="tweaks-root"></div>
 
   <script>
     document.getElementById("year").textContent = new Date().getFullYear();
     const nav = document.getElementById("nav");
+    const b2t = document.getElementById("back-to-top");
     window.addEventListener("scroll", () => {
-      if (window.scrollY > 8) nav.classList.add("scrolled");
-      else nav.classList.remove("scrolled");
+      var sy = window.scrollY;
+      if (sy > 8) nav.classList.add("scrolled"); else nav.classList.remove("scrolled");
+      if (b2t) {
+        if (sy > window.innerHeight * 1.4) b2t.classList.add("is-visible");
+        else b2t.classList.remove("is-visible");
+      }
+    });
+    if (b2t) b2t.addEventListener("click", function () {
+      window.scrollTo({ top: 0, behavior: "smooth" });
     });
     // Photo gallery rotation
     (function () {

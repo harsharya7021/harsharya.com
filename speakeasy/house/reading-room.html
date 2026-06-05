@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="robots" content="noindex,nofollow" />
+  <title>The Reading Room — prototype</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,700;1,6..96,400&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=Space+Mono:ital,wght@0,400;0,700&display=swap" rel="stylesheet">
+  <style>
+    :root{
+      --paper: #f4eedb;
+      --paper-dark: #ebe3c9;
+      --ink: #1a1612;
+      --ink-soft: #4a3f33;
+      --ink-mute: #8a7b66;
+      --warm: #b8541e;
+      --serif: 'Bodoni Moda', Georgia, serif;
+      --serif-text: 'Fraunces', Georgia, serif;
+      --mono: 'Space Mono', ui-monospace, monospace;
+    }
+    *{ box-sizing: border-box; }
+    html,body{ margin:0; padding:0; overflow: hidden; height: 100%; }
+    body{
+      background: #14110d;
+      color: var(--paper);
+      font-family: var(--serif-text);
+      user-select: none; -webkit-user-select: none;
+    }
+
+    .room-shell{
+      position: relative; width: 100vw; height: 100vh;
+      overflow: hidden;
+      background:
+        radial-gradient(ellipse at 50% 60%, #2a2218 0%, #14110d 80%);
+    }
+
+    /* HUD overlay */
+    .hud{
+      position: absolute; top: 18px; left: 20px; right: 20px;
+      display: flex; justify-content: space-between; align-items: flex-start;
+      gap: 16px; pointer-events: none; z-index: 30;
+    }
+    .hud > *{ pointer-events: auto; }
+    .hud-tag{
+      font-family: var(--mono);
+      font-size: 10.5px; letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--paper);
+      opacity: 0.78;
+      line-height: 1.5;
+    }
+    .hud-tag b{
+      display: block;
+      font-family: var(--serif);
+      font-style: italic; font-weight: 500;
+      font-size: 22px;
+      letter-spacing: -0.005em;
+      color: var(--paper);
+      opacity: 1;
+      margin-bottom: 2px;
+    }
+    .hud-exit{
+      font-family: var(--mono);
+      font-size: 10.5px; letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--paper);
+      opacity: 0.7;
+      background: transparent;
+      border: 1px solid rgba(244, 238, 219, 0.4);
+      padding: 8px 12px;
+      cursor: pointer;
+      text-decoration: none;
+      transition: opacity 0.2s, border-color 0.2s;
+    }
+    .hud-exit:hover{ opacity: 1; border-color: rgba(244, 238, 219, 0.9); }
+
+    /* Controls hint */
+    .hint{
+      position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%);
+      font-family: var(--mono);
+      font-size: 10.5px; letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: var(--paper);
+      opacity: 0.55;
+      pointer-events: none; z-index: 30;
+      text-align: center; line-height: 1.6;
+    }
+    .hint .k{
+      display: inline-block;
+      border: 1px solid rgba(244, 238, 219, 0.4);
+      padding: 1px 6px; margin: 0 1px;
+    }
+    @media (max-width: 720px){
+      .hint .desktop-only{ display: none; }
+    }
+    @media (min-width: 721px){
+      .hint .mobile-only{ display: none; }
+    }
+
+    /* the SVG stage */
+    .stage{
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      display: block;
+    }
+
+    /* prompt that appears when standing near an interactable */
+    .prompt{
+      position: absolute;
+      pointer-events: auto;
+      transform: translate(-50%, -100%);
+      background: var(--paper);
+      color: var(--ink);
+      font-family: var(--mono);
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      padding: 8px 12px;
+      border: 1.5px solid var(--ink);
+      cursor: pointer;
+      opacity: 0;
+      transition: opacity 0.2s ease, transform 0.2s ease;
+      z-index: 25;
+      white-space: nowrap;
+    }
+    .prompt.is-visible{ opacity: 1; transform: translate(-50%, -110%); }
+    .prompt .k-hint{
+      display: inline-block;
+      margin-left: 8px;
+      padding: 1px 5px;
+      border: 1px solid var(--ink);
+      font-size: 9.5px;
+      opacity: 0.8;
+    }
+
+    /* content overlay revealed by interactions */
+    .overlay{
+      position: fixed; inset: 0;
+      background: rgba(20, 17, 13, 0.78);
+      backdrop-filter: blur(4px);
+      display: none;
+      align-items: center; justify-content: center;
+      padding: 32px 24px;
+      z-index: 100;
+    }
+    .overlay.is-open{ display: flex; }
+    .overlay-card{
+      background: var(--paper);
+      color: var(--ink);
+      max-width: 620px; width: 100%;
+      padding: 40px 36px;
+      border: 1.5px solid var(--ink);
+      box-shadow: 12px 12px 0 rgba(0,0,0,0.55);
+      max-height: 80vh; overflow: auto;
+    }
+    .overlay-card h2{
+      font-family: var(--serif);
+      font-style: italic; font-weight: 500;
+      font-size: 38px; line-height: 1.1;
+      margin: 0 0 4px;
+    }
+    .overlay-card .ov-eyebrow{
+      font-family: var(--mono);
+      font-size: 11px; letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--ink-mute);
+      margin-bottom: 18px;
+    }
+    .overlay-card p{
+      font-family: var(--serif-text);
+      font-size: 16px; line-height: 1.6;
+      color: var(--ink-soft);
+      margin: 0 0 14px;
+    }
+    .overlay-close{
+      margin-top: 18px;
+      font-family: var(--mono);
+      font-size: 11px; letter-spacing: 0.16em;
+      text-transform: uppercase;
+      background: var(--ink); color: var(--paper);
+      border: 0; padding: 11px 18px;
+      cursor: pointer;
+    }
+    .overlay-close:hover{ background: var(--warm); }
+
+    /* character head image clipping */
+    .char-head-img{
+      clip-path: circle(50% at 50% 50%);
+    }
+  </style>
+</head>
+<body>
+
+<div class="room-shell">
+
+  <div class="hud">
+    <div class="hud-tag">
+      <b>The Reading Room</b>
+      Shelf I · Members only
+    </div>
+    <a class="hud-exit" href="/speakeasy/">← Back to the foyer</a>
+  </div>
+
+  <svg class="stage" id="stage" viewBox="0 0 800 600" preserveAspectRatio="xMidYMid meet">
+    <defs>
+      <!-- floor plank pattern, isometric -->
+      <pattern id="floorPlanks" patternUnits="userSpaceOnUse" width="64" height="32" patternTransform="rotate(0)">
+        <rect width="64" height="32" fill="#b8794a"/>
+        <line x1="0" y1="0" x2="64" y2="0" stroke="#8b5a35" stroke-width="1"/>
+        <line x1="32" y1="0" x2="32" y2="32" stroke="#8b5a35" stroke-width="0.5" opacity="0.7"/>
+        <line x1="0" y1="16" x2="64" y2="16" stroke="#8b5a35" stroke-width="0.6"/>
+        <line x1="0" y1="0" x2="0" y2="32" stroke="#8b5a35" stroke-width="0.5" opacity="0.5"/>
+      </pattern>
+
+      <!-- rug pattern -->
+      <pattern id="rugPattern" patternUnits="userSpaceOnUse" width="20" height="10">
+        <rect width="20" height="10" fill="#8a3a2a"/>
+        <path d="M 0 5 L 10 0 L 20 5 L 10 10 Z" fill="none" stroke="#c97a52" stroke-width="0.8"/>
+      </pattern>
+
+      <!-- window light gradient -->
+      <linearGradient id="windowLight" x1="0" y1="0" x2="0" y2="1">
+        <stop offset="0%" stop-color="#ffe8a8" stop-opacity="0.95"/>
+        <stop offset="100%" stop-color="#ffd97d" stop-opacity="0.55"/>
+      </linearGradient>
+
+      <!-- lamp glow -->
+      <radialGradient id="lampGlow" cx="50%" cy="50%" r="50%">
+        <stop offset="0%" stop-color="#ffd97d" stop-opacity="0.55"/>
+        <stop offset="100%" stop-color="#ffd97d" stop-opacity="0"/>
+      </radialGradient>
+
+      <!-- wall gradients for shading -->
+      <linearGradient id="wallLeft" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stop-color="#e6d9b0"/>
+        <stop offset="100%" stop-color="#f4eedb"/>
+      </linearGradient>
+      <linearGradient id="wallRight" x1="0" y1="0" x2="1" y2="0">
+        <stop offset="0%" stop-color="#f4eedb"/>
+        <stop offset="100%" stop-color="#d8c79a"/>
+      </linearGradient>
+
+      <!-- floor light spill from window -->
+      <linearGradient id="floorLight" x1="0" y1="0" x2="0.3" y2="1">
+        <stop offset="0%" stop-color="#ffe8a8" stop-opacity="0.45"/>
+        <stop offset="100%" stop-color="#ffe8a8" stop-opacity="0"/>
+      </linearGradient>
+
+      <!-- ambient floor shadow for depth -->
+      <radialGradient id="floorVignette" cx="50%" cy="50%" r="60%">
+        <stop offset="60%" stop-color="rgba(0,0,0,0)"/>
+        <stop offset="100%" stop-color="rgba(0,0,0,0.35)"/>
+      </radialGradient>
+    </defs>
+
+    <!-- ── WALLS ──────────────────────────── -->
+    <!-- back-left wall -->
+    <polygon points="100,350 400,200 400,0 100,150" fill="url(#wallLeft)" />
+    <polygon points="100,350 400,200 400,0 100,150" fill="rgba(0,0,0,0.05)"/>
+
+    <!-- back-right wall -->
+    <polygon points="700,350 400,200 400,0 700,150" fill="url(#wallRight)" />
+
+    <!-- wall trim shadow lines -->
+    <line x1="100" y1="350" x2="400" y2="200" stroke="#a08c5e" stroke-width="1.5" opacity="0.5"/>
+    <line x1="700" y1="350" x2="400" y2="200" stroke="#a08c5e" stroke-width="1.5" opacity="0.5"/>
+
+    <!-- window on left wall -->
+    <g id="window">
+      <polygon points="160,235 280,175 280,55 160,115" fill="#2a3a4a" stroke="#3a2a1a" stroke-width="2"/>
+      <polygon points="166,232 277,177 277,60 166,118" fill="url(#windowLight)"/>
+      <line x1="166" y1="174" x2="277" y2="118" stroke="#3a2a1a" stroke-width="1.5"/>
+      <line x1="221" y1="145" x2="221" y2="206" stroke="#3a2a1a" stroke-width="1.5"/>
+    </g>
+
+    <!-- light spill from window on floor -->
+    <polygon points="160,235 280,175 410,290 280,360" fill="url(#floorLight)" opacity="0.7"/>
+
+    <!-- ── FLOOR ──────────────────────────── -->
+    <polygon points="100,350 400,200 700,350 400,500" fill="url(#floorPlanks)"/>
+    <polygon points="100,350 400,200 700,350 400,500" fill="url(#floorVignette)"/>
+
+    <!-- floor edge highlight -->
+    <line x1="100" y1="350" x2="400" y2="500" stroke="#8b5a35" stroke-width="1" opacity="0.6"/>
+    <line x1="700" y1="350" x2="400" y2="500" stroke="#8b5a35" stroke-width="1" opacity="0.6"/>
+
+    <!-- ── RUG ──────────────────────────── -->
+    <polygon points="180,360 380,260 540,340 340,440" fill="url(#rugPattern)" stroke="#3a1a10" stroke-width="1.5" opacity="0.95"/>
+    <polygon points="180,360 380,260 540,340 340,440" fill="none" stroke="#c97a52" stroke-width="0.5" opacity="0.7"/>
+
+    <!-- ── BOOKSHELF (back-left wall) ──────────────────────────── -->
+    <g id="bookshelf" data-interact="true" style="cursor: pointer;">
+      <!-- frame -->
+      <polygon points="190,290 260,255 260,40 190,75" fill="#3a2418"/>
+      <polygon points="190,290 260,255 260,40 190,75" fill="rgba(0,0,0,0.18)"/>
+      <!-- shelves (4 levels) -->
+      <g>
+        <!-- top shelf -->
+        <polygon points="195,90 257,59 257,52 195,83" fill="#5a3826"/>
+        <polygon points="198,87 254,59 254,72 198,99 198,87" fill="#1e1208"/>
+        <!-- books shelf 1 -->
+        <g transform="translate(0,0)">
+          <polygon points="200,80 207,77 207,98 200,101" fill="#8a3a2a"/>
+          <polygon points="208,77 213,75 213,96 208,98" fill="#3e5a3a"/>
+          <polygon points="214,75 220,72 220,93 214,96" fill="#c8a04c"/>
+          <polygon points="221,72 226,70 226,91 221,93" fill="#4a3a6a"/>
+          <polygon points="227,70 235,67 235,88 227,91" fill="#5e3a26"/>
+          <polygon points="236,67 244,64 244,85 236,88" fill="#7a4a32"/>
+          <polygon points="245,64 252,61 252,82 245,85" fill="#3a4a6a"/>
+        </g>
+
+        <!-- shelf 2 -->
+        <polygon points="195,135 257,104 257,99 195,130" fill="#5a3826"/>
+        <polygon points="198,132 254,104 254,116 198,144" fill="#1e1208"/>
+        <g>
+          <polygon points="200,125 206,122 206,143 200,146" fill="#3e3a6a"/>
+          <polygon points="207,122 214,118 214,139 207,143" fill="#8c5a32"/>
+          <polygon points="215,118 222,115 222,136 215,139" fill="#9a3a3a"/>
+          <polygon points="223,115 230,112 230,133 223,136" fill="#c8a04c"/>
+          <polygon points="231,112 240,108 240,129 231,133" fill="#2c4a3a"/>
+          <polygon points="241,108 252,103 252,124 241,128" fill="#5a3a26"/>
+        </g>
+
+        <!-- shelf 3 -->
+        <polygon points="195,180 257,149 257,144 195,175" fill="#5a3826"/>
+        <polygon points="198,177 254,149 254,161 198,189" fill="#1e1208"/>
+        <g>
+          <polygon points="200,170 206,168 206,189 200,191" fill="#7a3a26"/>
+          <polygon points="207,168 215,164 215,185 207,189" fill="#3e5a3a"/>
+          <polygon points="216,164 224,161 224,182 216,185" fill="#c89e4c"/>
+          <polygon points="225,161 232,158 232,179 225,182" fill="#5a3a6a"/>
+          <polygon points="233,158 242,154 242,175 233,179" fill="#9a3a3a"/>
+          <polygon points="243,154 252,150 252,171 243,175" fill="#3a4a6a"/>
+        </g>
+
+        <!-- shelf 4 (bottom) -->
+        <polygon points="195,225 257,194 257,189 195,220" fill="#5a3826"/>
+        <polygon points="198,222 254,194 254,206 198,234" fill="#1e1208"/>
+        <g>
+          <polygon points="200,215 207,213 207,234 200,237" fill="#c89e4c"/>
+          <polygon points="208,213 216,209 216,230 208,234" fill="#3a4a6a"/>
+          <polygon points="217,209 226,205 226,226 217,230" fill="#7a3a26"/>
+          <polygon points="227,205 236,201 236,222 227,226" fill="#2c4a3a"/>
+          <polygon points="237,201 252,194 252,215 237,222" fill="#5a3a26"/>
+        </g>
+      </g>
+      <!-- bookshelf base shadow on floor -->
+      <ellipse cx="225" cy="295" rx="40" ry="6" fill="rgba(0,0,0,0.35)"/>
+    </g>
+
+    <!-- ── DESK + TYPEWRITER (back-right wall) ──────────────────────────── -->
+    <g id="desk" data-interact="true" style="cursor: pointer;">
+      <!-- desk box -->
+      <polygon points="430,255 560,320 560,360 430,295" fill="#5a3826"/>
+      <polygon points="560,320 620,290 620,330 560,360" fill="#3a2418"/>
+      <polygon points="430,255 560,320 620,290 490,225" fill="#7a5236"/>
+      <polygon points="430,255 560,320 620,290 490,225" fill="rgba(255,255,255,0.05)"/>
+      <!-- desk legs hint -->
+      <line x1="432" y1="295" x2="432" y2="345" stroke="#3a1808" stroke-width="3"/>
+      <line x1="558" y1="358" x2="558" y2="400" stroke="#3a1808" stroke-width="3"/>
+      <line x1="618" y1="328" x2="618" y2="380" stroke="#3a1808" stroke-width="3"/>
+
+      <!-- typewriter -->
+      <g transform="translate(0,0)">
+        <!-- body -->
+        <polygon points="490,250 555,283 555,303 490,270" fill="#1a1612"/>
+        <polygon points="555,283 580,270 580,290 555,303" fill="#0e0a06"/>
+        <polygon points="490,250 555,283 580,270 515,237" fill="#2a221a"/>
+        <!-- keys highlight -->
+        <polygon points="498,257 545,280 545,287 498,265" fill="#3a2a1e"/>
+        <circle cx="510" cy="261" r="1.4" fill="#c8b58c"/>
+        <circle cx="520" cy="266" r="1.4" fill="#c8b58c"/>
+        <circle cx="530" cy="271" r="1.4" fill="#c8b58c"/>
+        <circle cx="540" cy="276" r="1.4" fill="#c8b58c"/>
+        <!-- platen / roller -->
+        <polygon points="498,247 555,275 555,278 498,250" fill="#0a0805"/>
+        <!-- paper sticking up -->
+        <polygon points="515,238 545,253 545,210 515,195" fill="#f4eedb"/>
+        <polygon points="515,238 545,253 545,210 515,195" fill="rgba(0,0,0,0.06)"/>
+        <line x1="518" y1="215" x2="540" y2="225" stroke="#8a7b66" stroke-width="0.5"/>
+        <line x1="518" y1="222" x2="540" y2="232" stroke="#8a7b66" stroke-width="0.5"/>
+        <line x1="518" y1="229" x2="540" y2="239" stroke="#8a7b66" stroke-width="0.5"/>
+      </g>
+
+      <!-- desk lamp -->
+      <g transform="translate(0,0)">
+        <line x1="600" y1="305" x2="600" y2="265" stroke="#2a1810" stroke-width="2"/>
+        <polygon points="592,265 614,265 608,250 598,250" fill="#3a2418"/>
+        <ellipse cx="603" cy="280" rx="14" ry="4" fill="rgba(255,217,125,0.3)"/>
+      </g>
+
+      <!-- desk shadow on floor -->
+      <ellipse cx="520" cy="385" rx="80" ry="10" fill="rgba(0,0,0,0.4)"/>
+    </g>
+
+    <!-- ── READING CHAIR ──────────────────────────── -->
+    <g id="chair">
+      <!-- seat -->
+      <polygon points="280,395 380,345 410,360 310,410" fill="#2c4a3a"/>
+      <polygon points="380,345 410,360 410,400 380,420" fill="#1c2e22"/>
+      <polygon points="280,395 310,410 310,440 280,425" fill="#1c2e22"/>
+      <!-- back -->
+      <polygon points="280,395 380,345 380,265 280,310" fill="#2c4a3a"/>
+      <polygon points="280,395 380,345 380,265 280,310" fill="rgba(0,0,0,0.12)"/>
+      <polygon points="380,345 410,360 410,280 380,265" fill="#1c2e22"/>
+      <!-- cushion -->
+      <polygon points="285,330 375,290 375,320 285,360" fill="#3a5e4a" opacity="0.85"/>
+      <!-- chair shadow -->
+      <ellipse cx="345" cy="445" rx="60" ry="7" fill="rgba(0,0,0,0.4)"/>
+    </g>
+
+    <!-- ── FLOOR LAMP ──────────────────────────── -->
+    <g id="floorLamp">
+      <!-- glow on floor -->
+      <ellipse cx="270" cy="320" rx="110" ry="55" fill="url(#lampGlow)"/>
+      <!-- pole -->
+      <line x1="265" y1="395" x2="265" y2="240" stroke="#3a2418" stroke-width="2.5"/>
+      <!-- base -->
+      <ellipse cx="265" cy="397" rx="14" ry="4" fill="#1a1208"/>
+      <!-- shade -->
+      <polygon points="245,250 285,250 295,220 235,220" fill="#c8a06a"/>
+      <polygon points="235,220 295,220 285,250 245,250" fill="rgba(0,0,0,0.18)"/>
+      <ellipse cx="265" cy="220" rx="30" ry="6" fill="#d8b078"/>
+      <!-- glow at the bulb -->
+      <ellipse cx="265" cy="232" rx="20" ry="14" fill="rgba(255,217,125,0.35)"/>
+    </g>
+
+    <!-- ── POTTED PLANT (corner near door) ──────────────────────────── -->
+    <g id="plant">
+      <!-- pot -->
+      <polygon points="585,390 625,410 625,440 585,422" fill="#7a3a26"/>
+      <polygon points="625,410 645,400 645,430 625,440" fill="#5a2a18"/>
+      <polygon points="585,390 625,410 645,400 605,380" fill="#9a4a32"/>
+      <!-- leaves -->
+      <ellipse cx="600" cy="370" rx="8" ry="22" fill="#3e5a3a" transform="rotate(-15 600 370)"/>
+      <ellipse cx="615" cy="365" rx="9" ry="25" fill="#2c4a3a" transform="rotate(5 615 365)"/>
+      <ellipse cx="625" cy="375" rx="7" ry="20" fill="#3e6a4a" transform="rotate(20 625 375)"/>
+      <ellipse cx="608" cy="358" rx="6" ry="18" fill="#4a6a4a" transform="rotate(-8 608 358)"/>
+    </g>
+
+    <!-- ── DOOR (back-right wall) ──────────────────────────── -->
+    <g id="door">
+      <polygon points="500,260 580,220 580,90 500,130" fill="#3a2418"/>
+      <polygon points="500,260 580,220 580,90 500,130" fill="rgba(0,0,0,0.15)"/>
+      <polygon points="508,255 575,222 575,98 508,132" fill="#5a3826"/>
+      <!-- door panels -->
+      <polygon points="514,250 540,237 540,200 514,213" fill="#4a2e1e"/>
+      <polygon points="544,233 572,219 572,182 544,196" fill="#4a2e1e"/>
+      <polygon points="514,200 540,187 540,148 514,162" fill="#4a2e1e"/>
+      <polygon points="544,182 572,168 572,132 544,146" fill="#4a2e1e"/>
+      <!-- knob -->
+      <circle cx="535" cy="180" r="2.5" fill="#c8a04c"/>
+    </g>
+
+    <!-- ── CHARACTER (drawn last, position controlled by JS) ──────────────────────────── -->
+    <g id="character" transform="translate(420, 430)">
+      <!-- shadow -->
+      <ellipse cx="0" cy="2" rx="14" ry="4" fill="rgba(0,0,0,0.45)"/>
+      <!-- legs -->
+      <rect x="-7" y="-22" width="5" height="20" fill="#2a3a4a" rx="1"/>
+      <rect x="2" y="-22" width="5" height="20" fill="#2a3a4a" rx="1"/>
+      <!-- torso (sweater) -->
+      <polygon points="-12,-22 12,-22 14,-50 -14,-50" fill="#8a3a2a"/>
+      <polygon points="-12,-22 12,-22 14,-50 -14,-50" fill="rgba(0,0,0,0.08)"/>
+      <!-- neck -->
+      <rect x="-3" y="-52" width="6" height="4" fill="#d8a880"/>
+      <!-- head circle + image clip -->
+      <circle cx="0" cy="-62" r="12" fill="#d8a880" stroke="#1a1208" stroke-width="1"/>
+      <clipPath id="charHeadClip">
+        <circle cx="0" cy="-62" r="11"/>
+      </clipPath>
+      <g clip-path="url(#charHeadClip)">
+        <image href="../../assets/about.jpg" x="-16" y="-78" width="32" height="32" preserveAspectRatio="xMidYMid slice"/>
+      </g>
+      <!-- subtle outline around head -->
+      <circle cx="0" cy="-62" r="11.5" fill="none" stroke="rgba(0,0,0,0.35)" stroke-width="0.5"/>
+    </g>
+
+  </svg>
+
+  <!-- prompt label rendered in DOM, positioned by JS -->
+  <button class="prompt" id="prompt"></button>
+
+  <div class="hint">
+    <span class="desktop-only">
+      <span class="k">W</span><span class="k">A</span><span class="k">S</span><span class="k">D</span>
+      or
+      <span class="k">↑</span><span class="k">←</span><span class="k">↓</span><span class="k">→</span>
+      to walk &nbsp;·&nbsp; <span class="k">E</span> or click to interact
+    </span>
+    <span class="mobile-only">Tap anywhere to walk · tap the prompt to interact</span>
+  </div>
+
+</div>
+
+<!-- ── Reading Room overlay (opens when you "use" the typewriter) ── -->
+<div class="overlay" id="overlay-typewriter">
+  <div class="overlay-card">
+    <div class="ov-eyebrow">Shelf I · The Reading Room</div>
+    <h2>Long-form, unedited.</h2>
+    <p>This is where the writing lives that I'd send to a friend, not to a recruiter. Letters that never got mailed. Drafts that didn't survive the page. The slow stuff.</p>
+    <p style="font-style:italic; color:var(--ink-mute);">Currently empty. Filling slowly, the way you fill a library.</p>
+    <button type="button" class="overlay-close" data-close>← back to the room</button>
+  </div>
+</div>
+
+<!-- ── Stack overlay (opens when you "use" the bookshelf) ── -->
+<div class="overlay" id="overlay-bookshelf">
+  <div class="overlay-card">
+    <div class="ov-eyebrow">Shelf III · The Stack</div>
+    <h2>The real library.</h2>
+    <p>Books, films, music — annotated, opinionated. Not the LinkedIn reading list. The actual one, with marginalia and arguments.</p>
+    <p style="font-style:italic; color:var(--ink-mute);">Currently empty. Bringing the books over from the old shelf one by one.</p>
+    <button type="button" class="overlay-close" data-close>← back to the room</button>
+  </div>
+</div>
+
+<script>
+  (function () {
+    // ── Stage references ────────────────────────────
+    var stage = document.getElementById("stage");
+    var charG = document.getElementById("character");
+    var promptEl = document.getElementById("prompt");
+
+    // viewBox is 800x600. We move the character in viewBox coordinates.
+    var pos = { x: 420, y: 430 };  // starting position (on the floor, near door)
+    var target = { x: pos.x, y: pos.y };
+    var speed = 110; // viewBox units per second
+
+    // ── Walkable bounds (inside the floor diamond, padded inward) ──
+    // floor corners: (100,350)(400,200)(700,350)(400,500)
+    // Test inside-diamond by checking against the 4 edge lines.
+    function insideFloor(x, y){
+      // expand polygon test
+      function side(ax, ay, bx, by, px, py){
+        return (bx - ax) * (py - ay) - (by - ay) * (px - ax);
+      }
+      // signs for each edge (consistent winding clockwise from top)
+      var pad = 14;
+      // top-left edge: (100,350) -> (400,200)  — character must be on the right side
+      var s1 = side(100, 350, 400, 200, x, y) - pad * 6;
+      // top-right edge: (400,200) -> (700,350) — char must be on the right side
+      var s2 = side(400, 200, 700, 350, x, y) - pad * 6;
+      // bottom-right: (700,350) -> (400,500)
+      var s3 = side(700, 350, 400, 500, x, y) - pad * 6;
+      // bottom-left: (400,500) -> (100,350)
+      var s4 = side(400, 500, 100, 350, x, y) - pad * 6;
+      return s1 >= 0 && s2 >= 0 && s3 >= 0 && s4 >= 0;
+    }
+
+    // collision rects for furniture (axis-aligned approximations, generous)
+    var blockers = [
+      { x: 175, y: 240, w: 110, h: 70, name: "bookshelf" },  // bookshelf footprint
+      { x: 420, y: 270, w: 220, h: 100, name: "desk" },      // desk
+      { x: 275, y: 305, w: 140, h: 120, name: "chair" },     // chair
+      { x: 250, y: 380, w: 35, h: 25, name: "lamp" },        // floor lamp base
+      { x: 575, y: 380, w: 75, h: 55, name: "plant" }        // plant
+    ];
+    function rectContains(r, x, y){
+      return x >= r.x && x <= r.x + r.w && y >= r.y && y <= r.y + r.h;
+    }
+    function blocked(x, y){
+      for (var i = 0; i < blockers.length; i++) if (rectContains(blockers[i], x, y)) return blockers[i];
+      return null;
+    }
+
+    // ── interaction zones (where you can "use" an object) ──
+    var interactions = {
+      desk: {
+        // zone in front of the desk
+        zone: { x: 380, y: 365, w: 220, h: 70 },
+        anchor: { x: 510, y: 250 },
+        label: "Use the typewriter",
+        overlay: "overlay-typewriter"
+      },
+      bookshelf: {
+        zone: { x: 180, y: 295, w: 130, h: 65 },
+        anchor: { x: 225, y: 130 },
+        label: "Browse The Stack",
+        overlay: "overlay-bookshelf"
+      }
+    };
+
+    var activeInteract = null;
+
+    function checkInteract(){
+      for (var key in interactions){
+        if (rectContains(interactions[key].zone, pos.x, pos.y)){
+          if (activeInteract !== key) showPrompt(key);
+          return;
+        }
+      }
+      if (activeInteract) hidePrompt();
+    }
+
+    function showPrompt(key){
+      activeInteract = key;
+      var spec = interactions[key];
+      promptEl.innerHTML = spec.label + '<span class="k-hint">E</span>';
+      // position prompt above anchor — convert viewBox → screen coords
+      var rect = stage.getBoundingClientRect();
+      var vbw = 800, vbh = 600;
+      var sx = rect.left + (spec.anchor.x / vbw) * rect.width;
+      var sy = rect.top + (spec.anchor.y / vbh) * rect.height;
+      promptEl.style.left = sx + "px";
+      promptEl.style.top  = sy + "px";
+      promptEl.classList.add("is-visible");
+    }
+    function hidePrompt(){
+      activeInteract = null;
+      promptEl.classList.remove("is-visible");
+    }
+    promptEl.addEventListener("click", function(){
+      if (!activeInteract) return;
+      openOverlay(interactions[activeInteract].overlay);
+    });
+
+    // ── overlay open/close ──
+    function openOverlay(id){
+      var ov = document.getElementById(id);
+      if (!ov) return;
+      ov.classList.add("is-open");
+    }
+    document.querySelectorAll(".overlay").forEach(function(ov){
+      ov.addEventListener("click", function(e){
+        if (e.target === ov || e.target.hasAttribute("data-close")) ov.classList.remove("is-open");
+      });
+    });
+    document.addEventListener("keydown", function(e){
+      if (e.key === "Escape") document.querySelectorAll(".overlay.is-open").forEach(function(o){ o.classList.remove("is-open"); });
+    });
+
+    // ── input ──
+    var keys = {};
+    document.addEventListener("keydown", function(e){
+      // movement keys
+      var k = e.key.toLowerCase();
+      if (["w","a","s","d","arrowup","arrowleft","arrowdown","arrowright"].indexOf(k) !== -1){
+        keys[k] = true;
+        // when using keys, cancel click-to-walk target
+        target.x = pos.x; target.y = pos.y;
+        e.preventDefault();
+      }
+      // interact
+      if (k === "e" && activeInteract){
+        openOverlay(interactions[activeInteract].overlay);
+      }
+    });
+    document.addEventListener("keyup", function(e){
+      keys[e.key.toLowerCase()] = false;
+    });
+
+    // click/tap to move
+    stage.addEventListener("click", function(e){
+      // ignore clicks on furniture groups that are interactable — they'll be handled via prompt
+      var pt = stage.createSVGPoint();
+      pt.x = e.clientX; pt.y = e.clientY;
+      var ctm = stage.getScreenCTM().inverse();
+      var p = pt.matrixTransform(ctm);
+      target.x = p.x;
+      target.y = p.y;
+    });
+
+    // ── animation loop ──
+    var last = performance.now();
+    function frame(now){
+      var dt = Math.min(0.05, (now - last) / 1000);
+      last = now;
+
+      // keyboard intent vector
+      var vx = 0, vy = 0;
+      if (keys["w"] || keys["arrowup"])    vy -= 1;
+      if (keys["s"] || keys["arrowdown"])  vy += 1;
+      if (keys["a"] || keys["arrowleft"])  vx -= 1;
+      if (keys["d"] || keys["arrowright"]) vx += 1;
+
+      var moving = false;
+      if (vx !== 0 || vy !== 0){
+        var mag = Math.hypot(vx, vy);
+        vx /= mag; vy /= mag;
+        var nx = pos.x + vx * speed * dt;
+        var ny = pos.y + vy * speed * dt;
+        // collision-aware step: try x and y separately so we can slide along blockers
+        if (insideFloor(nx, pos.y) && !blocked(nx, pos.y)) pos.x = nx;
+        if (insideFloor(pos.x, ny) && !blocked(pos.x, ny)) pos.y = ny;
+        moving = true;
+      } else if (Math.abs(target.x - pos.x) > 2 || Math.abs(target.y - pos.y) > 2){
+        // click-to-move: walk toward target
+        var dx = target.x - pos.x, dy = target.y - pos.y;
+        var d = Math.hypot(dx, dy);
+        var step = Math.min(d, speed * dt);
+        var stepx = (dx / d) * step;
+        var stepy = (dy / d) * step;
+        var nx = pos.x + stepx;
+        var ny = pos.y + stepy;
+        if (insideFloor(nx, pos.y) && !blocked(nx, pos.y)) pos.x = nx;
+        else target.x = pos.x;
+        if (insideFloor(pos.x, ny) && !blocked(pos.x, ny)) pos.y = ny;
+        else target.y = pos.y;
+        moving = true;
+      }
+
+      // apply transform with a tiny bob when moving
+      var bob = moving ? Math.sin(now / 110) * 1.2 : 0;
+      charG.setAttribute("transform", "translate(" + pos.x.toFixed(1) + "," + (pos.y + bob).toFixed(1) + ")");
+
+      // reorder character against furniture by y (rough painter's algorithm)
+      // simple: if char is in front of a piece (greater y), append after; else move before.
+      // For prototype, keep static order — works because character is always painted last.
+
+      checkInteract();
+      // keep prompt anchored if visible (in case of resize)
+      if (activeInteract) {
+        var rect = stage.getBoundingClientRect();
+        var vbw = 800, vbh = 600;
+        var spec = interactions[activeInteract];
+        var sx = rect.left + (spec.anchor.x / vbw) * rect.width;
+        var sy = rect.top + (spec.anchor.y / vbh) * rect.height;
+        promptEl.style.left = sx + "px";
+        promptEl.style.top  = sy + "px";
+      }
+
+      requestAnimationFrame(frame);
+    }
+    requestAnimationFrame(frame);
+  })();
+</script>
+
+</body>
+</html>

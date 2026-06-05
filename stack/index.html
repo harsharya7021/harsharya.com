@@ -4,30 +4,35 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>The Stack — Harsh Kumar Arya</title>
-  <meta name="description" content="What's currently being read, watched, and saved for later. A live-ish snapshot of Harsh Kumar Arya's books and films." />
+  <meta name="description" content="The library and the projection room. Books on the shelf, films on the screen. A live-ish snapshot of what Harsh Kumar Arya is reading and watching." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo+Black&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,700;0,6..96,900;1,6..96,400&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=Inter:wght@400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../styles.css?v=11" />
   <style>
-    .stack-page main { max-width: 1080px; margin: 0 auto; padding: 0 0 64px; }
-    .stack-header { padding: 56px 0 40px; max-width: 880px; margin: 0 auto; }
+    /* ──────────────────────────────────────────────────────────
+       THE STACK — Warhol-pop continuity
+       Books as shelf / bookshop / archive · Films as projection
+       Hidden trigger: the missing book on the Currently Reading shelf
+       ────────────────────────────────────────────────────────── */
+
+    .stack-page main { max-width: 1100px; margin: 0 auto; padding: 0 0 0; }
+    .stack-header { padding: 64px 0 36px; max-width: 880px; margin: 0 auto; }
     .stack-eyebrow {
       display: inline-block;
       font-family: var(--font-mono);
-      font-size: 12px; letter-spacing: 0.2em;
+      font-size: 12px; letter-spacing: 0.22em;
       text-transform: uppercase;
       background: var(--accent-3); color: var(--text);
       border: 2px solid var(--text);
-      padding: 5px 12px;
-      margin-bottom: 24px;
+      padding: 5px 12px; margin-bottom: 24px;
     }
     .stack-title {
       font-family: var(--font-display);
-      font-size: clamp(48px, 7vw, 112px);
-      line-height: 0.92; letter-spacing: -0.02em;
+      font-size: clamp(56px, 8vw, 132px);
+      line-height: 0.9; letter-spacing: -0.02em;
       text-transform: uppercase;
-      margin-bottom: 24px;
+      margin: 0 0 24px;
     }
     .stack-title em {
       font-family: var(--font-serif);
@@ -38,7 +43,7 @@
     .stack-lead {
       font-size: 18px; line-height: 1.6;
       max-width: 640px;
-      margin-bottom: 12px;
+      margin: 0 0 12px;
     }
     .stack-lead a {
       color: var(--text);
@@ -46,6 +51,7 @@
       border: 1.5px solid var(--text);
       padding: 0 5px;
       font-weight: 500;
+      text-decoration: none;
     }
     .stack-stamp {
       font-family: var(--font-mono);
@@ -53,6 +59,7 @@
       color: var(--muted); text-transform: uppercase;
     }
 
+    /* ─── COUNTERS ─── (kept from previous build, tightened) */
     .counters {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
@@ -60,19 +67,14 @@
       padding: 36px 0;
       border-top: 3px solid var(--text);
       border-bottom: 3px solid var(--text);
-      margin-bottom: 64px;
+      margin-bottom: 72px;
     }
-    .counter {
-      padding: 0 24px;
-      border-right: 1px solid var(--line);
-    }
+    .counter { padding: 0 24px; border-right: 1px solid var(--line); }
     .counter:last-child { border-right: 0; }
     .counter-num {
       font-family: var(--font-display);
-      font-size: clamp(56px, 7vw, 96px);
-      line-height: 1;
-      letter-spacing: -0.02em;
-      color: var(--text);
+      font-size: clamp(52px, 6.5vw, 92px);
+      line-height: 1; letter-spacing: -0.02em;
     }
     .counter-num em {
       font-family: var(--font-serif);
@@ -82,8 +84,7 @@
     .counter-label {
       font-family: var(--font-mono);
       font-size: 11px; letter-spacing: 0.14em;
-      text-transform: uppercase; color: var(--text);
-      font-weight: 700;
+      text-transform: uppercase; font-weight: 700;
       margin-top: 12px;
     }
     .counter-source {
@@ -92,81 +93,560 @@
       color: var(--muted); margin-top: 4px;
     }
 
-    .stack-section { padding-bottom: 56px; }
-    .stack-section-label {
+    /* ─── SECTION SCAFFOLD ─── */
+    .stk-section { padding: 24px 0 64px; }
+    .stk-label {
       font-family: var(--font-mono);
-      font-size: 12px; letter-spacing: 0.18em;
-      text-transform: uppercase; color: var(--text);
+      font-size: 12px; letter-spacing: 0.2em;
+      text-transform: uppercase; font-weight: 700;
       margin-bottom: 18px;
       display: flex; align-items: center; gap: 16px;
-      font-weight: 700;
     }
-    .stack-section-label::after {
+    .stk-label::after {
       content: ""; flex: 1; height: 2px; background: var(--text);
     }
-    .stack-section-title {
+    .stk-title {
       font-family: var(--font-display);
-      font-size: clamp(32px, 4vw, 52px);
-      line-height: 1.0; letter-spacing: -0.015em;
+      font-size: clamp(36px, 5vw, 72px);
+      line-height: 0.95; letter-spacing: -0.015em;
       text-transform: uppercase;
-      margin-bottom: 32px;
+      margin: 0 0 32px;
     }
-    .stack-section-title em {
+    .stk-title em {
       font-family: var(--font-serif);
       font-style: italic; font-weight: 700;
       color: var(--accent);
       text-transform: none;
     }
-
-    .item-list { display: grid; gap: 0; }
-    .item-row {
-      display: grid;
-      grid-template-columns: 64px 1fr auto;
-      gap: 24px;
-      padding: 20px 0;
-      border-top: 1px solid var(--line);
-      align-items: baseline;
+    .stk-intro {
+      max-width: 56ch; font-size: 16px; line-height: 1.55;
+      color: var(--text); margin: 0 0 36px;
     }
-    .item-list .item-row:last-child { border-bottom: 1px solid var(--line); }
-    .item-rating {
+
+    /* ═══════════════════════════════════════════════════════
+       SECTION · THE SHELF (currently reading, books as spines)
+       ═══════════════════════════════════════════════════════ */
+    .shelf-wrap {
+      position: relative;
+      padding: 36px 28px 0;
+      border: 3px solid var(--text);
+      background: #fff;
+      box-shadow: 10px 10px 0 var(--text);
+    }
+    .shelf-row {
+      display: flex; align-items: flex-end;
+      gap: 6px;
+      min-height: 300px;
+      padding-bottom: 0;
+    }
+    .shelf-board {
+      height: 16px;
+      background: #5a3a26;
+      border-top: 2px solid var(--text);
+      border-bottom: 4px solid var(--text);
+      box-shadow: 0 6px 0 #3a2418 inset;
+      margin-top: -8px;
+      position: relative; z-index: 0;
+    }
+    .shelf-board::after {
+      content: ""; display: block;
+      height: 8px; background: rgba(0,0,0,0.18);
+      margin-top: 16px;
+    }
+
+    /* a single spine — vertical title, hover lifts */
+    .spine {
+      position: relative; z-index: 1;
+      width: 54px;
+      border: 2px solid var(--text);
+      border-bottom: 4px solid var(--text);
+      cursor: pointer;
+      display: flex; align-items: flex-end; justify-content: center;
+      padding: 12px 4px 16px;
+      transition: transform 0.22s ease, box-shadow 0.22s ease;
+      box-shadow: 2px 2px 0 rgba(0,0,0,0.55);
+    }
+    .spine:hover { transform: translateY(-10px); box-shadow: 4px 6px 0 rgba(0,0,0,0.6); }
+    .spine .spine-text {
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      font-family: var(--font-display);
+      font-size: 13px; letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: inherit;
+      line-height: 1.05;
+      white-space: nowrap;
+      max-height: 100%;
+      overflow: hidden;
+    }
+    .spine .spine-author {
+      writing-mode: vertical-rl;
+      transform: rotate(180deg);
+      font-family: var(--font-mono);
+      font-size: 9px; letter-spacing: 0.16em;
+      text-transform: uppercase;
+      opacity: 0.85;
+      margin-top: 8px;
+      white-space: nowrap;
+    }
+    .spine .spine-stack {
+      display: flex; flex-direction: row; gap: 6px;
+      height: 100%;
+    }
+
+    /* spine palette presets */
+    .spine.spine--oxblood { background: #8a2820; color: #f4eedb; height: 256px; }
+    .spine.spine--forest  { background: #2c4a3a; color: #f4eedb; height: 282px; }
+    .spine.spine--navy    { background: #1f2e5e; color: #f4eedb; height: 246px; width: 60px; }
+    .spine.spine--ochre   { background: #c8902c; color: #1a1208; height: 268px; }
+    .spine.spine--burgundy{ background: #6a1e2a; color: #f4eedb; height: 234px; }
+    .spine.spine--mustard { background: #b8861f; color: #1a1208; height: 252px; width: 50px; }
+    .spine.spine--olive   { background: #5e6a32; color: #f4eedb; height: 274px; }
+    .spine.spine--teal    { background: #1f4a5a; color: #f4eedb; height: 262px; width: 58px; }
+    .spine.spine--cream   { background: #ebe3c9; color: #1a1208; height: 246px; }
+
+    /* a thin one for variety */
+    .spine.spine--thin { width: 40px; }
+
+    /* the MISSING BOOK — empty slot, hidden trigger */
+    .spine.spine--gap {
+      width: 56px;
+      height: 252px;
+      background:
+        linear-gradient(180deg, rgba(0,0,0,0.6) 0%, rgba(0,0,0,0.32) 100%);
+      border: none;
+      border-bottom: 4px solid var(--text);
+      box-shadow: inset 6px 0 12px rgba(0,0,0,0.6), inset -6px 0 12px rgba(0,0,0,0.6);
+      cursor: pointer;
+      position: relative;
+    }
+    .spine.spine--gap:hover { transform: translateY(0); box-shadow: inset 6px 0 14px rgba(0,0,0,0.7), inset -6px 0 14px rgba(0,0,0,0.7); }
+    .spine.spine--gap::after {
+      content: "?";
+      position: absolute;
+      bottom: 14px; left: 50%;
+      transform: translateX(-50%);
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: 26px;
+      color: rgba(244, 238, 219, 0.18);
+      transition: color 0.4s ease;
+      pointer-events: none;
+    }
+    .spine.spine--gap:hover::after {
+      color: rgba(244, 238, 219, 0.85);
+    }
+
+    /* the annotation card that flips out below the shelf */
+    .shelf-card {
+      margin: 28px 0 0;
+      padding: 28px 28px 32px;
+      background: var(--accent-3);
+      border: 3px solid var(--text);
+      box-shadow: 6px 6px 0 var(--text);
+      display: none;
+    }
+    .shelf-card.is-open { display: block; }
+    .shelf-card .sc-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 11px; letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--text); margin-bottom: 10px;
+    }
+    .shelf-card .sc-title {
+      font-family: var(--font-serif);
+      font-style: italic; font-weight: 500;
+      font-size: clamp(26px, 3.4vw, 38px);
+      line-height: 1.15;
+      margin: 0 0 4px;
+    }
+    .shelf-card .sc-author {
+      font-family: var(--font-mono);
+      font-size: 12px; letter-spacing: 0.18em;
+      text-transform: uppercase;
+      margin-bottom: 14px;
+    }
+    .shelf-card .sc-note {
+      font-family: var(--font-serif);
+      font-size: 16px; line-height: 1.6;
+      max-width: 60ch;
+    }
+
+    /* ═══════════════════════════════════════════════════════
+       SECTION · THE BOOKSHOP (5★ books, face-out)
+       ═══════════════════════════════════════════════════════ */
+    .bookshop-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 28px;
+    }
+    .bookcover {
+      position: relative;
+      aspect-ratio: 5 / 7;
+      border: 3px solid var(--text);
+      box-shadow: 6px 6px 0 var(--text);
+      padding: 18px 16px 14px;
+      display: flex; flex-direction: column; justify-content: space-between;
+      cursor: pointer;
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+      overflow: hidden;
+    }
+    .bookcover:hover { transform: translate(-3px, -3px); box-shadow: 9px 9px 0 var(--text); }
+    .bookcover .bc-num {
+      font-family: var(--font-mono);
+      font-size: 10px; letter-spacing: 0.18em;
+      text-transform: uppercase;
+      opacity: 0.78;
+    }
+    .bookcover .bc-title {
+      font-family: var(--font-display);
+      font-size: clamp(20px, 2.4vw, 30px);
+      line-height: 0.96;
+      text-transform: uppercase;
+      letter-spacing: -0.005em;
+      margin: 12px 0 0;
+    }
+    .bookcover .bc-author {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: 13px;
+      margin-top: 8px;
+    }
+
+    /* per-cover Warhol palettes */
+    .bookcover.bc--y { background: var(--accent-3); color: var(--text); }
+    .bookcover.bc--p { background: var(--accent); color: var(--bg); }
+    .bookcover.bc--c { background: var(--accent-2, #00b3ff); color: var(--text); }
+    .bookcover.bc--k { background: var(--text); color: var(--bg); }
+    .bookcover.bc--w { background: #fff; color: var(--text); }
+    .bookcover.bc--g { background: #2c4a3a; color: var(--bg); }
+    .bookcover.bc--o { background: #ff5a00; color: var(--text); }
+    .bookcover.bc--b { background: #1f2e5e; color: var(--bg); }
+
+    /* the flip note overlay */
+    .bookcover .bc-note {
+      position: absolute; inset: 0;
+      background: var(--text); color: var(--bg);
+      padding: 18px 16px;
+      display: flex; flex-direction: column; justify-content: center;
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: 14px; line-height: 1.5;
+      opacity: 0; transition: opacity 0.25s ease;
+      pointer-events: none;
+    }
+    .bookcover.is-open .bc-note { opacity: 1; pointer-events: auto; }
+    .bookcover .bc-note .bc-note-meta {
+      font-family: var(--font-mono);
+      font-style: normal;
+      font-size: 10px; letter-spacing: 0.18em;
+      text-transform: uppercase;
+      opacity: 0.75;
+      margin-bottom: 8px;
+    }
+
+    /* ═══════════════════════════════════════════════════════
+       SECTION · THE PROJECTION ROOM (films, dark)
+       ═══════════════════════════════════════════════════════ */
+    .cinema {
+      background: #0a0805;
+      color: #f4eedb;
+      padding: 80px 0;
+      margin: 0 calc(-1 * var(--container-pad)) 0;
+      position: relative;
+      overflow: hidden;
+    }
+    .cinema-inner { max-width: 1080px; margin: 0 auto; padding: 0 var(--container-pad); }
+
+    /* marquee at top of cinema */
+    .cinema-marquee {
+      overflow: hidden;
+      border-top: 2px solid #f4eedb;
+      border-bottom: 2px solid #f4eedb;
+      padding: 10px 0;
+      margin-bottom: 56px;
+      background: #1a1208;
+    }
+    .cinema-marquee-track {
+      display: inline-flex; white-space: nowrap;
+      animation: cinemaMarquee 28s linear infinite;
+      font-family: var(--font-display);
+      font-size: 22px; letter-spacing: 0.04em;
+      color: #ffc700;
+      text-transform: uppercase;
+    }
+    .cinema-marquee-track span { padding: 0 28px; }
+    .cinema-marquee-track span::after {
+      content: "★"; color: #ff2d87; margin-left: 28px;
+    }
+    @keyframes cinemaMarquee {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-33.333%); }
+    }
+
+    .cinema-label {
+      font-family: var(--font-mono);
+      font-size: 11px; letter-spacing: 0.22em;
+      text-transform: uppercase; color: #ffc700;
+      margin-bottom: 12px;
+    }
+    .cinema-title {
+      font-family: var(--font-display);
+      font-size: clamp(40px, 6vw, 84px);
+      line-height: 0.92; letter-spacing: -0.02em;
+      text-transform: uppercase;
+      color: #f4eedb;
+      margin: 0 0 36px;
+    }
+    .cinema-title em {
+      font-family: var(--font-serif);
+      font-style: italic; font-weight: 700;
+      color: #ffc700;
+      text-transform: none;
+    }
+    .cinema-intro {
+      max-width: 56ch;
+      font-family: var(--font-serif);
+      font-size: 16px; line-height: 1.55;
+      color: #c8b58c; margin: 0 0 48px;
+    }
+
+    /* the wide screen */
+    .screen-frame {
+      position: relative;
+      aspect-ratio: 21 / 9;
+      background: #14110d;
+      border: 4px solid #f4eedb;
+      box-shadow: 0 0 0 12px #0a0805, 0 0 80px rgba(255, 199, 0, 0.25);
+      padding: 32px 36px;
+      display: flex; flex-direction: column; justify-content: space-between;
+      margin-bottom: 38px;
+      overflow: hidden;
+    }
+    .screen-frame::before {
+      content: ""; position: absolute; inset: 0;
+      background: repeating-linear-gradient(
+        0deg,
+        rgba(255,255,255,0.02) 0px,
+        rgba(255,255,255,0.02) 1px,
+        transparent 1px,
+        transparent 3px
+      );
+      pointer-events: none;
+    }
+    .screen-now {
+      font-family: var(--font-mono);
+      font-size: 11px; letter-spacing: 0.24em;
+      text-transform: uppercase;
+      color: #ffc700;
+    }
+    .screen-now::before {
+      content: ""; display: inline-block;
+      width: 8px; height: 8px; background: #ff2d87;
+      margin-right: 10px; margin-bottom: 1px;
+      vertical-align: middle;
+      animation: blink 1.4s ease-in-out infinite;
+    }
+    @keyframes blink {
+      0%, 50%, 100% { opacity: 1; }
+      55%, 95% { opacity: 0.2; }
+    }
+    .screen-film {
+      font-family: var(--font-display);
+      font-size: clamp(34px, 5vw, 64px);
+      line-height: 0.95; letter-spacing: -0.005em;
+      text-transform: uppercase;
+      color: #f4eedb;
+      margin: 0;
+    }
+    .screen-meta {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: 18px;
+      color: #c8b58c;
+      margin: 14px 0 0;
+    }
+    .screen-meta strong { color: #ffc700; font-weight: 500; font-style: normal; letter-spacing: 0.06em; text-transform: uppercase; font-family: var(--font-mono); font-size: 11px; margin-left: 12px; }
+    .screen-quote {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: 15px; line-height: 1.5;
+      color: #c8b58c;
+      max-width: 60ch;
+      margin: 16px 0 0;
+      opacity: 0.85;
+    }
+
+    /* poster strip — 10/10 films, click to swap the screen */
+    .poster-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 22px;
+      margin-bottom: 48px;
+    }
+    .poster {
+      position: relative;
+      aspect-ratio: 2 / 3;
+      border: 2.5px solid #f4eedb;
+      padding: 18px 14px 14px;
+      cursor: pointer;
+      display: flex; flex-direction: column; justify-content: space-between;
+      background: #1a1208;
+      color: #f4eedb;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      overflow: hidden;
+    }
+    .poster:hover { transform: translateY(-4px); box-shadow: 0 8px 0 rgba(255, 199, 0, 0.5); }
+    .poster.is-active { background: #ffc700; color: #1a1208; border-color: #ffc700; box-shadow: 0 0 0 4px #1a1208, 0 0 0 6px #ffc700; }
+    .poster .pst-rating {
       font-family: var(--font-display);
       font-size: 26px; line-height: 1;
-      color: var(--accent);
-      font-weight: 400;
+      color: #ff2d87;
     }
-    .item-rating-faint {
+    .poster.is-active .pst-rating { color: #1a1208; }
+    .poster .pst-title {
+      font-family: var(--font-display);
+      font-size: clamp(18px, 2.1vw, 24px);
+      line-height: 0.95;
+      text-transform: uppercase;
+      letter-spacing: -0.005em;
+      margin: 8px 0 0;
+    }
+    .poster .pst-meta {
+      font-family: var(--font-mono);
+      font-size: 9.5px; letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: #c8b58c;
+      margin-top: 6px;
+    }
+    .poster.is-active .pst-meta { color: #1a1208; }
+
+    /* ticket-strip — 9/10 tier shown like film stubs */
+    .ticket-strip {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+      border-top: 1px dashed rgba(244, 238, 219, 0.4);
+      border-bottom: 1px dashed rgba(244, 238, 219, 0.4);
+      padding: 22px 0;
+      margin-bottom: 48px;
+    }
+    .ticket {
+      border-right: 1px dashed rgba(244, 238, 219, 0.4);
+      padding: 0 18px;
+      cursor: pointer;
+    }
+    .ticket:last-child { border-right: 0; }
+    .ticket:hover .tkt-title { color: #ffc700; }
+    .tkt-rating {
       font-family: var(--font-display);
       font-size: 22px; line-height: 1;
-      color: var(--muted);
+      color: #ff2d87;
     }
-    .item-title {
+    .tkt-title {
       font-family: var(--font-serif);
-      font-weight: 500;
-      font-size: 20px; letter-spacing: -0.005em;
+      font-style: italic; font-weight: 500;
+      font-size: 18px;
+      line-height: 1.15;
+      margin: 6px 0 4px;
+      transition: color 0.18s ease;
+      color: #f4eedb;
+    }
+    .tkt-meta {
+      font-family: var(--font-mono);
+      font-size: 10px; letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: #8a7b66;
+    }
+
+    /* list teasers (to watch / stand-ups) inside cinema */
+    .cinema-lists {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+    .cinema-list {
+      border: 2px solid #f4eedb;
+      padding: 22px 20px;
+    }
+    .cinema-list .cl-eyebrow {
+      font-family: var(--font-mono);
+      font-size: 10.5px; letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: #ffc700;
+    }
+    .cinema-list .cl-title {
+      font-family: var(--font-display);
+      font-size: 26px; line-height: 1;
+      text-transform: uppercase;
+      margin: 8px 0 4px;
+    }
+    .cinema-list .cl-blurb {
+      font-family: var(--font-serif);
+      font-style: italic;
+      font-size: 14px; line-height: 1.5;
+      color: #c8b58c;
+      margin: 0 0 10px;
+    }
+    .cinema-list .cl-count {
+      font-family: var(--font-mono);
+      font-size: 10.5px; letter-spacing: 0.16em;
+      color: #c8b58c;
+      text-transform: uppercase;
+    }
+
+    /* ═══════════════════════════════════════════════════════
+       SECTION · THE ARCHIVE (lists, denser)
+       ═══════════════════════════════════════════════════════ */
+    .archive-wrap { padding: 24px 0 96px; }
+    .archive-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0 48px;
+    }
+    .arch-col-title {
+      font-family: var(--font-mono);
+      font-size: 11px; letter-spacing: 0.2em;
+      text-transform: uppercase;
+      font-weight: 700;
+      padding-bottom: 12px;
+      border-bottom: 2px solid var(--text);
+      margin-bottom: 0;
+    }
+    .arch-row {
+      display: grid;
+      grid-template-columns: 24px 1fr auto;
+      gap: 16px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--line);
+      align-items: baseline;
+    }
+    .arch-star {
+      font-family: var(--font-display);
+      font-size: 18px;
+      color: var(--accent);
+    }
+    .arch-title {
+      font-family: var(--font-serif);
+      font-weight: 500; font-size: 17px;
       line-height: 1.3;
     }
-    .item-title em { font-style: italic; }
-    .item-byline {
+    .arch-byline {
       display: block;
       font-family: var(--font-serif);
       font-style: italic;
-      font-weight: 400;
-      font-size: 14px;
+      font-size: 13px;
       color: var(--muted);
-      margin-top: 4px;
+      margin-top: 2px;
     }
-    .item-meta {
+    .arch-meta {
       font-family: var(--font-mono);
-      font-size: 10.5px; letter-spacing: 0.14em;
+      font-size: 10px; letter-spacing: 0.14em;
       color: var(--muted);
       text-transform: uppercase;
       white-space: nowrap;
     }
-    .two-col {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0 56px;
-    }
+
     .stack-end {
       text-align: center;
       font-family: var(--font-mono);
@@ -175,15 +655,31 @@
       padding: 48px 0 96px;
     }
 
-    @media (max-width: 720px) {
+    /* ─── mobile ─── */
+    @media (max-width: 760px) {
       .stack-header { padding: 40px 0 24px; }
       .counters { grid-template-columns: 1fr 1fr; gap: 28px 0; }
       .counter { padding: 16px; border-right: 0; border-bottom: 1px solid var(--line); }
       .counter:nth-child(odd) { border-right: 1px solid var(--line); }
       .counter:nth-child(3), .counter:nth-child(4) { border-bottom: 0; }
-      .two-col { grid-template-columns: 1fr; gap: 0; }
-      .item-row { grid-template-columns: 48px 1fr; gap: 16px; }
-      .item-meta { display: none; }
+
+      .shelf-wrap { padding: 24px 14px 0; }
+      .shelf-row { gap: 4px; flex-wrap: wrap; justify-content: flex-start; min-height: 0; }
+      .spine .spine-text { font-size: 11px; }
+
+      .bookshop-grid { grid-template-columns: repeat(2, 1fr); gap: 18px; }
+
+      .cinema { padding: 56px 0; }
+      .poster-strip { grid-template-columns: repeat(2, 1fr); gap: 16px; }
+      .ticket-strip { grid-template-columns: repeat(2, 1fr); gap: 16px 0; }
+      .ticket { border-right: 0; border-bottom: 1px dashed rgba(244, 238, 219, 0.4); padding: 10px 0; }
+      .ticket:nth-child(odd) { border-right: 1px dashed rgba(244, 238, 219, 0.4); padding-right: 16px; }
+      .ticket:nth-child(even) { padding-left: 16px; }
+      .ticket:last-child, .ticket:nth-last-child(2) { border-bottom: 0; }
+      .cinema-lists { grid-template-columns: 1fr; }
+
+      .archive-grid { grid-template-columns: 1fr; gap: 0; }
+      .arch-meta { display: none; }
     }
   </style>
 </head>
@@ -204,7 +700,7 @@
 
   <header class="container stack-header">
     <span class="stack-eyebrow">The Stack</span>
-    <h1 class="stack-title">Books on the side table, films I <em>keep coming back to.</em></h1>
+    <h1 class="stack-title">The library and the <em>projection room.</em></h1>
     <p class="stack-lead">A semi-live snapshot of what I'm reading and what I've watched. Pulled from <a href="https://www.goodreads.com/user/show/131128315-harsh-arya" target="_blank" rel="noopener">Goodreads</a> and <a href="https://www.imdb.com/user/p.zu2d65dgnmfcpzmntmp45p2wbm/" target="_blank" rel="noopener">IMDb</a>; refreshed when I remember to. (Yes — I use IMDb's "watchlist" backwards. It's a record of what I've seen.)</p>
     <p class="stack-stamp">Last refreshed · May 2026</p>
   </header>
@@ -234,156 +730,376 @@
       </div>
     </div>
 
-    <section class="stack-section">
-      <div class="stack-section-label">Currently reading</div>
-      <h2 class="stack-section-title">Three books on the <em>side table.</em></h2>
-      <div class="item-list">
-        <div class="item-row">
-          <span class="item-rating-faint">·</span>
-          <span class="item-title">Vigil<span class="item-byline">George Saunders</span></span>
-          <span class="item-meta">picked up Apr 2026</span>
+    <!-- ═══════════════════════════ THE SHELF ═══════════════════════════ -->
+    <section class="stk-section">
+      <div class="stk-label">Shelf I · Currently reading</div>
+      <h2 class="stk-title">On the <em>side table.</em></h2>
+      <p class="stk-intro">Three open at once. The Saunders is the morning book, the Murakami sits by the kettle, the Piyush Mishra travels.</p>
+
+      <div class="shelf-wrap">
+        <div class="shelf-row" id="shelfRow">
+
+          <button class="spine spine--oxblood" type="button"
+            data-shelf-card="sc-vigil">
+            <span class="spine-text">Vigil</span>
+          </button>
+
+          <button class="spine spine--ochre" type="button"
+            data-shelf-card="sc-birthday">
+            <span class="spine-text">Birthday Stories</span>
+          </button>
+
+          <button class="spine spine--navy" type="button"
+            data-shelf-card="sc-piyush">
+            <span class="spine-text">Tumhari Auqaat Kya Hai</span>
+          </button>
+
+          <!-- THE MISSING BOOK — hidden trigger, opens the speakeasy door -->
+          <a class="spine spine--gap" href="/speakeasy/"
+            aria-label="A book that isn't on the shelf"></a>
+
+          <button class="spine spine--forest" type="button"
+            data-shelf-card="sc-next-1">
+            <span class="spine-text">Next up · 01</span>
+          </button>
+
+          <button class="spine spine--mustard spine--thin" type="button"
+            data-shelf-card="sc-next-2">
+            <span class="spine-text">Next up · 02</span>
+          </button>
+
+          <button class="spine spine--burgundy" type="button"
+            data-shelf-card="sc-next-3">
+            <span class="spine-text">Next up · 03</span>
+          </button>
+
+          <button class="spine spine--teal" type="button"
+            data-shelf-card="sc-next-4">
+            <span class="spine-text">Next up · 04</span>
+          </button>
+
         </div>
-        <div class="item-row">
-          <span class="item-rating-faint">·</span>
-          <span class="item-title">Birthday Stories: Selected and Introduced by Haruki Murakami<span class="item-byline">Haruki Murakami</span></span>
-          <span class="item-meta">15% in</span>
+        <div class="shelf-board"></div>
+
+        <!-- ANNOTATION CARDS (revealed on spine click) -->
+        <div class="shelf-card" id="sc-vigil">
+          <div class="sc-eyebrow">Spine I · Picked up Apr 2026</div>
+          <div class="sc-title">Vigil</div>
+          <div class="sc-author">George Saunders</div>
+          <div class="sc-note">Reading a chapter a morning. Saunders writes the way I want to think when I'm tired — patient, generous, willing to look at the same small thing twice.</div>
         </div>
-        <div class="item-row">
-          <span class="item-rating-faint">·</span>
-          <span class="item-title">Tumhari Auqaat Kya Hai, Piyush Mishra<span class="item-byline">Piyush Mishra</span></span>
-          <span class="item-meta">24% in</span>
+        <div class="shelf-card" id="sc-birthday">
+          <div class="sc-eyebrow">Spine II · 15% in</div>
+          <div class="sc-title">Birthday Stories</div>
+          <div class="sc-author">Selected and introduced by Haruki Murakami</div>
+          <div class="sc-note">An anthology of birthday stories, picked by Murakami. The introductions are better than half the stories — which is its own kind of treat.</div>
+        </div>
+        <div class="shelf-card" id="sc-piyush">
+          <div class="sc-eyebrow">Spine III · 24% in</div>
+          <div class="sc-title">Tumhari Auqaat Kya Hai, Piyush Mishra</div>
+          <div class="sc-author">Piyush Mishra</div>
+          <div class="sc-note">The Hindi I should have grown up reading more of. Half memoir, half manifesto, half poetry — yes, three halves, that's how it works.</div>
+        </div>
+        <div class="shelf-card" id="sc-next-1">
+          <div class="sc-eyebrow">Spine IV · Queued</div>
+          <div class="sc-title">Next up · TBD</div>
+          <div class="sc-author">— filling these as I go —</div>
+          <div class="sc-note">Placeholder spine for the next book in line. Updating live-ish.</div>
+        </div>
+        <div class="shelf-card" id="sc-next-2">
+          <div class="sc-eyebrow">Spine V · Queued</div>
+          <div class="sc-title">Next up · TBD</div>
+          <div class="sc-author">— filling these as I go —</div>
+          <div class="sc-note">Placeholder spine for the next book in line.</div>
+        </div>
+        <div class="shelf-card" id="sc-next-3">
+          <div class="sc-eyebrow">Spine VI · Queued</div>
+          <div class="sc-title">Next up · TBD</div>
+          <div class="sc-author">— filling these as I go —</div>
+          <div class="sc-note">Placeholder spine for the next book in line.</div>
+        </div>
+        <div class="shelf-card" id="sc-next-4">
+          <div class="sc-eyebrow">Spine VII · Queued</div>
+          <div class="sc-title">Next up · TBD</div>
+          <div class="sc-author">— filling these as I go —</div>
+          <div class="sc-note">Placeholder spine for the next book in line.</div>
         </div>
       </div>
     </section>
 
-    <section class="stack-section">
-      <div class="stack-section-label">Films I'd defend at dinner</div>
-      <h2 class="stack-section-title">The 10/10s — small list, <em>deliberately.</em></h2>
-      <div class="item-list">
-        <div class="item-row">
-          <span class="item-rating">10</span>
-          <span class="item-title">Perfect Days<span class="item-byline">Wim Wenders · 2023 · 2h 4m</span></span>
-          <span class="item-meta">rated Aug 2025</span>
-        </div>
-        <div class="item-row">
-          <span class="item-rating">10</span>
-          <span class="item-title">Wild Tales<span class="item-byline">Damián Szifron · 2014 · Argentina</span></span>
-          <span class="item-meta">rated May 2021</span>
-        </div>
-        <div class="item-row">
-          <span class="item-rating">10</span>
-          <span class="item-title">Forrest Gump<span class="item-byline">Robert Zemeckis · 1994</span></span>
-          <span class="item-meta">rated Jan 2020</span>
-        </div>
-        <div class="item-row">
-          <span class="item-rating">10</span>
-          <span class="item-title">Once Upon a Time… in Hollywood<span class="item-byline">Quentin Tarantino · 2019</span></span>
-          <span class="item-meta">rated Jan 2020</span>
-        </div>
+    <!-- ═══════════════════════════ THE BOOKSHOP ═══════════════════════════ -->
+    <section class="stk-section">
+      <div class="stk-label">Shelf II · 5★ on Goodreads · books I've handed to friends</div>
+      <h2 class="stk-title">The <em>bookshop window.</em></h2>
+      <p class="stk-intro">The face-out display. Books I've physically given to people, or texted them to buy. R. K. Narayan dominates this row — that isn't an accident.</p>
+
+      <div class="bookshop-grid">
+
+        <button class="bookcover bc--y" type="button">
+          <span class="bc-num">★ I</span>
+          <span class="bc-title">Tuesdays<br>with Morrie</span>
+          <span class="bc-author">Mitch Albom</span>
+          <span class="bc-note">
+            <span class="bc-note-meta">Read · Jul 2025</span>
+            For when someone needs reminding that paying attention is the only practice that matters.
+          </span>
+        </button>
+
+        <button class="bookcover bc--g" type="button">
+          <span class="bc-num">★ II</span>
+          <span class="bc-title">Malgudi Days</span>
+          <span class="bc-author">R. K. Narayan</span>
+          <span class="bc-note">
+            <span class="bc-note-meta">Hand to · everyone</span>
+            The reason I think of small towns the way I do. The reason Ratlam is a story in my head, not an embarrassment.
+          </span>
+        </button>
+
+        <button class="bookcover bc--p" type="button">
+          <span class="bc-num">★ III</span>
+          <span class="bc-title">The English Teacher</span>
+          <span class="bc-author">R. K. Narayan</span>
+          <span class="bc-note">
+            <span class="bc-note-meta">Hand to · grieving friends</span>
+            Loss without melodrama. The book I bring up when someone is trying to write about losing a parent.
+          </span>
+        </button>
+
+        <button class="bookcover bc--c" type="button">
+          <span class="bc-num">★ IV</span>
+          <span class="bc-title">The Financial Expert</span>
+          <span class="bc-author">R. K. Narayan</span>
+          <span class="bc-note">
+            <span class="bc-note-meta">Hand to · operators</span>
+            What ambition looks like in a small place. Funny on the surface, brutal underneath.
+          </span>
+        </button>
+
+        <button class="bookcover bc--o" type="button">
+          <span class="bc-num">★ V</span>
+          <span class="bc-title">Talkative Man</span>
+          <span class="bc-author">R. K. Narayan</span>
+          <span class="bc-note">
+            <span class="bc-note-meta">Hand to · writers</span>
+            Slim, sharp, almost a sketch — but the voice is the point.
+          </span>
+        </button>
+
+        <button class="bookcover bc--w" type="button">
+          <span class="bc-num">★ VI</span>
+          <span class="bc-title">Piccadilly Jim</span>
+          <span class="bc-author">P. G. Wodehouse</span>
+          <span class="bc-note">
+            <span class="bc-note-meta">Hand to · anyone in a bad mood</span>
+            Comfort in book form. Comedy that's actually well-built underneath.
+          </span>
+        </button>
+
+        <button class="bookcover bc--k" type="button">
+          <span class="bc-num">★ VII</span>
+          <span class="bc-title">Five Point<br>Someone</span>
+          <span class="bc-author">Chetan Bhagat</span>
+          <span class="bc-note">
+            <span class="bc-note-meta">Hand to · 17-year-olds</span>
+            Yes, this one. Right book, right age. Doesn't have to be Tolstoy to land.
+          </span>
+        </button>
+
+        <button class="bookcover bc--b" type="button">
+          <span class="bc-num">★ VIII</span>
+          <span class="bc-title">Scientists & Their Mind-Blowing Experiments</span>
+          <span class="bc-author">Mike Goldsmith</span>
+          <span class="bc-note">
+            <span class="bc-note-meta">Hand to · curious kids</span>
+            The book that made me think being a scientist was a way of being playful as a job.
+          </span>
+        </button>
+
       </div>
     </section>
 
-    <section class="stack-section">
-      <div class="stack-section-label">9/10 tier</div>
-      <h2 class="stack-section-title">Lurking just <em>below.</em></h2>
-      <div class="two-col">
-        <div class="item-list">
-          <div class="item-row">
-            <span class="item-rating">9</span>
-            <span class="item-title">The Shawshank Redemption<span class="item-byline">Frank Darabont · 1994</span></span>
-            <span class="item-meta"></span>
-          </div>
-          <div class="item-row">
-            <span class="item-rating">9</span>
-            <span class="item-title">The Irishman<span class="item-byline">Martin Scorsese · 2019</span></span>
-            <span class="item-meta"></span>
+  </main>
+
+  <!-- ═══════════════════════════ THE PROJECTION ROOM ═══════════════════════════ -->
+  <section class="cinema">
+    <div class="container">
+      <div class="cinema-inner">
+
+        <div class="cinema-marquee" aria-hidden="true">
+          <div class="cinema-marquee-track">
+            <span>Perfect Days</span>
+            <span>Wild Tales</span>
+            <span>Forrest Gump</span>
+            <span>Once Upon a Time in Hollywood</span>
+            <span>The Shawshank Redemption</span>
+            <span>Parasite</span>
+            <span>Perfect Days</span>
+            <span>Wild Tales</span>
+            <span>Forrest Gump</span>
+            <span>Once Upon a Time in Hollywood</span>
+            <span>The Shawshank Redemption</span>
+            <span>Parasite</span>
+            <span>Perfect Days</span>
+            <span>Wild Tales</span>
+            <span>Forrest Gump</span>
+            <span>Once Upon a Time in Hollywood</span>
+            <span>The Shawshank Redemption</span>
+            <span>Parasite</span>
           </div>
         </div>
-        <div class="item-list">
-          <div class="item-row">
-            <span class="item-rating">9</span>
-            <span class="item-title">Parasite<span class="item-byline">Bong Joon Ho · 2019 · South Korea</span></span>
-            <span class="item-meta"></span>
+
+        <div class="cinema-label">Shelf III · The projection room</div>
+        <h2 class="cinema-title">Films I'd <em>defend at dinner.</em></h2>
+        <p class="cinema-intro">35mm in spirit. The 10/10 list is short on purpose — these are the films I'd rewatch on a flight, on a Sunday, on a hard day. Click a poster to swap the screen.</p>
+
+        <!-- the wide screen -->
+        <div class="screen-frame" id="screen">
+          <div class="screen-now">Now showing — projected on a loop</div>
+          <div>
+            <h3 class="screen-film" id="screenFilm">Perfect Days</h3>
+            <p class="screen-meta" id="screenMeta">Wim Wenders · 2023 · 2h 4m <strong>Rated 10</strong></p>
+            <p class="screen-quote" id="screenQuote">Hirayama cleans Tokyo's toilets, listens to cassettes, photographs trees. A film about how small attention compounds.</p>
           </div>
-          <div class="item-row">
-            <span class="item-rating">8</span>
-            <span class="item-title">Ford v Ferrari<span class="item-byline">James Mangold · 2019</span></span>
-            <span class="item-meta"></span>
+        </div>
+
+        <!-- 10/10 posters -->
+        <div class="poster-strip" id="posterStrip">
+
+          <button class="poster is-active" type="button"
+            data-film="perfect-days"
+            data-title="Perfect Days"
+            data-meta="Wim Wenders · 2023 · 2h 4m"
+            data-rating="Rated 10"
+            data-quote="Hirayama cleans Tokyo's toilets, listens to cassettes, photographs trees. A film about how small attention compounds.">
+            <span class="pst-rating">10</span>
+            <div>
+              <div class="pst-title">Perfect Days</div>
+              <div class="pst-meta">Wenders · 2023 · Japan</div>
+            </div>
+          </button>
+
+          <button class="poster" type="button"
+            data-film="wild-tales"
+            data-title="Wild Tales"
+            data-meta="Damián Szifron · 2014 · Argentina"
+            data-rating="Rated 10"
+            data-quote="Six stories about revenge and how easy it is to feel like the protagonist of yours. The best portmanteau film I've seen.">
+            <span class="pst-rating">10</span>
+            <div>
+              <div class="pst-title">Wild Tales</div>
+              <div class="pst-meta">Szifron · 2014 · Argentina</div>
+            </div>
+          </button>
+
+          <button class="poster" type="button"
+            data-film="forrest-gump"
+            data-title="Forrest Gump"
+            data-meta="Robert Zemeckis · 1994 · 2h 22m"
+            data-rating="Rated 10"
+            data-quote="Defending this one will lose you cinephile points. I'm fine with that. The film I watched first as a kid; the film that's gotten better with every rewatch.">
+            <span class="pst-rating">10</span>
+            <div>
+              <div class="pst-title">Forrest Gump</div>
+              <div class="pst-meta">Zemeckis · 1994</div>
+            </div>
+          </button>
+
+          <button class="poster" type="button"
+            data-film="ouatih"
+            data-title="Once Upon a Time… in Hollywood"
+            data-meta="Quentin Tarantino · 2019 · 2h 41m"
+            data-rating="Rated 10"
+            data-quote="Tarantino's most patient film. The one he made to sit inside Los Angeles, not to leave a stylish mark on it.">
+            <span class="pst-rating">10</span>
+            <div>
+              <div class="pst-title">Once Upon a Time… in Hollywood</div>
+              <div class="pst-meta">Tarantino · 2019</div>
+            </div>
+          </button>
+
+        </div>
+
+        <!-- 9/10 tier as ticket stubs -->
+        <div class="ticket-strip">
+          <div class="ticket" data-title="The Shawshank Redemption" data-meta="Frank Darabont · 1994" data-rating="Rated 9" data-quote="The most rewatchable film about endurance ever made.">
+            <div class="tkt-rating">9</div>
+            <div class="tkt-title">The Shawshank Redemption</div>
+            <div class="tkt-meta">Darabont · 1994</div>
+          </div>
+          <div class="ticket" data-title="The Irishman" data-meta="Martin Scorsese · 2019" data-rating="Rated 9" data-quote="Scorsese ending a register. Long, slow, completely earned.">
+            <div class="tkt-rating">9</div>
+            <div class="tkt-title">The Irishman</div>
+            <div class="tkt-meta">Scorsese · 2019</div>
+          </div>
+          <div class="ticket" data-title="Parasite" data-meta="Bong Joon Ho · 2019 · South Korea" data-rating="Rated 9" data-quote="A film that turns into a different film three times and lands every transition.">
+            <div class="tkt-rating">9</div>
+            <div class="tkt-title">Parasite</div>
+            <div class="tkt-meta">Bong · 2019</div>
+          </div>
+          <div class="ticket" data-title="Ford v Ferrari" data-meta="James Mangold · 2019" data-rating="Rated 8" data-quote="Mangold writes operators better than most people make pitch decks.">
+            <div class="tkt-rating">8</div>
+            <div class="tkt-title">Ford v Ferrari</div>
+            <div class="tkt-meta">Mangold · 2019</div>
+          </div>
+        </div>
+
+        <div class="cinema-lists">
+          <div class="cinema-list">
+            <div class="cl-eyebrow">List · In the queue</div>
+            <div class="cl-title">To watch in the future</div>
+            <div class="cl-blurb">Films I keep coming back to before bed and then putting off because the day's been too long.</div>
+            <div class="cl-count">56 titles</div>
+          </div>
+          <div class="cinema-list">
+            <div class="cl-eyebrow">List · Comfort</div>
+            <div class="cl-title">Stand-up specials</div>
+            <div class="cl-blurb">When the day's been heavy and the brain wants jokes that don't require thinking.</div>
+            <div class="cl-count">40 titles</div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══════════════════════════ THE ARCHIVE ═══════════════════════════ -->
+  <main class="container">
+    <section class="stk-section archive-wrap">
+      <div class="stk-label">Shelf IV · The archive</div>
+      <h2 class="stk-title">Everything else, <em>lightly catalogued.</em></h2>
+      <p class="stk-intro">The denser end. Books and films I've logged but haven't pulled out for the front shelf — for when you want to dig.</p>
+
+      <div class="archive-grid">
+        <div>
+          <div class="arch-col-title">Books · the rest of the read pile</div>
+          <div class="arch-row">
+            <span class="arch-star">·</span>
+            <span class="arch-title">— refreshing from Goodreads soon —<span class="arch-byline">a rolling pull of the last 30 titles, with my rating</span></span>
+            <span class="arch-meta">in progress</span>
+          </div>
+          <div class="arch-row">
+            <span class="arch-star">·</span>
+            <span class="arch-title">Author counts<span class="arch-byline">e.g. R. K. Narayan ×6, Wodehouse ×4, Murakami ×3 — once it pulls live</span></span>
+            <span class="arch-meta">in progress</span>
+          </div>
+        </div>
+        <div>
+          <div class="arch-col-title">Films · everything I've logged</div>
+          <div class="arch-row">
+            <span class="arch-star">·</span>
+            <span class="arch-title">— refreshing from IMDb soon —<span class="arch-byline">a rolling pull of the last 50 titles, with my rating</span></span>
+            <span class="arch-meta">in progress</span>
+          </div>
+          <div class="arch-row">
+            <span class="arch-star">·</span>
+            <span class="arch-title">By decade<span class="arch-byline">heaviest in the 2010s; surprised by how light the 80s are</span></span>
+            <span class="arch-meta">in progress</span>
           </div>
         </div>
       </div>
+
+      <p class="stack-end">— end of stack — refreshed when I remember to —</p>
     </section>
-
-    <section class="stack-section">
-      <div class="stack-section-label">Lists I keep</div>
-      <h2 class="stack-section-title">Smaller pockets — for <em>moods.</em></h2>
-      <div class="item-list">
-        <div class="item-row">
-          <span class="item-rating-faint">+</span>
-          <span class="item-title">To watch in the future<span class="item-byline">Films I keep coming back to before bed.</span></span>
-          <span class="item-meta">56 titles</span>
-        </div>
-        <div class="item-row">
-          <span class="item-rating-faint">+</span>
-          <span class="item-title">Stand-up specials<span class="item-byline">When the day's been heavy and the brain wants jokes.</span></span>
-          <span class="item-meta">40 titles</span>
-        </div>
-      </div>
-    </section>
-
-    <section class="stack-section">
-      <div class="stack-section-label">5★ on Goodreads</div>
-      <h2 class="stack-section-title">The books I've handed to <em>friends.</em></h2>
-      <div class="two-col">
-        <div class="item-list">
-          <div class="item-row">
-            <span class="item-rating">★</span>
-            <span class="item-title">Tuesdays with Morrie<span class="item-byline">Mitch Albom</span></span>
-            <span class="item-meta">read Jul 2025</span>
-          </div>
-          <div class="item-row">
-            <span class="item-rating">★</span>
-            <span class="item-title">Malgudi Days<span class="item-byline">R. K. Narayan</span></span>
-            <span class="item-meta"></span>
-          </div>
-          <div class="item-row">
-            <span class="item-rating">★</span>
-            <span class="item-title">The English Teacher<span class="item-byline">R. K. Narayan</span></span>
-            <span class="item-meta"></span>
-          </div>
-          <div class="item-row">
-            <span class="item-rating">★</span>
-            <span class="item-title">The Financial Expert<span class="item-byline">R. K. Narayan</span></span>
-            <span class="item-meta"></span>
-          </div>
-        </div>
-        <div class="item-list">
-          <div class="item-row">
-            <span class="item-rating">★</span>
-            <span class="item-title">Talkative Man<span class="item-byline">R. K. Narayan</span></span>
-            <span class="item-meta"></span>
-          </div>
-          <div class="item-row">
-            <span class="item-rating">★</span>
-            <span class="item-title">Piccadilly Jim<span class="item-byline">P. G. Wodehouse</span></span>
-            <span class="item-meta"></span>
-          </div>
-          <div class="item-row">
-            <span class="item-rating">★</span>
-            <span class="item-title">Five Point Someone<span class="item-byline">Chetan Bhagat</span></span>
-            <span class="item-meta"></span>
-          </div>
-          <div class="item-row">
-            <span class="item-rating">★</span>
-            <span class="item-title">Scientists and Their Mind-Blowing Experiments<span class="item-byline">Mike Goldsmith</span></span>
-            <span class="item-meta"></span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <p class="stack-end">— end of stack — refreshed when I remember to —</p>
-
   </main>
 
   <footer>
@@ -393,16 +1109,86 @@
         <a href="https://www.linkedin.com/in/harsharyaa/" target="_blank" rel="noopener">LinkedIn</a>
         <a href="https://github.com/harsharya7021" target="_blank" rel="noopener">GitHub</a>
       </span>
-      <span class="foot-right">Built for the few people who'll actually read this far.</span>
+      <span class="foot-right">Built for the <a class="foot-secret" href="/speakeasy/">few people</a> who'll actually read this far.</span>
     </div>
   </footer>
 
+  <button id="back-to-top" type="button" aria-label="Back to top">
+    <span class="b2t-arrow" aria-hidden="true">&uarr;</span>
+    <span class="b2t-label">Top</span>
+  </button>
+
   <script>
     document.getElementById("year").textContent = new Date().getFullYear();
-    const nav = document.getElementById("nav");
-    window.addEventListener("scroll", () => {
-      if (window.scrollY > 8) nav.classList.add("scrolled"); else nav.classList.remove("scrolled");
+    var nav = document.getElementById("nav");
+    var b2t = document.getElementById("back-to-top");
+    window.addEventListener("scroll", function () {
+      var sy = window.scrollY;
+      if (sy > 8) nav.classList.add("scrolled"); else nav.classList.remove("scrolled");
+      if (b2t) {
+        if (sy > window.innerHeight * 1.0) b2t.classList.add("is-visible");
+        else b2t.classList.remove("is-visible");
+      }
     });
+    if (b2t) b2t.addEventListener("click", function () { window.scrollTo({ top: 0, behavior: "smooth" }); });
+
+    // ── SHELF: spine → annotation card toggle ──
+    (function () {
+      var spines = document.querySelectorAll(".spine[data-shelf-card]");
+      var cards  = document.querySelectorAll(".shelf-card");
+      spines.forEach(function (s) {
+        s.addEventListener("click", function () {
+          var id = s.getAttribute("data-shelf-card");
+          var open = document.getElementById(id);
+          var alreadyOpen = open && open.classList.contains("is-open");
+          cards.forEach(function (c) { c.classList.remove("is-open"); });
+          if (open && !alreadyOpen) open.classList.add("is-open");
+        });
+      });
+    })();
+
+    // ── BOOKSHOP: cover → note flip ──
+    (function () {
+      var covers = document.querySelectorAll(".bookcover");
+      covers.forEach(function (cv) {
+        cv.addEventListener("click", function () {
+          var isOpen = cv.classList.contains("is-open");
+          covers.forEach(function (c) { c.classList.remove("is-open"); });
+          if (!isOpen) cv.classList.add("is-open");
+        });
+      });
+    })();
+
+    // ── CINEMA: poster / ticket → swap screen ──
+    (function () {
+      var screenFilm = document.getElementById("screenFilm");
+      var screenMeta = document.getElementById("screenMeta");
+      var screenQuote = document.getElementById("screenQuote");
+      var posters = document.querySelectorAll(".poster");
+      var tickets = document.querySelectorAll(".ticket");
+      function swap(el) {
+        var t = el.getAttribute("data-title");
+        var m = el.getAttribute("data-meta");
+        var r = el.getAttribute("data-rating") || "";
+        var q = el.getAttribute("data-quote") || "";
+        screenFilm.textContent = t;
+        screenMeta.innerHTML = m + (r ? " <strong>" + r + "</strong>" : "");
+        screenQuote.textContent = q;
+      }
+      posters.forEach(function (p) {
+        p.addEventListener("click", function () {
+          posters.forEach(function (o) { o.classList.remove("is-active"); });
+          p.classList.add("is-active");
+          swap(p);
+        });
+      });
+      tickets.forEach(function (t) {
+        t.addEventListener("click", function () {
+          posters.forEach(function (o) { o.classList.remove("is-active"); });
+          swap(t);
+        });
+      });
+    })();
   </script>
 </body>
 </html>
