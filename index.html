@@ -8,11 +8,51 @@
 
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo+Black&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,700;0,6..96,900;1,6..96,400&family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&family=DM+Serif+Display:ital@0;1&family=EB+Garamond:ital,wght@0,400;0,500;0,600;1,400&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;1,9..144,400&family=Inter:wght@300;400;500;600;700&family=Italiana&family=Old+Standard+TT:ital,wght@0,400;0,700;1,400&family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Unbounded:wght@300;400;500;700;900&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo+Black&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,700;0,6..96,900;1,6..96,400&family=Inter:wght@300;400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 
   <link rel="stylesheet" href="styles.css?v=11">
+  <style id="warhol-fx">
+  body{ background:transparent !important; }
+  #paper{ position:fixed; inset:0; z-index:-3; background:#fff8e7; }
+  #paper::after{ content:""; position:absolute; inset:0; opacity:.5; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .035 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E"); }
+  #dots{ position:fixed; inset:0; z-index:-2; pointer-events:none; }
+  .forbes{ width:min(300px,80vw)!important; height:auto; aspect-ratio:300/418; background:transparent!important; border:0!important; box-shadow:none!important; padding:0!important; perspective:1500px; }
+  .forbes .card3d{ position:absolute; inset:0; transform-style:preserve-3d; transition:transform .9s cubic-bezier(.7,-0.3,.25,1.25); }
+  .forbes.flipped .card3d{ transform:rotateY(180deg); }
+  .fb-face{ position:absolute; inset:0; backface-visibility:hidden; -webkit-backface-visibility:hidden; border:3.5px solid var(--text); box-shadow:10px 10px 0 var(--text); display:flex; flex-direction:column; align-items:center; justify-content:center; }
+  .fb-front{ background:#fff; }
+  .fb-back{ background:#f3eee0; transform:rotateY(180deg); padding:0; overflow:hidden; }
+  .fb-back svg{ display:block; width:100%; height:100%; }
+  .jail-no{ position:absolute; bottom:7px; right:11px; font-family:var(--font-mono),monospace; font-size:9.5px; color:#44544f; letter-spacing:.08em; }
+  .forbes.busted-card .fb-face{ box-shadow:14px 16px 0 rgba(0,0,0,.55); }
+  @font-face{ font-family:"Pricedown"; src:url("assets/fonts/pricedown.woff2") format("woff2"); font-display:swap; }
+  #busted{ position:fixed; inset:0; z-index:1200; pointer-events:none; opacity:0; transition:opacity .45s; }
+  #busted.on{ opacity:1; }
+  #busted .desat{ position:absolute; inset:0; -webkit-backdrop-filter:grayscale(1) contrast(1.05); backdrop-filter:grayscale(1) contrast(1.05); }
+  #busted .vigg{ position:absolute; inset:0; background:radial-gradient(ellipse at center,transparent 36%,rgba(0,0,0,.66) 100%); transform:scale(1.15); transition:transform 2.2s ease; }
+  #busted.on .vigg{ transform:scale(1); }
+  #busted .band{ position:absolute; left:0; right:0; top:50%; height:34vh; transform:translateY(-50%) scaleY(0); background:linear-gradient(to bottom,transparent,rgba(0,0,0,.42) 22%,rgba(0,0,0,.42) 78%,transparent); transition:transform .3s ease; }
+  #busted.on .band{ transform:translateY(-50%) scaleY(1); }
+  #busted .word{ position:absolute; left:50%; top:50%; transform:translate(-50%,-54%) scale(2.8); font-family:"Pricedown","Anton",sans-serif; font-size:clamp(80px,16vw,220px); line-height:1; color:#4565c8; -webkit-text-stroke:4px #000; text-shadow:0 6px 0 rgba(0,0,0,.45); opacity:0; }
+  #busted.slam .word{ animation:bSlam .3s cubic-bezier(.15,.9,.2,1) both, bShake .26s .28s linear both; }
+  @keyframes bSlam{ from{transform:translate(-50%,-54%) scale(2.8);opacity:0;} 60%{opacity:1;} to{transform:translate(-50%,-54%) scale(1);opacity:1;} }
+  @keyframes bShake{ 0%{transform:translate(-50%,-54%);}25%{transform:translate(calc(-50% - 7px),-53%) rotate(-.6deg);}50%{transform:translate(calc(-50% + 5px),-55%) rotate(.5deg);}75%{transform:translate(calc(-50% - 3px),-54%);}100%{transform:translate(-50%,-54%);} }
+  #busted-dig{ position:fixed; left:50%; top:calc(46% + 232px); transform:translateX(-50%); width:min(560px,86vw); text-align:center; z-index:1300; font-family:var(--font-serif),serif; font-style:italic; font-size:18px; color:#0a0a0a; opacity:0; transition:opacity .5s; pointer-events:none; }
+  @media (prefers-reduced-motion:reduce){ #dots{display:none;} }
+  /* C: hero headline clears the nav divider (desktop) */
+  @media (min-width:821px){ body[data-mode="warhol"] .cine .hero-wrap{ padding-top:104px; } }
+  /* D: hide the cinematic kid/exhibit apparatus on mobile (doesn't work statically) */
+  @media (max-width:820px){ .hero-portrait{ display:none !important; } }
+  /* E: mobile press reads straight — "As Featured In" + real clippings, then GO TO JAIL as the punchline */
+  @media (max-width:820px){
+    .m2-eyebrow .m2not{ display:none !important; }
+    .forbes .card3d{ transform:rotateY(180deg) !important; }
+  }
+  </style>
 </head>
 <body data-mode="warhol" data-density="normal" data-about-photo="wash" data-fx-marilyn="false" data-fx-halftone="false" data-fx-misprint="false" data-fx-stamp="false" data-fx-flood="true" data-creds-logo="footer" data-creds-props="prominent" data-creds-fx="pop" data-wink-fx="hot" data-wink-arrival="manual" data-pointer-stamp="auto" data-pointer-affordance="dotted" data-fn-affordance="bracketed" data-kid-label="off" data-story-opener="dropcap" data-fn-hint="on" style="--accent:#ff5a00;--font-display:'Anton',sans-serif;--font-serif:'Bodoni Moda',serif;--about-wash:#00b3ff;--about-shadow:#ffc700;">
+
+  <div id="paper"></div><canvas id="dots"></canvas>
 
   <!-- ─── NAV ───────────────────────────────────────────── -->
   <nav class="nav" id="nav">
@@ -176,9 +216,14 @@
           </figure>
         </div>
         <div class="forbes" id="forbes">
-          <div class="forbes-mast">Forbes</div>
-          <div class="forbes-30">30 Under 30</div>
-          <div class="forbes-yr">Class of 2026 · the list</div>
+          <div class="card3d">
+            <div class="fb-face fb-front">
+              <div class="forbes-mast">Forbes</div>
+              <div class="forbes-30">30 Under 30</div>
+              <div class="forbes-yr">Class of 2026 · the list</div>
+            </div>
+            <div class="fb-face fb-back"><svg viewBox="0 0 300 420" xmlns="http://www.w3.org/2000/svg" aria-label="Go to Jail"><rect x="0" y="0" width="300" height="420" fill="#f3eee0"/><rect x="17" y="17" width="266" height="386" fill="#d5e4d1" stroke="#44544f" stroke-width="3"/><text x="150" y="78" text-anchor="middle" font-family="Inter,sans-serif" font-weight="600" font-size="34" letter-spacing="6" fill="#44544f">GO TO</text><text x="150" y="382" text-anchor="middle" font-family="Inter,sans-serif" font-weight="600" font-size="34" letter-spacing="8" fill="#44544f">JAIL</text><g stroke="#1a1a1a" stroke-linejoin="round" stroke-linecap="round"><path d="M84 330 q-2 -52 30 -64 l64 -10 q40 6 44 36 l4 38 z" fill="#3d6bb5" stroke-width="7"/><path d="M168 268 q10 -26 34 -38 l28 -12 -6 26 -30 16 q-14 10 -26 8 z" fill="#3d6bb5" stroke-width="7"/><path d="M224 214 l16 -8 8 18 -16 9 z" fill="#f6f3e8" stroke-width="6"/><path d="M236 206 l26 -10 q6 -2 7 3 q1 5 -4 7 l-12 5 q4 1 3 6 q-1 5 -7 6 l-10 2 q-8 1 -9 -6 z" fill="#f6f3e8" stroke-width="5.5"/><path d="M128 158 q-4 -34 26 -38 q26 -3 34 18 q4 12 12 14 l-8 8 q6 26 -10 34 q-22 10 -40 -2 q-12 -10 -14 -34 z" fill="#f6f3e8" stroke-width="7"/><path d="M196 158 q12 2 10 12 q-2 8 -14 6" fill="#f6f3e8" stroke-width="6"/><path d="M168 142 l18 8" fill="none" stroke-width="6"/><circle cx="184" cy="156" r="3.6" fill="#1a1a1a" stroke="none"/><path d="M196 184 l22 8" fill="none" stroke-width="7"/><rect x="214" y="186" width="14" height="12" rx="3" fill="#1a1a1a" stroke-width="4"/><path d="M138 270 l28 -14 16 16" fill="#f6f3e8" stroke-width="6"/><path d="M120 134 q2 -26 44 -28 q36 -2 44 16 l-2 6 -86 14 z" fill="#3d6bb5" stroke-width="7"/><path d="M110 140 l98 -20 q14 -3 15 6 q1 8 -11 11 l-98 16 q-10 1 -4 -13 z" fill="#3d6bb5" stroke-width="6"/></g></svg><div class="jail-no">CARD 30 / 30</div></div>
+          </div>
         </div>
         <p class="dig" id="dig">Not on it. <em>Have you seen the alumni? I'm filing that as a feature, not a bug.</em></p>
       </div>
@@ -391,6 +436,8 @@
       <span class="foot-right">Built for the <a class="foot-secret" href="/speakeasy/">few people</a> who'll actually read this far.</span>
     </div>
   </footer>
+
+  <div id="busted"><div class="desat"></div><div class="vigg"></div><div class="band"></div><div class="word">BUSTED</div></div>
 
   <button id="back-to-top" type="button" aria-label="Back to top">
     <span class="b2t-arrow" aria-hidden="true">&uarr;</span>
@@ -933,6 +980,7 @@
       if(tape) tape.style.opacity=range(t,0.54,0.68);
     }
     function frame2(){
+      if(window.__bustedActive) return;
       var p=prog_of(cine2);
       m2grad.style.opacity=range(p,0.0,0.22);
       leaf(lf1, KF1, range(p,0.04,0.30));
@@ -956,6 +1004,7 @@
       var dg=ease(range(p,0.93,1.0));
       dig.style.opacity=dg;
       dig.style.transform='translate(-50%,calc(-50% + '+lerp(232,206,dg)+'px))';
+      if(p>0.985 && window.__startBusted) window.__startBusted();
     }
 
     var ticking=false;
@@ -969,5 +1018,74 @@
   })();
   </script>
 
+  <script>
+(function(){
+  var reduced=matchMedia('(prefers-reduced-motion:reduce)').matches;
+  var fine=matchMedia('(pointer:fine)').matches;
+  var small=matchMedia('(max-width:820px)').matches;
+
+  /* ── halftone field ── */
+  var cv=document.getElementById('dots'),g=cv.getContext('2d');
+  var W,H,DPR,SP=small?24:17,dots=[];
+  function sizeC(){ DPR=Math.min(devicePixelRatio||1,1.75);W=innerWidth;H=innerHeight;cv.width=W*DPR;cv.height=H*DPR;cv.style.width=W+'px';cv.style.height=H+'px';g.setTransform(DPR,0,0,DPR,0,0);dots=[];for(var y=SP/2;y<H+SP;y+=SP)for(var x=SP/2;x<W+SP;x+=SP)dots.push({x:x,y:y}); }
+  sizeC();addEventListener('resize',sizeC);
+  var mx=-9999,my=-9999; if(fine)addEventListener('pointermove',function(e){mx=e.clientX;my=e.clientY;},{passive:true});
+  var patch={r:255,g2:90,b:0,x:.7,y:.32,amt:.6}, tgt={r:255,g2:90,b:0,x:.7,y:.32,amt:.6};
+  var lastY=scrollY,vel=0;
+  function draw(t){
+    patch.r+=(tgt.r-patch.r)*.05;patch.g2+=(tgt.g2-patch.g2)*.05;patch.b+=(tgt.b-patch.b)*.05;
+    patch.x+=(tgt.x-patch.x)*.05;patch.y+=(tgt.y-patch.y)*.05;patch.amt+=(tgt.amt-patch.amt)*.05;
+    g.clearRect(0,0,W,H);
+    var y=scrollY;vel+=(Math.abs(y-lastY)-vel)*.12;lastY=y;
+    var vmul=1+Math.min(vel/260,.5),drift=y*.06;
+    var px=patch.x*W,py=patch.y*H,PR=Math.max(W,H)*.42;
+    g.fillStyle='rgba(10,10,10,.085)';g.beginPath();
+    for(var i=0;i<dots.length;i++){ var d=dots[i],dy=(d.y+drift)%(H+SP),r=1.25+Math.sin(t*.0006+d.x*.011+dy*.014)*.32; r*=vmul; if(fine){var ddx=d.x-mx,ddy=dy-my,md=ddx*ddx+ddy*ddy;if(md<57600)r+=Math.pow(1-Math.sqrt(md)/240,1.6)*2.4;} g.moveTo(d.x+r,dy);g.arc(d.x,dy,r,0,6.2832);} g.fill();
+    if(patch.amt>.01){ for(var j=0;j<dots.length;j++){ var e=dots[j],ey=(e.y+drift)%(H+SP),qx=e.x-px,qy=ey-py,qd=Math.sqrt(qx*qx+qy*qy); if(qd<PR){ var k=(1-qd/PR)*patch.amt,r2=(1.45+Math.sin(t*.0006+e.x*.011+ey*.014)*.32)*vmul; g.fillStyle='rgba('+(patch.r|0)+','+(patch.g2|0)+','+(patch.b|0)+','+(k*.32).toFixed(3)+')';g.beginPath();g.arc(e.x,ey,r2,0,6.2832);g.fill(); } } }
+  }
+  if(reduced){ draw(0); } else { (function loop(){ draw(performance.now()); requestAnimationFrame(loop); })(); }
+
+  /* ── accent blush per section ── */
+  var SEC={ 'cine':[255,90,0,.7,.32], 'about':[0,179,255,.24,.5], 'work':[255,199,0,.76,.52], 'credentials':[255,45,135,.26,.55], 'contact':[255,90,0,.6,.6] };
+  if('IntersectionObserver' in window) Object.keys(SEC).forEach(function(id){
+    var el=document.getElementById(id); if(!el)return;
+    new IntersectionObserver(function(es){ es.forEach(function(en){ if(en.isIntersecting){ var c=SEC[id]; tgt.r=c[0];tgt.g2=c[1];tgt.b=c[2];tgt.x=c[3];tgt.y=c[4];tgt.amt=.82; } }); },{threshold:.4}).observe(el);
+  });
+
+  /* ── BUSTED sequence ── */
+  var forbes=document.getElementById('forbes'), busted=document.getElementById('busted');
+  var aboutEl=document.getElementById('about'), cine2=document.getElementById('cine2'), odig=document.getElementById('dig');
+  var bustedDone=false, marching=false;
+  /* enforced scroll-pin: re-set position every frame so wheel/touch can't escape the takeover */
+  var bustedY=null, bustedRAF=null;
+  var _pv=function(e){e.preventDefault();}, _ky=function(e){ if([32,33,34,35,36,38,40].indexOf(e.keyCode)>=0)e.preventDefault(); };
+  function _enforce(){ if(bustedY===null){bustedRAF=null;return;} window.scrollTo(0,bustedY); bustedRAF=requestAnimationFrame(_enforce); }
+  function lockAt(y){ bustedY=y; addEventListener('wheel',_pv,{passive:false}); addEventListener('touchmove',_pv,{passive:false}); addEventListener('keydown',_ky,{passive:false}); if(!bustedRAF)bustedRAF=requestAnimationFrame(_enforce); }
+  function unlockScroll(){ bustedY=null; removeEventListener('wheel',_pv,{passive:false}); removeEventListener('touchmove',_pv,{passive:false}); removeEventListener('keydown',_ky,{passive:false}); }
+  function march(target,dur){ var from=(bustedY!==null?bustedY:scrollY), to=target.getBoundingClientRect().top+scrollY-30, t0=null; (function step(ts){ if(t0===null)t0=ts; var p=Math.min((ts-t0)/dur,1),e=p<.5?2*p*p:1-Math.pow(-2*p+2,2)/2; bustedY=from+(to-from)*e; if(p<1)requestAnimationFrame(step); })(performance.now()); }
+  var jdig=document.createElement('div'); jdig.id='busted-dig'; jdig.innerHTML='Not on the list. <em>Go directly to About. Do not pass GO. Do not collect $200.</em>'; document.body.appendChild(jdig);
+
+  window.__bustedActive=false;
+  window.__startBusted=function(force){
+    if(bustedDone) return;
+    if(!force){ var r=cine2.getBoundingClientRect(); if(!(r.bottom>=innerHeight*0.5 && r.top<=0)) return; }
+    bustedDone=true; window.__bustedActive=true;
+    var rect=forbes.getBoundingClientRect(), home=forbes.parentNode, sib=forbes.nextSibling;
+    if(odig) odig.style.opacity='0';
+    document.body.appendChild(forbes);
+    forbes.style.cssText='position:fixed;left:50%;top:46%;width:'+rect.width+'px;height:'+rect.height+'px;margin:0;z-index:1300;opacity:1;transform:translate(-50%,-46%);';
+    function back(){ forbes.style.cssText=''; forbes.classList.remove('flipped','busted-card'); if(sib)home.insertBefore(forbes,sib);else home.appendChild(forbes); forbes.style.opacity='0'; window.__bustedActive=false; }
+    busted.classList.add('on'); lockAt(scrollY);
+    setTimeout(function(){ forbes.style.transition='transform .9s cubic-bezier(.7,-.3,.25,1.25)'; forbes.style.transform='translate(-50%,-46%) scale(1.14)'; forbes.classList.add('flipped'); },900);
+    setTimeout(function(){ forbes.style.transition='transform .16s cubic-bezier(.5,0,.8,.4)'; forbes.style.transform='translate(-50%,-46%) scale(1)'; forbes.classList.add('busted-card'); busted.classList.add('slam'); },2000);
+    setTimeout(function(){ jdig.style.opacity='1'; },2400);
+    setTimeout(function(){ march(aboutEl,1300); },3800);
+    setTimeout(function(){ unlockScroll(); jdig.style.opacity='0'; busted.classList.remove('on','slam'); forbes.style.transition='opacity .4s'; forbes.style.opacity='0'; setTimeout(back,420); },5200);
+  };
+
+  /* mobile/reduced: no scroll-hijack takeover — GO TO JAIL shows statically via CSS */
+})();
+
+  </script>
 </body>
 </html>
