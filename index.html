@@ -19,25 +19,29 @@
   .forbes{ width:min(300px,80vw)!important; height:auto; aspect-ratio:300/418; background:transparent!important; border:0!important; box-shadow:none!important; padding:0!important; perspective:1500px; }
   .forbes .card3d{ position:absolute; inset:0; transform-style:preserve-3d; transition:transform .9s cubic-bezier(.7,-0.3,.25,1.25); }
   .forbes.flipped .card3d{ transform:rotateY(180deg); }
-  .fb-face{ position:absolute; inset:0; backface-visibility:hidden; -webkit-backface-visibility:hidden; border:3.5px solid var(--text); box-shadow:10px 10px 0 var(--text); display:flex; flex-direction:column; align-items:center; justify-content:center; }
+  .fb-face{ position:absolute; inset:0; backface-visibility:hidden; -webkit-backface-visibility:hidden; border:3.5px solid var(--text); box-shadow:10px 10px 0 var(--text); display:flex; flex-direction:column; align-items:center; justify-content:center; overflow:hidden; }
+  .fb-face::after{ content:""; position:absolute; inset:-25%; pointer-events:none; background:linear-gradient(115deg,transparent 35%,rgba(255,255,255,.32) 48%,transparent 61%); transform:translateX(-42%) rotate(8deg); opacity:.55; mix-blend-mode:screen; }
   .fb-front{ background:#fff; }
   .fb-back{ background:#f3eee0; transform:rotateY(180deg); padding:0; overflow:hidden; }
-  .fb-back svg{ display:block; width:100%; height:100%; }
-  .jail-no{ position:absolute; bottom:7px; right:11px; font-family:var(--font-mono),monospace; font-size:9.5px; color:#44544f; letter-spacing:.08em; }
+  .fb-img{ display:block; width:100%; height:100%; object-fit:cover; }
+  .fb-front .fb-img{ object-fit:contain; background:#fff; padding:18px; box-sizing:border-box; }
+  @media (hover:hover) and (pointer:fine){
+    .forbes .card3d{ transform:rotateX(var(--tilt-x,0deg)) rotateY(var(--tilt-y,0deg)); }
+    .forbes.flipped .card3d{ transform:rotateX(var(--tilt-x,0deg)) rotateY(calc(180deg + var(--tilt-y,0deg))); }
+  }
   .forbes.busted-card .fb-face{ box-shadow:14px 16px 0 rgba(0,0,0,.55); }
   @font-face{ font-family:"Pricedown"; src:url("assets/fonts/pricedown.woff2") format("woff2"); font-display:swap; }
-  #busted{ position:fixed; inset:0; z-index:1200; pointer-events:none; opacity:0; transition:opacity .45s; }
+  #busted{ position:fixed; inset:0; z-index:1200; pointer-events:none; opacity:0; transition:opacity .45s; overflow:hidden; }
   #busted.on{ opacity:1; }
   #busted .desat{ position:absolute; inset:0; -webkit-backdrop-filter:grayscale(1) contrast(1.05); backdrop-filter:grayscale(1) contrast(1.05); }
   #busted .vigg{ position:absolute; inset:0; background:radial-gradient(ellipse at center,transparent 36%,rgba(0,0,0,.66) 100%); transform:scale(1.15); transition:transform 2.2s ease; }
   #busted.on .vigg{ transform:scale(1); }
   #busted .band{ position:absolute; left:0; right:0; top:50%; height:34vh; transform:translateY(-50%) scaleY(0); background:linear-gradient(to bottom,transparent,rgba(0,0,0,.42) 22%,rgba(0,0,0,.42) 78%,transparent); transition:transform .3s ease; }
   #busted.on .band{ transform:translateY(-50%) scaleY(1); }
-  #busted .word{ position:absolute; left:50%; top:50%; transform:translate(-50%,-54%) scale(2.8); font-family:"Pricedown","Anton",sans-serif; font-size:clamp(80px,16vw,220px); line-height:1; color:#4565c8; -webkit-text-stroke:4px #000; text-shadow:0 6px 0 rgba(0,0,0,.45); opacity:0; }
-  #busted.slam .word{ animation:bSlam .3s cubic-bezier(.15,.9,.2,1) both, bShake .26s .28s linear both; }
+  #busted .word{ display:none; }
   @keyframes bSlam{ from{transform:translate(-50%,-54%) scale(2.8);opacity:0;} 60%{opacity:1;} to{transform:translate(-50%,-54%) scale(1);opacity:1;} }
   @keyframes bShake{ 0%{transform:translate(-50%,-54%);}25%{transform:translate(calc(-50% - 7px),-53%) rotate(-.6deg);}50%{transform:translate(calc(-50% + 5px),-55%) rotate(.5deg);}75%{transform:translate(calc(-50% - 3px),-54%);}100%{transform:translate(-50%,-54%);} }
-  #busted-dig{ position:fixed; left:50%; top:calc(46% + 232px); transform:translateX(-50%); width:min(560px,86vw); text-align:center; z-index:1300; font-family:var(--font-serif),serif; font-style:italic; font-size:18px; color:#0a0a0a; opacity:0; transition:opacity .5s; pointer-events:none; }
+  #busted-dig{ position:fixed; left:50%; top:min(calc(46% + 286px),calc(100vh - 76px)); transform:translateX(-50%); width:min(620px,86vw); text-align:center; z-index:1300; font-family:var(--font-serif),serif; font-style:italic; font-size:18px; line-height:1.35; color:#0a0a0a; opacity:0; transition:opacity .5s; pointer-events:none; padding:8px 12px; background:rgba(255,248,231,.8); box-shadow:0 0 0 1px rgba(10,10,10,.08); }
   @media (prefers-reduced-motion:reduce){ #dots{display:none;} }
   /* C: hero headline clears the nav divider (desktop) */
   @media (min-width:821px){ body[data-mode="warhol"] .cine .hero-wrap{ padding-top:104px; } }
@@ -218,11 +222,11 @@
         <div class="forbes" id="forbes">
           <div class="card3d">
             <div class="fb-face fb-front">
-              <div class="forbes-mast">Forbes</div>
-              <div class="forbes-30">30 Under 30</div>
-              <div class="forbes-yr">Class of 2026 · the list</div>
+              <img class="fb-img" src="assets/press/forbes-30-under-30-logo.jpg" alt="Forbes 30 Under 30 card" loading="lazy" />
             </div>
-            <div class="fb-face fb-back"><svg viewBox="0 0 300 420" xmlns="http://www.w3.org/2000/svg" aria-label="Go to Jail"><rect x="0" y="0" width="300" height="420" fill="#f3eee0"/><rect x="17" y="17" width="266" height="386" fill="#d5e4d1" stroke="#44544f" stroke-width="3"/><text x="150" y="78" text-anchor="middle" font-family="Inter,sans-serif" font-weight="600" font-size="34" letter-spacing="6" fill="#44544f">GO TO</text><text x="150" y="382" text-anchor="middle" font-family="Inter,sans-serif" font-weight="600" font-size="34" letter-spacing="8" fill="#44544f">JAIL</text><g stroke="#1a1a1a" stroke-linejoin="round" stroke-linecap="round"><path d="M84 330 q-2 -52 30 -64 l64 -10 q40 6 44 36 l4 38 z" fill="#3d6bb5" stroke-width="7"/><path d="M168 268 q10 -26 34 -38 l28 -12 -6 26 -30 16 q-14 10 -26 8 z" fill="#3d6bb5" stroke-width="7"/><path d="M224 214 l16 -8 8 18 -16 9 z" fill="#f6f3e8" stroke-width="6"/><path d="M236 206 l26 -10 q6 -2 7 3 q1 5 -4 7 l-12 5 q4 1 3 6 q-1 5 -7 6 l-10 2 q-8 1 -9 -6 z" fill="#f6f3e8" stroke-width="5.5"/><path d="M128 158 q-4 -34 26 -38 q26 -3 34 18 q4 12 12 14 l-8 8 q6 26 -10 34 q-22 10 -40 -2 q-12 -10 -14 -34 z" fill="#f6f3e8" stroke-width="7"/><path d="M196 158 q12 2 10 12 q-2 8 -14 6" fill="#f6f3e8" stroke-width="6"/><path d="M168 142 l18 8" fill="none" stroke-width="6"/><circle cx="184" cy="156" r="3.6" fill="#1a1a1a" stroke="none"/><path d="M196 184 l22 8" fill="none" stroke-width="7"/><rect x="214" y="186" width="14" height="12" rx="3" fill="#1a1a1a" stroke-width="4"/><path d="M138 270 l28 -14 16 16" fill="#f6f3e8" stroke-width="6"/><path d="M120 134 q2 -26 44 -28 q36 -2 44 16 l-2 6 -86 14 z" fill="#3d6bb5" stroke-width="7"/><path d="M110 140 l98 -20 q14 -3 15 6 q1 8 -11 11 l-98 16 q-10 1 -4 -13 z" fill="#3d6bb5" stroke-width="6"/></g></svg><div class="jail-no">CARD 30 / 30</div></div>
+            <div class="fb-face fb-back">
+              <img class="fb-img" src="assets/press/go-to-jail-card.jpg" alt="Monopoly-inspired Go to Jail card" loading="lazy" />
+            </div>
           </div>
         </div>
         <p class="dig" id="dig">Not on it. <em>Have you seen the alumni? I'm filing that as a feature, not a bug.</em></p>
@@ -434,7 +438,7 @@
     </div>
   </footer>
 
-  <div id="busted"><div class="desat"></div><div class="vigg"></div><div class="band"></div><div class="word">BUSTED</div></div>
+  <div id="busted"><div class="desat"></div><div class="vigg"></div><div class="band"></div></div>
 
   <button id="back-to-top" type="button" aria-label="Back to top">
     <span class="b2t-arrow" aria-hidden="true">&uarr;</span>
@@ -1000,7 +1004,7 @@
       m2not.style.transform='rotate(-2deg) scale('+back(range(p,0.86,0.97))+')';
       var dg=ease(range(p,0.93,1.0));
       dig.style.opacity=dg;
-      dig.style.transform='translate(-50%,calc(-50% + '+lerp(232,206,dg)+'px))';
+      dig.style.transform='translate(-50%,calc(-50% + '+lerp(318,342,dg)+'px))';
       if(p>0.985 && window.__startBusted) window.__startBusted();
     }
 
@@ -1016,6 +1020,33 @@
   </script>
 
   <script>
+(function(){
+  if(matchMedia('(prefers-reduced-motion:reduce)').matches) return;
+  if(!matchMedia('(hover:hover) and (pointer:fine)').matches) return;
+  var card=document.getElementById('forbes');
+  var stage=document.querySelector('.m2-stage');
+  if(!card || !stage) return;
+  var tx=0,ty=0,cx=0,cy=0,raf=null;
+  function flush(){
+    cx+=(tx-cx)*0.16; cy+=(ty-cy)*0.16;
+    card.style.setProperty('--tilt-x',cx.toFixed(2)+'deg');
+    card.style.setProperty('--tilt-y',cy.toFixed(2)+'deg');
+    if(Math.abs(tx-cx)>0.02 || Math.abs(ty-cy)>0.02) raf=requestAnimationFrame(flush);
+    else raf=null;
+  }
+  function start(){ if(!raf) raf=requestAnimationFrame(flush); }
+  stage.addEventListener('pointermove',function(e){
+    var r=card.getBoundingClientRect();
+    if(r.width<10 || Number(getComputedStyle(card).opacity)<0.35) return;
+    var px=(e.clientX-(r.left+r.width/2))/(r.width/2);
+    var py=(e.clientY-(r.top+r.height/2))/(r.height/2);
+    tx=Math.max(-1,Math.min(1,-py))*5.5;
+    ty=Math.max(-1,Math.min(1,px))*7;
+    start();
+  },{passive:true});
+  stage.addEventListener('pointerleave',function(){ tx=0; ty=0; start(); },{passive:true});
+})();
+
 (function(){
   var reduced=matchMedia('(prefers-reduced-motion:reduce)').matches;
   var fine=matchMedia('(pointer:fine)').matches;
