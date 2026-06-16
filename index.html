@@ -1085,6 +1085,93 @@
 
   </script>
 
+  <!-- ─── awwwards pass: Lenis smooth-scroll + GSAP reveals ───────────────
+       Reveals are IntersectionObserver-triggered (not ScrollTrigger): the hero's
+       custom ~19k-px cinematic transforms content as you scroll, which defeats
+       ScrollTrigger's position math. IO fires on real visual intersection, so
+       nothing can get stuck hidden. GSAP still powers every animation. ── -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
+  <script>
+  (function(){
+    if(!window.gsap) return;
+    var reduced = matchMedia('(prefers-reduced-motion:reduce)').matches;
+
+    /* ── Lenis: light & natural smooth-scroll, AUTO-PAUSED during the Forbes
+       cinematic (window.__bustedActive) so the hero scroll-pin is untouched ── */
+    if(!reduced && window.Lenis){
+      var lenis = new Lenis({ lerp:0.15, wheelMultiplier:1, smoothWheel:true, touchMultiplier:1.4 });
+      gsap.ticker.add(function(t){ lenis.raf(t*1000); });
+      gsap.ticker.lagSmoothing(0);
+      var paused=false;
+      gsap.ticker.add(function(){
+        if(window.__bustedActive && !paused){ lenis.stop(); paused=true; }
+        else if(!window.__bustedActive && paused){ lenis.start(); paused=false; }
+      });
+      window.__lenis = lenis;
+    }
+
+    if(reduced) return;   /* reduced-motion: native scroll, content static & fully visible */
+
+    /* ── word/char splitter that PRESERVES inline markup (<em> highlights) ── */
+    function splitChars(el){
+      var texts=[]; (function walk(n){ for(var c=n.firstChild;c;c=c.nextSibling){ if(c.nodeType===3){ if(c.nodeValue.replace(/\s/g,'')!=='') texts.push(c);} else if(c.nodeType===1) walk(c); } })(el);
+      var chars=[];
+      texts.forEach(function(t){
+        var frag=document.createDocumentFragment();
+        t.nodeValue.split(/(\s+)/).forEach(function(part){
+          if(part==='') return;
+          if(/^\s+$/.test(part)){ frag.appendChild(document.createTextNode(part)); return; }
+          var w=document.createElement('span'); w.className='rv-word'; w.style.display='inline-block'; w.style.whiteSpace='nowrap';
+          part.split('').forEach(function(ch){ var s=document.createElement('span'); s.className='rv-ch'; s.style.display='inline-block'; s.textContent=ch; w.appendChild(s); chars.push(s); });
+          frag.appendChild(w);
+        });
+        t.parentNode.replaceChild(frag,t);
+      });
+      return chars;
+    }
+
+    /* ── reliable reveal trigger: fires once when the element scrolls into view ── */
+    function reveal(el, fn){ if(!el) return; new IntersectionObserver(function(es,ob){ es.forEach(function(e){ if(e.isIntersecting){ ob.disconnect(); fn(el); } }); }, { rootMargin:'0px 0px -10% 0px', threshold:0.12 }).observe(el); }
+    function group(triggerSel, itemSel, vars){ reveal(document.querySelector(triggerSel), function(){ gsap.from(itemSel, vars); }); }
+
+    /* ── section titles: staggered headline chars + accent <em> pop ──
+       (pre-split now — no visual change — so the reveal just animates them) */
+    gsap.utils.toArray('#about .section-title, #work .section-title, #credentials .section-title, #contact .contact-line').forEach(function(el){
+      var chars = splitChars(el);
+      reveal(el, function(){
+        var tl = gsap.timeline();
+        tl.from(chars, { yPercent:115, opacity:0, duration:0.55, ease:'power3.out', stagger:0.016 });
+        var em = el.querySelector('em');
+        if(em) tl.fromTo(em, { scale:1 }, { scale:1.16, transformOrigin:'center', duration:0.16, yoyo:true, repeat:1, ease:'power2.inOut' }, '-=0.12');
+      });
+    });
+
+    /* ── section labels: clip-path wipe L→R (Warhol marquee) ── */
+    gsap.utils.toArray('#about .section-label, #work .section-label, #credentials .section-label, #contact .section-label').forEach(function(el){
+      reveal(el, function(){ gsap.from(el, { clipPath:'inset(0 100% 0 0)', xPercent:-4, opacity:0, duration:0.7, ease:'power4.out' }); });
+    });
+
+    /* ── card pop-ins (stagger the group when it enters) ── */
+    group('.wk-stats', '.wk-stat', { y:42, scale:0.9, opacity:0, duration:0.6, ease:'back.out(1.5)', stagger:0.08 });
+    group('.wk-list',  '.wk-row',  { x:-28, opacity:0, duration:0.5, ease:'power3.out', stagger:0.06 });
+    group('.lyd-grid', '.lyd-col', { y:54, opacity:0, duration:0.7, ease:'power3.out', stagger:0.14 });
+
+    reveal(document.querySelector('.about-photo-frame'), function(el){ gsap.from(el, { scale:0.9, rotation:-2.5, opacity:0, duration:0.85, ease:'power3.out' }); });
+    reveal(document.querySelector('.contact-form'),  function(el){ gsap.from(el, { y:46, opacity:0, duration:0.7, ease:'power3.out' }); });
+    reveal(document.querySelector('.contact-stamp'), function(el){ gsap.from(el, { scale:0.4, rotation:-28, opacity:0, duration:0.85, ease:'back.out(1.6)' }); });
+
+    /* ── magnetic cursor pull: nav links + primary CTA (desktop fine-pointer only) ── */
+    if(matchMedia('(pointer:fine)').matches){
+      document.querySelectorAll('.nav-links a, .form-send').forEach(function(el){
+        var xT=gsap.quickTo(el,'x',{duration:0.4,ease:'power3'}), yT=gsap.quickTo(el,'y',{duration:0.4,ease:'power3'});
+        el.addEventListener('pointermove',function(e){ var b=el.getBoundingClientRect(); xT((e.clientX-(b.left+b.width/2))*0.4); yT((e.clientY-(b.top+b.height/2))*0.5); });
+        el.addEventListener('pointerleave',function(){ xT(0); yT(0); });
+      });
+    }
+  })();
+  </script>
+
   <!-- ─── CREDENTIALS — lanyard ID badges (Three.js physics) ─────────── -->
   <!-- Responsive scale-to-fit: standalone so it works even if WebGL/CDN fails -->
   <script>
