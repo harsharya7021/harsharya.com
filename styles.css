@@ -4730,3 +4730,59 @@ body[data-mode="warhol"] #work .section-title em { transform: rotate(-1.5deg); }
   .cred-foot { flex-wrap: wrap; gap: 12px; padding-top: 18px; }
   .cred-seal { height: 42px; }
 }
+
+/* ============================================================
+   CREDENTIALS — lanyard ID badges (baked from Harsh's tuned
+   prototype). Namespaced .lyd-* so the legacy experimental
+   .cred-* rules above stay dormant and can't collide.
+   ============================================================ */
+/* swing canvases run wider than their boxes (drag room); clip the empty
+   overflow at the section so it never adds horizontal page scroll on mobile.
+   overflow-x:clip is single-axis — it does NOT create a scroll container,
+   so the badge's vertical bleed below each box stays visible. */
+#credentials { overflow-x: clip; }
+.lyd-grid { display: flex; gap: 38px; justify-content: center; align-items: flex-start; flex-wrap: wrap; }
+.lyd-col { width: 541px; max-width: 100%; }
+
+/* school architecture crest — sits ABOVE the page dot-texture */
+.lyd-campus { position: relative; z-index: 1; height: 140px; background-repeat: no-repeat;
+  background-position: center bottom; background-size: contain; opacity: .62;
+  filter: saturate(.9) contrast(1.05); margin-bottom: -1px; }
+.lyd-campus--isb { background-image: url("assets/credentials/isb-campus.png"); }
+.lyd-campus--gt  { background-image: url("assets/credentials/gt-campus.png"); }
+
+/* stage = scalable wrapper; box = the fixed 541x470 design canvas */
+.lyd-stage { position: relative; width: 541px; max-width: 100%; height: 470px; margin: 0 auto; }
+.lyd-box { position: absolute; top: 0; left: 0; width: 541px; height: 470px;
+  border: 3px solid var(--ink, #0a0a0a); box-shadow: 8px 8px 0 var(--ink, #0a0a0a);
+  transform-origin: top left; }
+.lyd-box--isb { background: #00b3ff; }
+.lyd-box--gt  { background: #ffc700; }
+
+.lyd-el { position: absolute; }
+.lyd-title { font-family: 'Anton', sans-serif; font-weight: 400; text-transform: uppercase;
+  font-size: 31px; line-height: 1.04; letter-spacing: -.02em; color: #0a0a0a; }
+.lyd-program { font-family: 'Space Mono', monospace; font-size: 10.5px; letter-spacing: .11em;
+  text-transform: uppercase; color: #3a3a3a; }
+.lyd-line { border-top: 1px solid rgba(0,0,0,.5); }
+.lyd-copy p { font-size: 14px; line-height: 1.5; margin: 0 0 9px; color: #0a0a0a; }
+.lyd-copy strong { font-weight: 600; }
+.lyd-copy .lyd-ref { font-family: 'Bodoni Moda', serif; font-style: italic; color: #2c2c2c;
+  margin-top: 12px; padding-top: 10px; border-top: 1px dashed rgba(0,0,0,.4); }
+.lyd-seal img { display: block; width: 100%; height: auto; }
+.lyd-stat { font-family: 'Space Mono', monospace; }
+.lyd-stat-big { display: block; font-family: 'Anton', sans-serif; font-size: 23px; line-height: 1; color: #0a0a0a; }
+.lyd-stat-sub { display: block; font-size: 9.5px; letter-spacing: .15em; text-transform: uppercase; color: #2c2c2c; margin-top: 5px; }
+
+/* WebGL lanyard canvas — click-through; window-level hit-test drives the drag */
+.lyd-canvas { position: absolute; touch-action: none; z-index: 6; pointer-events: none; }
+
+/* footnote source unfolds as a readable card overlaid inside the box */
+.lyd-fn { position: absolute; left: 22px; right: 22px; top: 116px; bottom: 22px; margin: 0;
+  z-index: 9; pointer-events: none; display: flex; align-items: flex-start; }
+.lyd-fn > * { pointer-events: auto; width: 100%; }
+.lyd-fn:empty { display: none; }
+.lyd-box .fn-card { box-shadow: 7px 7px 0 var(--ink, #0a0a0a); }
+
+@media (max-width: 1180px) { .lyd-grid { gap: 56px; } }
+@media (max-width: 600px)  { .lyd-campus { height: 104px; } }
