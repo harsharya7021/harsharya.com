@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo+Black&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,700;0,6..96,900;1,6..96,400&family=Inter:wght@300;400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="styles.css?v=12">
+  <link rel="stylesheet" href="styles.css?v=13">
   <style id="warhol-fx">
   body{ background:transparent !important; }
   #paper{ position:fixed; inset:0; z-index:-3; background:#fff8e7; }
@@ -1085,31 +1085,17 @@
 
   </script>
 
-  <!-- ─── awwwards pass: Lenis smooth-scroll + GSAP reveals ───────────────
+  <!-- ─── awwwards pass: GSAP reveals + magnetic (NATIVE scroll) ───────────
        Reveals are IntersectionObserver-triggered (not ScrollTrigger): the hero's
        custom ~19k-px cinematic transforms content as you scroll, which defeats
-       ScrollTrigger's position math. IO fires on real visual intersection, so
-       nothing can get stuck hidden. GSAP still powers every animation. ── -->
+       ScrollTrigger's position math. IO fires on real visual intersection.
+       Lenis smooth-scroll was removed — its inertia stutters against the page's
+       live WebGL + cinematic load and read as lag; native scroll is crisp. ── -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/lenis@1.1.14/dist/lenis.min.js"></script>
   <script>
   (function(){
     if(!window.gsap) return;
     var reduced = matchMedia('(prefers-reduced-motion:reduce)').matches;
-
-    /* ── Lenis: light & natural smooth-scroll, AUTO-PAUSED during the Forbes
-       cinematic (window.__bustedActive) so the hero scroll-pin is untouched ── */
-    if(!reduced && window.Lenis){
-      var lenis = new Lenis({ lerp:0.15, wheelMultiplier:1, smoothWheel:true, touchMultiplier:1.4 });
-      gsap.ticker.add(function(t){ lenis.raf(t*1000); });
-      gsap.ticker.lagSmoothing(0);
-      var paused=false;
-      gsap.ticker.add(function(){
-        if(window.__bustedActive && !paused){ lenis.stop(); paused=true; }
-        else if(!window.__bustedActive && paused){ lenis.start(); paused=false; }
-      });
-      window.__lenis = lenis;
-    }
 
     if(reduced) return;   /* reduced-motion: native scroll, content static & fully visible */
 
@@ -1178,9 +1164,13 @@
   (function(){
     function fit(){
       var stages=document.querySelectorAll('.lyd-stage');
+      /* The badges bleed up to ~88px past the box edge; scale so the box PLUS that
+         bleed fits the viewport (718 = 541 box + 2x widest bleed), then size the
+         stage to the scaled box so it stays centered and the card never clips. */
+      var s=Math.min(1, (window.innerWidth - 28) / 718);
       for(var i=0;i<stages.length;i++){ var st=stages[i], box=st.querySelector('.lyd-box'); if(!box) continue;
-        var s=Math.min(1, st.clientWidth/541);
         box.style.transform = s<1 ? 'scale('+s+')' : '';
+        st.style.width = s<1 ? (541*s)+'px' : '';
         st.style.height = (470*s)+'px';
       }
     }
@@ -1293,11 +1283,18 @@
     new ResizeObserver(()=>{ if(window.__fitLyd)window.__fitLyd(); cards.forEach(c=>c.resize()); }).observe(document.body);
     if(document.fonts&&document.fonts.ready) document.fonts.ready.then(()=>{ if(window.__fitLyd)window.__fitLyd(); cards.forEach(c=>c.resize()); });
     const FIXED=1/60;
+    /* Only sim+render while the School section is near the viewport. Off-screen it
+       would burn a full WebGL draw every frame and drag on scroll across the page. */
+    let visible=false;
+    const credEl=document.querySelector('#credentials');
+    if(credEl){ new IntersectionObserver(es=>{ visible=es.some(e=>e.isIntersecting); },{rootMargin:'300px 0px'}).observe(credEl); }
+    else { visible=true; }
     if(reduce){ for(let s=0;s<240;s++)cards.forEach(c=>c.step(s*FIXED)); /* settle, then redraw a bounded window so async card textures appear — no stepping = no motion */ let k=0; (function rd(){ cards.forEach(c=>c.draw()); if(++k<120) requestAnimationFrame(rd); })(); }
     else { let last=performance.now(), acc=0, sim=0;
-      (function f(now){ acc+=Math.min(0.1,(now-last)/1000); last=now; let n=0;
-        while(acc>=FIXED&&n<6){ sim+=FIXED; cards.forEach(c=>c.step(sim)); acc-=FIXED; n++; }
-        cards.forEach(c=>c.draw()); requestAnimationFrame(f); })(performance.now());
+      (function f(now){ acc+=Math.min(0.1,(now-last)/1000); last=now;
+        if(visible){ let n=0; while(acc>=FIXED&&n<6){ sim+=FIXED; cards.forEach(c=>c.step(sim)); acc-=FIXED; n++; } cards.forEach(c=>c.draw()); }
+        else { acc=0; }
+        requestAnimationFrame(f); })(performance.now());
     }
   }
   </script>

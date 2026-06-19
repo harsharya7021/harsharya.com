@@ -786,13 +786,6 @@ body[data-story-opener="rule"] .hero-story > p:first-of-type::before {
   text-wrap: pretty;
 }
 .hero-creds { display: flex; flex-wrap: wrap; gap: 8px 10px; }
-.cred-tag {
-  font-family: var(--font-mono);
-  font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
-  padding: 8px 14px; border: 1px solid var(--text);
-  color: var(--text); background: transparent;
-}
-.cred-tag strong { font-weight: 700; }
 
 .hero-photo { position: relative; }
 
@@ -1873,33 +1866,9 @@ section { padding: var(--section-pad-y) 0; }
 /* ─── CREDENTIALS ───────────────────────────────────────── */
 #credentials { position: relative; padding-top: 32px; }
 #credentials > .container { position: relative; z-index: 1; }
-.creds-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 28px;
-  position: relative;
-  padding-top: 240px;        /* room for building crests above each card */
-}
 
 /* Building silhouettes — rise ABOVE each card like architectural crests.
    The institution dominates; the card becomes a caption. */
-.creds-grid::before,
-.creds-grid::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  height: 230px;
-  width: calc(50% - 14px);
-  background-repeat: no-repeat;
-  background-position: center bottom;
-  background-size: contain;
-  pointer-events: none;
-  opacity: 0.22;
-  filter: saturate(0.85);
-  z-index: 0;
-}
-.creds-grid::before { left: 0;  background-image: url("assets/credentials/isb-campus.png"); }
-.creds-grid::after  { right: 0; background-image: url("assets/credentials/gt-campus.png");  }
 .cred { position: relative; z-index: 1; }
 
 /* ID-card shadow prop — a real ID card from the school's archive
@@ -1919,65 +1888,14 @@ section { padding: var(--section-pad-y) 0; }
      off       — props hidden
      subtle    — small, mostly behind the card
      prominent — bigger, co-equal with the card (default) */
-.cred-prop {
-  position: absolute;
-  height: auto;
-  z-index: 0;
-  pointer-events: none;
-  opacity: 0.6;
-  display: block;
-  isolation: isolate;          /* contains mix-blend-mode of inner overlays */
-  filter:
-    drop-shadow(0 12px 24px rgba(0,0,0,0.20))
-    drop-shadow(0 3px 6px rgba(0,0,0,0.12));
-  transition: width 240ms ease, top 240ms ease,
-              left 240ms ease, right 240ms ease;
-}
-.cred-prop > img {
-  display: block;
-  width: 100%;
-  height: auto;
-}
 /* Per-card tint pair — drives the Warhol pop & halftone treatments
    (`--cred-prop-tint` = primary fill, `--cred-prop-light` = highlight). */
-.cred-prop--isb { --cred-prop-tint: #ff2d87; --cred-prop-light: #00b3ff; }
-.cred-prop--gt  { --cred-prop-tint: #ff5a00; --cred-prop-light: #ffc700; }
-
-body[data-creds-props="off"] .cred-prop { display: none; }
 
 /* PROMINENT — default. Cards peek out roughly two-thirds past their
    cred card, tilted outward away from the cred (ISB left, GT right).
    ISB is bumped slightly larger so the portrait reads clearly. */
-body:not([data-creds-props]) .cred-prop--isb,
-body[data-creds-props="prominent"] .cred-prop--isb,
-body[data-creds-props="subtle"]    .cred-prop--isb {
-  width: 230px;
-  top: 252px;
-  left: -168px;
-  transform: rotate(-10deg);
-}
-body:not([data-creds-props]) .cred-prop--gt,
-body[data-creds-props="prominent"] .cred-prop--gt,
-body[data-creds-props="subtle"]    .cred-prop--gt {
-  width: 300px;
-  top: 332px;
-  right: -188px;
-  transform: rotate(8deg);
-}
 
 /* SUBTLE — smaller props, just a corner peeking past the card. */
-body[data-creds-props="subtle"] .cred-prop--isb {
-  width: 130px;
-  top: 282px;
-  left: -42px;
-  transform: rotate(-13deg);
-}
-body[data-creds-props="subtle"] .cred-prop--gt {
-  width: 200px;
-  top: 340px;
-  right: -52px;
-  transform: rotate(11deg);
-}
 
 /* SCROLL-DRIVEN ENTRANCE — each prop starts tucked under its cred
    card (translated inward, opacity 0) and slides out + fades up to
@@ -1985,16 +1903,6 @@ body[data-creds-props="subtle"] .cred-prop--gt {
    modern `animation-timeline: view()` API; older browsers fall
    through to the static end-state above via the @supports guard. */
 @supports (animation-timeline: view()) {
-  .cred-prop--isb {
-    animation: cred-prop-isb-in linear both;
-    animation-timeline: view(block);
-    animation-range: entry 0% entry 85%;
-  }
-  .cred-prop--gt {
-    animation: cred-prop-gt-in linear both;
-    animation-timeline: view(block);
-    animation-range: entry 0% entry 85%;
-  }
   @keyframes cred-prop-isb-in {
     from { opacity: 0; transform: translateX(120px) rotate(-10deg); }
     to   { opacity: 0.6; transform: translateX(0)    rotate(-10deg); }
@@ -2004,8 +1912,6 @@ body[data-creds-props="subtle"] .cred-prop--gt {
     to   { opacity: 0.6; transform: translateX(0)    rotate(8deg); }
   }
   /* Subtle mode keeps its own tilts in the keyframes */
-  body[data-creds-props="subtle"] .cred-prop--isb { animation-name: cred-prop-isb-in-subtle; }
-  body[data-creds-props="subtle"] .cred-prop--gt  { animation-name: cred-prop-gt-in-subtle; }
   @keyframes cred-prop-isb-in-subtle {
     from { opacity: 0; transform: translateX(60px) rotate(-13deg); }
     to   { opacity: 0.6; transform: translateX(0)  rotate(-13deg); }
@@ -2013,10 +1919,6 @@ body[data-creds-props="subtle"] .cred-prop--gt {
   @keyframes cred-prop-gt-in-subtle {
     from { opacity: 0; transform: translateX(-80px) rotate(11deg); }
     to   { opacity: 0.6; transform: translateX(0)   rotate(11deg); }
-  }
-  @media (prefers-reduced-motion: reduce) {
-    .cred-prop--isb,
-    .cred-prop--gt { animation: none; opacity: 0.6; }
   }
 }
 
@@ -2029,157 +1931,35 @@ body[data-creds-props="subtle"] .cred-prop--gt {
 
 /* POP — grayscale photo with a Warhol monotone wash (per-card tint).
    "Every pop a different color"; ISB pops hot-pink, GT pops orange. */
-body[data-creds-fx="pop"] .cred-prop > img {
-  filter: grayscale(1) contrast(1.08) brightness(1.04);
-}
-body[data-creds-fx="pop"] .cred-prop::before,
-body[data-creds-fx="pop"] .cred-prop::after {
-  content: "";
-  position: absolute; inset: 0;
-  pointer-events: none;
-}
-body[data-creds-fx="pop"] .cred-prop::before {
-  background: var(--cred-prop-tint, var(--accent));
-  mix-blend-mode: multiply;
-  opacity: 0.88;
-}
-body[data-creds-fx="pop"] .cred-prop::after {
-  background: var(--cred-prop-light, var(--accent-3));
-  mix-blend-mode: screen;
-  opacity: 0.22;
-}
 
 /* HALFTONE — comic-book screen-print dots over the photo. */
-body[data-creds-fx="halftone"] .cred-prop::after {
-  content: "";
-  position: absolute; inset: 0;
-  pointer-events: none;
-  background-image: radial-gradient(circle, rgba(0,0,0,0.78) 22%, transparent 26%);
-  background-size: 6px 6px;
-  mix-blend-mode: multiply;
-}
-body[data-creds-fx="halftone"] .cred-prop > img {
-  filter: contrast(1.15) brightness(1.06) saturate(1.1);
-}
 
 /* NEGATIVE — full color invert + hue swing. Pop-art psychedelia. */
-body[data-creds-fx="negative"] .cred-prop > img {
-  filter: invert(1) hue-rotate(180deg) saturate(1.4) contrast(1.08);
-}
 
 /* MISPRINT — RGB channel offsets via colored drop-shadows, like a
    four-color press out of registration. */
-body[data-creds-fx="misprint"] .cred-prop > img {
-  filter:
-    drop-shadow(-3px 0 0 rgba(255, 45, 135, 0.82))
-    drop-shadow(3px 0 0 rgba(0, 179, 255, 0.82))
-    drop-shadow(0 2px 0 rgba(255, 199, 0, 0.55));
-}
 
 @media (max-width: 760px) {
   /* On mobile the grid collapses to a single column; shrink the props
      and tuck them at the top-right of each card so they don't fight
      the building silhouette above each card. */
-  .cred-prop--isb {
-    top: -16px !important;
-    left: auto !important; right: -18px !important;
-    width: 100px !important;
-    transform: rotate(9deg) !important;
-  }
-  .cred-prop--gt {
-    top: -14px !important;
-    right: -22px !important; left: auto !important;
-    width: 140px !important;
-    transform: rotate(-8deg) !important;
-  }
 }
 
 /* ─── School logos — placement modes (data-creds-logo on <body>) ─── */
 /* Default: hidden unless a mode is selected */
-.cred-logo {
-  display: none;
-  height: auto;
-  user-select: none;
-  pointer-events: none;
-}
 
 /* ── MODE: watermark — giant faded crest BEHIND the building silhouette,
    sitting in the top column area. Two scales of identity = institutional weight. */
-body[data-creds-logo="watermark"] .creds-grid::before,
-body[data-creds-logo="watermark"] .creds-grid::after {
-  /* Push the silhouette slightly forward */
-  z-index: 1;
-}
-body[data-creds-logo="watermark"] .cred-logo {
-  display: block;
-  position: absolute;
-  top: -228px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 220px;
-  height: 220px;
-  object-fit: contain;
-  opacity: 0.12;
-  z-index: 0;
-  /* White logo → invert back to dark for visibility on cream background */
-  filter: invert(1) saturate(0.4);
-}
 
 /* ── MODE: chip — small logo inline before the school name, on colored card */
-body[data-creds-logo="chip"] .cred-logo {
-  display: block;
-  width: 56px;
-  height: 36px;
-  object-fit: contain;
-  object-position: left center;
-  margin-bottom: 14px;
-}
 
 /* ── MODE: seal — small mark in the top-right corner of the card */
-body[data-creds-logo="seal"] .cred-logo {
-  display: block;
-  position: absolute;
-  top: 28px;
-  right: 28px;
-  width: 72px;
-  height: 36px;
-  object-fit: contain;
-  object-position: right center;
-  opacity: 0.9;
-}
 body[data-creds-logo="seal"] .cred { padding-right: 116px; }
 
 /* ── MODE: footer — logo sits inline with the meta strip at the bottom */
 body[data-creds-logo="footer"] .cred { padding-bottom: 88px; }
-body[data-creds-logo="footer"] .cred-logo {
-  display: block;
-  position: absolute;
-  left: 36px;
-  bottom: 24px;
-  width: 72px;
-  height: 36px;
-  object-fit: contain;
-  object-position: left center;
-}
-body[data-creds-logo="footer"] .cred-meta {
-  position: absolute;
-  right: 36px;
-  bottom: 36px;
-  margin-top: 0;
-}
 
 /* ── MODE: combo — large watermark behind silhouette + small corner seal on card */
-body[data-creds-logo="combo"] .cred-logo {
-  display: block;
-  position: absolute;
-  top: 22px;
-  right: 24px;
-  width: 64px;
-  height: 32px;
-  object-fit: contain;
-  object-position: right center;
-  z-index: 2;
-}
 body[data-creds-logo="combo"] .cred { padding-right: 104px; }
 body[data-creds-logo="combo"] .cred::before {
   content: "";
@@ -2195,22 +1975,10 @@ body[data-creds-logo="combo"] .cred::before {
   z-index: 0;
   pointer-events: none;
 }
-body[data-creds-logo="combo"] .cred-isb { --combo-watermark: url("assets/credentials/isb-seal.png"); }
-body[data-creds-logo="combo"] .cred-gt  { --combo-watermark: url("assets/credentials/gt-seal.png");  }
-body[data-creds-logo="combo"] .creds-grid::before,
-body[data-creds-logo="combo"] .creds-grid::after { z-index: 1; }
 
 @media (max-width: 760px) {
-  body[data-creds-logo="watermark"] .cred-logo { width: 160px; height: 160px; top: -168px; }
-  body[data-creds-logo="seal"] .cred-logo { width: 44px; height: 44px; top: 18px; right: 18px; }
   body[data-creds-logo="seal"] .cred { padding-right: 72px; }
   body[data-creds-logo="combo"] .cred::before { width: 160px; height: 160px; top: -168px; }
-}
-
-@media (max-width: 760px) {
-  .creds-grid { padding-top: 160px; }
-  .creds-grid::before,
-  .creds-grid::after { height: 150px; width: calc(50% - 8px); }
 }
 
 .cred {
@@ -2219,91 +1987,8 @@ body[data-creds-logo="combo"] .creds-grid::after { z-index: 1; }
   border: 1px solid var(--text);
   background: #fff;
 }
-.cred-stamp {
-  display: inline-block;
-  font-family: var(--font-mono); font-size: 11px;
-  letter-spacing: 0.16em; color: var(--muted);
-  margin-bottom: 16px;
-}
-.cred-seal {
-  display: block;
-  height: 80px; width: auto;
-  object-fit: contain;
-}
-.cred-stamp-fallback { display: none; }
-.cred-school {
-  font-family: var(--font-display);
-  font-size: 36px; font-weight: 400;
-  letter-spacing: -0.02em; line-height: 1.05;
-  margin-bottom: 8px;
-}
-.cred-program {
-  font-family: var(--font-mono);
-  font-size: 11px; letter-spacing: 0.12em;
-  text-transform: uppercase; color: var(--muted);
-  margin-bottom: 24px;
-}
-.cred-divider { height: 1px; background: var(--line); margin: 24px 0; }
 
 /* ID band — passport-style header strip at the top of each credential card */
-.cred-id-band {
-  display: flex;
-  justify-content: space-between;
-  align-items: baseline;
-  gap: 14px;
-  flex-wrap: wrap;
-  padding-bottom: 10px;
-  margin-bottom: 22px;
-  border-bottom: 1px dashed var(--text);
-  font-family: var(--font-mono);
-  font-size: 9.5px;
-  letter-spacing: 0.2em;
-  text-transform: uppercase;
-  font-weight: 700;
-  color: var(--text);
-  line-height: 1.4;
-}
-.cred-id-country {
-  font-family: var(--font-serif);
-  font-style: italic;
-  font-weight: 400;
-  letter-spacing: 0.04em;
-  text-transform: none;
-  font-size: 12px;
-}
-.cred-id-type {
-  color: var(--muted);
-  font-weight: 500;
-  flex: 1;
-  text-align: center;
-  letter-spacing: 0.18em;
-}
-.cred-id-num {
-  letter-spacing: 0.06em;
-  background: var(--text);
-  color: var(--bg);
-  padding: 3px 7px;
-}
-
-.cred-highlight { font-size: 15px; line-height: 1.55; margin-bottom: 12px; }
-.cred-highlight strong { color: var(--text); font-weight: 600; }
-.cred-highlight--reflection {
-  margin-top: 18px;
-  padding-top: 16px;
-  border-top: 1px dashed var(--line);
-  font-style: italic;
-  font-family: var(--font-serif);
-  font-size: 16px;
-  line-height: 1.5;
-  color: var(--muted);
-  text-wrap: pretty;
-}
-.cred-meta {
-  font-family: var(--font-mono);
-  font-size: 11px; letter-spacing: 0.16em;
-  text-transform: uppercase; color: var(--muted);
-  margin-top: 18px;
-}
 
 /* ─── OFF GRID ──────────────────────────────────────────── */
 .off-grid {
@@ -3044,8 +2729,6 @@ body[data-mode="warhol"] .hero-eyebrow {
   padding: 5px 12px; border: 2px solid var(--text);
   color: var(--text); font-weight: 700;
 }
-body[data-mode="warhol"] .cred-tag { background: var(--text); color: var(--bg); border-color: var(--text); }
-body[data-mode="warhol"] .cred-tag:nth-child(2) { background: var(--accent); color: var(--text); }
 body[data-mode="warhol"] .warhol-grid { display: none; }
 body[data-mode="warhol"] .passport-frame {
   display: block;
@@ -3171,8 +2854,6 @@ body[data-mode="warhol"][data-about-photo="plain"] .about-photo-frame img {
 }
 
 body[data-mode="warhol"] .cred { border: 3px solid var(--text); }
-body[data-mode="warhol"] .cred-isb { background: var(--accent-2); color: var(--text); box-shadow: 8px 8px 0 var(--text); }
-body[data-mode="warhol"] .cred-gt  { background: var(--accent-3); color: var(--text); box-shadow: 8px 8px 0 var(--text); }
 
 /* WARHOL · Hero pointer line — pointer sentence is now the OPENER of the
    kid-story (lives inside the first <p> as an inline <span>). All the
@@ -3336,10 +3017,6 @@ body[data-mode="warhol"] .work-role-title {
   text-transform: uppercase;
   font-size: 38px;
 }
-body[data-mode="warhol"] .cred-stamp-fallback { background: var(--text); color: var(--bg); padding: 4px 8px; }
-body[data-mode="warhol"] .cred-school { font-family: var(--font-display); text-transform: uppercase; font-size: 42px; line-height: 0.95; }
-body[data-mode="warhol"] .cred-divider { background: var(--text); height: 2px; }
-body[data-mode="warhol"] .cred-highlight strong { color: var(--text); }
 
 body[data-mode="warhol"] .off-grid > div { border: 3px solid var(--text); overflow: hidden; }
 body[data-mode="warhol"] .off-tag { background: var(--accent); color: var(--text); border: 2px solid var(--text); font-weight: 700; }
@@ -3540,52 +3217,11 @@ body[data-mode="warhol"] .inline-link:hover {
 /* ═══ WARHOL FX TOGGLES (Tweaks panel) ══════════════════════ */
 
 /* MARILYN — swap single passport for the 4-up portrait grid */
-body[data-mode="warhol"][data-fx-marilyn="true"] .warhol-grid {
-  display: grid;
-  box-shadow: 14px 14px 0 var(--text);
-}
-body[data-mode="warhol"][data-fx-marilyn="true"] .passport-frame { display: none; }
 
 /* HALFTONE — dot pattern overlay on photo frames */
-body[data-mode="warhol"][data-fx-halftone="true"] .passport-frame,
-body[data-mode="warhol"][data-fx-halftone="true"] .about-photo-frame,
-body[data-mode="warhol"][data-fx-halftone="true"] .off-grid > div,
-body[data-mode="warhol"][data-fx-halftone="true"] .clipping {
-  position: relative;
-}
-body[data-mode="warhol"][data-fx-halftone="true"] .passport-frame::before,
-body[data-mode="warhol"][data-fx-halftone="true"] .about-photo-frame::before,
-body[data-mode="warhol"][data-fx-halftone="true"] .off-grid > div::before,
-body[data-mode="warhol"][data-fx-halftone="true"] .clipping::before {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(circle at center, rgba(10,10,10,0.65) 1.2px, transparent 1.4px) 0 0 / 6px 6px;
-  pointer-events: none;
-  z-index: 3;
-}
 /* Keep stamps/tags visible above halftone */
-body[data-mode="warhol"][data-fx-halftone="true"] .passport-stamp,
-body[data-mode="warhol"][data-fx-halftone="true"] .off-tag {
-  z-index: 4;
-}
 
 /* RGB MISPRINT — chromatic offset on display headlines */
-body[data-mode="warhol"][data-fx-misprint="true"] .hero-h1,
-body[data-mode="warhol"][data-fx-misprint="true"] .section-title,
-body[data-mode="warhol"][data-fx-misprint="true"] .contact-line,
-body[data-mode="warhol"][data-fx-misprint="true"] .cred-school,
-body[data-mode="warhol"][data-fx-misprint="true"] .note-title,
-body[data-mode="warhol"][data-fx-misprint="true"] .creative-meta h4 {
-  text-shadow:
-    -3px 0 0 var(--accent),
-    3px 0 0 var(--accent-2);
-}
-body[data-mode="warhol"][data-fx-misprint="true"] .contact-email {
-  text-shadow:
-    -2px 0 0 var(--accent-3),
-    2px 0 0 var(--accent-4);
-}
 
 /* ─── CONTACT EFFECTS ───────────────────────────────── */
 
@@ -3656,7 +3292,6 @@ body[data-mode="warhol"][data-fx-stack="true"] .contact-email-wrap {
   border: 2.5px solid var(--text);
   white-space: nowrap;
 }
-body[data-mode="warhol"][data-fx-stamp="true"] .contact-stamp { display: block; }
 
 /* HALFTONE FLOOD — intensify the dot overlay on the contact bg */
 body[data-mode="warhol"][data-fx-flood="true"] .contact-block::before {
@@ -3870,244 +3505,12 @@ body[data-mode="warhol"] .form-gist::placeholder {
    Massive serif masthead, sells column, single big portrait,
    restrained colors, refined editorial.
    ═══════════════════════════════════════════════════════════ */
-body[data-mode="issue"] {
-  --bg: #f1ebdd;
-  --text: #14110b;
-  --muted: #6a5f4d;
-  --line: #c8bea7;
-  --accent: #c63d2f;
-  --font-display: "Bodoni Moda", "Fraunces", serif;
-  --font-serif: "Bodoni Moda", serif;
-  --font-body: "Inter", sans-serif;
-  --type-h1-min: 56px; --type-h1-max: 100px;
-  --type-h2-min: 40px; --type-h2-max: 72px;
-}
-body[data-mode="issue"] .marquee { display: none; }
-body[data-mode="issue"] .nav { border-bottom: 1px solid var(--text); }
-body[data-mode="issue"] .issue-meta { display: flex; }
-body[data-mode="issue"] .logo { font-family: var(--font-serif); font-weight: 700; font-size: 22px; }
-body[data-mode="issue"] .nav-links a { font-family: var(--font-mono); letter-spacing: 0.14em; }
-
-body[data-mode="issue"] .hero-wrap { padding-top: 12px; }
-body[data-mode="issue"] .masthead {
-  display: grid;
-  grid-template-columns: auto 1fr auto;
-  align-items: end; gap: 18px;
-  padding-bottom: 8px;
-  border-bottom: 3px double var(--text);
-  margin-bottom: 36px;
-}
-body[data-mode="issue"] .masthead .mast-word {
-  font-family: "Bodoni Moda", serif;
-  font-weight: 900;
-  text-align: center;
-  text-transform: none;
-  letter-spacing: -0.04em;
-}
-body[data-mode="issue"] .masthead .mast-side { align-self: end; padding-bottom: 14px; }
-
-body[data-mode="issue"] .hero { grid-template-columns: 1fr 1fr; }
-body[data-mode="issue"] .hero-h1 {
-  font-family: var(--font-serif);
-  font-weight: 400;
-  font-style: italic;
-  line-height: 0.98; letter-spacing: -0.02em;
-}
-body[data-mode="issue"] .hero-h1 em {
-  font-style: italic; color: var(--accent); font-weight: 500;
-}
-body[data-mode="issue"] .hero-eyebrow { color: var(--muted); }
-body[data-mode="issue"] .cred-tag { border-color: var(--text); }
-
-body[data-mode="issue"] .warhol-grid { display: none; }
-body[data-mode="issue"] .passport-frame { display: block; transform: rotate(-1deg); }
-body[data-mode="issue"] .name-card { border-color: var(--text); }
-body[data-mode="issue"] .card-tag { display: inline-block; }
-
-body[data-mode="issue"] .cover-sells {
-  display: grid; gap: 8px;
-  margin-top: 56px; padding-top: 32px;
-  border-top: 1px solid var(--text);
-  grid-template-columns: repeat(2, 1fr); gap: 8px 48px;
-}
-body[data-mode="issue"] .sell {
-  font-family: var(--font-serif);
-  font-style: italic; font-size: 18px;
-  display: flex; gap: 14px; align-items: baseline;
-  padding: 10px 0; border-bottom: 1px solid var(--line);
-}
-body[data-mode="issue"] .sell-num {
-  font-family: var(--font-mono);
-  font-size: 12px; letter-spacing: 0.12em;
-  color: var(--accent); font-style: normal;
-}
-
-body[data-mode="issue"] .section-label { border-bottom: 1px solid var(--text); }
-body[data-mode="issue"] .section-title {
-  font-family: var(--font-serif); font-weight: 400;
-  letter-spacing: -0.025em; line-height: 1.0;
-}
-body[data-mode="issue"] .section-title em {
-  font-style: italic; color: var(--accent);
-}
-
-body[data-mode="issue"] .press { background: var(--bg); border-color: var(--text); }
-body[data-mode="issue"] .clipping { transform: rotate(0); box-shadow: 0 8px 24px rgba(0,0,0,0.10); }
-body[data-mode="issue"] .clipping:nth-child(1),
-body[data-mode="issue"] .clipping:nth-child(2),
-body[data-mode="issue"] .clipping:nth-child(3) { transform: none; }
-body[data-mode="issue"] .clip-tape { display: none; }
-
-body[data-mode="issue"] .about-photo-frame { transform: rotate(-0.6deg); }
-body[data-mode="issue"] .cred { border-color: var(--text); background: transparent; }
-body[data-mode="issue"] .cred-school { font-family: var(--font-serif); font-style: italic; font-weight: 400; font-size: 40px; }
-
-body[data-mode="issue"] .off-caption h4 { font-family: var(--font-serif); font-style: italic; }
-body[data-mode="issue"] .creative-meta h4 { font-family: var(--font-serif); font-style: italic; }
-body[data-mode="issue"] .note-title { font-family: var(--font-serif); font-style: italic; font-weight: 400; font-size: 24px; line-height: 1.2; }
-body[data-mode="issue"] .contact-line { font-family: var(--font-serif); font-style: italic; }
-body[data-mode="issue"] .contact-email { font-family: var(--font-serif); font-style: italic; }
 
 /* ═══════════════════════════════════════════════════════════
    MODE: MARGIELA — Avant-garde minimal
    Bone background, ultra-thin display serif, garment-tag
    labels, B&W portrait, heavy whitespace, asymmetric grid.
    ═══════════════════════════════════════════════════════════ */
-body[data-mode="margiela"] {
-  --bg: #ecebe5;
-  --text: #1d1d1a;
-  --muted: #7a786f;
-  --line: #cdccc4;
-  --accent: #1d1d1a;
-  --font-display: "Italiana", "Cormorant Garamond", serif;
-  --font-serif: "Cormorant Garamond", serif;
-  --font-body: "Inter", sans-serif;
-  --font-mono: "Space Mono", monospace;
-  --container-pad: 56px;
-  --section-pad-y: 120px;
-  --type-h1-min: 56px; --type-h1-max: 168px;
-  --type-h2-min: 42px; --type-h2-max: 96px;
-}
-body[data-mode="margiela"] { font-weight: 300; }
-body[data-mode="margiela"] .marquee { display: none; }
-body[data-mode="margiela"] .nav { background: transparent; backdrop-filter: none; -webkit-backdrop-filter: none; }
-body[data-mode="margiela"] .nav.scrolled { background: color-mix(in srgb, var(--bg) 92%, transparent); backdrop-filter: saturate(140%) blur(14px); -webkit-backdrop-filter: saturate(140%) blur(14px); }
-body[data-mode="margiela"] .logo { font-family: var(--font-display); font-weight: 400; font-size: 22px; letter-spacing: 0.01em; }
-body[data-mode="margiela"] .nav-links a { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.18em; }
-
-body[data-mode="margiela"] .hero-wrap { padding-top: 24px; padding-bottom: 160px; }
-body[data-mode="margiela"] .masthead { display: grid; grid-template-columns: auto 1fr auto; align-items: end; padding-bottom: 14px; margin-bottom: 80px; }
-body[data-mode="margiela"] .masthead .mast-word {
-  font-family: var(--font-display);
-  font-weight: 400; font-style: normal;
-  text-transform: uppercase;
-  letter-spacing: -0.01em;
-  line-height: 0.85;
-}
-body[data-mode="margiela"] .masthead .mast-side { padding-bottom: 14px; }
-
-body[data-mode="margiela"] .hero { grid-template-columns: 1fr 1fr; gap: 96px; }
-body[data-mode="margiela"] .hero-eyebrow {
-  display: inline-block; padding: 4px 8px;
-  border: 1px solid var(--text); color: var(--text);
-  background: #fff;
-}
-body[data-mode="margiela"] .hero-h1 {
-  font-family: var(--font-display);
-  font-weight: 400; font-size: clamp(56px, 8vw, 132px);
-  line-height: 0.98; letter-spacing: -0.005em;
-  text-transform: none;
-}
-body[data-mode="margiela"] .hero-h1 em { font-family: var(--font-serif); font-style: italic; color: var(--muted); font-weight: 300; }
-body[data-mode="margiela"] .cred-tag {
-  background: #fff; border-color: var(--text);
-  border-radius: 0; padding: 6px 10px;
-  position: relative;
-}
-body[data-mode="margiela"] .cred-tag::before {
-  content: ""; position: absolute; left: 4px; top: 50%;
-  width: 6px; height: 6px; border-radius: 50%;
-  background: var(--bg); border: 1px solid var(--text);
-  transform: translateY(-50%);
-  display: none;
-}
-
-body[data-mode="margiela"] .warhol-grid { display: none; }
-body[data-mode="margiela"] .passport-frame {
-  display: block;
-  background: #fff; padding: 18px;
-  border: 1px solid var(--line);
-  box-shadow: none;
-  transform: none;
-}
-body[data-mode="margiela"] .passport-frame img { filter: grayscale(1) contrast(1.05); }
-body[data-mode="margiela"] .passport-stamp { font-family: var(--font-mono); font-size: 10px; }
-
-body[data-mode="margiela"] .name-card {
-  background: transparent; border: 0; padding: 0;
-  margin-top: 32px;
-}
-body[data-mode="margiela"] .card-tag { display: none; }
-body[data-mode="margiela"] .dict-word { font-family: var(--font-display); font-weight: 400; font-size: 24px; }
-body[data-mode="margiela"] .dict-row { border-top-color: var(--line); }
-
-body[data-mode="margiela"] .passport-caption { color: var(--muted); }
-body[data-mode="margiela"] .name-footnote {
-  font-family: var(--font-mono); font-size: 11px; line-height: 1.8;
-}
-
-body[data-mode="margiela"] .section-label {
-  border-bottom: 0;
-  font-family: var(--font-mono); font-size: 11px;
-  letter-spacing: 0.22em;
-  padding-bottom: 0; margin-bottom: 64px;
-}
-body[data-mode="margiela"] .section-title {
-  font-family: var(--font-display);
-  font-weight: 400;
-  letter-spacing: -0.01em; line-height: 1.0;
-  max-width: 1100px;
-}
-body[data-mode="margiela"] .section-title em { font-family: var(--font-serif); font-style: italic; color: var(--muted); font-weight: 300; }
-
-body[data-mode="margiela"] .press {
-  border-top: 1px solid var(--line);
-  border-bottom: 1px solid var(--line);
-  padding: 72px 0 !important;
-}
-body[data-mode="margiela"] .press-side { font-style: normal; }
-body[data-mode="margiela"] .clipping {
-  transform: none; box-shadow: none;
-  background: #fff; border: 1px solid var(--line);
-  padding: 18px 18px 24px;
-}
-body[data-mode="margiela"] .clipping:nth-child(1),
-body[data-mode="margiela"] .clipping:nth-child(2),
-body[data-mode="margiela"] .clipping:nth-child(3) { transform: none; }
-body[data-mode="margiela"] .clipping img { filter: grayscale(1) contrast(1.05); }
-body[data-mode="margiela"] .clip-tape { display: none; }
-
-body[data-mode="margiela"] .about-grid { gap: 96px; }
-body[data-mode="margiela"] .about-photo-frame { border: 1px solid var(--line); background: #fff; }
-body[data-mode="margiela"] .about-photo-frame img { filter: grayscale(1); }
-
-body[data-mode="margiela"] .creds-grid { gap: 96px; }
-body[data-mode="margiela"] .cred { background: transparent; border: 0; padding: 0; border-top: 1px solid var(--text); padding-top: 28px; }
-body[data-mode="margiela"] .cred-school { font-family: var(--font-display); font-weight: 400; font-size: 44px; letter-spacing: -0.005em; }
-body[data-mode="margiela"] .cred-stamp { position: static; display: inline-block; margin-bottom: 12px; border: 1px solid var(--text); padding: 4px 8px; background: #fff; }
-
-body[data-mode="margiela"] .off-grid { gap: 24px; }
-body[data-mode="margiela"] .off-grid > div { border: 1px solid var(--line); }
-body[data-mode="margiela"] .off-grid img { filter: grayscale(1) contrast(1.05); }
-body[data-mode="margiela"] .off-tag { background: #fff; color: var(--text); border: 1px solid var(--text); }
-body[data-mode="margiela"] .off-caption h4 { font-family: var(--font-display); font-weight: 400; font-size: 32px; }
-
-body[data-mode="margiela"] .creative-frame { border: 1px solid var(--line); background: transparent; }
-body[data-mode="margiela"] .creative-meta h4 { font-family: var(--font-display); font-weight: 400; font-size: 32px; }
-
-body[data-mode="margiela"] .note-item { grid-template-columns: 60px 110px 1fr auto; padding: 28px 0; }
-body[data-mode="margiela"] .note-item:hover { background: transparent; padding-left: 12px; }
-body[data-mode="margiela"] .note-title { font-family: var(--font-display); font-weight: 400; font-size: 30px; line-height: 1.1; }
 
 /* ════════════════════════════════════════════════════════════
    HERO CINEMATIC — scroll-driven choreography
@@ -4336,127 +3739,11 @@ body[data-mode="margiela"] .note-title { font-family: var(--font-display); font-
   .cine .hero-roles li { opacity: 1 !important; transform: none !important; }
 }
 
-body[data-mode="margiela"] .contact-line { font-family: var(--font-display); font-weight: 400; }
-body[data-mode="margiela"] .contact-email { font-family: var(--font-display); font-weight: 400; }
-
 /* ═══════════════════════════════════════════════════════════
    MODE: TABLOID — Broadsheet newsprint
    Multi-column about, condensed serif, italic flourish,
    newsprint cream, ink black, decorative rule lines.
    ═══════════════════════════════════════════════════════════ */
-body[data-mode="tabloid"] {
-  --bg: #f0e9d4;
-  --text: #1a1812;
-  --muted: #6e6452;
-  --line: #b5a989;
-  --accent: #8b1c1c;
-  --font-display: "Old Standard TT", "EB Garamond", serif;
-  --font-serif: "EB Garamond", "Old Standard TT", serif;
-  --font-body: "EB Garamond", "Old Standard TT", serif;
-  --font-mono: "Space Mono", monospace;
-  --type-h1-min: 56px; --type-h1-max: 120px;
-  --type-h2-min: 42px; --type-h2-max: 72px;
-}
-body[data-mode="tabloid"] { font-size: 18px; line-height: 1.55; }
-body[data-mode="tabloid"] .marquee { display: block; background: var(--text); color: var(--bg); padding: 8px 0; }
-body[data-mode="tabloid"] .marquee-track span { font-family: var(--font-serif); font-style: italic; font-size: 18px; text-transform: none; letter-spacing: 0.04em; }
-
-body[data-mode="tabloid"] .nav { border-bottom: 2px solid var(--text); }
-body[data-mode="tabloid"] .nav-inner { padding: 12px 0; }
-body[data-mode="tabloid"] .logo { font-family: var(--font-display); font-style: italic; font-weight: 700; font-size: 26px; }
-body[data-mode="tabloid"] .issue-meta { display: flex; }
-body[data-mode="tabloid"] .issue-meta span { font-family: var(--font-serif); font-style: italic; font-size: 13px; letter-spacing: 0.04em; text-transform: none; }
-body[data-mode="tabloid"] .nav-links a { font-family: var(--font-serif); font-style: italic; font-size: 15px; letter-spacing: 0.02em; text-transform: none; color: var(--text); }
-
-body[data-mode="tabloid"] .hero-wrap { padding-top: 20px; padding-bottom: 60px; }
-body[data-mode="tabloid"] .masthead {
-  display: grid; grid-template-columns: auto 1fr auto;
-  align-items: end; padding: 12px 0 12px;
-  margin-bottom: 24px;
-  border-top: 6px double var(--text); border-bottom: 6px double var(--text);
-}
-body[data-mode="tabloid"] .masthead .mast-word {
-  font-family: var(--font-display);
-  font-weight: 700; font-style: italic;
-  font-size: clamp(96px, 22vw, 320px);
-  letter-spacing: -0.02em; line-height: 0.85;
-  text-align: center;
-}
-body[data-mode="tabloid"] .masthead .mast-side { font-family: var(--font-serif); font-style: italic; font-size: 14px; padding-bottom: 16px; text-transform: none; letter-spacing: 0.02em; }
-
-body[data-mode="tabloid"] .hero { grid-template-columns: 1.4fr 1fr; }
-body[data-mode="tabloid"] .hero-h1 {
-  font-family: var(--font-display);
-  font-weight: 700; font-style: italic;
-  line-height: 0.95; letter-spacing: -0.02em;
-}
-body[data-mode="tabloid"] .hero-h1 em { font-style: italic; color: var(--accent); }
-body[data-mode="tabloid"] .hero-eyebrow { font-family: var(--font-serif); font-style: italic; font-size: 14px; letter-spacing: 0.02em; text-transform: none; }
-body[data-mode="tabloid"] .hero-tagline { font-family: var(--font-serif); font-size: 19px; line-height: 1.6; }
-body[data-mode="tabloid"] .hero-tagline::first-letter {
-  font-family: var(--font-display); font-weight: 700;
-  font-size: 4.5em; float: left; line-height: 0.8;
-  padding: 6px 10px 0 0; color: var(--accent);
-}
-body[data-mode="tabloid"] .cred-tag { font-family: var(--font-serif); font-style: italic; font-size: 14px; letter-spacing: 0.02em; text-transform: none; padding: 6px 12px; border: 1px solid var(--text); background: var(--bg); }
-
-body[data-mode="tabloid"] .warhol-grid { display: none; }
-body[data-mode="tabloid"] .passport-frame { display: block; background: var(--bg); border: 1px solid var(--text); transform: rotate(-0.8deg); }
-body[data-mode="tabloid"] .passport-frame img { filter: sepia(0.35) contrast(1.05); }
-body[data-mode="tabloid"] .name-card { background: var(--bg); border: 1px solid var(--text); }
-body[data-mode="tabloid"] .card-tag { display: inline-block; background: var(--bg); font-family: var(--font-serif); font-style: italic; letter-spacing: 0.04em; }
-body[data-mode="tabloid"] .dict-word { font-family: var(--font-display); font-style: italic; font-size: 22px; }
-body[data-mode="tabloid"] .name-footnote { font-family: var(--font-serif); font-style: italic; font-size: 14px; letter-spacing: 0.005em; text-transform: none; }
-
-body[data-mode="tabloid"] .section-label { border-bottom: 4px double var(--text); font-family: var(--font-serif); font-style: italic; font-size: 14px; text-transform: none; letter-spacing: 0.02em; color: var(--text); }
-body[data-mode="tabloid"] .section-side { font-style: italic; }
-body[data-mode="tabloid"] .section-title {
-  font-family: var(--font-display);
-  font-weight: 700; font-style: italic;
-  line-height: 1.0; letter-spacing: -0.02em;
-}
-body[data-mode="tabloid"] .section-title em { color: var(--accent); }
-
-body[data-mode="tabloid"] .about-prose {
-  columns: 2; column-gap: 32px;
-  font-family: var(--font-serif);
-  font-size: 17px; line-height: 1.65;
-  text-align: justify;
-  hyphens: auto;
-}
-body[data-mode="tabloid"] .about-prose p { font-size: 17px; }
-body[data-mode="tabloid"] .about-prose p:first-child::first-letter {
-  font-family: var(--font-display); font-weight: 700;
-  font-size: 4.5em; float: left; line-height: 0.8;
-  padding: 6px 10px 0 0; color: var(--accent);
-}
-body[data-mode="tabloid"] .about-grid { grid-template-columns: 1.6fr 1fr; gap: 56px; }
-body[data-mode="tabloid"] .about-photo-frame { transform: rotate(-1deg); background: var(--bg); border: 1px solid var(--text); }
-body[data-mode="tabloid"] .about-photo-frame img { filter: sepia(0.35); }
-
-body[data-mode="tabloid"] .press { background: var(--bg); border-top: 6px double var(--text); border-bottom: 6px double var(--text); }
-body[data-mode="tabloid"] .clipping { background: #fdfaf0; }
-body[data-mode="tabloid"] .clipping img { filter: sepia(0.4) contrast(1.05); }
-
-body[data-mode="tabloid"] .cred { background: var(--bg); border: 1px solid var(--text); }
-body[data-mode="tabloid"] .cred-school { font-family: var(--font-display); font-style: italic; font-weight: 700; font-size: 40px; }
-body[data-mode="tabloid"] .cred-program { font-family: var(--font-serif); font-style: italic; font-size: 14px; text-transform: none; letter-spacing: 0.02em; }
-body[data-mode="tabloid"] .cred-highlight { font-family: var(--font-serif); font-size: 16px; }
-
-body[data-mode="tabloid"] .off-grid img { filter: sepia(0.3); }
-body[data-mode="tabloid"] .off-caption h4 { font-family: var(--font-display); font-style: italic; font-weight: 700; }
-body[data-mode="tabloid"] .off-caption p { font-family: var(--font-serif); font-size: 16px; }
-
-body[data-mode="tabloid"] .creative-meta h4 { font-family: var(--font-display); font-style: italic; font-weight: 700; }
-
-body[data-mode="tabloid"] .note-title { font-family: var(--font-display); font-style: italic; font-weight: 700; font-size: 26px; line-height: 1.15; }
-body[data-mode="tabloid"] .note-date { font-family: var(--font-serif); font-style: italic; font-size: 14px; letter-spacing: 0.02em; text-transform: none; }
-body[data-mode="tabloid"] .note-num { font-family: var(--font-serif); font-style: italic; font-size: 14px; letter-spacing: 0.02em; }
-body[data-mode="tabloid"] .note-tag { font-family: var(--font-serif); font-style: italic; font-size: 14px; letter-spacing: 0.02em; text-transform: none; }
-
-body[data-mode="tabloid"] .contact-line { font-family: var(--font-display); font-weight: 700; font-style: italic; }
-body[data-mode="tabloid"] .contact-line em { color: var(--accent); }
-body[data-mode="tabloid"] .contact-email { font-family: var(--font-display); font-weight: 700; font-style: italic; }
 
 /* ─── RESPONSIVE ────────────────────────────────────────── */
 @media (max-width: 960px) {
@@ -4464,7 +3751,6 @@ body[data-mode="tabloid"] .contact-email { font-family: var(--font-display); fon
   .hero { grid-template-columns: 1fr; gap: 40px; }
   .about-grid { grid-template-columns: 1fr; gap: 48px; }
   .about-photo { position: static; max-width: 480px; }
-  .creds-grid { grid-template-columns: 1fr; gap: 20px; }
   .creative-grid { grid-template-columns: 1fr; gap: 36px; max-width: 520px; margin-left: auto; margin-right: auto; }
   .clippings { grid-template-columns: 1fr; gap: 32px; max-width: 420px; margin: 0 auto; }
   .clipping:nth-child(1), .clipping:nth-child(3) { transform: rotate(-0.6deg); }
@@ -4475,15 +3761,11 @@ body[data-mode="tabloid"] .contact-email { font-family: var(--font-display); fon
   .off-1 .off-photos { aspect-ratio: 4/3; height: auto; }
   .off-caption { grid-template-columns: 1fr; gap: 24px; }
   .issue-meta { display: none !important; }
-  body[data-mode="tabloid"] .about-prose { columns: 1; }
   .note-item { grid-template-columns: 50px 100px 1fr; gap: 16px; }
   .note-tag { display: none; }
   .nav-links { gap: 14px; }
   .nav-links a,
-  body[data-mode="warhol"] .nav-links a,
-  body[data-mode="margiela"] .nav-links a,
-  body[data-mode="tabloid"] .nav-links a,
-  body[data-mode="issue"] .nav-links a {
+  body[data-mode="warhol"] .nav-links a {
     font-size: 11px; font-style: normal;
   }
   .marquee-track span { font-size: 22px !important; }
@@ -4494,18 +3776,13 @@ body[data-mode="tabloid"] .contact-email { font-family: var(--font-display); fon
   .nav-inner { padding: 14px 0; gap: 8px; }
   .nav-links { gap: 10px; flex-wrap: nowrap; }
   .nav-links a,
-  body[data-mode="warhol"] .nav-links a,
-  body[data-mode="margiela"] .nav-links a,
-  body[data-mode="tabloid"] .nav-links a,
-  body[data-mode="issue"] .nav-links a {
+  body[data-mode="warhol"] .nav-links a {
     font-size: 10px; letter-spacing: 0.06em; font-style: normal;
   }
   .logo { font-size: 16px; }
   section { padding: 56px 0; }
   .section-title { margin-bottom: 36px; }
   .hero-wrap { padding: 24px 0 40px; }
-  body[data-mode="warhol"] .cred-school { font-size: 32px; }
-  body[data-mode="margiela"] .cred-school { font-size: 32px; }
   .clipping { padding: 10px 10px 16px; }
   .off-grid { grid-template-columns: 1fr; }
   .off-1 { grid-column: auto; }
@@ -4584,26 +3861,7 @@ body[data-mode="warhol"] #work .section-title em { transform: rotate(-1.5deg); }
    mobile it drops into the flow under the copy; when a footnote
    opens, the ID card hides so the exhibit takes its slot.
    ════════════════════════════════════════════════════════════ */
-.creds-grid {
-  display: grid; grid-template-columns: 1fr 1fr; gap: 28px;
-  align-items: stretch;
-}
 /* drop the old grid-wide background; we use per-column campus art now */
-.creds-grid::before, .creds-grid::after { content: none !important; background: none !important; }
-
-.cred-col { display: flex; flex-direction: column; }
-.cred-campus {
-  height: 210px;
-  background-repeat: no-repeat;
-  background-position: center bottom;
-  background-size: contain;
-  opacity: 0.24;
-  filter: saturate(0.85);
-  pointer-events: none;
-  margin-bottom: -2px;
-}
-.cred-campus--isb { background-image: url("assets/credentials/isb-campus.png"); }
-.cred-campus--gt  { background-image: url("assets/credentials/gt-campus.png"); }
 
 .cred {
   position: relative; overflow: hidden;
@@ -4614,84 +3872,11 @@ body[data-mode="warhol"] #work .section-title em { transform: rotate(-1.5deg); }
   background: #fff;
   flex: 1;
 }
-.cred-isb { background: var(--accent-2, #00b3ff); }
-.cred-gt  { background: var(--accent-3, #ffc700); }
 .cred > * { position: relative; z-index: 2; }
 
-.cred-school {
-  font-family: var(--font-display); font-weight: 400;
-  font-size: 31px; line-height: 1.04; letter-spacing: -0.02em;
-  margin: 0 0 8px; text-transform: uppercase;
-  color: var(--text);
-}
-.cred-program {
-  font-family: var(--font-mono); font-size: 10.5px;
-  letter-spacing: 0.11em; text-transform: uppercase;
-  color: #3a3a3a; margin: 0 0 18px;
-}
-#credentials .cred-divider { height: 1px; background: rgba(0,0,0,0.25); margin: 0 0 18px; }
-.cred-highlight { font-size: 14px; line-height: 1.5; margin: 0 0 9px; color: var(--text); }
-.cred-highlight strong { font-weight: 600; }
-.cred-highlight--reflection {
-  margin-top: 14px; padding-top: 12px;
-  border-top: 1px dashed rgba(0,0,0,0.4);
-  font-family: var(--font-serif); font-style: italic;
-  font-size: 14px; line-height: 1.5; color: #2c2c2c;
-}
-#credentials .cred-meta {
-  font-family: var(--font-mono); font-size: 11px;
-  letter-spacing: 0.14em; text-transform: uppercase;
-  color: #1a1a1a; background: #fff; padding: 5px 9px;
-  display: inline-block;
-}
-#credentials .cred-meta span + span::before { content: " · "; }
-.cred-foot {
-  display: flex; align-items: center; justify-content: space-between;
-  gap: 16px; margin-top: auto; padding-top: 20px;
-}
-.cred-seal { height: 50px; width: auto; }
-
 /* ID card — big prop, behind copy, clipped by the card edge */
-.idcard {
-  position: absolute; z-index: 1;
-  background: #fff; padding: 8px 8px 10px;
-  border: 2px solid var(--text);
-  box-shadow: 6px 6px 0 rgba(0,0,0,0.45);
-}
-.idcard .pop { position: relative; overflow: hidden; display: block; }
-.idcard .pop img {
-  display: block; width: 100%; height: auto;
-  filter: grayscale(1) contrast(1.18) brightness(1.05);
-}
-.idcard .pop::before {
-  content: ""; position: absolute; inset: 0;
-  background: var(--tint); mix-blend-mode: multiply;
-}
-.idcard .pop::after {
-  content: ""; position: absolute; inset: 0;
-  background: var(--light); mix-blend-mode: screen; opacity: 0.55;
-}
-.idcard figcaption {
-  font-family: var(--font-mono); font-size: 8.5px;
-  font-weight: 700; letter-spacing: 0.16em;
-  text-transform: uppercase;
-  margin-top: 6px; text-align: center;
-}
 /* ISB — ID card bleeds off the LEFT edge; copy shifts right */
-.cred-isb { padding-left: 196px; padding-right: 34px; }
-.cred-isb .idcard-isb {
-  --tint: #ff2d87; --light: #00b3ff;
-  width: 244px; top: 152px; left: -80px;
-  transform: rotate(-4deg);
-}
 /* GT — ID card moved up, bleeds off the RIGHT edge */
-.cred-gt { padding-bottom: 30px; }
-.cred-gt .cred-highlight { max-width: 70%; }
-.cred-gt .idcard-gt {
-  --tint: #ff5a00; --light: #ffc700;
-  width: 372px; top: 140px; right: -116px;
-  transform: rotate(4deg);
-}
 
 /* footnote mount on desktop — appears in flow under the meta */
 #credentials .fn-mount { margin-top: 16px; }
@@ -4699,36 +3884,11 @@ body[data-mode="warhol"] #work .section-title em { transform: rotate(-1.5deg); }
 
 /* ── MOBILE ── ID card drops in-flow, meta moves below, exhibit takes the ID slot */
 @media (max-width: 760px) {
-  .creds-grid { grid-template-columns: 1fr; gap: 34px; }
-  .cred-campus { height: 128px; }
-  .cred-isb { padding-left: 34px; padding-right: 34px; }
-  .cred-gt { padding-bottom: 30px; }
-  .cred-gt .cred-highlight { max-width: none; }
-
-  .idcard {
-    position: relative; inset: auto; z-index: 2;
-    box-shadow: 5px 5px 0 rgba(0,0,0,0.5);
-    order: 1;
-  }
-  .cred-isb .idcard-isb {
-    width: 172px; top: auto; left: auto; right: auto; bottom: auto;
-    transform: rotate(-3deg); margin: 18px auto 0;
-  }
-  .cred-gt .idcard-gt {
-    width: min(280px, 78%); top: auto; left: auto; right: auto; bottom: auto;
-    transform: rotate(1.5deg); margin: 18px auto 0;
-  }
   #credentials .fn-mount { order: 1; margin-top: 18px; }
-  .cred-foot { order: 2; }
 
   /* footnote open → ID card hides, exhibit takes the slot */
-  .cred:has(.fn-mount[data-active-fn]) .idcard { display: none; }
 
   /* meta footer — plain on mobile, no white box */
-  #credentials .cred-meta { background: none; padding: 0; }
-  #credentials .cred-meta span { display: inline-block; }
-  .cred-foot { flex-wrap: wrap; gap: 12px; padding-top: 18px; }
-  .cred-seal { height: 42px; }
 }
 
 /* ============================================================
