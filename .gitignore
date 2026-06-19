@@ -12,3 +12,6 @@ _archive/
 _deck-media/
 # workshop: working notes, prototypes, draft markdown — local only
 _workshop/
+test-harness.html
+test-reveal.html
+test-credrev.html
