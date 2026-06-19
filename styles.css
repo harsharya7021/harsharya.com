@@ -3984,3 +3984,21 @@ body[data-mode="warhol"] #work .section-title em { transform: rotate(-1.5deg); }
 
 @media (max-width: 1180px) { .lyd-grid { gap: 56px; } }
 @media (max-width: 600px)  { .lyd-campus { height: 104px; } }
+
+/* ============================================================
+   FIX: the name-card "Harry" footnote (FN.02) lives inside the pinned
+   100vh hero (.cine-pin is height:100vh; align-items:center; overflow:hidden).
+   Opening it in normal flow pushed the portrait column taller than the
+   viewport, so it got clipped top AND bottom ("box appears only half").
+   Float it as a centered, self-contained overlay that always fits.
+   ============================================================ */
+#fn-mount-harry:not(:empty) {
+  position: absolute;
+  left: -6px; right: -6px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 16;
+  margin: 0;
+  max-height: 84vh;
+  overflow-y: auto;
+}
