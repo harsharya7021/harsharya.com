@@ -4020,25 +4020,27 @@ body[data-mode="warhol"] #work .section-title em { transform: rotate(-1.5deg); }
      so it sits inline in the story like a planted document, in the corner of the text. */
   .kid-inline {
     display: block;
-    float: right;
-    width: 40vw; max-width: 178px;
-    margin: 2px 0 14px 18px;
-    padding: 7px 7px 0;
+    float: none; clear: both;
+    width: min(66vw, 280px);
+    margin: 10px auto 24px;
+  }
+  .kid-inline .passport-frame {
     background: #fff;
     border: 3px solid var(--text);
-    box-shadow: 6px 6px 0 var(--text);
+    box-shadow: 7px 7px 0 var(--text);
+    cursor: pointer;
   }
-  .kid-inline img {
+  .kid-inline .passport-frame img {
     display: block; width: 100%; height: auto;
-    filter: grayscale(0.08) contrast(1.02);
   }
+  .kid-inline .passport-stamp { font-size: 8.5px; }
   .kid-inline figcaption {
     font-family: var(--font-mono);
-    font-size: 9px; letter-spacing: 0.14em; text-transform: uppercase;
+    font-size: 9.5px; letter-spacing: 0.14em; text-transform: uppercase;
     color: var(--muted); text-align: center;
-    padding: 6px 2px 7px;
+    padding: 8px 2px 0;
   }
-  .kid-inline.is-flashing { animation: kid-inline-flash 1.5s cubic-bezier(0.16,1,0.3,1); }
+  .kid-inline.is-flashing .passport-frame { animation: kid-inline-flash 1.5s cubic-bezier(0.16,1,0.3,1); }
 
   /* punchline divider above the Forbes → GO TO JAIL card */
   .m2-aside {
@@ -4048,10 +4050,14 @@ body[data-mode="warhol"] #work .section-title em { transform: rotate(-1.5deg); }
     color: var(--muted); text-align: center;
     margin: 6px 0 -10px;
   }
+  /* About photo relocated midway through the prose (by JS) — give it room + cap size */
+  .about-prose > .about-photo {
+    margin: 26px auto 30px; max-width: 340px; float: none;
+  }
 }
 
 @keyframes kid-inline-flash {
-  0%   { box-shadow: 6px 6px 0 var(--text); }
-  28%  { box-shadow: 0 0 0 4px var(--accent), 6px 6px 0 var(--text); transform: translateY(-2px); }
-  100% { box-shadow: 6px 6px 0 var(--text); transform: none; }
+  0%   { box-shadow: 7px 7px 0 var(--text); }
+  28%  { box-shadow: 0 0 0 4px var(--accent), 7px 7px 0 var(--text); transform: translateY(-2px); }
+  100% { box-shadow: 7px 7px 0 var(--text); transform: none; }
 }

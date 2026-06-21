@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo+Black&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,700;0,6..96,900;1,6..96,400&family=Inter:wght@300;400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="styles.css?v=14">
+  <link rel="stylesheet" href="styles.css?v=15">
   <style id="warhol-fx">
   body{ background:transparent !important; }
   #paper{ position:fixed; inset:0; z-index:-3; background:#fff8e7; }
@@ -45,8 +45,10 @@
   @media (prefers-reduced-motion:reduce){ #dots{display:none;} }
   /* C: hero headline clears the nav divider (desktop) */
   @media (min-width:821px){ body[data-mode="warhol"] .cine .hero-wrap{ padding-top:104px; } }
-  /* D: hide the cinematic kid/exhibit apparatus on mobile (doesn't work statically) */
-  @media (max-width:820px){ .hero-portrait{ display:none !important; } }
+  /* D: hide the whole desktop portrait/exhibit apparatus on mobile — the kid lives
+        inline in the story (Exhibit A figure) and image exhibits open inline, so the
+        "Exhibit A · The Kid" tag + "Exhibits · on demand" stage aren't orphaned here. */
+  @media (max-width:820px){ .hero-photo{ display:none !important; } }
   /* E: mobile press reads straight — "As Featured In" + real clippings, then the
         card FLIPS to GO TO JAIL as the punchline (JS adds .flipped on scroll-in). */
   @media (max-width:820px){
@@ -110,11 +112,17 @@
 
           <div class="hero-story" id="hc-story">
             <aside class="fn-hint"><span class="fn-hint-body">The little numbers are clickable.</span><span class="fn-hint-legend" aria-hidden="true"><span class="fn-hint-legend-item fn-hint-legend-item--namecard"><span class="fn-hint-bracket">[</span><span class="fn-hint-num-glyph">1</span><span class="fn-hint-tag-glyph">names</span><span class="fn-hint-bracket">]</span></span><span class="fn-hint-legend-item fn-hint-legend-item--image"><span class="fn-hint-bracket">[</span><span class="fn-hint-num-glyph">3</span><span class="fn-hint-tag-glyph">sketches</span><span class="fn-hint-bracket">]</span></span><span class="fn-hint-legend-item fn-hint-legend-item--text"><span class="fn-hint-bracket">[</span><span class="fn-hint-num-glyph">6</span><span class="fn-hint-tag-glyph">asides</span><span class="fn-hint-bracket">]</span></span></span></aside>
-            <figure class="kid-inline" id="kid-inline" aria-label="Exhibit A — the kid">
-              <img src="assets/portrait.jpg" alt="Harsh as a child — the enterprising kid" loading="lazy" />
+            <p><span class="hero-pointer"><span class="hero-pointer-text">To make sense of any of this, start with the enterprising <span class="hero-kid-anchor">kid</span><sup class="fn-ref" data-fn-num="A" data-fn-target=".hero-portrait" role="button" tabindex="0" aria-label="See Exhibit A — the kid in the portrait">A</sup> in the corner of this page.</span></span> My parents wouldn't buy me the thirty-five-rupee <strong>Trimax Gold</strong>, let alone the hundred-rupee <strong>Parker</strong>. So at nine, I started trading. Pens, mostly. I got captivated by the game and built an empire of sorts — used to walk into school with ten Trimaxes lined up in the inside pocket of my blazer, ready to move, like a dealer's arms. Then I went one step further and designed my own version of the pen — pitch deck<sup class="fn-ref" data-fn="deck" data-fn-num="3" data-fn-mount="fn-mount-photo" role="button" tabindex="0" aria-expanded="false" aria-label="Footnote 3 — pitch deck exhibit">3</sup> and prototype<sup class="fn-ref" data-fn="proto" data-fn-num="4" data-fn-mount="fn-mount-photo" role="button" tabindex="0" aria-expanded="false" aria-label="Footnote 4 — prototype exhibit">4</sup>, by hand. Never sent either. Still have both.</p>
+            <!-- mobile-only: Exhibit A — the kid passport, with the same wink the desktop portrait has -->
+            <figure class="kid-inline" id="kid-inline" aria-label="Exhibit A — the kid (tap to wink)">
+              <div class="passport-frame kid-passport">
+                <img src="assets/portrait.jpg" alt="Harsh as a child — the enterprising kid, age 8" loading="lazy" />
+                <img class="wink-overlay" src="assets/portrait-wink.jpg" alt="" aria-hidden="true" loading="lazy" />
+                <div class="wink-fx" aria-hidden="true"></div>
+                <div class="passport-stamp">PASSPORT №01 · 2008</div>
+              </div>
               <figcaption>Exhibit A · The Kid</figcaption>
             </figure>
-            <p><span class="hero-pointer"><span class="hero-pointer-text">To make sense of any of this, start with the enterprising <span class="hero-kid-anchor">kid</span><sup class="fn-ref" data-fn-num="A" data-fn-target=".hero-portrait" role="button" tabindex="0" aria-label="See Exhibit A — the kid in the portrait">A</sup> in the corner of this page.</span></span> My parents wouldn't buy me the thirty-five-rupee <strong>Trimax Gold</strong>, let alone the hundred-rupee <strong>Parker</strong>. So at nine, I started trading. Pens, mostly. I got captivated by the game and built an empire of sorts — used to walk into school with ten Trimaxes lined up in the inside pocket of my blazer, ready to move, like a dealer's arms. Then I went one step further and designed my own version of the pen — pitch deck<sup class="fn-ref" data-fn="deck" data-fn-num="3" data-fn-mount="fn-mount-photo" role="button" tabindex="0" aria-expanded="false" aria-label="Footnote 3 — pitch deck exhibit">3</sup> and prototype<sup class="fn-ref" data-fn="proto" data-fn-num="4" data-fn-mount="fn-mount-photo" role="button" tabindex="0" aria-expanded="false" aria-label="Footnote 4 — prototype exhibit">4</sup>, by hand. Never sent either. Still have both.</p>
             <p>When the wrestling-card craze hit a year or two later, I ran a different play — no inventory, low CapEx, traded my way into a full set. In the back of every school file from those years, I used to sketch what merch<sup class="fn-ref" data-fn="merch" data-fn-num="5" data-fn-mount="fn-mount-photo" role="button" tabindex="0" aria-expanded="false" aria-label="Footnote 5 — merch sketches exhibit">5</sup> for my pretend employees would look like.</p>
             <p class="hero-synth">I'm still that kid. Been running some version of that hustle since. Just, the pretend employees became real. Allow me to take you through some of my present and past hustles.</p>
             <!-- mobile-only inline mount: image exhibits (3,4,5) open here when the portrait is hidden -->
@@ -1357,6 +1365,40 @@
         requestAnimationFrame(f); })(performance.now());
     }
   }
+  </script>
+
+  <script>
+  /* Mobile-only finishing touches:
+     (1) the inline Exhibit A kid passport winks (cross-fades to portrait-wink) on tap,
+         and once when it scrolls into view — the same gag the desktop portrait has;
+     (2) the About photo is moved midway through the prose instead of trailing at the
+         very bottom of the section. */
+  (function(){
+    if(!matchMedia('(max-width:820px)').matches) return;
+
+    var fig = document.getElementById('kid-inline');
+    var frame = fig && fig.querySelector('.passport-frame');
+    if(frame){
+      var winking=false;
+      function wink(){ if(winking) return; winking=true; frame.classList.add('is-winking');
+        setTimeout(function(){ frame.classList.remove('is-winking'); winking=false; }, 1700); }
+      fig.addEventListener('click', wink);
+      if(!matchMedia('(prefers-reduced-motion:reduce)').matches && 'IntersectionObserver' in window){
+        new IntersectionObserver(function(es,ob){ es.forEach(function(e){ if(e.isIntersecting){ ob.disconnect();
+          setTimeout(wink, 520); } }); }, { threshold:0.6 }).observe(fig);
+      }
+    }
+
+    var prose = document.querySelector('.about-prose');
+    var photo = document.querySelector('.about-photo');
+    if(prose && photo){
+      var ps = prose.querySelectorAll(':scope > p');
+      if(ps.length > 2){
+        var mid = ps[Math.min(3, ps.length-1)];
+        if(mid && mid.parentNode === prose) prose.insertBefore(photo, mid.nextSibling);
+      }
+    }
+  })();
   </script>
 </body>
 </html>
