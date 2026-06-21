@@ -10,15 +10,25 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Space+Mono:wght@400;700&display=swap" rel="stylesheet">
 <style>
+  :root{ --ink:#1b1813; --paper:#dcd5bc; --cyan:#00b3ff; --accent:#ff5a00; }
   *{ box-sizing:border-box; margin:0; padding:0; }
   html,body{ height:100%; }
   body{
-    background:#000; color:#fff;
+    color:var(--ink);
     font-family:'Fredoka',system-ui,sans-serif;
     min-height:100%;
     display:flex; flex-direction:column; align-items:center; justify-content:center;
     text-align:center; padding:44px 20px; overflow-x:hidden;
     -webkit-font-smoothing:antialiased;
+    /* ── specimen / recycled-paper background (matches the site's document theme) ── */
+    --grid-line:rgba(120,108,82,.16); --grid:100px;
+    background-color:var(--paper);
+    background-image:
+      linear-gradient(var(--grid-line) 1px, transparent 1px),
+      linear-gradient(90deg, var(--grid-line) 1px, transparent 1px),
+      url("../assets/onlyfans-paper.webp");
+    background-size: var(--grid) var(--grid), var(--grid) var(--grid), 1500px 1500px;
+    background-position: center top;
   }
   .rise{ opacity:0; transform:translateY(16px); animation:rise .7s cubic-bezier(.16,1,.3,1) forwards; }
   .rise.d1{ animation-delay:.06s; } .rise.d2{ animation-delay:.16s; } .rise.d3{ animation-delay:.26s; }
@@ -26,43 +36,36 @@
 
   .of-title{
     font-weight:700; line-height:.9; letter-spacing:-.02em;
-    font-size:clamp(64px,15vw,200px);
-    text-shadow:0 6px 0 rgba(255,255,255,.06);
+    font-size:clamp(64px,15vw,200px); color:var(--ink);
+    text-shadow:3px 3px 0 rgba(27,24,19,.08);
   }
-  .of-title .blue{ color:#00AFF0; }   /* the only-fans wink */
+  .of-title .blue{ color:var(--cyan); }   /* the only-fans wink */
 
   .fans-wrap{ width:min(680px,93vw); margin:clamp(26px,5vh,58px) auto clamp(22px,4.5vh,52px); }
   .fans-img{
     display:block; width:100%; height:auto;
-    filter:drop-shadow(0 22px 46px rgba(0,0,0,.7));
+    filter:drop-shadow(0 14px 28px rgba(70,60,40,.30));
     animation:floaty 6.5s ease-in-out infinite;
   }
   @keyframes floaty{ 0%,100%{ transform:translateY(0); } 50%{ transform:translateY(-12px); } }
 
   .tag{ font-weight:600; font-size:clamp(22px,4vw,40px); line-height:1.15; }
-  .tag .em{ color:#00AFF0; }
+  .tag .em{ color:var(--cyan); }
 
   .home{
     display:inline-flex; align-items:center; gap:9px;
     margin-top:clamp(26px,5vh,44px);
     font-family:'Space Mono',monospace; font-size:14px; letter-spacing:.04em;
-    color:#000; background:#fff; text-decoration:none;
-    padding:13px 22px; border-radius:40px; font-weight:700;
-    transition:transform .15s ease, background .15s ease, color .15s ease;
+    color:var(--paper); background:var(--ink); text-decoration:none;
+    padding:13px 24px; font-weight:700; border:3px solid var(--ink);
+    box-shadow:5px 5px 0 var(--cyan);
+    transition:transform .14s ease, background .14s ease, box-shadow .14s ease;
   }
-  .home:hover{ transform:translateY(-2px); background:#00AFF0; color:#fff; }
+  .home:hover{ transform:translate(-2px,-2px); background:var(--accent); box-shadow:7px 7px 0 var(--ink); }
   .home span{ transition:transform .2s ease; }
   .home:hover span{ transform:translateX(-4px); }
 
-  .fine{ margin-top:30px; font-family:'Space Mono',monospace; font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:#444; }
-
-  /* ── breeze: the fans blow a wind that shoves your cursor around ── */
-  @media (pointer:fine){ body.breeze, body.breeze a, body.breeze button{ cursor:none; } }
-  .breeze-cursor{ position:fixed; left:0; top:0; width:13px; height:17px; pointer-events:none; z-index:99999;
-    background:#fcfcfc; border-radius:2px 3px 2px 3px; box-shadow:0 2px 8px rgba(0,0,0,.5); will-change:transform; }
-  .breeze-cursor::before{ content:''; position:absolute; left:2px; right:2px; top:4px; height:1.5px; background:rgba(0,0,0,.16); box-shadow:0 4px 0 rgba(0,0,0,.12), 0 8px 0 rgba(0,0,0,.08); }
-  .wind-streak{ position:fixed; left:0; top:0; height:2px; pointer-events:none; z-index:1; transform-origin:left center; will-change:transform,opacity;
-    background:linear-gradient(90deg, rgba(255,255,255,0), rgba(186,228,255,.7), rgba(255,255,255,0)); }
+  .fine{ margin-top:30px; font-family:'Space Mono',monospace; font-size:10.5px; letter-spacing:.14em; text-transform:uppercase; color:#8a8270; }
 
   @media (prefers-reduced-motion:reduce){ .rise,.fans-img{ animation:none; opacity:1; transform:none; } }
 </style>
@@ -83,72 +86,6 @@
   <a class="home rise d3" href="/"><span>&larr;</span> take me back to reality</a>
 
   <p class="fine">no, but seriously — these are very good at cooling.</p>
-
-  <script>
-  (function(){
-    if(matchMedia('(prefers-reduced-motion:reduce)').matches) return;
-    var fine = matchMedia('(pointer:fine)').matches;
-    var img = document.querySelector('.fans-img');
-    function fanRect(){ var r = img ? img.getBoundingClientRect() : null;
-      if(!r || !r.width) return {cx:innerWidth/2, cy:innerHeight*0.45, w:Math.min(innerWidth,innerHeight)*0.5};
-      return {cx:r.left+r.width/2, cy:r.top+r.height/2, w:r.width}; }
-
-    var t=0;
-    /* wind force at a point: gentle drift + gusts, plus a strong push radiating
-       OUT of the fans (so the closer you get, the harder you're blown off). */
-    function wind(x,y){
-      var wx = 0.15 + Math.sin(t*0.8 + y*0.004)*0.32 + Math.sin(t*1.9)*0.18;
-      var wy = Math.sin(t*1.2 + x*0.004)*0.30;
-      var f = fanRect(); var dx = x-f.cx, dy = y-f.cy, d = Math.hypot(dx,dy)||1;
-      var range = f.w*0.82;
-      if(d < range){ var p = 1 - d/range; p = p*p; wx += (dx/d)*p*4.0; wy += (dy/d)*p*4.0; }
-      return {x:wx, y:wy};
-    }
-
-    /* ── visible breeze: streaks billowing out of the fans ── */
-    var streaks=[], MAX = innerWidth<700 ? 26 : 46;
-    function reset(s){ var f=fanRect();
-      s.x = f.cx + (Math.random()-0.5)*f.w*0.9;
-      s.y = f.cy + (Math.random()-0.5)*f.w*0.9;
-      s.vx = 0; s.vy = 0; s.life = 0; s.max = 55 + Math.random()*70;
-      s.len = 14 + Math.random()*42; s.el.style.width = s.len+'px';
-    }
-    for(var i=0;i<MAX;i++){ var el=document.createElement('div'); el.className='wind-streak';
-      document.body.appendChild(el); var s={el:el}; reset(s); streaks.push(s); }
-
-    /* ── the cursor becomes a paper scrap that the wind blows around ── */
-    var mouse={x:innerWidth/2,y:innerHeight*0.5}, cur=null;
-    if(fine){
-      document.body.classList.add('breeze');
-      cur=document.createElement('div'); cur.className='breeze-cursor'; document.body.appendChild(cur);
-      cur.px=mouse.x; cur.py=mouse.y; cur.vx=0; cur.vy=0; cur.rot=0;
-      addEventListener('mousemove',function(e){ mouse.x=e.clientX; mouse.y=e.clientY; }, {passive:true});
-    }
-
-    (function loop(){
-      t += 1/60;
-      for(var i=0;i<streaks.length;i++){ var s=streaks[i]; var w=wind(s.x,s.y);
-        s.vx += (w.x-s.vx)*0.18 + 0.35; s.vy += (w.y-s.vy)*0.18;
-        s.x += s.vx*2.1; s.y += s.vy*2.1; s.life++;
-        var op = Math.sin(Math.min(s.life/s.max,1)*Math.PI)*0.55;
-        var ang = Math.atan2(s.vy, s.vx)*57.2958;
-        s.el.style.transform = 'translate('+s.x+'px,'+s.y+'px) rotate('+ang+'deg)';
-        s.el.style.opacity = op;
-        if(s.life>=s.max || s.x>innerWidth+80 || s.x<-80 || s.y<-80 || s.y>innerHeight+80) reset(s);
-      }
-      if(cur){ var w=wind(cur.px,cur.py);
-        cur.vx += (mouse.x-cur.px)*0.16 + w.x*0.85;
-        cur.vy += (mouse.y-cur.py)*0.16 + w.y*0.85;
-        cur.vx *= 0.80; cur.vy *= 0.80;
-        var sp = Math.hypot(cur.vx, cur.vy); if(sp > 26){ cur.vx = cur.vx/sp*26; cur.vy = cur.vy/sp*26; }
-        cur.px += cur.vx; cur.py += cur.vy;
-        cur.rot += cur.vx*0.7;
-        cur.style.transform = 'translate('+(cur.px-6)+'px,'+(cur.py-8)+'px) rotate('+cur.rot+'deg)';
-      }
-      requestAnimationFrame(loop);
-    })();
-  })();
-  </script>
 
 </body>
 </html>
