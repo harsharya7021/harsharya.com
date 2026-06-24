@@ -219,6 +219,8 @@ body[data-gallery-layout="grid"] .gnav .i-scroll{ opacity:1; transform:none; }
    line and the descriptive half of each caption are hidden site-wide; the
    frame number stays as a quiet index. Delete this block to bring text back. ── */
 .series-intro{ display:none; }
+.series-meta{ display:none; }
+.series-chapter{ display:none; }
 .series-end{ display:none; }
 .frame-text{ display:none; }
 .frame-cap{ margin-top:9px; }
