@@ -8,101 +8,8 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo+Black&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,700;0,6..96,900;1,6..96,400&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=Inter:wght@400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../styles.css?v=11" />
-  <style>
-    .page-wrap { padding: 64px var(--container-pad) 32px; max-width: 1100px; margin: 0 auto; }
-    @media (max-width: 560px) {
-      .page-title { font-size: clamp(40px, 11vw, 72px); letter-spacing: -0.01em; }
-    }
-    .page-eyebrow {
-      display: inline-block;
-      font-family: var(--font-mono);
-      font-size: 12px; letter-spacing: 0.2em;
-      text-transform: uppercase; color: var(--text);
-      background: var(--accent-3);
-      border: 2px solid var(--text);
-      padding: 5px 12px;
-      margin-bottom: 28px;
-    }
-    .page-title {
-      font-family: var(--font-display);
-      font-size: clamp(56px, 8vw, 132px);
-      line-height: 0.92; letter-spacing: -0.02em;
-      text-transform: uppercase;
-      margin-bottom: 24px;
-    }
-    .page-title em {
-      font-family: var(--font-serif);
-      font-style: italic; font-weight: 700;
-      color: var(--accent);
-      text-transform: none;
-    }
-    .page-lead {
-      font-size: 19px; line-height: 1.55;
-      max-width: 640px;
-      margin-bottom: 16px;
-    }
-
-    /* Series grid */
-    .gallery-page main { padding: 32px 0 96px; max-width: 1100px; margin: 0 auto; }
-    .series-grid {
-      display: grid; grid-template-columns: repeat(2, 1fr);
-      gap: 56px 36px;
-    }
-    .series-card { display: block; }
-    .series-card-image {
-      position: relative;
-      aspect-ratio: 4 / 5;
-      border: 3px solid var(--text);
-      box-shadow: 10px 10px 0 var(--accent);
-      overflow: hidden;
-      transition: box-shadow 0.3s ease, transform 0.3s ease;
-    }
-    .series-card:hover .series-card-image {
-      box-shadow: 6px 6px 0 var(--accent);
-      transform: translate(4px, 4px);
-    }
-    .series-card-image img {
-      width: 100%; height: 100%;
-      object-fit: cover;
-      display: block;
-    }
-    .series-card-soon {
-      display: flex; flex-direction: column;
-      align-items: center; justify-content: center;
-      text-align: center; padding: 18px;
-      background: var(--accent-3);
-      font-family: var(--font-display);
-      font-size: 28px; line-height: 1.1;
-      text-transform: uppercase;
-      color: var(--text);
-      gap: 14px;
-    }
-    .series-card-soon small {
-      font-family: var(--font-mono);
-      font-size: 11px;
-      letter-spacing: 0.12em;
-      text-transform: none;
-      opacity: 0.75;
-      max-width: 240px;
-    }
-    .series-card-meta { margin-top: 20px; text-align: center; }
-    .series-card-meta h3 {
-      font-family: var(--font-serif);
-      font-style: italic; font-weight: 500;
-      font-size: 36px; letter-spacing: -0.01em;
-      margin-bottom: 6px;
-    }
-    .series-card-meta p {
-      font-family: var(--font-mono);
-      font-size: 11px; letter-spacing: 0.16em;
-      text-transform: uppercase; color: var(--muted);
-    }
-
-    @media (max-width: 720px) {
-      .series-grid { grid-template-columns: 1fr; gap: 40px; }
-    }
-  </style>
+  <link rel="stylesheet" href="../styles.css?v=15" />
+  <link rel="stylesheet" href="series.css?v=1" />
 </head>
 <body data-mode="warhol" data-density="normal" class="gallery-page">
 
@@ -119,68 +26,73 @@
     </div>
   </nav>
 
-  <header class="container page-wrap">
-    <span class="page-eyebrow">Gallery</span>
-    <h1 class="page-title">Series from places I <em>keep going back to.</em></h1>
-    <p class="page-lead">Film and digital. Long-form rather than greatest-hits — each series is a single trip, a single roll of mood, sequenced the way I'd flip through prints in a sleeve.</p>
+  <header class="gx-head">
+    <span class="gx-eyebrow">Gallery</span>
+    <h1 class="gx-title">Series from places I <em>keep going back to.</em></h1>
+    <p class="gx-lead">Film and digital. Long-form rather than greatest-hits — each series is a single trip, a single roll of mood, sequenced the way I'd flip through prints in a sleeve.</p>
   </header>
 
-  <main class="container">
-    <div class="series-grid">
+  <main class="gx-grid">
 
-      <a class="series-card" href="kerala.html">
-        <div class="series-card-image">
-          <img src="../assets/life/kerala/varkala-01.jpg" alt="Kerala series — Varkala, the cliffside" />
-        </div>
-        <div class="series-card-meta">
-          <h3>Kerala</h3>
-          <p>A series in progress · ch. 01 Varkala</p>
-        </div>
-      </a>
-
-      <a class="series-card" href="jodhpur.html">
-        <div class="series-card-image">
-          <img src="../assets/life/jodhpur/jodhpur-01.jpg" alt="Jodhpur series — the blue city below Mehrangarh" />
-        </div>
-        <div class="series-card-meta">
-          <h3>Jodhpur</h3>
-          <p>Rajasthan · 7 frames</p>
-        </div>
-      </a>
-
-      <a class="series-card" href="shimla.html">
-        <div class="series-card-image">
-          <img src="../assets/life/shimla/shimla-01.jpg" alt="Shimla series — winter on the ridge" />
-        </div>
-        <div class="series-card-meta">
-          <h3>Shimla</h3>
-          <p>Himachal · 10 frames</p>
-        </div>
-      </a>
-
-      <a class="series-card" href="malaysia.html">
-        <div class="series-card-image">
-          <img src="../assets/life/malaysia/malaysia-01.jpg" alt="Malaysia series — three frames from Southeast Asia" />
-        </div>
-        <div class="series-card-meta">
-          <h3>Malaysia</h3>
-          <p>Southeast Asia · 3 frames</p>
-        </div>
-      </a>
-
-      <div class="series-card">
-        <div class="series-card-image series-card-soon">
-          More series<br>coming
-          <small>Goa, Auroville, Lakshadweep, the Himalayas — when the rolls come back</small>
-        </div>
-        <div class="series-card-meta">
-          <h3 style="color: var(--muted);">In the queue</h3>
-          <p>more rolls, more places</p>
-        </div>
+    <a class="gx-card" href="kerala.html">
+      <div class="gx-card-img">
+        <span class="gx-card-no">01</span>
+        <img src="../assets/life/kerala/varkala-01.jpg" alt="Kerala series — Varkala, the cliffside" loading="lazy" />
       </div>
+      <div class="gx-card-meta"><h3>Kerala</h3><p>In progress · 06</p></div>
+    </a>
 
+    <a class="gx-card" href="jodhpur.html">
+      <div class="gx-card-img">
+        <span class="gx-card-no">02</span>
+        <img src="../assets/life/jodhpur/jodhpur-01.jpg" alt="Jodhpur series — the blue city below Mehrangarh" loading="lazy" />
+      </div>
+      <div class="gx-card-meta"><h3>Jodhpur</h3><p>Rajasthan · 07</p></div>
+    </a>
+
+    <a class="gx-card" href="shimla.html">
+      <div class="gx-card-img">
+        <span class="gx-card-no">03</span>
+        <img src="../assets/life/shimla/shimla-01.jpg" alt="Shimla series — winter on the ridge" loading="lazy" />
+      </div>
+      <div class="gx-card-meta"><h3>Shimla</h3><p>Himachal · 10</p></div>
+    </a>
+
+    <a class="gx-card" href="malaysia.html">
+      <div class="gx-card-img">
+        <span class="gx-card-no">04</span>
+        <img src="../assets/life/malaysia/malaysia-01.jpg" alt="Malaysia series — three frames from Southeast Asia" loading="lazy" />
+      </div>
+      <div class="gx-card-meta"><h3>Malaysia</h3><p>SE Asia · 03</p></div>
+    </a>
+
+    <div class="gx-card gx-card--soon">
+      <div class="gx-card-img">
+        More series<br>coming
+        <small>Goa, Auroville, Lakshadweep, the Himalayas — when the rolls come back.</small>
+      </div>
+      <div class="gx-card-meta"><h3 style="color:var(--muted);">In the queue</h3><p>more rolls</p></div>
     </div>
+
   </main>
+
+  <nav class="gfn" aria-label="Gallery navigation">
+    <a class="gfn__btn gfn__back" href="../life/index.html" aria-label="Back to Life" title="Back to Life">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><path d="M11 5l-7 7 7 7M4 12h16"/></svg>
+    </a>
+    <div class="gfn__center">
+      <button class="gfn__series" id="gfnSeries" aria-haspopup="true" aria-expanded="false">
+        <span class="gfn__kicker">Gallery</span>
+        <span class="gfn__name">Series <span class="gfn__chev">▾</span></span>
+      </button>
+      <div class="gfn__menu" id="gfnMenu" role="menu" hidden>
+        <a role="menuitem" href="kerala.html">Kerala <em>06</em></a>
+        <a role="menuitem" href="jodhpur.html">Jodhpur <em>07</em></a>
+        <a role="menuitem" href="shimla.html">Shimla <em>10</em></a>
+        <a role="menuitem" href="malaysia.html">Malaysia <em>03</em></a>
+      </div>
+    </div>
+  </nav>
 
   <footer>
     <div class="container">
@@ -193,12 +105,6 @@
     </div>
   </footer>
 
-  <script>
-    document.getElementById("year").textContent = new Date().getFullYear();
-    const nav = document.getElementById("nav");
-    window.addEventListener("scroll", () => {
-      if (window.scrollY > 8) nav.classList.add("scrolled"); else nav.classList.remove("scrolled");
-    });
-  </script>
+  <script src="series.js?v=1"></script>
 </body>
 </html>

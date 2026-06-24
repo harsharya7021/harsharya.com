@@ -4,240 +4,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Kerala — Gallery — Harsh Kumar Arya</title>
-  <meta name="description" content="Kerala — a series in progress by Harsh Kumar Arya. Cliffs, beach, sunset. Starting in Varkala." />
+  <meta name="description" content="Kerala — a photographic series in progress by Harsh Kumar Arya. Cliffs, beach and sunset, starting in Varkala." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo+Black&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,700;0,6..96,900;1,6..96,400&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=Inter:wght@400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../styles.css?v=11" />
-  <style>
-    .series-page header { padding: 56px var(--container-pad) 24px; max-width: 900px; margin: 0 auto; }
-    .series-back {
-      display: inline-block;
-      font-family: var(--font-mono);
-      font-size: 12px; letter-spacing: 0.14em;
-      text-transform: uppercase;
-      background: var(--text); color: var(--bg);
-      padding: 6px 12px;
-      border: 2px solid var(--text);
-      margin-bottom: 24px;
-    }
-    .series-back:hover { background: var(--accent); color: var(--text); }
-    .series-meta {
-      display: inline-block;
-      font-family: var(--font-mono);
-      font-size: 11px; letter-spacing: 0.18em;
-      text-transform: uppercase;
-      background: var(--accent-3);
-      border: 2px solid var(--text);
-      padding: 5px 12px;
-      margin-bottom: 20px;
-    }
-    .series-title {
-      font-family: var(--font-display);
-      font-size: clamp(72px, 12vw, 168px);
-      line-height: 0.88; letter-spacing: -0.03em;
-      text-transform: uppercase;
-      margin-bottom: 20px;
-    }
-    .series-intro {
-      font-size: 18px; line-height: 1.6;
-      max-width: 620px;
-      margin-bottom: 12px;
-    }
-    .series-chapter {
-      display: inline-block;
-      font-family: var(--font-mono);
-      font-size: 11px; letter-spacing: 0.16em;
-      text-transform: uppercase;
-      color: var(--muted);
-      margin-bottom: 28px;
-    }
-    .series-chapter b { color: var(--text); }
-
-    /* Sliding gallery viewer (shared with /gallery/kochi.html) */
-    .series-viewer { max-width: 1180px; margin: 0 auto; padding: 0 24px 48px; }
-    .viewer-stage {
-      position: relative;
-      aspect-ratio: 3 / 2;
-      background: #f5f5f7;
-      border: 3px solid var(--text);
-      box-shadow: 12px 12px 0 var(--accent);
-      overflow: hidden;
-      margin-bottom: 20px;
-    }
-    .viewer-stage img {
-      position: absolute; inset: 0;
-      width: 100%; height: 100%;
-      object-fit: contain;
-      opacity: 0;
-      transition: opacity 0.45s ease;
-    }
-    .viewer-stage img.active { opacity: 1; }
-    .viewer-stage button.stage-zone {
-      position: absolute; top: 0; bottom: 0;
-      width: 33%;
-      background: transparent;
-      border: 0; cursor: pointer;
-      z-index: 2;
-    }
-    .viewer-stage .stage-zone--prev { left: 0; cursor: w-resize; }
-    .viewer-stage .stage-zone--next { right: 0; cursor: e-resize; }
-    .viewer-stage .stage-zone--zoom { left: 33%; width: 34%; cursor: zoom-in; }
-
-    /* ── Lightbox · fullscreen immersive viewer ── */
-    body.lightbox-open { overflow: hidden; }
-    .lightbox {
-      position: fixed; inset: 0; z-index: 1000;
-      background: #f5f5f7;
-      display: none;
-      align-items: center; justify-content: center;
-      padding: 64px 24px 80px;
-    }
-    .lightbox.is-open { display: flex; }
-    .lightbox-img {
-      max-width: 100%; max-height: 100%;
-      object-fit: contain;
-      user-select: none;
-      -webkit-user-drag: none;
-      transition: opacity 0.25s ease;
-    }
-    .lightbox-img.is-loading { opacity: 0.35; }
-    .lightbox-close {
-      position: absolute; top: 18px; right: 22px;
-      width: 44px; height: 44px;
-      background: transparent; border: 2px solid var(--text); color: var(--text);
-      font-family: var(--font-display); font-size: 22px;
-      cursor: pointer; line-height: 1;
-      transition: background 0.15s, color 0.15s;
-    }
-    .lightbox-close:hover { background: var(--text); color: #f5f5f7; }
-    .lightbox-counter {
-      position: absolute; top: 28px; left: 28px;
-      font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.2em;
-      text-transform: uppercase; color: var(--text);
-    }
-    .lightbox-caption {
-      position: absolute; bottom: 28px; left: 50%;
-      transform: translateX(-50%);
-      font-family: var(--font-serif); font-style: italic; font-size: 16px;
-      color: var(--text); max-width: 72%; text-align: center;
-      margin: 0; line-height: 1.45;
-    }
-    .lightbox-nav {
-      position: absolute; top: 50%; transform: translateY(-50%);
-      width: 56px; height: 56px;
-      background: rgba(255,255,255,0.75); border: 2px solid var(--text); color: var(--text);
-      font-family: var(--font-display); font-size: 26px;
-      cursor: pointer; line-height: 1;
-      transition: background 0.15s, color 0.15s;
-    }
-    .lightbox-nav:hover { background: var(--accent); color: var(--text); }
-    .lightbox-prev { left: 24px; }
-    .lightbox-next { right: 24px; }
-    @media (max-width: 720px) {
-      .lightbox { padding: 56px 12px 72px; }
-      .lightbox-nav { width: 44px; height: 44px; font-size: 22px; }
-      .lightbox-prev { left: 10px; } .lightbox-next { right: 10px; }
-      .lightbox-caption { font-size: 14px; max-width: 88%; }
-    }
-
-    .viewer-bar {
-      display: flex; align-items: center; justify-content: space-between;
-      gap: 24px; flex-wrap: wrap;
-      margin-bottom: 24px;
-    }
-    .viewer-caption {
-      font-family: var(--font-serif);
-      font-style: italic;
-      font-size: 19px;
-      color: var(--text);
-      line-height: 1.4;
-      flex: 1;
-      min-width: 200px;
-    }
-    .viewer-controls { display: flex; align-items: center; gap: 12px; }
-    .viewer-counter {
-      font-family: var(--font-mono);
-      font-size: 12px; letter-spacing: 0.18em;
-      color: var(--muted);
-      min-width: 76px;
-      text-align: right;
-    }
-    .viewer-btn {
-      width: 44px; height: 44px;
-      border: 2px solid var(--text);
-      background: var(--bg);
-      font-family: var(--font-display);
-      font-size: 22px;
-      cursor: pointer;
-      transition: background 0.15s, color 0.15s, transform 0.15s;
-    }
-    .viewer-btn:hover { background: var(--accent); color: var(--text); }
-    .viewer-btn:active { transform: scale(0.96); }
-
-    .viewer-thumbs {
-      display: flex;
-      gap: 8px;
-      overflow-x: auto;
-      scroll-snap-type: x proximity;
-      padding: 6px 2px 16px;
-      scrollbar-width: thin;
-      scrollbar-color: var(--text) transparent;
-    }
-    .viewer-thumbs::-webkit-scrollbar { height: 6px; }
-    .viewer-thumbs::-webkit-scrollbar-thumb { background: var(--text); border-radius: 3px; }
-    .viewer-thumbs button {
-      flex: 1 1 0;
-      min-width: 84px;
-      aspect-ratio: 1;
-      padding: 0;
-      border: 2px solid var(--text);
-      background: var(--text);
-      overflow: hidden;
-      cursor: pointer;
-      opacity: 0.55;
-      transition: opacity 0.2s, transform 0.2s, box-shadow 0.2s;
-      scroll-snap-align: center;
-    }
-    .viewer-thumbs button img {
-      width: 100%; height: 100%;
-      object-fit: cover;
-      pointer-events: none;
-    }
-    .viewer-thumbs button.active {
-      opacity: 1;
-      box-shadow: 0 6px 0 var(--accent);
-      transform: translateY(-3px);
-    }
-    .viewer-thumbs button:hover { opacity: 0.85; }
-
-    .series-end {
-      text-align: center;
-      font-family: var(--font-mono);
-      font-size: 11px; letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--muted);
-      padding: 32px 0 16px;
-    }
-    .series-more {
-      text-align: center;
-      font-family: var(--font-serif);
-      font-style: italic;
-      font-size: 16px;
-      color: var(--muted);
-      padding: 0 0 64px;
-    }
-    .series-more b { color: var(--text); font-style: normal; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; padding: 3px 8px; border: 1.5px solid var(--text); background: var(--accent-3); margin-right: 8px; }
-
-    @media (max-width: 720px) {
-      .series-page header { padding: 40px 0 16px; }
-      .viewer-stage { aspect-ratio: 4 / 3; box-shadow: 6px 6px 0 var(--accent); }
-      .viewer-thumbs button { min-width: 60px; }
-      .viewer-caption { font-size: 16px; }
-    }
-  </style>
+  <link rel="stylesheet" href="../styles.css?v=15" />
+  <link rel="stylesheet" href="series.css?v=1" />
 </head>
-<body data-mode="warhol" data-density="normal" class="series-page">
+<body data-mode="warhol" data-density="normal" class="series-page" data-series="kerala">
 
   <nav class="nav" id="nav">
     <div class="container nav-inner">
@@ -252,49 +26,72 @@
     </div>
   </nav>
 
-  <header class="container">
+  <header class="series-head">
     <a href="index.html" class="series-back">← All series</a>
-    <span class="series-meta">A series in progress · Kerala</span>
-    <h1 class="series-title">Kerala.</h1>
+    <div class="series-metawrap"><span class="series-meta">A series in progress · Kerala</span></div>
+    <h1 class="series-title">Kerala<span class="dot">.</span></h1>
     <p class="series-intro">A growing series across Kerala — different trips, different rolls, sequenced the way I remember each place rather than how the days actually went.</p>
-    <span class="series-chapter"><b>Chapter 01 ·</b> Varkala — cliffs, beach, sunset.</span>
+    <div class="series-chapwrap"><span class="series-chapter"><b>Chapter 01 ·</b> Varkala — cliffs, beach, sunset.</span></div>
   </header>
 
-  <main class="series-viewer">
-    <div class="viewer-stage" id="viewer-stage">
-      <img src="../assets/life/kerala/varkala-01.jpg" alt="Varkala — frame 01" class="active" />
-      <img src="../assets/life/kerala/varkala-02.jpg" alt="Varkala — frame 02" />
-      <img src="../assets/life/kerala/varkala-03.jpg" alt="Varkala — frame 03" />
-      <img src="../assets/life/kerala/varkala-04.jpg" alt="Varkala — frame 04" />
-      <img src="../assets/life/kerala/varkala-05.jpg" alt="Varkala — frame 05" />
-      <img src="../assets/life/kerala/varkala-06.jpg" alt="Varkala — frame 06" />
-      <button class="stage-zone stage-zone--prev" aria-label="Previous photo"></button>
-      <button class="stage-zone stage-zone--zoom" aria-label="Open full screen"></button>
-      <button class="stage-zone stage-zone--next" aria-label="Next photo"></button>
-    </div>
+  <main class="series" id="series" data-layout="vertical">
+    <div class="series-list">
 
-    <div class="viewer-bar">
-      <p class="viewer-caption" id="viewer-caption">Varkala · cliffside afternoon</p>
-      <div class="viewer-controls">
-        <button class="viewer-btn" id="viewer-prev" aria-label="Previous">←</button>
-        <button class="viewer-btn" id="viewer-next" aria-label="Next">→</button>
-        <span class="viewer-counter" id="viewer-counter">01 / 06</span>
+      <figure class="frame">
+        <div class="frame-media"><img src="../assets/life/kerala/varkala-01.jpg" alt="Varkala, Kerala — cliffside afternoon" loading="eager" /></div>
+        <figcaption class="frame-cap"><span class="frame-no">01</span><span class="frame-text">Varkala · cliffside afternoon</span></figcaption>
+      </figure>
+
+      <figure class="frame">
+        <div class="frame-media"><img src="../assets/life/kerala/varkala-02.jpg" alt="Varkala, Kerala — the path down to the beach" loading="lazy" /></div>
+        <figcaption class="frame-cap"><span class="frame-no">02</span><span class="frame-text">The path down to the beach</span></figcaption>
+      </figure>
+
+      <figure class="frame">
+        <div class="frame-media"><img src="../assets/life/kerala/varkala-03.jpg" alt="Varkala, Kerala — long shadows at low tide" loading="lazy" /></div>
+        <figcaption class="frame-cap"><span class="frame-no">03</span><span class="frame-text">Long shadows · low tide</span></figcaption>
+      </figure>
+
+      <figure class="frame">
+        <div class="frame-media"><img src="../assets/life/kerala/varkala-04.jpg" alt="Varkala, Kerala — cliffs at golden hour" loading="lazy" /></div>
+        <figcaption class="frame-cap"><span class="frame-no">04</span><span class="frame-text">Cliffs at golden hour</span></figcaption>
+      </figure>
+
+      <figure class="frame">
+        <div class="frame-media"><img src="../assets/life/kerala/varkala-05.jpg" alt="Varkala, Kerala — last light over the Arabian Sea" loading="lazy" /></div>
+        <figcaption class="frame-cap"><span class="frame-no">05</span><span class="frame-text">Last light over the Arabian Sea</span></figcaption>
+      </figure>
+
+      <figure class="frame">
+        <div class="frame-media"><img src="../assets/life/kerala/varkala-06.jpg" alt="Varkala, Kerala — cliff cafe after sunset" loading="lazy" /></div>
+        <figcaption class="frame-cap"><span class="frame-no">06</span><span class="frame-text">Cliff cafe · after sunset</span></figcaption>
+      </figure>
+
+    </div>
+    <p class="series-end"><b>End of chapter 01.</b> Kochi, Munnar, Alappuzha — when the rolls come back.</p>
+  </main>
+
+  <nav class="gfn" aria-label="Gallery navigation">
+    <a class="gfn__btn gfn__back" href="index.html" aria-label="All series" title="All series">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="square"><path d="M11 5l-7 7 7 7M4 12h16"/></svg>
+    </a>
+    <div class="gfn__center">
+      <button class="gfn__series" id="gfnSeries" aria-haspopup="true" aria-expanded="false">
+        <span class="gfn__kicker">Series</span>
+        <span class="gfn__name">Kerala <span class="gfn__chev">▾</span></span>
+      </button>
+      <div class="gfn__menu" id="gfnMenu" role="menu" hidden>
+        <a role="menuitem" href="kerala.html" class="is-current">Kerala <em>06</em></a>
+        <a role="menuitem" href="jodhpur.html">Jodhpur <em>07</em></a>
+        <a role="menuitem" href="shimla.html">Shimla <em>10</em></a>
+        <a role="menuitem" href="malaysia.html">Malaysia <em>03</em></a>
       </div>
     </div>
-
-    <div class="viewer-thumbs" id="viewer-thumbs">
-      <button class="active" data-idx="0"><img src="../assets/life/kerala/varkala-01.jpg" alt="" loading="lazy"></button>
-      <button data-idx="1"><img src="../assets/life/kerala/varkala-02.jpg" alt="" loading="lazy"></button>
-      <button data-idx="2"><img src="../assets/life/kerala/varkala-03.jpg" alt="" loading="lazy"></button>
-      <button data-idx="3"><img src="../assets/life/kerala/varkala-04.jpg" alt="" loading="lazy"></button>
-      <button data-idx="4"><img src="../assets/life/kerala/varkala-05.jpg" alt="" loading="lazy"></button>
-      <button data-idx="5"><img src="../assets/life/kerala/varkala-06.jpg" alt="" loading="lazy"></button>
-    </div>
-
-    <p class="series-end">— end of chapter 01 — use ← → keys or click any frame —</p>
-    <p class="series-more"><b>Coming</b>Kochi, Munnar, Alappuzha — when the rolls come back.</p>
-
-  </main>
+    <button class="gfn__btn gfn__layout" id="gfnLayout" aria-label="Toggle scroll / grid layout" title="Scroll / grid">
+      <svg class="gfn__icon-grid" viewBox="0 0 24 24" fill="currentColor"><rect x="3" y="3" width="8" height="8"/><rect x="13" y="3" width="8" height="8"/><rect x="3" y="13" width="8" height="8"/><rect x="13" y="13" width="8" height="8"/></svg>
+      <svg class="gfn__icon-scroll" viewBox="0 0 24 24" fill="currentColor"><rect x="4" y="4" width="16" height="6"/><rect x="4" y="14" width="16" height="6"/></svg>
+    </button>
+  </nav>
 
   <footer>
     <div class="container">
@@ -307,111 +104,6 @@
     </div>
   </footer>
 
-  <!-- Lightbox · click the centre of any frame (or any thumbnail in full mode) -->
-  <div class="lightbox" id="lightbox" aria-hidden="true" role="dialog" aria-label="Photo viewer">
-    <button class="lightbox-close" id="lb-close" aria-label="Close (Esc)">&times;</button>
-    <span class="lightbox-counter" id="lb-counter">01 / 06</span>
-    <button class="lightbox-nav lightbox-prev" id="lb-prev" aria-label="Previous photo">&larr;</button>
-    <img class="lightbox-img" id="lb-img" alt="">
-    <button class="lightbox-nav lightbox-next" id="lb-next" aria-label="Next photo">&rarr;</button>
-    <p class="lightbox-caption" id="lb-caption"></p>
-  </div>
-
-  <script>
-    document.getElementById("year").textContent = new Date().getFullYear();
-    const nav = document.getElementById("nav");
-    window.addEventListener("scroll", () => {
-      if (window.scrollY > 8) nav.classList.add("scrolled"); else nav.classList.remove("scrolled");
-    });
-
-    // Slide viewer
-    (function () {
-      const stage = document.getElementById("viewer-stage");
-      if (!stage) return;
-      const images = stage.querySelectorAll("img");
-      const thumbs = document.querySelectorAll("#viewer-thumbs button");
-      const counter = document.getElementById("viewer-counter");
-      const captionEl = document.getElementById("viewer-caption");
-      const captions = [
-        "Varkala · cliffside afternoon",
-        "The path down to the beach",
-        "Long shadows · low tide",
-        "Cliffs at golden hour",
-        "Last light over the Arabian Sea",
-        "Cliff cafe · after sunset"
-      ];
-      let cur = 0;
-      const total = images.length;
-      function pad(n) { return String(n).padStart(2, "0"); }
-      function show(i) {
-        images[cur].classList.remove("active");
-        thumbs[cur].classList.remove("active");
-        cur = (i + total) % total;
-        images[cur].classList.add("active");
-        thumbs[cur].classList.add("active");
-        counter.textContent = pad(cur + 1) + " / " + pad(total);
-        captionEl.textContent = captions[cur];
-        thumbs[cur].scrollIntoView({ behavior: "smooth", block: "nearest", inline: "center" });
-      }
-      thumbs.forEach((b, i) => b.addEventListener("click", () => show(i)));
-      document.getElementById("viewer-prev").addEventListener("click", () => show(cur - 1));
-      document.getElementById("viewer-next").addEventListener("click", () => show(cur + 1));
-      stage.querySelector(".stage-zone--prev").addEventListener("click", () => show(cur - 1));
-      stage.querySelector(".stage-zone--next").addEventListener("click", () => show(cur + 1));
-
-      /* ── LIGHTBOX ──────────────────────────────────────────────
-         Click the centre of any frame → fullscreen white viewer.
-         Arrows / swipe / click side-buttons to navigate. ESC closes. */
-      const lb       = document.getElementById("lightbox");
-      const lbImg    = document.getElementById("lb-img");
-      const lbCount  = document.getElementById("lb-counter");
-      const lbCap    = document.getElementById("lb-caption");
-
-      function syncLb() {
-        lbImg.classList.add("is-loading");
-        const src = images[cur].getAttribute("src");
-        const tmp = new Image();
-        tmp.onload = () => { lbImg.src = src; lbImg.classList.remove("is-loading"); };
-        tmp.src = src;
-        lbImg.alt = images[cur].alt || "";
-        lbCount.textContent = pad(cur + 1) + " / " + pad(total);
-        lbCap.textContent = captions[cur] || "";
-      }
-      function openLb() {
-        syncLb();
-        lb.classList.add("is-open");
-        document.body.classList.add("lightbox-open");
-        lb.setAttribute("aria-hidden", "false");
-      }
-      function closeLb() {
-        lb.classList.remove("is-open");
-        document.body.classList.remove("lightbox-open");
-        lb.setAttribute("aria-hidden", "true");
-      }
-
-      stage.querySelector(".stage-zone--zoom").addEventListener("click", openLb);
-      document.getElementById("lb-close").addEventListener("click", closeLb);
-      document.getElementById("lb-prev").addEventListener("click", () => { show(cur - 1); syncLb(); });
-      document.getElementById("lb-next").addEventListener("click", () => { show(cur + 1); syncLb(); });
-      lb.addEventListener("click", (e) => { if (e.target === lb) closeLb(); });
-
-      /* Touch swipe — left/right in lightbox */
-      let tx = 0;
-      lb.addEventListener("touchstart", (e) => { tx = e.changedTouches[0].screenX; }, {passive:true});
-      lb.addEventListener("touchend", (e) => {
-        const dx = e.changedTouches[0].screenX - tx;
-        if (Math.abs(dx) < 40) return;
-        if (dx < 0) { show(cur + 1); } else { show(cur - 1); }
-        syncLb();
-      }, {passive:true});
-
-      document.addEventListener("keydown", (e) => {
-        const open = lb.classList.contains("is-open");
-        if (e.key === "Escape" && open) { closeLb(); return; }
-        if (e.key === "ArrowLeft")  { show(cur - 1); if (open) syncLb(); }
-        if (e.key === "ArrowRight") { show(cur + 1); if (open) syncLb(); }
-      });
-    })();
-  </script>
+  <script src="series.js?v=1"></script>
 </body>
 </html>
