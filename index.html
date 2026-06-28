@@ -410,6 +410,10 @@
       <p class="contact-line">Got something to <em>build</em>, hire, or chat about?</p>
 
       <form class="contact-form" id="contact-form" novalidate>
+        <!-- honeypot: real visitors never see or fill this; bots do, and get dropped -->
+        <div class="form-hp" aria-hidden="true" style="position:absolute;left:-9999px;top:auto;width:1px;height:1px;overflow:hidden;">
+          <label>Company URL <input type="text" name="company_url" tabindex="-1" autocomplete="off" /></label>
+        </div>
         <div class="form-prose">
           <span class="form-text">Hi Harsh, I'm</span>
           <input type="text" name="name" placeholder="your name" class="form-blank form-blank--name" required autocomplete="name" />
@@ -552,24 +556,77 @@
     (function () {
       const cf = document.getElementById("contact-form");
       if (!cf) return;
-      cf.addEventListener("submit", (e) => {
+
+      /* Endpoint for the stdlib handler in _source/contact-backend/.
+         Leave "" until it's hosted \u2014 the form then opens a mailto instead, so
+         it always works. Once deployed, set this to e.g.
+         "https://contact.harsharya.com/api/contact". */
+      const CONTACT_ENDPOINT = "";
+
+      const btn = cf.querySelector(".form-send");
+      const btnText = btn ? btn.textContent : "Send it \u2192";
+      const status = document.createElement("p");
+      status.className = "form-status";
+      status.setAttribute("role", "status");
+      status.setAttribute("aria-live", "polite");
+      status.style.cssText = "margin:12px 0 0;font-family:var(--font-mono);font-size:12px;letter-spacing:.02em;min-height:1em;";
+      (cf.querySelector(".form-foot") || cf).appendChild(status);
+      function setStatus(msg, kind) {
+        status.textContent = msg || "";
+        status.dataset.kind = kind || "";
+        status.style.color = kind === "ok" ? "var(--accent)" : kind === "err" ? "#c0392b" : "var(--muted)";
+      }
+
+      function mailtoFallback(d) {
+        const subject = `${d.name}${d.org ? " / " + d.org : ""} \u2014 a note via harsharya.com`;
+        const lines = [];
+        if (d.message) lines.push(d.message, "");
+        lines.push(`\u2014 ${d.name}${d.org ? ", " + d.org : ""}`, d.email);
+        window.location.href = `mailto:hi@harsharya.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(lines.join("\n"))}`;
+      }
+
+      cf.addEventListener("submit", async (e) => {
         e.preventDefault();
         const fd = new FormData(cf);
-        const name = (fd.get("name") || "").toString().trim();
-        const org = (fd.get("org") || "").toString().trim();
-        const email = (fd.get("email") || "").toString().trim();
-        const message = (fd.get("message") || "").toString().trim();
-        if (!name || !email) {
-          cf.reportValidity();
-          return;
+        const d = {
+          name: (fd.get("name") || "").toString().trim(),
+          org: (fd.get("org") || "").toString().trim(),
+          email: (fd.get("email") || "").toString().trim(),
+          message: (fd.get("message") || "").toString().trim(),
+          company_url: (fd.get("company_url") || "").toString(), // honeypot
+        };
+        if (!d.name || !d.email) { cf.reportValidity(); return; }
+
+        if (!CONTACT_ENDPOINT) { mailtoFallback(d); return; }
+
+        if (btn) { btn.disabled = true; btn.textContent = "Sending\u2026"; }
+        setStatus("", "");
+        try {
+          const res = await fetch(CONTACT_ENDPOINT, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(d),
+          });
+          if (res.ok) {
+            cf.reset();
+            setStatus("Got it \u2014 thanks. I\u2019ll be in touch.", "ok");
+            if (btn) btn.textContent = "Sent \u2713";
+            return;
+          }
+          if (res.status === 422) {
+            const j = await res.json().catch(() => ({}));
+            const fields = j && j.errors ? Object.keys(j.errors).join(", ") : "some fields";
+            setStatus(`Please check: ${fields}.`, "err");
+          } else {
+            setStatus("That didn\u2019t go through \u2014 opening your mail app\u2026", "err");
+            mailtoFallback(d);
+          }
+        } catch (err) {
+          setStatus("Network hiccup \u2014 opening your mail app instead\u2026", "err");
+          mailtoFallback(d);
+        } finally {
+          if (btn) { btn.disabled = false; if (status.dataset.kind !== "ok") btn.textContent = btnText; }
         }
-        const subject = `${name}${org ? " / " + org : ""} \u2014 a note via harsharya.com`;
-        const lines = [];
-        if (message) lines.push(message, "");
-        lines.push(`\u2014 ${name}${org ? ", " + org : ""}`);
-        lines.push(email);
-        const body = lines.join("\n");
-        window.location.href = `mailto:hi@harsharya.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
       });
     })();
 

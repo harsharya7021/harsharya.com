@@ -12,6 +12,9 @@ _archive/
 _deck-media/
 # workshop: working notes, prototypes, draft markdown — local only
 _workshop/
+# contact-form backend: runs on a separate host, must never be served by the
+# site (.nojekyll publishes every committed file), so it's kept out of git
+_source/
 test-harness.html
 test-reveal.html
 test-credrev.html
