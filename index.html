@@ -42,6 +42,16 @@
   @keyframes bSlam{ from{transform:translate(-50%,-54%) scale(2.8);opacity:0;} 60%{opacity:1;} to{transform:translate(-50%,-54%) scale(1);opacity:1;} }
   @keyframes bShake{ 0%{transform:translate(-50%,-54%);}25%{transform:translate(calc(-50% - 7px),-53%) rotate(-.6deg);}50%{transform:translate(calc(-50% + 5px),-55%) rotate(.5deg);}75%{transform:translate(calc(-50% - 3px),-54%);}100%{transform:translate(-50%,-54%);} }
   #busted-dig{ position:fixed; left:50%; top:min(calc(46% + 286px),calc(100vh - 76px)); transform:translateX(-50%); width:min(620px,86vw); text-align:center; z-index:1300; font-family:var(--font-serif),serif; font-style:italic; font-size:18px; line-height:1.35; color:#0a0a0a; opacity:0; transition:opacity .5s; pointer-events:none; padding:8px 12px; background:rgba(255,248,231,.8); box-shadow:0 0 0 1px rgba(10,10,10,.08); }
+  /* scroll-lock cue: wheel/touch/keys are hard-blocked during BUSTED, so this pill tells
+     the viewer it's intentional and lets them skip straight out ("Get Out of Jail Free").
+     Bottom-right, out of the way of the card + punchline text; fill tracks the hold. */
+  #jail-cue{ position:fixed; right:max(22px,3.2vw); bottom:max(22px,3.2vh); z-index:1310; display:flex; align-items:center; gap:9px; padding:10px 20px 10px 14px; background:#fff8e7; border:2.5px solid #0a0a0a; border-radius:999px; box-shadow:5px 5px 0 #0a0a0a; cursor:pointer; opacity:0; transform:translateY(10px); pointer-events:none; transition:opacity .4s ease,transform .4s cubic-bezier(.2,.8,.2,1); overflow:hidden; }
+  #jail-cue.on{ opacity:1; transform:translateY(0); pointer-events:auto; }
+  #jail-cue:active{ transform:translateY(0) scale(.95); }
+  #jail-cue .jc-fill{ position:absolute; inset:0; width:0%; background:#ff5a00; opacity:.24; z-index:0; }
+  #jail-cue .jc-icon{ position:relative; z-index:1; width:15px; height:15px; flex:none; color:#0a0a0a; }
+  #jail-cue .jc-label{ position:relative; z-index:1; font-family:"Space Mono",monospace; font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; white-space:nowrap; color:#0a0a0a; }
+  @media (max-width:820px){ #jail-cue{ display:none; } }
   @media (prefers-reduced-motion:reduce){ #dots{display:none;} }
   /* C: hero headline clears the nav divider (desktop) */
   @media (min-width:821px){ body[data-mode="warhol"] .cine .hero-wrap{ padding-top:104px; } }
@@ -1233,6 +1243,17 @@
   function march(target,dur){ var from=(bustedY!==null?bustedY:scrollY), to=target.getBoundingClientRect().top+scrollY-30, t0=null; (function step(ts){ if(t0===null)t0=ts; var p=Math.min((ts-t0)/dur,1),e=p<.5?2*p*p:1-Math.pow(-2*p+2,2)/2; bustedY=from+(to-from)*e; if(p<1)requestAnimationFrame(step); })(performance.now()); }
   var jdig=document.createElement('div'); jdig.id='busted-dig'; jdig.innerHTML='Not on the list. <em>Go directly to About. Do not pass GO. Do not collect $200.</em>'; document.body.appendChild(jdig);
 
+  /* scroll-lock cue: hard-blocks wheel/touch/keys for ~5s, so a viewer whose scroll goes
+     dead needs a signal it's intentional — and a real way out. Pill appears once the
+     punchline lands (post-slam) so it never steps on the flip/BUSTED beat, fills over
+     the hold + march, and doubles as a "Get Out of Jail Free" skip button. */
+  var jcue=document.createElement('div'); jcue.id='jail-cue'; jcue.setAttribute('role','button'); jcue.setAttribute('tabindex','0'); jcue.setAttribute('aria-label','Skip ahead to About');
+  jcue.innerHTML='<span class="jc-fill"></span><svg class="jc-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect x="1.2" y="1.2" width="13.6" height="13.6" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M4.9 1.2v13.6M8 1.2v13.6M11.1 1.2v13.6" stroke="currentColor" stroke-width="1.5"/></svg><span class="jc-label">Get out of jail — free</span>';
+  document.body.appendChild(jcue);
+  var jcueFill=jcue.querySelector('.jc-fill');
+  function jcueShow(dur){ jcueFill.style.transition='none'; jcueFill.style.width='0%'; jcue.classList.add('on'); requestAnimationFrame(function(){ requestAnimationFrame(function(){ jcueFill.style.transition='width '+dur+'ms linear'; jcueFill.style.width='100%'; }); }); }
+  function jcueHide(){ jcue.classList.remove('on'); }
+
   window.__bustedActive=false;
   window.__startBusted=function(force){
     if(bustedDone) return;
@@ -1243,12 +1264,18 @@
     document.body.appendChild(forbes);
     forbes.style.cssText='position:fixed;left:50%;top:46%;width:'+rect.width+'px;height:'+rect.height+'px;margin:0;z-index:1300;opacity:1;transform:translate(-50%,-46%);';
     function back(){ forbes.style.cssText=''; forbes.classList.remove('flipped','busted-card'); if(sib)home.insertBefore(forbes,sib);else home.appendChild(forbes); forbes.style.opacity='0'; window.__bustedActive=false; }
+    var timers=[], done=false;
+    function schedule(fn,ms){ timers.push(setTimeout(fn,ms)); }
+    function finish(){ if(done) return; done=true; unlockScroll(); jdig.style.opacity='0'; jcueHide(); busted.classList.remove('on','slam'); forbes.style.transition='opacity .4s'; forbes.style.opacity='0'; setTimeout(back,420); }
+    function skip(){ timers.forEach(clearTimeout); timers.length=0; finish(); }
     busted.classList.add('on'); lockAt(scrollY);
-    setTimeout(function(){ forbes.style.transition='transform .9s cubic-bezier(.7,-.3,.25,1.25)'; forbes.style.transform='translate(-50%,-46%) scale(1.14)'; forbes.classList.add('flipped'); },900);
-    setTimeout(function(){ forbes.style.transition='transform .16s cubic-bezier(.5,0,.8,.4)'; forbes.style.transform='translate(-50%,-46%) scale(1)'; forbes.classList.add('busted-card'); busted.classList.add('slam'); },2000);
-    setTimeout(function(){ jdig.style.opacity='1'; },2400);
-    setTimeout(function(){ march(aboutEl,1300); },3800);
-    setTimeout(function(){ unlockScroll(); jdig.style.opacity='0'; busted.classList.remove('on','slam'); forbes.style.transition='opacity .4s'; forbes.style.opacity='0'; setTimeout(back,420); },5200);
+    schedule(function(){ forbes.style.transition='transform .9s cubic-bezier(.7,-.3,.25,1.25)'; forbes.style.transform='translate(-50%,-46%) scale(1.14)'; forbes.classList.add('flipped'); },900);
+    schedule(function(){ forbes.style.transition='transform .16s cubic-bezier(.5,0,.8,.4)'; forbes.style.transform='translate(-50%,-46%) scale(1)'; forbes.classList.add('busted-card'); busted.classList.add('slam'); },2000);
+    schedule(function(){ jdig.style.opacity='1'; jcueShow(2800); },2400);
+    schedule(function(){ march(aboutEl,1300); },3800);
+    schedule(function(){ finish(); },5200);
+    jcue.onclick=skip;
+    jcue.onkeydown=function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); skip(); } };
   };
 
   /* Mobile: no scroll-hijack takeover. Show the Forbes face, then FLIP to GO TO JAIL
