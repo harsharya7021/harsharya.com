@@ -3614,7 +3614,7 @@ body[data-mode="warhol"] .form-gist::placeholder {
 }
 
 /* ── Movement 2 — gradient takeover + press leaflets ── */
-.cine2 { position: relative; height: 960vh; } /* 720vh legacy reveal + 240vh scroll-scrubbed jail sequence */
+.cine2 { position: relative; height: 870vh; } /* 720vh legacy reveal + 150vh scroll-scrubbed jail sequence */
 .cine2-pin {
   position: sticky; top: 0;
   height: 100vh; overflow: hidden;
