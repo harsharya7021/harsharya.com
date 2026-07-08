@@ -180,9 +180,10 @@
         var cl = d < -1.1 ? -1.1 : d > 1.1 ? 1.1 : d;
         var ad = Math.abs(cl);
         img.style.transform = 'translate3d(0,' + (cl * -r.height * 0.13).toFixed(1) + 'px,0)';
-        media.style.transform = 'scale(' + (1 - ad * 0.07).toFixed(3) + ')';
-        media.style.filter = ad > 0.14 ? 'blur(' + (ad * 1.6).toFixed(2) + 'px)' : 'none';
-        fr.style.opacity = (1 - ad * 0.3).toFixed(3);
+        // 3D pull-back: photos above/below tilt + recede, then un-curve and land flat at centre
+        media.style.transform = 'translateZ(' + (-ad * 120).toFixed(1) + 'px) rotateX(' + (cl * 9).toFixed(2) + 'deg) scale(' + (1 - ad * 0.05).toFixed(3) + ')';
+        media.style.filter = (ad > 0.1 ? 'blur(' + (ad * 1.5).toFixed(2) + 'px) ' : '') + 'brightness(' + (1 - ad * 0.28).toFixed(3) + ')';
+        fr.style.opacity = (1 - ad * 0.22).toFixed(3);
         var ac = Math.abs(c - mid); if (ac < nd) { nd = ac; nearest = i; }
       }
       var lr = list.getBoundingClientRect();

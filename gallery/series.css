@@ -120,8 +120,10 @@ body.is-leaving{ animation:none; opacity:0; transition:opacity .24s ease; }
 }
 .series[data-layout="strip"] .frame{
   position:relative; margin:0; width:min(760px,86vw); cursor:zoom-in;
+  perspective:1300px;                       /* 3D field for the pull-back curve */
   will-change:transform, opacity; transition:none !important;
 }
+.series[data-layout="strip"] .frame-media{ transform-style:preserve-3d; }
 .series[data-layout="strip"] .frame + .frame{ margin-top:1.5vh; }
 .series[data-layout="strip"] .frame-media{
   position:relative; width:100%; height:52vh; overflow:hidden; background:#0c0b09;
