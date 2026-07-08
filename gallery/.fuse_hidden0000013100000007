@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Jodhpur — Gallery — Harsh Kumar Arya</title>
-  <meta name="description" content="Jodhpur, Rajasthan — a photographic series by Harsh Kumar Arya. The blue city under Mehrangarh." />
+  <title>Kerala — Gallery — Harsh Kumar Arya</title>
+  <meta name="description" content="Kerala — a photographic series in progress by Harsh Kumar Arya. Cliffs, beach and sunset, starting in Varkala." />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo+Black&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,700;0,6..96,900;1,6..96,400&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=Inter:wght@400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
@@ -15,30 +15,29 @@
   <link rel="icon" href="../favicon.ico" sizes="48x48">
   <link rel="icon" href="../assets/favicon-32.png" type="image/png" sizes="32x32">
   <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
-  <link rel="canonical" href="https://harsharya.com/gallery/jodhpur.html">
+  <link rel="canonical" href="https://harsharya.com/gallery/kerala.html">
   <meta property="og:type" content="website">
   <meta property="og:site_name" content="Harsh Kumar Arya">
-  <meta property="og:title" content="Jodhpur — Gallery — Harsh Kumar Arya">
-  <meta property="og:description" content="Jodhpur, Rajasthan — a photographic series by Harsh Kumar Arya. The blue city under Mehrangarh.">
-  <meta property="og:url" content="https://harsharya.com/gallery/jodhpur.html">
+  <meta property="og:title" content="Kerala — Gallery — Harsh Kumar Arya">
+  <meta property="og:description" content="Kerala — a photographic series in progress by Harsh Kumar Arya. Cliffs, beach and sunset, starting in Varkala.">
+  <meta property="og:url" content="https://harsharya.com/gallery/kerala.html">
   <meta property="og:image" content="https://harsharya.com/assets/portrait.jpg">
   <meta property="og:image:width" content="1200">
   <meta property="og:image:height" content="807">
   <meta property="og:image:alt" content="Harsh Kumar Arya — passport portrait">
   <meta name="twitter:card" content="summary_large_image">
-  <meta name="twitter:title" content="Jodhpur — Gallery — Harsh Kumar Arya">
-  <meta name="twitter:description" content="Jodhpur, Rajasthan — a photographic series by Harsh Kumar Arya. The blue city under Mehrangarh.">
+  <meta name="twitter:title" content="Kerala — Gallery — Harsh Kumar Arya">
+  <meta name="twitter:description" content="Kerala — a photographic series in progress by Harsh Kumar Arya. Cliffs, beach and sunset, starting in Varkala.">
   <meta name="twitter:image" content="https://harsharya.com/assets/portrait.jpg">
 </head>
-<body data-mode="warhol" data-density="normal" class="series-page" data-series="jodhpur">
+<body data-mode="warhol" data-density="normal" class="series-page" data-series="kerala">
 
   <nav class="nav" id="nav">
     <div class="container nav-inner">
       <a href="../" class="logo">Harsh<sup>1</sup></a>
       <div class="nav-links">
         <a href="../#about">About</a>
-        <a href="/#work">Work</a>
-        <a href="/portfolio/">Portfolio</a>
+        <a href="/work/">Work</a>
         <a href="../life/index.html">Life</a>
         <a href="../writing/index.html">Notes</a>
         <a href="../#contact">Contact</a>
@@ -48,51 +47,47 @@
 
   <header class="series-head">
     <a href="index.html" class="series-back">← All series</a>
-    <div class="series-metawrap"><span class="series-meta">A trip · Rajasthan</span></div>
-    <h1 class="series-title">Jodhpur<span class="dot">.</span></h1>
-    <p class="series-intro">The blue city. Mehrangarh's shadow runs across the old town like a slow hand. Sequenced the way I remember the walk down from the fort — not the way the day went.</p>
+    <div class="series-metawrap"><span class="series-meta">A series in progress · Kerala</span></div>
+    <h1 class="series-title">Kerala<span class="dot">.</span></h1>
+    <p class="series-intro">A growing series across Kerala — different trips, different rolls, sequenced the way I remember each place rather than how the days actually went.</p>
+    <div class="series-chapwrap"><span class="series-chapter"><b>Chapter 01 ·</b> Varkala — cliffs, beach, sunset.</span></div>
   </header>
 
   <main class="series" id="series" data-layout="vertical" data-ribbon="on">
     <div class="series-list">
 
       <figure class="frame">
-        <div class="frame-media"><img src="../assets/life/jodhpur/jodhpur-01.jpg" alt="Jodhpur — the blue city below the fort" loading="eager" /></div>
-        <figcaption class="frame-cap"><span class="frame-no">01</span><span class="frame-text">The blue city below the fort</span></figcaption>
+        <div class="frame-media"><img src="../assets/life/kerala/varkala-01.jpg" alt="Varkala, Kerala — cliffside afternoon" loading="eager" /></div>
+        <figcaption class="frame-cap"><span class="frame-no">01</span><span class="frame-text">Varkala · cliffside afternoon</span></figcaption>
       </figure>
 
       <figure class="frame">
-        <div class="frame-media"><img src="../assets/life/jodhpur/jodhpur-02.jpg" alt="Jodhpur — Mehrangarh wall, late morning" loading="lazy" /></div>
-        <figcaption class="frame-cap"><span class="frame-no">02</span><span class="frame-text">Mehrangarh wall · late morning</span></figcaption>
+        <div class="frame-media"><img src="../assets/life/kerala/varkala-02.jpg" alt="Varkala, Kerala — the path down to the beach" loading="lazy" /></div>
+        <figcaption class="frame-cap"><span class="frame-no">02</span><span class="frame-text">The path down to the beach</span></figcaption>
       </figure>
 
       <figure class="frame">
-        <div class="frame-media"><img src="../assets/life/jodhpur/jodhpur-03.jpg" alt="Jodhpur — lanes off the clock tower" loading="lazy" /></div>
-        <figcaption class="frame-cap"><span class="frame-no">03</span><span class="frame-text">Lanes off the clock tower</span></figcaption>
+        <div class="frame-media"><img src="../assets/life/kerala/varkala-03.jpg" alt="Varkala, Kerala — long shadows at low tide" loading="lazy" /></div>
+        <figcaption class="frame-cap"><span class="frame-no">03</span><span class="frame-text">Long shadows · low tide</span></figcaption>
       </figure>
 
       <figure class="frame">
-        <div class="frame-media"><img src="../assets/life/jodhpur/jodhpur-04.jpg" alt="Jodhpur — stairs and shadows" loading="lazy" /></div>
-        <figcaption class="frame-cap"><span class="frame-no">04</span><span class="frame-text">Stairs and shadows</span></figcaption>
+        <div class="frame-media"><img src="../assets/life/kerala/varkala-04.jpg" alt="Varkala, Kerala — cliffs at golden hour" loading="lazy" /></div>
+        <figcaption class="frame-cap"><span class="frame-no">04</span><span class="frame-text">Cliffs at golden hour</span></figcaption>
       </figure>
 
       <figure class="frame">
-        <div class="frame-media"><img src="../assets/life/jodhpur/jodhpur-05.jpg" alt="Jodhpur — doorways in pale indigo" loading="lazy" /></div>
-        <figcaption class="frame-cap"><span class="frame-no">05</span><span class="frame-text">Doorways · pale indigo</span></figcaption>
+        <div class="frame-media"><img src="../assets/life/kerala/varkala-05.jpg" alt="Varkala, Kerala — last light over the Arabian Sea" loading="lazy" /></div>
+        <figcaption class="frame-cap"><span class="frame-no">05</span><span class="frame-text">Last light over the Arabian Sea</span></figcaption>
       </figure>
 
       <figure class="frame">
-        <div class="frame-media"><img src="../assets/life/jodhpur/jodhpur-06.jpg" alt="Jodhpur — looking up at the fort" loading="lazy" /></div>
-        <figcaption class="frame-cap"><span class="frame-no">06</span><span class="frame-text">Looking up at the fort</span></figcaption>
-      </figure>
-
-      <figure class="frame">
-        <div class="frame-media"><img src="../assets/life/jodhpur/jodhpur-07.jpg" alt="Jodhpur — rooftops at last light" loading="lazy" /></div>
-        <figcaption class="frame-cap"><span class="frame-no">07</span><span class="frame-text">Rooftops · last light</span></figcaption>
+        <div class="frame-media"><img src="../assets/life/kerala/varkala-06.jpg" alt="Varkala, Kerala — cliff cafe after sunset" loading="lazy" /></div>
+        <figcaption class="frame-cap"><span class="frame-no">06</span><span class="frame-text">Cliff cafe · after sunset</span></figcaption>
       </figure>
 
     </div>
-    <p class="series-end">— end of roll · Jodhpur —</p>
+    <p class="series-end"><b>End of chapter 01.</b> Kochi, Munnar, Alappuzha — when the rolls come back.</p>
   </main>
 
   <nav class="gfn" aria-label="Gallery navigation">
@@ -102,11 +97,11 @@
     <div class="gfn__center">
       <button class="gfn__series" id="gfnSeries" aria-haspopup="true" aria-expanded="false">
         <span class="gfn__kicker">Series</span>
-        <span class="gfn__name">Jodhpur <span class="gfn__chev">▾</span></span>
+        <span class="gfn__name">Kerala <span class="gfn__chev">▾</span></span>
       </button>
       <div class="gfn__menu" id="gfnMenu" role="menu" hidden>
-        <a role="menuitem" href="kerala.html">Kerala <em>06</em></a>
-        <a role="menuitem" href="jodhpur.html" class="is-current">Jodhpur <em>07</em></a>
+        <a role="menuitem" href="kerala.html" class="is-current">Kerala <em>06</em></a>
+        <a role="menuitem" href="jodhpur.html">Jodhpur <em>07</em></a>
         <a role="menuitem" href="shimla.html">Shimla <em>10</em></a>
         <a role="menuitem" href="malaysia.html">Malaysia <em>03</em></a>
       </div>

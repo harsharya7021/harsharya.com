@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Newsreader:ital,opsz,wght@0,6..72,200..600;1,6..72,200..500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;}
+  body{background:#EDEBE5;}
+  ::selection{background:#1C1916;color:#EDEBE5;}
+  img{ -webkit-user-drag:none; }
+  @property --reveal { syntax: '<number>'; inherits: false; initial-value: 0; }
+  [data-reveal]{ cursor:pointer; -webkit-tap-highlight-color:transparent; }
+  [data-reveal-layer]{
+    position:relative; display:block; width:100%; height:auto; --reveal:0;
+    -webkit-mask-image:radial-gradient(circle,#000 calc((1 - var(--reveal)) * 14px),transparent calc((1 - var(--reveal)) * 14px + 0.5px));
+    mask-image:radial-gradient(circle,#000 calc((1 - var(--reveal)) * 14px),transparent calc((1 - var(--reveal)) * 14px + 0.5px));
+    -webkit-mask-size:13px 13px; mask-size:13px 13px; -webkit-mask-repeat:repeat; mask-repeat:repeat;
+    transform:translateY(calc(var(--reveal) * -8px)); filter:blur(calc(var(--reveal) * 0.6px));
+  }
+  [data-reveal-mark]{ transition:opacity 600ms ease; }
+  @media (prefers-reduced-motion: reduce){ [data-reveal-layer]{ transition-duration: 1ms !important; } }
+</style>
+</helmet>
+
+<div data-screen-label="A Personal Piece of Earth — case study" style="width:100%;min-height:100%;background:#EDEBE5;color:#1C1916;font-family:'Newsreader',Georgia,serif;-webkit-font-smoothing:antialiased;padding-bottom:clamp(80px,12vh,160px);overflow-x:hidden;">
+
+  <!-- MASTHEAD BAR -->
+  <div data-screen-label="Masthead" style="max-width:1240px;margin:0 auto;padding:22px clamp(20px,6vw,72px) 18px;display:flex;justify-content:space-between;align-items:baseline;gap:20px;border-bottom:1px solid #D7D2C7;">
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:0.18em;text-transform:uppercase;color:#1C1916;">Harsh Arya</span>
+    <span style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:0.18em;text-transform:uppercase;color:#9A9286;">Hand-cut collage — 2020–2021</span>
+  </div>
+
+  <!-- TITLE BLOCK -->
+  <header style="max-width:1240px;margin:0 auto;padding:clamp(64px,13vh,150px) clamp(20px,6vw,72px) clamp(48px,8vh,90px);">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:11.5px;letter-spacing:0.32em;text-transform:uppercase;color:#9A9286;margin-bottom:clamp(26px,5vh,52px);">Series · Eight works on the cutting mat</div>
+    <h1 style="margin:0;font-weight:380;font-size:clamp(46px,8.4vw,112px);line-height:1.0;letter-spacing:-0.018em;color:#1C1916;max-width:14ch;">A Personal Piece of Earth</h1>
+    <p style="margin:clamp(34px,5vh,56px) 0 0;font-style:italic;font-weight:300;font-size:clamp(20px,2.3vw,27px);line-height:1.55;color:#564F44;max-width:36ch;">
+      I kept cutting whatever caught my attention with an X&#8209;Acto knife, and arranging it by hand on a green cutting mat. There was no final destination in mind.
+    </p>
+  </header>
+
+  <!-- LEAD WORK -->
+  <section data-screen-label="Lead work" style="max-width:1040px;margin:0 auto;padding:0 clamp(20px,6vw,72px);">
+    <figure style="margin:0;">
+      <img src="assets/01-irony.jpg" alt="Collage: a male portrait split with a silver classical statue head, a teal eye, red city skylines, snowy mountains and grazing yaks" style="display:block;width:100%;height:auto;background:#fff;box-shadow:0 38px 80px -38px rgba(38,32,22,0.34),0 3px 10px rgba(38,32,22,0.05);">
+      <figcaption style="display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;margin-top:20px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.13em;text-transform:uppercase;color:#9A9286;">
+        <span style="color:#56503F;">Fig. 01 — Untitled</span>
+        <span>Magazine, paper, adhesive · finished digitally</span>
+      </figcaption>
+    </figure>
+  </section>
+
+  <!-- PROSE 1 -->
+  <section style="max-width:1240px;margin:0 auto;padding:clamp(80px,13vh,150px) clamp(20px,6vw,72px) 0;">
+    <div style="max-width:600px;margin-left:clamp(0px,6vw,120px);">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:#B0A899;margin-bottom:24px;">01 / Learning by hand</div>
+      <p style="margin:0;font-weight:380;font-size:clamp(19px,1.9vw,22px);line-height:1.74;color:#2B271F;">
+        I was learning about design then. This was how the early designers worked — so I worked the way they did. Researching, studying a lot of artists and illustrators, and, I&#8217;m sure, <em style="font-style:italic;">stealing like an artist</em> from one or two of them. What I loved was the play of scale, and the surreal that came out of it.
+      </p>
+    </div>
+  </section>
+
+  <!-- WORK 05 magnifier -->
+  <section data-screen-label="Work — observation" style="max-width:920px;margin:0 auto;padding:clamp(64px,10vh,120px) clamp(20px,6vw,72px) 0;">
+    <figure style="margin:0;">
+      <img src="assets/05-magnifier.jpg" alt="Collage: a baker with a cake, a chef taking a phone selfie, an eye overlaid with floating planets, a mushroom cloud, a magnifying glass, a daisy and a woman in florals" style="display:block;width:100%;height:auto;background:#fff;box-shadow:0 34px 72px -36px rgba(38,32,22,0.32),0 3px 10px rgba(38,32,22,0.05);">
+      <figcaption style="display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;margin-top:20px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.13em;text-transform:uppercase;color:#9A9286;">
+        <span style="color:#56503F;">Fig. 02 — Untitled</span>
+        <span>Magazine, paper, adhesive · finished digitally</span>
+      </figcaption>
+    </figure>
+  </section>
+
+  <!-- PROSE 2 (pandemic) -->
+  <section style="max-width:1240px;margin:0 auto;padding:clamp(80px,13vh,150px) clamp(20px,6vw,72px) 0;">
+    <div style="max-width:600px;margin-left:auto;margin-right:clamp(0px,4vw,80px);">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:#B0A899;margin-bottom:24px;">02 / A surreal time</div>
+      <p style="margin:0;font-weight:380;font-size:clamp(19px,1.9vw,22px);line-height:1.74;color:#2B271F;">
+        These were the days of the pandemic — as surreal as any moment I&#8217;ve lived. And if that could somehow make sense, then so could these: images torn from their context and rearranged, until they begin to hold an emotion of their own.
+      </p>
+    </div>
+  </section>
+
+  <!-- WORK 02 pandemic -->
+  <section data-screen-label="Work — pandemic" style="max-width:880px;margin:0 auto;padding:clamp(56px,9vh,110px) clamp(20px,6vw,72px) 0;">
+    <figure style="margin:0;">
+      <img src="assets/02-pandemic.jpg" alt="Dense colourful collage: a figure in a PPE suit, an elephant on an orange sun, masked schoolchildren, an Indian wedding, a TATA truck, a cruise ship and the Empire State Building" style="display:block;width:100%;height:auto;background:#fff;box-shadow:0 34px 72px -36px rgba(38,32,22,0.32),0 3px 10px rgba(38,32,22,0.05);">
+      <figcaption style="display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;margin-top:20px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.13em;text-transform:uppercase;color:#9A9286;">
+        <span style="color:#56503F;">Fig. 03 — Untitled</span>
+        <span>Magazine, paper, adhesive · finished digitally</span>
+      </figcaption>
+    </figure>
+  </section>
+
+  <!-- WORK 07 postcards — DISINTEGRATE REVEAL -->
+  <section data-screen-label="Work — postcards" style="max-width:900px;margin:0 auto;padding:clamp(80px,13vh,150px) clamp(20px,6vw,72px) 0;">
+    <figure data-reveal style="margin:0;">
+      <div data-reveal-stage style="position:relative;aspect-ratio:1;background:#fff;box-shadow:0 34px 72px -36px rgba(38,32,22,0.32),0 3px 10px rgba(38,32,22,0.05);overflow:hidden;cursor:pointer;">
+        <img src="assets/process-03-postcards-mat.jpg" alt="The Postcards arrangement in progress on the green cutting mat" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;">
+        <div data-tiles role="img" aria-label="The finished Postcards collage, which comes apart into fragments to reveal the cutting mat beneath" style="position:absolute;inset:0;overflow:hidden;">
+          <img data-finished src="assets/07-postcards.jpg" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;">
+        </div>
+      </div>
+      <figcaption style="display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;margin-top:20px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.13em;text-transform:uppercase;color:#9A9286;">
+        <span style="color:#56503F;">Fig. 04 — The Postcards</span>
+        <span data-reveal-mark>Hover &middot; tap to disintegrate &rarr; the cutting mat</span>
+      </figcaption>
+    </figure>
+  </section>
+
+  <!-- PROCESS DIVIDER -->
+  <section data-screen-label="From the mat" style="max-width:1240px;margin:0 auto;padding:clamp(96px,15vh,170px) clamp(20px,6vw,72px) 0;">
+    <div style="border-top:1px solid #D7D2C7;padding-top:26px;display:flex;justify-content:space-between;align-items:baseline;gap:20px;flex-wrap:wrap;">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:clamp(13px,1.5vw,16px);letter-spacing:0.22em;text-transform:uppercase;color:#1C1916;">From the mat</div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#9A9286;">Documentation · iPhone · studio</div>
+    </div>
+    <div style="max-width:600px;margin-top:clamp(40px,6vh,72px);">
+      <p style="margin:0;font-weight:380;font-size:clamp(19px,1.9vw,22px);line-height:1.74;color:#2B271F;">
+        There was no final destination in mind. I just kept cutting — a face here, a building there, an elephant, a bus, a flower — laying the pieces down, lifting them, moving them, until the arrangement felt true. Then I&#8217;d photograph it and take it into Photoshop to finish.
+      </p>
+    </div>
+  </section>
+
+  <!-- DISINTEGRATE REVEAL: finished plate -> mat -->
+  <section data-screen-label="Disintegrate — plate to mat" style="max-width:880px;margin:0 auto;padding:clamp(48px,8vh,90px) clamp(20px,6vw,72px) 0;">
+    <figure data-reveal style="margin:0;">
+      <div data-reveal-stage style="position:relative;aspect-ratio:1;background:#fff;box-shadow:0 34px 72px -36px rgba(38,32,22,0.34),0 3px 10px rgba(38,32,22,0.05);overflow:hidden;cursor:pointer;">
+        <img src="assets/process-01-mat.jpg" alt="The same collage in progress, laid out on a green self-healing cutting mat with a steel ruler alongside" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;">
+        <div data-tiles role="img" aria-label="The finished plate, which comes apart into fragments to reveal the loose paper on the cutting mat beneath" style="position:absolute;inset:0;overflow:hidden;">
+          <img data-finished src="assets/03-george-floyd-web.jpg" alt="" style="position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;">
+        </div>
+      </div>
+      <figcaption style="display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;margin-top:20px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.13em;text-transform:uppercase;color:#9A9286;">
+        <span style="color:#56503F;">Fig. 05 — the plate dissolves to the mat</span>
+        <span data-reveal-mark>Hover &middot; tap &rarr; back to loose paper</span>
+      </figcaption>
+    </figure>
+  </section>
+
+  <!-- more process docs — the full uncropped sheets -->
+  <section data-screen-label="Process — full sheets" style="max-width:1240px;margin:0 auto;padding:clamp(64px,10vh,120px) clamp(20px,6vw,72px) 0;">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:#B0A899;margin-bottom:clamp(28px,4vh,44px);">The full sheets &mdash; uncropped</div>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:clamp(22px,2.6vw,40px);align-items:start;">
+      <figure style="margin:0;">
+        <div style="background:#fff;padding:clamp(7px,0.9vw,11px);box-shadow:0 24px 50px -30px rgba(38,32,22,0.40),0 2px 8px rgba(38,32,22,0.07);">
+          <img src="assets/process-01-mat.jpg" alt="The orange-beanie collage in progress on the green cutting mat with a steel ruler" style="display:block;width:100%;height:auto;">
+        </div>
+        <figcaption style="margin-top:14px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.13em;text-transform:uppercase;color:#9A9286;">Fig. 05 &mdash; on the mat</figcaption>
+      </figure>
+      <figure style="margin:0;">
+        <div style="background:#fff;padding:clamp(7px,0.9vw,11px);box-shadow:0 24px 50px -30px rgba(38,32,22,0.40),0 2px 8px rgba(38,32,22,0.07);">
+          <img src="assets/process-02-mat-ccw.jpg" alt="An arrangement in progress on the cutting mat: a white-suited figure, a grey vintage car badged GQ India, a tufted sofa, a banana and assorted cut-out portraits" style="display:block;width:100%;height:auto;">
+        </div>
+        <figcaption style="margin-top:14px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.13em;text-transform:uppercase;color:#9A9286;">Another sitting &mdash; tried and re-tried</figcaption>
+      </figure>
+      <figure style="margin:0;">
+        <div style="background:#fff;padding:clamp(7px,0.9vw,11px);box-shadow:0 24px 50px -30px rgba(38,32,22,0.40),0 2px 8px rgba(38,32,22,0.07);">
+          <img src="assets/process-03-postcards-mat.jpg" alt="The Postcards collage laid out on the green cutting mat, a steel ruler running across the top edge" style="display:block;width:100%;height:auto;">
+        </div>
+        <figcaption style="margin-top:14px;font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.13em;text-transform:uppercase;color:#9A9286;">Fig. 04 &mdash; mid-assembly</figcaption>
+      </figure>
+    </div>
+  </section>
+
+  <!-- RAW MATERIAL -->
+  <section data-screen-label="The raw material" style="max-width:1240px;margin:0 auto;padding:clamp(96px,15vh,170px) clamp(20px,6vw,72px) 0;">
+    <div style="border-top:1px solid #D7D2C7;padding-top:26px;display:flex;justify-content:space-between;align-items:baseline;gap:20px;flex-wrap:wrap;">
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:clamp(13px,1.5vw,16px);letter-spacing:0.22em;text-transform:uppercase;color:#1C1916;">The raw material</div>
+      <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.16em;text-transform:uppercase;color:#9A9286;">Magazines · before the knife</div>
+    </div>
+    <p style="max-width:620px;margin-top:clamp(40px,6vh,72px);font-weight:380;font-size:clamp(19px,1.9vw,22px);line-height:1.74;color:#2B271F;">
+      Every figure began as someone else&#8217;s photograph — a glossy ad, a travel feature, a cover. I cut them out of their old lives and gave them new ones. A few of the originals:
+    </p>
+    <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(250px,1fr));gap:clamp(22px,2.6vw,40px);margin-top:clamp(40px,6vh,72px);align-items:start;">
+      <figure style="margin:0;">
+        <div style="background:#fff;padding:clamp(7px,0.9vw,11px);box-shadow:0 24px 50px -30px rgba(38,32,22,0.38),0 2px 8px rgba(38,32,22,0.06);">
+          <img src="assets/src-samsung.jpg" alt="Samsung Galaxy Z Flip magazine advertisement: a side profile of a man with cornrows in a white turtleneck" style="display:block;width:100%;height:auto;">
+        </div>
+        <div style="margin-top:14px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.13em;text-transform:uppercase;color:#56503F;">Samsung — Galaxy Z Flip</div>
+          <div style="margin-top:5px;font-style:italic;font-weight:300;font-size:15px;line-height:1.45;color:#7E776A;">became the face at the centre of Fig. 07</div>
+        </div>
+      </figure>
+      <figure style="margin:0;">
+        <div style="background:#fff;padding:clamp(7px,0.9vw,11px);box-shadow:0 24px 50px -30px rgba(38,32,22,0.38),0 2px 8px rgba(38,32,22,0.06);">
+          <img src="assets/src-gq.jpg" alt="GQ India full-page house advertisement: a man examining the camera through a large magnifying glass, on a red background" style="display:block;width:100%;height:auto;">
+        </div>
+        <div style="margin-top:14px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.13em;text-transform:uppercase;color:#56503F;">GQ India — house ad</div>
+          <div style="margin-top:5px;font-style:italic;font-weight:300;font-size:15px;line-height:1.45;color:#7E776A;">the magnifying glass in Fig. 02</div>
+        </div>
+      </figure>
+      <figure style="margin:0;">
+        <div style="background:#fff;padding:clamp(7px,0.9vw,11px);box-shadow:0 24px 50px -30px rgba(38,32,22,0.38),0 2px 8px rgba(38,32,22,0.06);">
+          <img src="assets/src-theman.jpg" alt="THE MAN magazine, December 2018 cover: an older tailor adjusting the tie of a younger man, headline World's Most Popular Tailors" style="display:block;width:100%;height:auto;">
+        </div>
+        <div style="margin-top:14px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.13em;text-transform:uppercase;color:#56503F;">THE MAN — Dec 2018</div>
+          <div style="margin-top:5px;font-style:italic;font-weight:300;font-size:15px;line-height:1.45;color:#7E776A;">the tailor and the elder in Fig. 08</div>
+        </div>
+      </figure>
+      <figure style="margin:0;">
+        <div style="background:#fff;padding:clamp(7px,0.9vw,11px);box-shadow:0 24px 50px -30px rgba(38,32,22,0.38),0 2px 8px rgba(38,32,22,0.06);">
+          <img src="assets/src-lonelyplanet.jpg" alt="Lonely Planet magazine, July 2018, the Postcards reader section: a footbridge in Inverness and a yak beside Lake Nam in Tibet" style="display:block;width:100%;height:auto;">
+        </div>
+        <div style="margin-top:14px;">
+          <div style="font-family:'IBM Plex Mono',monospace;font-size:10.5px;letter-spacing:0.13em;text-transform:uppercase;color:#56503F;">Lonely Planet — Jul 2018</div>
+          <div style="margin-top:5px;font-style:italic;font-weight:300;font-size:15px;line-height:1.45;color:#7E776A;">the yaks of Fig. 01 — and the name of Fig. 04</div>
+        </div>
+      </figure>
+    </div>
+  </section>
+
+  <!-- WORK 04 headband variant -->
+  <section data-screen-label="Work — variant" style="max-width:820px;margin:0 auto;padding:clamp(72px,11vh,130px) clamp(20px,6vw,72px) 0;">
+    <figure style="margin:0;">
+      <img src="assets/04-headband.jpg" alt="A sibling composition: the orange-beanie portrait with green and blue eyes, four suited men emerging from the head, a typewriter, flowers and Coach and Michael Kors bags, over rainbow paper shapes" style="display:block;width:100%;height:auto;background:#fff;box-shadow:0 34px 72px -36px rgba(38,32,22,0.32),0 3px 10px rgba(38,32,22,0.05);">
+      <figcaption style="display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;margin-top:20px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.13em;text-transform:uppercase;color:#9A9286;">
+        <span style="color:#56503F;">Fig. 06 — Untitled (variant)</span>
+        <span>The same head, re-arranged</span>
+      </figcaption>
+    </figure>
+  </section>
+
+  <!-- WORK 08 profile -->
+  <section data-screen-label="Work — profile" style="max-width:940px;margin:0 auto;padding:clamp(80px,13vh,150px) clamp(20px,6vw,72px) 0;">
+    <figure style="margin:0;">
+      <img src="assets/08-profile.jpg" alt="Collage around a large side profile of a man with cornrows in a white turtleneck; a Dior x Air Jordan sneaker, a Times Square sign, a wedding-cake figure, a Tokyo storefront and bright paper circles surround him" style="display:block;width:100%;height:auto;background:#fff;box-shadow:0 34px 72px -36px rgba(38,32,22,0.32),0 3px 10px rgba(38,32,22,0.05);">
+      <figcaption style="display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;margin-top:20px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.13em;text-transform:uppercase;color:#9A9286;">
+        <span style="color:#56503F;">Fig. 07 — Untitled</span>
+        <span>Magazine, paper, adhesive · finished digitally</span>
+      </figcaption>
+    </figure>
+  </section>
+
+  <!-- CHILDHOOD CORE -->
+  <section data-screen-label="A personal piece of Earth" style="max-width:1180px;margin:0 auto;padding:clamp(110px,18vh,210px) clamp(20px,6vw,72px) 0;">
+    <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.3em;text-transform:uppercase;color:#B0A899;text-align:center;margin-bottom:clamp(40px,7vh,72px);">Before any of this</div>
+    <blockquote style="margin:0 auto;max-width:21ch;text-align:center;font-weight:300;font-size:clamp(28px,4.4vw,52px);line-height:1.22;letter-spacing:-0.012em;color:#1C1916;">
+      And I remember now: this wasn&#8217;t the first time. My first&#8209;grade science books met a similar fate.
+    </blockquote>
+    <p style="margin:clamp(44px,7vh,80px) auto 0;max-width:46ch;font-weight:380;font-size:clamp(19px,1.95vw,23px);line-height:1.7;color:#2B271F;">
+      There&#8217;s a legend that in some cultures the camera was thought to steal a sliver of the soul. As a child I believed something close to it — that if I tore out the picture of the Earth, the one with the diagram of the crust, I would somehow be holding my own <em style="font-style:italic;">personal piece of Earth</em>.
+    </p>
+    <p style="margin:clamp(30px,4vh,44px) auto 0;max-width:46ch;font-style:italic;font-weight:300;font-size:clamp(15px,1.5vw,18px);line-height:1.66;color:#7E776A;">
+      (And in case you&#8217;re wondering which five&#8209;year&#8209;old is busy dismantling diagrams of the planet — I was an ICSE kid, hopelessly fascinated by science and space.)
+    </p>
+  </section>
+
+  <!-- FINAL WORK 06 -->
+  <section data-screen-label="Work — streets" style="max-width:820px;margin:0 auto;padding:clamp(110px,17vh,200px) clamp(20px,6vw,72px) 0;">
+    <figure style="margin:0;">
+      <img src="assets/06-budhe-uncle.jpg" alt="Collage of city streets: a smiling man in an orange jacket striding over a skyline, an older man gesturing, Gucci and Fish & Chips and Lawson storefronts, yellow taxis" style="display:block;width:100%;height:auto;background:#fff;box-shadow:0 34px 72px -36px rgba(38,32,22,0.32),0 3px 10px rgba(38,32,22,0.05);">
+      <figcaption style="display:flex;justify-content:space-between;gap:24px;flex-wrap:wrap;margin-top:20px;font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.13em;text-transform:uppercase;color:#9A9286;">
+        <span style="color:#56503F;">Fig. 08 — Untitled</span>
+        <span>Magazine, paper, adhesive · finished digitally</span>
+      </figcaption>
+    </figure>
+  </section>
+
+  <!-- COLOPHON -->
+  <footer data-screen-label="Colophon" style="max-width:1240px;margin:clamp(120px,18vh,220px) auto 0;padding:0 clamp(20px,6vw,72px);">
+    <div style="border-top:1px solid #D7D2C7;padding-top:clamp(40px,6vh,64px);display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:clamp(28px,4vw,56px);align-items:start;">
+      <div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:#9A9286;margin-bottom:16px;">Colophon</div>
+        <p style="margin:0;font-style:italic;font-weight:300;font-size:clamp(18px,1.7vw,21px);line-height:1.6;color:#3A352B;max-width:30ch;">Cut by hand from magazines on a green cutting mat, during the pandemic. Finished in Photoshop.</p>
+      </div>
+      <div style="justify-self:start;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:#9A9286;margin-bottom:16px;">Made</div>
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:13px;letter-spacing:0.1em;color:#1C1916;">2020–2021</div>
+      </div>
+      <div style="justify-self:start;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:#9A9286;margin-bottom:16px;">Cut from</div>
+        <div style="font-weight:380;font-size:clamp(15px,1.5vw,17px);line-height:1.5;color:#3A352B;max-width:22ch;">Lonely Planet · GQ India · THE MAN · Samsung &amp; others</div>
+      </div>
+      <div style="justify-self:start;">
+        <div style="font-family:'IBM Plex Mono',monospace;font-size:11px;letter-spacing:0.2em;text-transform:uppercase;color:#9A9286;margin-bottom:16px;">By hand</div>
+        <div style="font-weight:400;font-size:clamp(26px,3vw,40px);line-height:1;color:#1C1916;">Harsh Arya</div>
+      </div>
+    </div>
+  </footer>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{
+  &quot;seriesTitle&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;A Personal Piece of Earth&quot;, &quot;tsType&quot;: &quot;string&quot;},
+  &quot;artistName&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;Harsh Arya&quot;, &quot;tsType&quot;: &quot;string&quot;},
+  &quot;year&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;2020–2021&quot;, &quot;tsType&quot;: &quot;string&quot;},
+  &quot;footerNote&quot;: {&quot;editor&quot;: &quot;text&quot;, &quot;default&quot;: &quot;Magazine cut-outs, hand-arranged on a cutting mat and finished digitally. A study in scale, and in the surreal.&quot;, &quot;tsType&quot;: &quot;string&quot;}
+}">
+class Component extends DCLogic {
+  componentDidMount() {
+    this._cleanup = [];
+    let tries = 0;
+    const attempt = () => {
+      if (this._wired) return;
+      const n = document.querySelectorAll('[data-reveal]').length;
+      if (n > 0) { this._wired = true; this.wireReveals(); return; }
+      if (tries++ < 20) setTimeout(attempt, 50);
+    };
+    attempt();
+  }
+  componentWillUnmount() {
+    (this._cleanup || []).forEach(fn => fn());
+  }
+  // ---- deterministic per-tile randomness ----
+  _hash(str) {
+    let h = 1779033703 ^ str.length;
+    for (let i = 0; i < str.length; i++) {
+      h = Math.imul(h ^ str.charCodeAt(i), 3432918353);
+      h = (h << 13) | (h >>> 19);
+    }
+    return () => {
+      h = Math.imul(h ^ (h >>> 16), 2246822507);
+      h = Math.imul(h ^ (h >>> 13), 3266489909);
+      h ^= h >>> 16;
+      return (h >>> 0) / 4294967296;
+    };
+  }
+
+  buildTiles(fig) {
+    const stage = fig.querySelector('[data-tiles]');
+    if (!stage || stage._built) return;
+    const seed = stage.querySelector('[data-finished]');
+    const src = seed ? seed.getAttribute('src') : null;
+    if (!src) return;
+    const cols = 13, rows = 13;
+    const rand = this._hash(src);
+    const tiles = [];
+    for (let r = 0; r < rows; r++) {
+      for (let c = 0; c < cols; c++) {
+        const t = document.createElement('div');
+        const w = 100 / cols, h = 100 / rows;
+        t.style.cssText =
+          'position:absolute;' +
+          'left:' + (c * w) + '%;top:' + (r * h) + '%;' +
+          'width:calc(' + w + '% + 1px);height:calc(' + h + '% + 1px);' +
+          'background-image:url("' + src + '");' +
+          'background-size:' + (cols * 100) + '% ' + (rows * 100) + '%;' +
+          'background-position:' + (c / (cols - 1)) * 100 + '% ' + (r / (rows - 1)) * 100 + '%;' +
+          'will-change:transform,opacity;backface-visibility:hidden;';
+        const cx = (c + 0.5) / cols - 0.5;
+        const cy = (r + 0.5) / rows - 0.5;
+        const ang = Math.atan2(cy, cx) + (rand() - 0.5) * 1.4;
+        // disintegration sweeps roughly top -> bottom, with jitter
+        const start = Math.max(0, Math.min(0.6, (cy + 0.5) * 0.4 + (rand() - 0.5) * 0.45));
+        t._p = {
+          dx: Math.cos(ang),
+          dy: Math.sin(ang),
+          dist: 0.10 + rand() * 0.30,   // fraction of stage diagonal, drift outward
+          grav: 0.25 + rand() * 0.55,   // downward fall
+          rot: (rand() - 0.5) * 90,
+          start: start,
+          span: 0.45 + rand() * 0.3
+        };
+        stage.appendChild(t);
+        tiles.push(t);
+      }
+    }
+    if (seed) seed.remove();
+    stage._built = true;
+    stage._tiles = tiles;
+    this.applyReveal(fig, 0);
+  }
+
+  applyReveal(fig, p) {
+    const stage = fig.querySelector('[data-tiles]');
+    if (!stage || !stage._tiles) return;
+    const rect = stage.getBoundingClientRect();
+    const diag = Math.hypot(rect.width, rect.height) || 600;
+    const easeOut = t => 1 - Math.pow(1 - t, 3);
+    for (const t of stage._tiles) {
+      const q = t._p;
+      let lp = (p - q.start) / q.span;
+      lp = lp < 0 ? 0 : lp > 1 ? 1 : lp;
+      const e = easeOut(lp);
+      const tx = q.dx * q.dist * diag * e;
+      const ty = q.dy * q.dist * diag * e + q.grav * diag * e * e * 0.7;
+      const rot = q.rot * e;
+      const sc = 1 - 0.28 * e;
+      t.style.transform = 'translate(' + tx.toFixed(1) + 'px,' + ty.toFixed(1) + 'px) rotate(' + rot.toFixed(1) + 'deg) scale(' + sc.toFixed(3) + ')';
+      t.style.opacity = (1 - e).toFixed(3);
+    }
+  }
+
+  wireReveals() {
+    const figs = Array.from(document.querySelectorAll('[data-reveal]'));
+    if (!figs.length) return;
+    const canHover = window.matchMedia('(hover: hover)').matches;
+    const reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const ease = t => t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+
+    figs.forEach(fig => this.buildTiles(fig));
+
+    const animateTo = (fig, target) => {
+      const mark = fig.querySelector('[data-reveal-mark]');
+      if (mark) mark.style.transition = 'opacity .5s ease';
+      if (mark) mark.style.opacity = target >= 0.5 ? '0.25' : '1';
+      const from = (typeof fig._p === 'number') ? fig._p : 0;
+      if (reduce) { fig._p = target; this.applyReveal(fig, target); return; }
+      if (fig._raf) cancelAnimationFrame(fig._raf);
+      const dur = 1250, t0 = performance.now();
+      const tick = (now) => {
+        const k = Math.min(1, (now - t0) / dur);
+        const v = from + (target - from) * ease(k);
+        fig._p = v;
+        this.applyReveal(fig, v);
+        if (k < 1) fig._raf = requestAnimationFrame(tick); else fig._raf = null;
+      };
+      fig._raf = requestAnimationFrame(tick);
+    };
+
+    figs.forEach(fig => {
+      if (canHover) {
+        const on = () => animateTo(fig, 1);
+        const off = () => animateTo(fig, 0);
+        fig.addEventListener('mouseenter', on);
+        fig.addEventListener('mouseleave', off);
+        this._cleanup.push(() => { fig.removeEventListener('mouseenter', on); fig.removeEventListener('mouseleave', off); });
+      }
+      let open = false;
+      const toggle = () => { open = !open; animateTo(fig, open ? 1 : 0); };
+      fig.addEventListener('click', toggle);
+      this._cleanup.push(() => fig.removeEventListener('click', toggle));
+    });
+
+    if (!canHover) {
+      const io = new IntersectionObserver(entries => {
+        entries.forEach(e => animateTo(e.target, e.intersectionRatio > 0.55 ? 1 : 0));
+      }, { threshold: [0, 0.55, 1] });
+      figs.forEach(f => io.observe(f));
+      this._cleanup.push(() => io.disconnect());
+    }
+
+    const onResize = () => figs.forEach(f => this.applyReveal(f, (typeof f._p === 'number') ? f._p : 0));
+    window.addEventListener('resize', onResize);
+    this._cleanup.push(() => window.removeEventListener('resize', onResize));
+  }
+  renderVals() {
+    const p = this.props || {};
+    return {
+      seriesTitle: p.seriesTitle ?? 'A Personal Piece of Earth',
+      artistName: p.artistName ?? 'Harsh Arya',
+      year: p.year ?? '2020–2021',
+      footerNote: p.footerNote ?? 'Magazine cut-outs, hand-arranged on a cutting mat and finished digitally. A study in scale, and in the surreal.'
+    };
+  }
+}
+</script>
+</body>
+</html>
