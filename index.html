@@ -41,15 +41,14 @@
   #busted .word{ display:none; }
   @keyframes bSlam{ from{transform:translate(-50%,-54%) scale(2.8);opacity:0;} 60%{opacity:1;} to{transform:translate(-50%,-54%) scale(1);opacity:1;} }
   @keyframes bShake{ 0%{transform:translate(-50%,-54%);}25%{transform:translate(calc(-50% - 7px),-53%) rotate(-.6deg);}50%{transform:translate(calc(-50% + 5px),-55%) rotate(.5deg);}75%{transform:translate(calc(-50% - 3px),-54%);}100%{transform:translate(-50%,-54%);} }
-  /* jail sequence is scroll-scrubbed (part of the cine2 pin, no scroll-lock). Both pieces
-     live at body level, ABOVE the #busted gray veil (its backdrop-filter would otherwise
-     desaturate them too), and are driven by frame2(). Layout is deliberately sparse:
-     ONE caption slot under the card (the alumni line and the verdict share it, never
-     both), and the escape pill alone in the corner — an NRG-style meter whose green
-     capsule grows from the left circle to fill the pill across the whole sequence. */
-  #jail-panel{ position:fixed; left:50%; top:50%; transform:translate(-50%,-50%); width:min(620px,86vw); z-index:1300; display:flex; justify-content:center; opacity:0; pointer-events:none; }
-  #busted-dig{ text-align:center; font-family:var(--font-serif),serif; font-style:italic; font-size:18px; line-height:1.35; color:#0a0a0a; opacity:0; padding:8px 12px; background:rgba(255,248,231,.8); box-shadow:0 0 0 1px rgba(10,10,10,.08); }
-  #jail-cue{ position:fixed; right:34px; bottom:26px; width:min(300px,80vw); height:60px; background:#fff; border:2.5px solid #0a0a0a; border-radius:30px; box-shadow:6px 6px 0 rgba(10,10,10,.85); cursor:pointer; opacity:0; pointer-events:none; overflow:hidden; z-index:1300; }
+  /* jail sequence is scroll-scrubbed (part of the cine2 pin, no scroll-lock). The pill
+     lives at body level, ABOVE the #busted gray veil (its backdrop-filter would otherwise
+     desaturate it too), and is driven by frame2(). Layout is deliberately sparse: ONE
+     caption slot under the card — the alumni line holds it first, then the NRG-style
+     escape pill takes it over after the slam (the pill IS the verdict), its green
+     capsule growing from the left circle to fill the pill as the sentence is served. */
+  #jail-panel{ position:fixed; left:50%; top:50%; transform:translate(-50%,-50%); z-index:1300; display:flex; justify-content:center; opacity:0; pointer-events:none; }
+  #jail-cue{ position:relative; width:min(300px,80vw); height:60px; background:#fff; border:2.5px solid #0a0a0a; border-radius:30px; box-shadow:6px 6px 0 rgba(10,10,10,.85); cursor:pointer; pointer-events:none; overflow:hidden; }
   #jail-cue:active{ transform:scale(.96); }
   #jail-cue .jc-fill{ position:absolute; left:3px; top:3px; bottom:3px; width:49px; border-radius:25px; background:#6fe45d; z-index:0; }
   #jail-cue .jc-icon{ position:absolute; left:19px; top:50%; transform:translateY(-50%); width:17px; height:17px; color:#0a0a0a; z-index:1; }
@@ -518,15 +517,14 @@
 
   <div id="busted"><div class="desat"></div><div class="vigg"></div><div class="band"></div></div>
 
-  <!-- jail verdict (shares the caption slot under the card) + corner escape pill —
-       body-level so they stack ABOVE the #busted veil; frame2() drives both -->
+  <!-- escape pill — takes the caption slot under the card after the slam (it IS the
+       verdict: get out of jail, free). Body-level so it stacks ABOVE the #busted veil. -->
   <div id="jail-panel">
-    <div id="busted-dig">Not on the list. <em>Go directly to About. Do not pass GO. Do not collect $200.</em></div>
-  </div>
-  <div id="jail-cue" role="button" tabindex="0" aria-label="Skip ahead to About">
-    <span class="jc-fill"></span>
-    <svg class="jc-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect x="1.2" y="1.2" width="13.6" height="13.6" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M4.9 1.2v13.6M8 1.2v13.6M11.1 1.2v13.6" stroke="currentColor" stroke-width="1.5"/></svg>
-    <span class="jc-label">Get out of jail — free</span>
+    <div id="jail-cue" role="button" tabindex="0" aria-label="Skip ahead to About">
+      <span class="jc-fill"></span>
+      <svg class="jc-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect x="1.2" y="1.2" width="13.6" height="13.6" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M4.9 1.2v13.6M8 1.2v13.6M11.1 1.2v13.6" stroke="currentColor" stroke-width="1.5"/></svg>
+      <span class="jc-label">Get out of jail — free</span>
+    </div>
   </div>
 
   <button id="back-to-top" type="button" aria-label="Back to top">
@@ -540,11 +538,15 @@
     document.getElementById("year").textContent = new Date().getFullYear();
     const nav = document.getElementById("nav");
     const b2t = document.getElementById("back-to-top");
+    const aboutSec = document.getElementById("about");
     window.addEventListener("scroll", () => {
       var sy = window.scrollY;
       if (sy > 8) nav.classList.add("scrolled"); else nav.classList.remove("scrolled");
       if (b2t) {
-        if (sy > window.innerHeight * 1.4) b2t.classList.add("is-visible");
+        // only surfaces once you're WAY deep — past both cinematic pins, into the
+        // content proper — where a rescue back to the top actually earns its place
+        var deepAt = aboutSec ? aboutSec.offsetTop - window.innerHeight : window.innerHeight * 10;
+        if (sy > deepAt) b2t.classList.add("is-visible");
         else b2t.classList.remove("is-visible");
       }
     });
@@ -1132,7 +1134,6 @@
         band  =busted.querySelector('.band'),
         card3d=forbes.querySelector('.card3d'),
         jailPanel=document.getElementById('jail-panel'),
-        jdig  =document.getElementById('busted-dig'),
         jcue  =document.getElementById('jail-cue'),
         jcueFill=jcue.querySelector('.jc-fill'),
         aboutEl=document.getElementById('about');
@@ -1192,9 +1193,9 @@
       var dg=ease(range(p,0.93,1.0));
 
       // ── JAIL ── one beat at a time, each with its own stretch of scroll:
-      //   hold the alumni line → gray washes in → pill wakes in the corner → card
-      //   turns (caption slot empties mid-flip) → band slams → verdict stamps into
-      //   the SAME slot → long, gradual re-colouring hands off to About.
+      //   hold the alumni line → gray washes in → card turns (caption slot empties
+      //   mid-flip) → band slams → the escape pill takes the SAME slot and fills →
+      //   long, gradual re-colouring hands off to About.
       // pj is 0-1 across the 220vh tail; scrolling back reverses all of it.
       var pj=range(pr,JAIL_START,1);
       var slotOff=Math.min(342, window.innerHeight*0.46);   // caption slot: below the card, always on screen
@@ -1216,18 +1217,14 @@
       dig.style.opacity=dg*digOut;
       dig.style.transform='translate(-50%,calc(-50% + '+lerp(318,slotOff,dg)+'px))';
 
-      // caption slot, part 2: the verdict stamps into the same slot after the slam
-      var verdictT=ease(range(pj,0.56,0.66));
-      jdig.style.opacity=verdictT;
-      jailPanel.style.opacity=verdictT*cardMul;
-      jailPanel.style.transform='translate(-50%,calc(-50% + '+(slotOff+lerp(10,0,verdictT))+'px))';
-
-      // escape pill: alone in the corner (nothing else competes with the card), arrives
-      // with the gray, and its green capsule fills across the WHOLE jail sequence
-      var cueT=ease(range(pj,0.10,0.18))*(1-ease(range(pj,0.96,1.0)));
-      var fillT=range(pj,0.18,0.90);
+      // caption slot, part 2: the ESCAPE PILL takes the slot after the slam — no more
+      // verdict text, the pill says it all. Its green capsule fills as you serve out
+      // the rest of the scroll, holds full, and it's the last thing to leave.
+      var cueT=ease(range(pj,0.56,0.66))*(1-ease(range(pj,0.96,1.0)));
+      var fillT=range(pj,0.58,0.92);
       jcueFill.style.width='calc(49px + '+fillT.toFixed(4)+'*(100% - 55px))';
-      jcue.style.opacity=cueT;
+      jailPanel.style.opacity=cueT;
+      jailPanel.style.transform='translate(-50%,calc(-50% + '+(slotOff+lerp(10,0,cueT))+'px))';
       jcue.style.pointerEvents=(cueT>0.5&&pj<0.96)?'auto':'none';
 
       var riseScale=lerp(0.72,1,fin), bump=0.14*flipT-0.14*slamT;
