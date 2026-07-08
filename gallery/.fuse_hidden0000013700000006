@@ -191,7 +191,7 @@
         <a href="/portfolio/">Portfolio</a>
         <a href="../life/index.html">Life</a>
         <a href="../writing/index.html">Notes</a>
-        <a href="/contact/">Contact</a>
+        <a href="../#contact">Contact</a>
       </div>
     </div>
   </nav>

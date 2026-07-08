@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Gen Z Economics — Launch Film</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=Hanken+Grotesk:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --paper:#FAF7F0; --paper2:#F1EBDD; --surface:#FFFFFF; --rule:#E7E0D0;
+    --ink:#16181F; --soft:#4B515F;
+    --navy:#20307F; --navy2:#172361; --deep:#10173F;
+    --gold:#E3A310; --goldink:#7A5E10; --hl:#FFE8A0; --icefog:#C9CFEA;
+    --xpblue:#245EDC; --dos:#0C0C0C; --dosgreen:#33FF66;
+    --serif:"Fraunces","Times New Roman",Georgia,serif;
+    --sans:"Hanken Grotesk",-apple-system,"Segoe UI",Roboto,sans-serif;
+    --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%;background:#0B0D18;overflow:hidden}
+  body{font-family:var(--sans);-webkit-font-smoothing:antialiased}
+  #frame{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}
+  #stage{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;overflow:hidden;background:var(--paper)}
+
+  .scene{position:absolute;inset:0;visibility:hidden;opacity:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:6vh 7vw}
+  .navy{background:var(--navy)} .deep{background:var(--deep)} .paper{background:var(--paper)} .xp{background:linear-gradient(180deg,#3B8DE8 0%,var(--xpblue) 40%,#1E48B0 100%)}
+
+  .k{font-family:var(--mono);font-weight:700;letter-spacing:.3em;text-transform:uppercase;font-size:clamp(10px,1vw,14px);color:var(--goldink)}
+  .navy .k,.deep .k,.xp .k{color:var(--gold)}
+  .huge{font-family:var(--serif);font-weight:600;line-height:1.05;color:var(--ink);font-size:clamp(28px,5vw,72px)}
+  .med{font-family:var(--serif);font-weight:500;line-height:1.14;color:var(--ink);font-size:clamp(20px,3.1vw,44px)}
+  .navy :is(.huge,.med),.deep :is(.huge,.med),.xp :is(.huge,.med){color:#fff}
+  .sub{font-family:var(--sans);font-weight:500;color:var(--soft);font-size:clamp(13px,1.45vw,21px);line-height:1.5}
+  .navy .sub,.deep .sub{color:var(--icefog)} .xp .sub{color:#EAF2FF}
+  .gold{color:var(--gold)} .goldink{color:var(--goldink)} .navytxt{color:var(--navy)} .it{font-style:italic}
+  .hl{background:linear-gradient(transparent 62%, var(--hl) 62%)}
+  .line{overflow:hidden;display:block}
+  .line>span{display:inline-block}
+
+  /* wordmark — matches the site header */
+  .wm{font-family:var(--serif);font-weight:600;letter-spacing:.01em}
+  .wm .mid{color:var(--gold);padding:0 .08em}
+
+  /* poster */
+  #poster{visibility:visible;opacity:1;z-index:40}
+  #poster .dots{display:flex;gap:14px;margin-bottom:4.5vh}
+  #poster .dots i{width:14px;height:14px;border-radius:50%}
+  #playBtn{margin-top:5.5vh;width:clamp(74px,8vw,110px);height:clamp(74px,8vw,110px);border-radius:50%;border:none;cursor:pointer;background:var(--navy);display:flex;align-items:center;justify-content:center;transition:transform .25s ease,background .25s ease}
+  #playBtn:hover{transform:scale(1.06);background:var(--navy2)}
+  #playBtn svg{width:38%;height:38%;fill:var(--gold);margin-left:6%}
+  #poster .hint{margin-top:2.2vh;font-size:clamp(11px,1.05vw,14px);color:var(--soft);letter-spacing:.08em}
+
+  /* -------- UI vignette cards (site-faithful) -------- */
+  .uicard{background:var(--surface);border:1px solid var(--rule);border-radius:16px;box-shadow:0 30px 70px -30px rgba(21,24,40,.35);text-align:left}
+  .uikick{font-family:var(--mono);font-weight:700;letter-spacing:.22em;font-size:clamp(9px,.85vw,12px);color:var(--goldink);text-transform:uppercase}
+
+  /* S5 session card */
+  .sess{width:min(66vw,900px);padding:2.6vh 2vw}
+  .sess .player{margin-top:1.6vh;border-radius:12px;background:var(--deep);height:clamp(120px,22vh,210px);position:relative;overflow:hidden}
+  .sess .pbar{position:absolute;left:0;bottom:0;height:5px;width:20%;background:var(--gold)}
+  .sess .pbtn{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:52px;height:52px;border-radius:50%;background:rgba(250,247,240,.14);display:flex;align-items:center;justify-content:center}
+  .sess .pbtn::after{content:"";border-left:16px solid var(--paper);border-top:10px solid transparent;border-bottom:10px solid transparent;margin-left:4px}
+  .sess .chap{display:flex;gap:.7vw;margin-top:1.6vh;flex-wrap:wrap}
+  .sess .ch{font-family:var(--mono);font-size:clamp(9px,.85vw,12px);color:var(--navy);background:#ECEEF8;border-radius:999px;padding:.7vh 1vw}
+
+  /* S6 model card (opportunity cost) */
+  .model{width:min(66vw,900px);padding:2.6vh 2vw}
+  .chiprow{display:flex;gap:.8vw;margin-top:1.6vh;flex-wrap:wrap}
+  .mchip{font-family:var(--sans);font-weight:600;font-size:clamp(10px,1vw,14px);color:var(--navy);background:#fff;border:1px solid var(--rule);border-radius:999px;padding:1vh 1.3vw}
+  .mchip.on{background:var(--navy);color:#fff;border-color:var(--navy)}
+  .mtable{margin-top:1.8vh;width:100%;border-collapse:collapse;font-family:var(--mono);font-size:clamp(10px,1.05vw,15px)}
+  .mtable th{color:var(--goldink);font-weight:700;text-align:left;letter-spacing:.14em;font-size:clamp(8px,.8vw,11px);padding:.6vh .8vw;border-bottom:1px solid var(--rule)}
+  .mtable td{color:var(--ink);padding:.9vh .8vw;border-bottom:1px solid var(--paper2)}
+  .mtable td.big{font-weight:700}
+  .pos{color:#1B7A3D;font-weight:700} .neg{color:#B0322B;font-weight:700}
+
+  /* S7 bloomburger terminal */
+  .term{width:min(62vw,860px);border-radius:16px;background:linear-gradient(135deg,var(--navy2),var(--deep));padding:3vh 2.2vw;text-align:left;box-shadow:0 30px 70px -30px rgba(0,0,0,.6)}
+  .term .tk{font-family:var(--mono);font-weight:700;letter-spacing:.24em;font-size:clamp(9px,.85vw,12px);color:var(--icefog)}
+  .term .days{font-family:var(--serif);font-weight:600;color:#fff;font-size:clamp(40px,6.5vw,92px);line-height:1}
+  .term .drow{display:flex;gap:1.4vw;margin-top:2vh;flex-wrap:wrap}
+  .term .dcell{flex:1;min-width:150px;background:rgba(250,247,240,.07);border:1px solid rgba(250,247,240,.14);border-radius:10px;padding:1.4vh 1.1vw}
+  .term .dcell .l{font-family:var(--mono);font-size:clamp(8px,.8vw,11px);letter-spacing:.18em;color:var(--gold)}
+  .term .dcell .v{font-family:var(--serif);font-weight:600;color:#fff;font-size:clamp(18px,2.2vw,32px);margin-top:.5vh}
+  .term .dcell .n{font-family:var(--mono);font-size:clamp(8px,.78vw,11px);color:var(--icefog);margin-top:.4vh}
+
+  /* S8 BIL chat */
+  .chatwrap{width:min(60vw,820px);padding:2.4vh 2vw}
+  .msg{display:flex;margin-top:1.4vh}
+  .msg .bub{max-width:78%;border-radius:14px;padding:1.4vh 1.3vw;font-size:clamp(11px,1.2vw,17px);line-height:1.45;text-align:left}
+  .msg.you{justify-content:flex-end}
+  .msg.you .bub{background:var(--navy);color:#fff;border-bottom-right-radius:4px}
+  .msg.bil .bub{background:var(--paper2);color:var(--ink);border-bottom-left-radius:4px}
+  .msg .who{font-family:var(--mono);font-size:clamp(8px,.8vw,11px);letter-spacing:.16em;color:var(--goldink);margin-bottom:.5vh;display:block}
+  .cite{display:inline-block;margin-top:.8vh;font-family:var(--mono);font-size:clamp(8px,.82vw,11px);color:var(--navy);background:#ECEEF8;border-radius:6px;padding:.4vh .6vw}
+
+  /* S9 XP reading room */
+  .xpwin{width:min(58vw,780px);border-radius:8px;overflow:hidden;box-shadow:0 34px 80px -30px rgba(0,0,0,.55);text-align:left}
+  .xpbar{background:linear-gradient(180deg,#3E7BF0,#1C50C8);padding:1vh 1.2vw;display:flex;align-items:center;gap:.8vw}
+  .xpbar .t{color:#fff;font-weight:700;font-size:clamp(10px,1vw,14px);font-family:var(--sans)}
+  .xpbar .btns{margin-left:auto;display:flex;gap:6px}
+  .xpbar .btns i{width:14px;height:14px;border-radius:3px;background:#E8532F;display:block}
+  .xpbar .btns i:first-child{background:#3FA33F}.xpbar .btns i:nth-child(2){background:#E0A72F}
+  .dosbody{background:var(--dos);padding:2vh 1.6vw;font-family:var(--mono);color:var(--dosgreen);font-size:clamp(10px,1.15vw,16px);line-height:1.6;min-height:clamp(140px,24vh,230px)}
+  .dosbody .dim{color:#9EE8B0}
+  .folders{display:flex;gap:2.4vw;margin-top:2.6vh}
+  .folder{text-align:center}
+  .folder .ic{width:clamp(40px,4.4vw,64px);height:clamp(30px,3.3vw,48px);background:linear-gradient(180deg,#FFD97A,#F0B429);border-radius:5px 8px 5px 5px;position:relative;margin:0 auto}
+  .folder .ic::before{content:"";position:absolute;top:-8px;left:0;width:45%;height:10px;background:#F0B429;border-radius:4px 6px 0 0}
+  .folder .fl{color:#fff;font-size:clamp(9px,.95vw,13px);margin-top:.8vh;text-shadow:0 1px 3px rgba(0,0,0,.6)}
+
+  /* S10 schedule + karma */
+  .duo{display:flex;gap:2vw;margin-top:4vh;width:min(78vw,1080px)}
+  .duo .half{flex:1;padding:2.4vh 1.6vw}
+  .duo .bignum{font-family:var(--serif);font-weight:600;color:var(--navy);font-size:clamp(26px,3.4vw,48px)}
+  .duo p{font-size:clamp(11px,1.2vw,16px);color:var(--soft);line-height:1.5;margin-top:1vh;text-align:left}
+  .duo .uikick{display:block;margin-bottom:1vh}
+
+  /* S11 stack */
+  .stackrows{margin-top:4vh;width:min(66vw,880px);text-align:left}
+  .srow{display:flex;align-items:baseline;gap:1.4vw;padding:1.5vh 0;border-bottom:1px solid rgba(250,247,240,.14)}
+  .srow .sn{font-family:var(--mono);color:var(--gold);font-size:clamp(10px,1vw,14px);min-width:2.2em}
+  .srow .st{color:#fff;font-weight:600;font-size:clamp(13px,1.6vw,22px);font-family:var(--sans)}
+  .srow .sd{color:var(--icefog);font-family:var(--mono);font-size:clamp(9px,.95vw,13px);margin-left:auto;text-align:right}
+
+  /* end card */
+  .endmark{font-family:var(--serif);font-weight:600;color:var(--ink);font-size:clamp(40px,7vw,104px);line-height:1}
+  .endsub{margin-top:2.4vh;font-size:clamp(13px,1.5vw,21px);color:var(--soft)}
+  .endsub b{color:var(--ink)}
+  #replayBtn{margin-top:4.6vh;border:1.5px solid var(--navy);background:transparent;color:var(--navy);font-family:var(--sans);font-weight:700;letter-spacing:.22em;font-size:clamp(11px,1vw,14px);padding:1.6vh 2.6vw;border-radius:999px;cursor:pointer;transition:all .25s ease}
+  #replayBtn:hover{background:var(--navy);color:var(--paper)}
+
+  #progress{position:absolute;left:0;bottom:0;height:4px;width:0%;background:var(--gold);z-index:30}
+  #ctl{position:absolute;left:1.4vw;bottom:1.6vh;z-index:30;font-family:var(--mono);font-size:clamp(9px,.85vw,12px);color:rgba(120,125,150,.85);letter-spacing:.06em;opacity:0;user-select:none}
+  #paused{position:absolute;inset:0;display:none;align-items:center;justify-content:center;background:rgba(11,13,24,.35);z-index:25;backdrop-filter:blur(2px)}
+  #paused span{font-family:var(--sans);font-weight:700;letter-spacing:.3em;color:#fff;font-size:clamp(12px,1.3vw,18px)}
+  .grain{pointer-events:none;position:absolute;inset:0;z-index:20;opacity:.05;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E")}
+</style>
+</head>
+<body>
+<div id="frame"><div id="stage">
+
+  <!-- poster -->
+  <section class="scene paper" id="poster">
+    <div class="dots"><i style="background:var(--navy)"></i><i style="background:var(--gold)"></i><i style="border:2.5px solid var(--navy)"></i></div>
+    <div class="k">A launch film · 110 seconds</div>
+    <h1 class="wm" style="font-size:clamp(44px,8.5vw,120px);color:var(--ink);margin-top:2.2vh">gen z<span class="mid">·</span>economics</h1>
+    <button id="playBtn" aria-label="Play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
+    <div class="hint">click anywhere to pause · R replay · F fullscreen</div>
+  </section>
+
+  <!-- S1 cold open -->
+  <section class="scene deep" id="s1">
+    <div class="med"><span class="line"><span>Somebody already explained macro to you.</span></span></div>
+    <div class="huge" style="margin-top:2vh"><span class="line"><span class="gold it">Badly.</span></span></div>
+    <div class="sub" id="s1c" style="margin-top:4.5vh;max-width:56ch">A TV panel shouting past each other. A forwarded chart with no source.</div>
+  </section>
+
+  <!-- S2 meanwhile -->
+  <section class="scene paper" id="s2">
+    <div class="k">Meanwhile</div>
+    <div class="med s2l" style="margin-top:3.2vh">The repo rate set your <span class="navytxt">EMI.</span></div>
+    <div class="med s2l" style="margin-top:1.2vh">The rupee priced your <span class="navytxt">trip.</span></div>
+    <div class="med s2l" style="margin-top:1.2vh">A yield curve you've never seen decided your <span class="navytxt">offer letter.</span></div>
+    <div class="sub" id="s2s" style="margin-top:4.5vh">None of it asked whether you'd taken the elective.</div>
+  </section>
+
+  <!-- S3 title -->
+  <section class="scene paper" id="s3">
+    <div class="huge" style="font-weight:600"><span class="line"><span>ISB made macro optional.</span></span></div>
+    <div class="huge" style="margin-top:1.6vh"><span class="line"><span class="navytxt hl" style="font-style:italic;padding:0 .15em">Here it is anyway.</span></span></div>
+    <div class="sub" id="s3s" style="margin-top:5vh;max-width:58ch">A closed study room built on <b style="color:var(--ink)">Prof. Prasanna Tantri's</b> weekly macro sessions — sign in with your ISB ID.</div>
+    <h2 class="wm" id="s3wm" style="font-size:clamp(20px,2.6vw,36px);color:var(--ink);margin-top:4.5vh">gen z<span class="mid">·</span>economics</h2>
+  </section>
+
+  <!-- S4 byline -->
+  <section class="scene navy" id="s4">
+    <div class="k">An unusual byline</div>
+    <div style="display:flex;align-items:stretch;gap:4vw;margin-top:6vh">
+      <div id="s4a" style="max-width:30vw;text-align:left">
+        <div style="font-family:var(--mono);font-weight:700;letter-spacing:.26em;font-size:clamp(9px,.9vw,12px);color:var(--gold)">THE PROFESSOR</div>
+        <div style="font-family:var(--serif);font-weight:600;color:#fff;font-size:clamp(22px,2.9vw,42px);margin:1.2vh 0">Prasanna Tantri</div>
+        <div class="sub" style="text-align:left">Indian School of Business.<br>Chairman, Power Finance Corporation.<br>Believes nothing is as fun as torturing students.</div>
+      </div>
+      <div id="s4x" style="font-family:var(--serif);color:var(--gold);font-size:clamp(34px,5vw,70px);align-self:center;font-style:italic">×</div>
+      <div id="s4b" style="max-width:30vw;text-align:left">
+        <div style="font-family:var(--mono);font-weight:700;letter-spacing:.26em;font-size:clamp(9px,.9vw,12px);color:var(--gold)">THE OPERATOR</div>
+        <div style="font-family:var(--serif);font-weight:600;color:#fff;font-size:clamp(22px,2.9vw,42px);margin:1.2vh 0">Harsh Kumar Arya</div>
+        <div class="sub" style="text-align:left">ISB '25 · founder · builder.<br>Turned the office hours into a product.<br>Writes the code, keeps the receipts.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- S5 feature 1: Sunday session -->
+  <section class="scene paper" id="s5">
+    <div class="k">Feature 01 · The Sunday Session</div>
+    <div class="med" style="margin-top:2vh">One lecture a week. <span class="it goldink">Because you forget.</span></div>
+    <div class="uicard sess" id="s5card">
+      <div class="uikick">Session 16 · Exchange Rates, Inflation &amp; Interest-Rate Parity</div>
+      <div class="player"><div class="pbtn"></div><div class="pbar" id="s5bar"></div></div>
+      <div class="chap">
+        <span class="ch">00:00 The misconception</span><span class="ch">14:20 UIP, slowly</span><span class="ch">31:05 The rupee example</span><span class="ch">52:40 What RBI actually does</span>
+      </div>
+    </div>
+    <div class="sub" id="s5s" style="margin-top:2.6vh;max-width:62ch">Zoom recording in → chaptered notes out, <b style="color:var(--ink)">the same evening</b> — an automated pipeline runs while everyone sleeps.</div>
+  </section>
+
+  <!-- S6 feature 2: playable notes -->
+  <section class="scene paper" id="s6">
+    <div class="k">Feature 02 · The Long Reads</div>
+    <div class="med" style="margin-top:2vh">His notes, <span class="navytxt">made playable.</span></div>
+    <div class="uicard model" id="s6card">
+      <div class="uikick">Model №1 — the opportunity-cost table (June-10 notes, §2.1)</div>
+      <div class="chiprow">
+        <span class="mchip on" id="chipA">C is running</span>
+        <span class="mchip" id="chipB">C shut by the Pollution Control Board</span>
+        <span class="mchip" id="chipC">C shut, workers can't be fired</span>
+      </div>
+      <table class="mtable">
+        <tr><th>PROJECT</th><th>REVENUE</th><th>MATERIALS</th><th>WAGES</th><th>OPPORTUNITY COST</th><th>ECONOMIC PROFIT</th></tr>
+        <tr><td class="big">A</td><td>100</td><td>30</td><td>50</td><td id="oppA">0</td><td class="big pos" id="epA">20</td></tr>
+        <tr><td class="big">B</td><td>140</td><td>40</td><td>50</td><td id="oppB">50</td><td class="big pos" id="epB">0</td></tr>
+      </table>
+    </div>
+    <div class="sub" id="s6s" style="margin-top:2.6vh;max-width:60ch">Three courses as continuous reads — every model wired to <b style="color:var(--ink)">his exact numbers</b>, so you can move the assumptions yourself. Every one hides a trap he sets in exams.</div>
+  </section>
+
+  <!-- S7 feature 3: bloomburger -->
+  <section class="scene paper" id="s7">
+    <div class="k">Feature 03 · The Bloomburger Terminal</div>
+    <div class="med" style="margin-top:2vh">Know the <span class="hl" style="font-style:italic;padding:0 .12em">print</span> before it drops.</div>
+    <div class="term" id="s7card">
+      <div class="tk">NEXT MPC DECISION</div>
+      <div class="days"><span id="mpcdays">31</span> days</div>
+      <div class="drow">
+        <div class="dcell"><div class="l">RBI REPO RATE</div><div class="v">5.25%</div><div class="n">Jun 2026 MPC (held, 4–2)</div></div>
+        <div class="dcell"><div class="l">CPI INFLATION (YOY)</div><div class="v">3.9%</div><div class="n">May 2026 print</div></div>
+        <div class="dcell"><div class="l">INR REER</div><div class="v">94.0</div><div class="n">the dosa test lives here</div></div>
+      </div>
+    </div>
+    <div class="sub" id="s7s" style="margin-top:2.6vh;max-width:60ch">Market data refreshes itself daily. So the next time <b style="color:var(--ink)">onions are setting the repo rate</b> — you saw it coming.</div>
+  </section>
+
+  <!-- S8 feature 4: BIL -->
+  <section class="scene paper" id="s8">
+    <div class="k">Feature 04 · Ask BIL</div>
+    <div class="med" style="margin-top:2vh">Every family has one. <span class="it goldink">Ours is finally useful.</span></div>
+    <div class="uicard chatwrap" id="s8card">
+      <div class="msg you" id="m1"><div class="bub">BIL, why does the site keep saying the rupee is "cheap in real terms"?</div></div>
+      <div class="msg bil" id="m2"><div class="bub"><span class="who">BIL · IIM-A, HE'LL MENTION IT</span><span id="biltxt"></span><span class="cite" id="bilcite">source: INFS long-read, ch. 4 · REER 94.0, Apr 2026 bulletin</span></div></div>
+    </div>
+    <div class="sub" id="s8s" style="margin-top:2.6vh;max-width:62ch">A RAG bot grounded in the professor's actual notes — cites the page, refuses stock tips, sighs first. <b style="color:var(--ink)">365 pre-written sighs.</b></div>
+  </section>
+
+  <!-- S9 feature 5: reading room -->
+  <section class="scene xp" id="s9">
+    <div class="k">Feature 05 · The Reading Room</div>
+    <div class="med" style="margin-top:2vh">Filed in folders, <span class="it" style="color:#FFE8A0">like it's 1997.</span></div>
+    <div class="xpwin" id="s9card" style="margin-top:3.4vh">
+      <div class="xpbar"><span class="t">C:\LRC\READING_ROOM</span><span class="btns"><i></i><i></i><i></i></span></div>
+      <div class="dosbody"><span class="dim">C:\LRC\READING_ROOM&gt;</span> <span id="dostype"></span><span id="doscur">█</span><div id="dosout" style="margin-top:1vh;visibility:hidden">THE READING ROOM — an homage to the Stone Age,<br>back when people read things.<br><span class="dim">His class notes, the articles he sent, and the papers.<br>Open a folder. Files open in Notepad.</span></div></div>
+    </div>
+    <div class="folders" id="s9folders">
+      <div class="folder"><div class="ic"></div><div class="fl">Class notes</div></div>
+      <div class="folder"><div class="ic"></div><div class="fl">Articles</div></div>
+      <div class="folder"><div class="ic"></div><div class="fl">Papers</div></div>
+    </div>
+  </section>
+
+  <!-- S10 schedule + karma -->
+  <section class="scene paper" id="s10">
+    <div class="k">And the house rules</div>
+    <div class="duo">
+      <div class="uicard half" id="s10a">
+        <span class="uikick">The Timetable</span>
+        <div class="bignum">The system runs on a schedule.</div>
+        <p>CPI on the 12th. WPI on the 14th. IIP on the 28th. The MPC, six times a year, on dates RBI published last March. 52 events — subscribe once, your calendar knows forever.</p>
+      </div>
+      <div class="uicard half" id="s10b">
+        <span class="uikick">Class Participation</span>
+        <div class="bignum">Karma never resets.</div>
+        <p>Weekly questions, a leaderboard with a long memory, and answers that earn their way onto the site with your name on them. Miss three quizzes and Maneshwar drops you. He's the bad guy.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- S11 the build -->
+  <section class="scene navy" id="s11">
+    <div class="k">Under the hood</div>
+    <div class="med" style="margin-top:2vh">Built like a product. <span class="gold">By one person.</span></div>
+    <div class="stackrows">
+      <div class="srow"><span class="sn">01</span><span class="st">Static site, Jekyll on Render</span><span class="sd">public shell · fast · free-tier cheap</span></div>
+      <div class="srow"><span class="sn">02</span><span class="st">Google sign-in + Firestore</span><span class="sd">the gate — a login, not a fee</span></div>
+      <div class="srow"><span class="sn">03</span><span class="st">Cloudflare Stream, signed playback</span><span class="sd">the lectures are the honeypot</span></div>
+      <div class="srow"><span class="sn">04</span><span class="st">BIL: RAG on Cloudflare Workers</span><span class="sd">local embeddings · JWT-verified · cites pages</span></div>
+      <div class="srow"><span class="sn">05</span><span class="st">A WhatsApp bot that runs ops</span><span class="sd">polls the cohort → books Zoom → announces</span></div>
+      <div class="srow"><span class="sn">06</span><span class="st">Session pipeline: video → notes</span><span class="sd">transcribe · chapter · publish, same evening</span></div>
+    </div>
+  </section>
+
+  <!-- S12 end -->
+  <section class="scene paper" id="s12">
+    <div class="endmark wm">gen z<span class="mid">·</span>economics</div>
+    <div class="endsub" id="s12a">The macro you can't just Google.</div>
+    <div class="endsub" id="s12b" style="margin-top:1vh">Co-authored with <b>Prof. Prasanna Tantri</b> · live at <b>genz-economics.com</b></div>
+    <button id="replayBtn">Replay ↻</button>
+  </section>
+
+  <div class="grain"></div>
+  <div id="progress"></div>
+  <div id="ctl">SPACE pause · R replay · F fullscreen</div>
+  <div id="paused"><span>PAUSED — CLICK TO RESUME</span></div>
+
+</div></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script>
+(function(){
+  const $ = s => document.querySelector(s);
+  let started = false;
+
+  const tl = gsap.timeline({paused:true, onUpdate(){ $("#progress").style.width=(tl.progress()*100)+"%"; }});
+  const showS = sel => [sel,{autoAlpha:1,duration:.001}];
+  const hideS = sel => [sel,{autoAlpha:0,duration:.55,ease:"power2.inOut"}];
+  const outAll = sel => [sel+" > *",{autoAlpha:0,y:-16,duration:.6,ease:"power2.in",stagger:.05}];
+  const rise = (sel,pos,stag=0.15)=>tl.from(sel,{yPercent:115,duration:.95,ease:"power4.out",stagger:stag},pos);
+
+  /* S1 · 0–8 */
+  tl.to(...showS("#s1"));
+  tl.from("#s1 .med",{autoAlpha:0,y:14,duration:.9,ease:"power3.out"},"+=0.3");
+  rise("#s1 .line>span","+=0.6");
+  tl.from("#s1c",{autoAlpha:0,duration:.8},"+=0.4");
+  tl.to({},{duration:1.7}).to(...outAll("#s1")).to(...hideS("#s1"));
+
+  /* S2 · 8–17 */
+  tl.to(...showS("#s2"));
+  tl.from("#s2 .k",{autoAlpha:0,y:10,duration:.5});
+  tl.from(".s2l",{autoAlpha:0,y:22,duration:.75,ease:"power3.out",stagger:.85},"+=0.2");
+  tl.from("#s2s",{autoAlpha:0,duration:.8},"+=0.4");
+  tl.to({},{duration:1.6}).to(...outAll("#s2")).to(...hideS("#s2"));
+
+  /* S3 · 17–26 */
+  tl.to(...showS("#s3"));
+  rise("#s3 .line>span","+=0.2",.55);
+  tl.from("#s3s",{autoAlpha:0,y:12,duration:.8},"+=0.5");
+  tl.from("#s3wm",{autoAlpha:0,letterSpacing:".25em",duration:1,ease:"power2.out"},"+=0.3");
+  tl.to({},{duration:2}).to(...outAll("#s3")).to(...hideS("#s3"));
+
+  /* S4 · 26–35 */
+  tl.to(...showS("#s4"));
+  tl.from("#s4 .k",{autoAlpha:0,y:10,duration:.5});
+  tl.from("#s4a",{autoAlpha:0,x:-44,duration:.85,ease:"power3.out"},"+=0.2");
+  tl.from("#s4b",{autoAlpha:0,x:44,duration:.85,ease:"power3.out"},"-=0.65");
+  tl.from("#s4x",{autoAlpha:0,scale:0,rotate:-90,duration:.7,ease:"back.out(2)"},"-=0.35");
+  tl.to({},{duration:2.6}).to(...outAll("#s4")).to(...hideS("#s4"));
+
+  /* S5 · 35–46 — Sunday session */
+  tl.to(...showS("#s5"));
+  tl.from("#s5 .k",{autoAlpha:0,y:10,duration:.5});
+  tl.from("#s5 .med",{autoAlpha:0,y:16,duration:.8,ease:"power3.out"},"-=0.15");
+  tl.from("#s5card",{autoAlpha:0,y:44,duration:.9,ease:"power3.out"},"+=0.25");
+  tl.from("#s5card .ch",{autoAlpha:0,y:12,duration:.45,ease:"power3.out",stagger:.22},"-=0.2");
+  tl.to("#s5bar",{width:"64%",duration:2.4,ease:"power1.inOut"},"-=0.3");
+  tl.from("#s5s",{autoAlpha:0,duration:.8},"-=1.6");
+  tl.to({},{duration:1.2}).to(...outAll("#s5")).to(...hideS("#s5"));
+
+  /* S6 · 46–58 — playable model performs */
+  tl.to(...showS("#s6"));
+  tl.from("#s6 .k",{autoAlpha:0,y:10,duration:.5});
+  tl.from("#s6 .med",{autoAlpha:0,y:16,duration:.8,ease:"power3.out"},"-=0.15");
+  tl.from("#s6card",{autoAlpha:0,y:44,duration:.9,ease:"power3.out"},"+=0.25");
+  tl.from("#s6s",{autoAlpha:0,duration:.7},"-=0.2");
+  tl.call(()=>{ // scenario 2: C shut by PCB — opportunity cost vanishes
+      $("#chipA").classList.remove("on"); $("#chipB").classList.add("on");
+      $("#oppB").textContent="0";
+      const b=$("#epB"); b.textContent="50"; b.className="big pos";
+      gsap.fromTo("#s6card",{scale:1.012},{scale:1,duration:.4});
+    },null,"+=1.6");
+  tl.call(()=>{ // scenario 3: workers can't be fired — wages sunk
+      $("#chipB").classList.remove("on"); $("#chipC").classList.add("on");
+      $("#oppB").textContent="0"; $("#epB").textContent="100";
+      $("#oppA").textContent="0";
+      const a=$("#epA"); a.textContent="70"; a.className="big pos";
+      gsap.fromTo("#s6card",{scale:1.012},{scale:1,duration:.4});
+    },null,"+=2.2");
+  tl.to({},{duration:2.4}).to(...outAll("#s6")).to(...hideS("#s6"));
+
+  /* S7 · 58–69 — bloomburger counts down */
+  const mpc={d:31};
+  tl.to(...showS("#s7"));
+  tl.from("#s7 .k",{autoAlpha:0,y:10,duration:.5});
+  tl.from("#s7 .med",{autoAlpha:0,y:16,duration:.8,ease:"power3.out"},"-=0.15");
+  tl.from("#s7card",{autoAlpha:0,y:44,duration:.9,ease:"power3.out"},"+=0.25");
+  tl.from("#s7card .dcell",{autoAlpha:0,y:16,duration:.5,ease:"power3.out",stagger:.25},"-=0.25");
+  tl.to(mpc,{d:28,duration:1.8,ease:"steps(3)",onUpdate(){$("#mpcdays").textContent=Math.round(mpc.d);}},"-=0.4");
+  tl.from("#s7s",{autoAlpha:0,duration:.8},"-=0.8");
+  tl.to({},{duration:1.6}).to(...outAll("#s7")).to(...hideS("#s7"));
+
+  /* S8 · 69–83 — BIL types, sighs first */
+  const bilFull="*sigh* We covered this at IIM-A in week one — but fine. REER adjusts the rupee for inflation differentials against 40 partners. Below 100 means cheap in real terms: your imports feel pricey, your exporters quietly cheer.";
+  const bilObj={n:0};
+  tl.to(...showS("#s8"));
+  tl.from("#s8 .k",{autoAlpha:0,y:10,duration:.5});
+  tl.from("#s8 .med",{autoAlpha:0,y:16,duration:.8,ease:"power3.out"},"-=0.15");
+  tl.from("#s8card",{autoAlpha:0,y:44,duration:.9,ease:"power3.out"},"+=0.25");
+  tl.from("#m1",{autoAlpha:0,y:14,duration:.5},"-=0.2");
+  tl.set("#bilcite",{autoAlpha:0});
+  tl.from("#m2",{autoAlpha:0,y:14,duration:.5},"+=0.6");
+  tl.to(bilObj,{n:bilFull.length,duration:4.6,ease:"none",onUpdate(){$("#biltxt").textContent=bilFull.slice(0,Math.round(bilObj.n));}});
+  tl.to("#bilcite",{autoAlpha:1,duration:.5},"+=0.2");
+  tl.from("#s8s",{autoAlpha:0,duration:.8},"-=0.2");
+  tl.to({},{duration:1.6}).to(...outAll("#s8")).to(...hideS("#s8"));
+
+  /* S9 · 83–95 — DOS types */
+  const dosCmd="dir", dosObj={n:0};
+  tl.to(...showS("#s9"));
+  tl.from("#s9 .k",{autoAlpha:0,y:10,duration:.5});
+  tl.from("#s9 .med",{autoAlpha:0,y:16,duration:.8,ease:"power3.out"},"-=0.15");
+  tl.from("#s9card",{autoAlpha:0,y:44,duration:.9,ease:"power3.out"},"+=0.25");
+  tl.to(dosObj,{n:dosCmd.length,duration:.7,ease:"steps(3)",onUpdate(){$("#dostype").textContent=dosCmd.slice(0,Math.round(dosObj.n));}},"+=0.5");
+  tl.set("#dosout",{visibility:"visible",opacity:0},"+=0.3");
+  tl.to("#dosout",{opacity:1,duration:.45});
+  tl.from("#s9folders .folder",{autoAlpha:0,y:18,duration:.5,ease:"back.out(1.6)",stagger:.25},"+=0.4");
+  tl.to("#doscur",{opacity:0,duration:.35,repeat:7,yoyo:true},"-=1.5");
+  tl.to({},{duration:1.8}).to(...outAll("#s9")).to(...hideS("#s9"));
+
+  /* S10 · 95–104 */
+  tl.to(...showS("#s10"));
+  tl.from("#s10 .k",{autoAlpha:0,y:10,duration:.5});
+  tl.from("#s10a",{autoAlpha:0,x:-40,duration:.8,ease:"power3.out"},"+=0.2");
+  tl.from("#s10b",{autoAlpha:0,x:40,duration:.8,ease:"power3.out"},"-=0.55");
+  tl.to({},{duration:3.2}).to(...outAll("#s10")).to(...hideS("#s10"));
+
+  /* S11 · 104–115 */
+  tl.to(...showS("#s11"));
+  tl.from("#s11 .k",{autoAlpha:0,y:10,duration:.5});
+  tl.from("#s11 .med",{autoAlpha:0,y:16,duration:.8,ease:"power3.out"},"-=0.15");
+  tl.from("#s11 .srow",{autoAlpha:0,x:-30,duration:.5,ease:"power3.out",stagger:.38},"+=0.25");
+  tl.to({},{duration:2}).to(...outAll("#s11")).to(...hideS("#s11"));
+
+  /* S12 end */
+  tl.to(...showS("#s12"));
+  tl.from("#s12 .endmark",{autoAlpha:0,y:26,duration:1,ease:"power3.out"});
+  tl.from("#s12a",{autoAlpha:0,y:12,duration:.7},"-=0.3");
+  tl.from("#s12b",{autoAlpha:0,y:12,duration:.7},"-=0.35");
+  tl.from("#replayBtn",{autoAlpha:0,duration:.8},"+=0.3");
+
+  /* controls */
+  function start(){ if(started) return; started=true;
+    gsap.to("#poster",{autoAlpha:0,duration:.7,ease:"power2.inOut",onComplete(){$("#poster").style.visibility="hidden";}});
+    gsap.to("#ctl",{opacity:1,duration:.6,delay:1});
+    tl.play(0.001);
+  }
+  function replay(){ $("#paused").style.display="none"; tl.pause(0).play(0.001); }
+  function togglePause(){ if(!started||tl.progress()===0) return;
+    if(tl.paused()&&tl.progress()<0.999){ tl.play(); $("#paused").style.display="none"; }
+    else if(!tl.paused()){ tl.pause(); $("#paused").style.display="flex"; } }
+  function fullscreen(){ const el=document.documentElement;
+    if(!document.fullscreenElement){(el.requestFullscreen||el.webkitRequestFullscreen||function(){}).call(el);}
+    else{(document.exitFullscreen||document.webkitExitFullscreen||function(){}).call(document);} }
+
+  $("#playBtn").addEventListener("click",e=>{e.stopPropagation();start();});
+  $("#replayBtn").addEventListener("click",e=>{e.stopPropagation();replay();});
+  $("#stage").addEventListener("click",()=>togglePause());
+  document.addEventListener("keydown",e=>{
+    if(e.code==="Space"){e.preventDefault(); started?togglePause():start();}
+    if(e.key==="r"||e.key==="R"){if(started)replay();}
+    if(e.key==="f"||e.key==="F"){fullscreen();}
+  });
+
+  /* QA: ?autoplay · ?t=SECONDS (paused) · &play */
+  const qp=new URLSearchParams(location.search);
+  if(qp.has("autoplay")||qp.has("t")){ start();
+    if(qp.has("t")){ const t=Math.max(0.02,parseFloat(qp.get("t"))||0.02);
+      qp.has("play") ? tl.play(t) : tl.pause(t); } }
+})();
+</script>
+</body>
+</html>

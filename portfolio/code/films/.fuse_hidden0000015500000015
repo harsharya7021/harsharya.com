@@ -1,0 +1,462 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>personal-os — Launch Film</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..700;1,9..144,300..700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#FAF6EF; --cream2:#F1EAD9; --surface:#FFFFFF; --rule:#E8E1CF;
+    --ink:#1C2422; --soft:#5A6660;
+    --sage:#7C9082; --sage2:#5F7566; --sagefog:#D8E2D8;
+    --night:#0E1B1E; --night2:#14262B;
+    --peach:#F2B98E; --coral:#E28B67; --amber:#E8B23F; --teal:#2E5F63;
+    --serif:"Fraunces","Times New Roman",Georgia,serif;
+    --sans:-apple-system,BlinkMacSystemFont,"SF Pro Text","Hanken Grotesk","Segoe UI",Roboto,sans-serif;
+    --mono:"JetBrains Mono",ui-monospace,Menlo,monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box}
+  html,body{height:100%;background:#0A1113;overflow:hidden}
+  body{font-family:var(--sans);-webkit-font-smoothing:antialiased}
+  #frame{position:fixed;inset:0;display:flex;align-items:center;justify-content:center}
+  #stage{position:relative;width:100vw;height:56.25vw;max-height:100vh;max-width:177.78vh;overflow:hidden;background:var(--cream)}
+
+  .scene{position:absolute;inset:0;visibility:hidden;opacity:0;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:6vh 7vw}
+  .night{background:var(--night)} .cream{background:var(--cream)} .sagebg{background:linear-gradient(160deg,#EFF3EA,#D8E2D8)}
+
+  .k{font-family:var(--mono);font-weight:700;letter-spacing:.3em;text-transform:uppercase;font-size:clamp(10px,1vw,14px);color:var(--sage2)}
+  .night .k{color:var(--peach)}
+  .huge{font-family:var(--serif);font-weight:500;line-height:1.06;color:var(--ink);font-size:clamp(28px,5vw,72px)}
+  .med{font-family:var(--serif);font-weight:500;line-height:1.14;color:var(--ink);font-size:clamp(20px,3.1vw,44px)}
+  .night :is(.huge,.med){color:#F2EFE6}
+  .sub{font-weight:400;color:var(--soft);font-size:clamp(13px,1.45vw,21px);line-height:1.55}
+  .night .sub{color:#B9C4BE}
+  .sage{color:var(--sage2)} .peachy{color:var(--peach)} .it{font-style:italic}
+  .line{overflow:hidden;display:block}
+  .line>span{display:inline-block}
+
+  .wm{font-family:var(--mono);font-weight:500;letter-spacing:.02em}
+  .wm .dash{color:var(--sage2)}
+
+  /* poster */
+  #poster{visibility:visible;opacity:1;z-index:40}
+  #poster .dots{display:flex;gap:14px;margin-bottom:4.5vh}
+  #poster .dots i{width:14px;height:14px;border-radius:50%}
+  #playBtn{margin-top:5.5vh;width:clamp(74px,8vw,110px);height:clamp(74px,8vw,110px);border-radius:50%;border:none;cursor:pointer;background:var(--ink);display:flex;align-items:center;justify-content:center;transition:transform .25s ease}
+  #playBtn:hover{transform:scale(1.06)}
+  #playBtn svg{width:38%;height:38%;fill:var(--cream);margin-left:6%}
+  #poster .hint{margin-top:2.2vh;font-size:clamp(11px,1.05vw,14px);color:var(--soft);letter-spacing:.08em}
+
+  /* phone frame for vignettes */
+  .phone{width:min(30vw,300px);border-radius:34px;background:#0B0F0E;padding:1.1vh .55vw;box-shadow:0 34px 80px -30px rgba(10,20,18,.5)}
+  .screen{border-radius:26px;overflow:hidden;background:var(--cream);height:clamp(240px,46vh,420px);position:relative;text-align:left}
+
+  /* S4 lounge vignette */
+  #loungeScr{transition:none}
+  .lg-inner{position:absolute;inset:0;padding:2.4vh 1.2vw;display:flex;flex-direction:column}
+  .lg-time{font-family:var(--mono);font-size:clamp(8px,.8vw,11px);letter-spacing:.2em;color:rgba(28,36,34,.6)}
+  .lg-greet{font-family:var(--serif);font-size:clamp(16px,1.9vw,26px);font-weight:500;color:var(--ink);margin-top:1vh;line-height:1.2}
+  .lg-vibe{font-size:clamp(10px,1vw,14px);color:rgba(28,36,34,.65);margin-top:.6vh;font-style:italic}
+  .lg-cards{margin-top:auto;display:flex;flex-direction:column;gap:.9vh}
+  .lg-card{background:rgba(255,255,255,.55);backdrop-filter:blur(4px);border-radius:12px;padding:1.2vh 1vw;font-size:clamp(10px,1vw,14px);color:var(--ink);font-weight:500}
+  .lg-night .lg-time{color:rgba(242,239,230,.6)} .lg-night .lg-greet{color:#F2EFE6} .lg-night .lg-vibe{color:rgba(242,239,230,.65)}
+  .lg-night .lg-card{background:rgba(20,38,43,.65);color:#E4E9E2}
+
+  /* S5 assistant chat */
+  .chatcol{padding:2vh 1vw;display:flex;flex-direction:column;gap:1vh;height:100%}
+  .cb{max-width:86%;border-radius:12px;padding:1vh .9vw;font-size:clamp(9px,.95vw,13px);line-height:1.45;text-align:left}
+  .cb.you{align-self:flex-end;background:var(--sage2);color:#fff;border-bottom-right-radius:4px}
+  .cb.ai{align-self:flex-start;background:#fff;color:var(--ink);border:1px solid var(--rule);border-bottom-left-radius:4px}
+  .cb .cchip{display:inline-block;margin-top:.7vh;font-family:var(--mono);font-size:clamp(7px,.72vw,10px);color:var(--sage2);background:var(--sagefog);border-radius:5px;padding:.3vh .5vw}
+  .memchip{align-self:center;font-family:var(--mono);font-size:clamp(7px,.75vw,10px);color:var(--sage2);border:1px dashed var(--sage);border-radius:999px;padding:.5vh .9vw;margin-top:.4vh}
+
+  /* S6 recorder */
+  .recwrap{padding:2vh 1vw;height:100%;display:flex;flex-direction:column;text-align:left}
+  .recdot{display:flex;align-items:center;gap:.5vw;font-family:var(--mono);font-size:clamp(8px,.8vw,11px);color:#C2412E;letter-spacing:.18em}
+  .recdot i{width:9px;height:9px;border-radius:50%;background:#C2412E;display:block}
+  .tr{margin-top:1.4vh;display:none}
+  .tr .spk{font-family:var(--mono);font-size:clamp(7px,.72vw,10px);letter-spacing:.14em;border-radius:5px;padding:.25vh .5vw;color:#fff}
+  .tr.s1 .spk{background:var(--sage2)} .tr.s2 .spk{background:var(--teal)}
+  .tr p{font-size:clamp(9px,.95vw,13px);color:var(--ink);margin-top:.5vh;line-height:1.4}
+
+  /* S7 health */
+  .hwrap{padding:2.2vh 1vw;height:100%;display:flex;flex-direction:column;align-items:center;text-align:center}
+  .ringbox{position:relative;width:clamp(90px,10vw,140px);height:clamp(90px,10vw,140px);margin-top:1vh}
+  .ringbox svg{transform:rotate(-90deg)}
+  .ringpct{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center}
+  .ringpct b{font-family:var(--serif);font-size:clamp(18px,2.2vw,30px);color:var(--ink)}
+  .ringpct span{font-family:var(--mono);font-size:clamp(7px,.72vw,10px);letter-spacing:.16em;color:var(--soft)}
+  .macros{display:flex;gap:1vw;margin-top:1.6vh}
+  .mac{background:#fff;border:1px solid var(--rule);border-radius:10px;padding:.9vh .8vw;min-width:4.2em}
+  .mac b{font-family:var(--serif);font-size:clamp(12px,1.3vw,18px);color:var(--ink);display:block}
+  .mac span{font-family:var(--mono);font-size:clamp(7px,.7vw,9px);letter-spacing:.14em;color:var(--soft)}
+  .meallog{margin-top:auto;width:100%;background:#fff;border:1px solid var(--rule);border-radius:10px;padding:1vh .9vw;font-size:clamp(9px,.9vw,12px);color:var(--ink);text-align:left;font-family:var(--mono)}
+
+  /* S8 voice-to-calendar */
+  .vwrap{padding:2.2vh 1vw;height:100%;display:flex;flex-direction:column;align-items:center;justify-content:center}
+  .wave{display:flex;gap:4px;align-items:center;height:44px}
+  .wave i{width:5px;border-radius:3px;background:var(--sage2);height:10px;display:block}
+  .spoken{margin-top:1.6vh;font-family:var(--serif);font-style:italic;font-size:clamp(11px,1.2vw,17px);color:var(--ink)}
+  .evcard{margin-top:2vh;width:92%;background:#fff;border:1px solid var(--rule);border-left:4px solid var(--sage2);border-radius:10px;padding:1.2vh 1vw;text-align:left}
+  .evcard b{font-size:clamp(10px,1.05vw,15px);color:var(--ink)}
+  .evcard div{font-family:var(--mono);font-size:clamp(8px,.8vw,11px);color:var(--soft);margin-top:.5vh}
+  .evbtn{margin-top:1.2vh;font-size:clamp(8px,.85vw,12px);font-weight:600;color:#fff;background:var(--sage2);border-radius:8px;padding:.8vh 1vw;display:inline-block}
+
+  /* S9 constellation */
+  .con{display:flex;flex-wrap:wrap;gap:1vw;justify-content:center;margin-top:4.5vh;max-width:74vw}
+  .tile{background:#fff;border:1px solid var(--rule);border-radius:12px;padding:1.5vh 1.4vw;font-size:clamp(10px,1.05vw,15px);font-weight:600;color:var(--ink);box-shadow:0 12px 30px -20px rgba(10,20,18,.35)}
+  .tile.dk{background:var(--night2);color:#E4E9E2;border-color:var(--night2)}
+
+  /* S10 stack */
+  .stackrows{margin-top:4vh;width:min(66vw,880px);text-align:left}
+  .srow{display:flex;align-items:baseline;gap:1.4vw;padding:1.5vh 0;border-bottom:1px solid rgba(242,239,230,.14)}
+  .srow .sn{font-family:var(--mono);color:var(--peach);font-size:clamp(10px,1vw,14px);min-width:2.2em}
+  .srow .st{color:#F2EFE6;font-weight:600;font-size:clamp(13px,1.6vw,22px)}
+  .srow .sd{color:#B9C4BE;font-family:var(--mono);font-size:clamp(9px,.92vw,13px);margin-left:auto;text-align:right}
+
+  .endmark{font-family:var(--mono);font-weight:500;color:var(--ink);font-size:clamp(36px,6.4vw,96px);line-height:1}
+  .endsub{margin-top:2.4vh;font-size:clamp(13px,1.5vw,21px);color:var(--soft)}
+  .endsub b{color:var(--ink)}
+  #replayBtn{margin-top:4.6vh;border:1.5px solid var(--ink);background:transparent;color:var(--ink);font-weight:700;letter-spacing:.22em;font-size:clamp(11px,1vw,14px);padding:1.6vh 2.6vw;border-radius:999px;cursor:pointer;transition:all .25s ease}
+  #replayBtn:hover{background:var(--ink);color:var(--cream)}
+
+  #progress{position:absolute;left:0;bottom:0;height:4px;width:0%;background:var(--sage2);z-index:30}
+  #ctl{position:absolute;left:1.4vw;bottom:1.6vh;z-index:30;font-family:var(--mono);font-size:clamp(9px,.85vw,12px);color:rgba(110,125,115,.85);letter-spacing:.06em;opacity:0;user-select:none}
+  #paused{position:absolute;inset:0;display:none;align-items:center;justify-content:center;background:rgba(10,17,19,.35);z-index:25;backdrop-filter:blur(2px)}
+  #paused span{font-weight:700;letter-spacing:.3em;color:#fff;font-size:clamp(12px,1.3vw,18px)}
+  .grain{pointer-events:none;position:absolute;inset:0;z-index:20;opacity:.05;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.55'/%3E%3C/svg%3E")}
+
+  .split{display:flex;align-items:center;gap:3.5vw}
+  .split .copy{max-width:34vw;text-align:left}
+  .split .copy .k{display:block;text-align:left}
+</style>
+</head>
+<body>
+<div id="frame"><div id="stage">
+
+  <!-- poster -->
+  <section class="scene cream" id="poster">
+    <div class="dots"><i style="background:var(--peach)"></i><i style="background:var(--sage2)"></i><i style="background:var(--teal)"></i><i style="background:var(--night)"></i></div>
+    <div class="k">A launch film · 105 seconds</div>
+    <h1 class="wm" style="font-size:clamp(40px,7.5vw,110px);color:var(--ink);margin-top:2.2vh">personal<span class="dash">-</span>os</h1>
+    <button id="playBtn" aria-label="Play"><svg viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg></button>
+    <div class="hint">click anywhere to pause · R replay · F fullscreen</div>
+  </section>
+
+  <!-- S1 cold open -->
+  <section class="scene night" id="s1">
+    <div class="med"><span class="line"><span>Your phone is full of other people's software.</span></span></div>
+    <div class="huge" style="margin-top:2vh"><span class="line"><span>Each app wants a subscription,</span></span></div>
+    <div class="huge" style="margin-top:1vh"><span class="line"><span>your data, <em class="it peachy">and your attention.</em></span></span></div>
+  </section>
+
+  <!-- S2 the question -->
+  <section class="scene cream" id="s2">
+    <div class="med s2a">What would software look like<br>if it knew exactly one user?</div>
+    <div class="huge s2b" style="margin-top:3.5vh"><span class="line"><span class="sage it">This one.</span></span></div>
+  </section>
+
+  <!-- S3 title -->
+  <section class="scene cream" id="s3">
+    <div class="k" id="s3k">Introducing</div>
+    <h1 class="wm" style="font-size:clamp(44px,8.5vw,120px);color:var(--ink);margin-top:2.5vh"><span class="line"><span>personal<span class="dash">-</span>os</span></span></h1>
+    <div class="med it" id="s3t" style="margin-top:3vh;font-weight:400">An operating system for one human.</div>
+    <div class="sub" id="s3s" style="margin-top:3vh;max-width:60ch">A native iOS super-app on a private AI cloud — local models, owned hardware, sixteen features.<br><b style="color:var(--ink)">Designed, built, and operated by one person. For one user.</b></div>
+  </section>
+
+  <!-- S4 the lounge -->
+  <section class="scene sagebg" id="s4">
+    <div class="split">
+      <div class="copy">
+        <span class="k">Feature 01 · The Lounge</span>
+        <div class="med" style="margin-top:2vh;text-align:left">It doesn't open into a grid.<br><span class="sage it">It opens into a room.</span></div>
+        <div class="sub" style="margin-top:2.4vh;text-align:left">The home shifts with the clock — dawn, day, dusk, night — each with its own light, greeting, and suggestions. Coffee. A calm minute. Piano.<br><br><b style="color:var(--ink)">No badges. No streaks. Nothing ages, nothing is late.</b></div>
+      </div>
+      <div class="phone" id="s4phone"><div class="screen" id="loungeScr" style="background:linear-gradient(165deg,#FBEFD9,#F2B98E)">
+        <div class="lg-inner" id="lgInner">
+          <div class="lg-time" id="lgTime">06:40 · DAWN</div>
+          <div class="lg-greet" id="lgGreet">Morning, Harsh.<br>No rush.</div>
+          <div class="lg-vibe" id="lgVibe">the day hasn't started without you</div>
+          <div class="lg-cards">
+            <div class="lg-card" id="lgC1">☕ Brew the Ethiopia — 15g · 250ml</div>
+            <div class="lg-card" id="lgC2">🎹 Ten unhurried minutes of piano</div>
+          </div>
+        </div>
+      </div></div>
+    </div>
+  </section>
+
+  <!-- S5 assistant -->
+  <section class="scene cream" id="s5">
+    <div class="split">
+      <div class="phone" id="s5phone"><div class="screen"><div class="chatcol">
+        <div class="cb you" id="a1">what did I decide about the school website copy?</div>
+        <div class="cb ai" id="a2"><span id="aiTxt"></span><span class="cchip" id="aiCite" style="visibility:hidden">↳ website-copy-v0.1.md · brand-voice notes</span></div>
+        <div class="cb you" id="a3">remember: revisit fee framing after conjoint</div>
+        <div class="memchip" id="a4">✓ saved to memory</div>
+      </div></div></div>
+      <div class="copy">
+        <span class="k">Feature 02 · The Assistant</span>
+        <div class="med" style="margin-top:2vh;text-align:left">It has actually<br><span class="sage it">read your life.</span></div>
+        <div class="sub" style="margin-top:2.4vh;text-align:left">Streaming answers over your whole vault — notes, journals, decisions — with citations back to the exact file. Runs on a 14-billion-parameter model <b style="color:var(--ink)">on a server in the house.</b> No cloud reads your journal.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- S6 recorder -->
+  <section class="scene cream" id="s6">
+    <div class="split">
+      <div class="copy">
+        <span class="k">Feature 03 · The Recorder</span>
+        <div class="med" style="margin-top:2vh;text-align:left">Who said what,<br><span class="sage it">sorted while you talk.</span></div>
+        <div class="sub" style="margin-top:2.4vh;text-align:left">Meetings transcribe on the home server with <b style="color:var(--ink)">live speaker labels</b> — then flow into the vault, where the assistant can quote them back later.</div>
+      </div>
+      <div class="phone" id="s6phone"><div class="screen"><div class="recwrap">
+        <div class="recdot"><i></i> REC · 00:<span id="recs">04</span></div>
+        <div class="tr s1" id="t1"><span class="spk">SPEAKER 1</span><p>So the fee circular goes out before the PTM, right?</p></div>
+        <div class="tr s2" id="t2"><span class="spk">SPEAKER 2</span><p>After. Parents read it differently once they've met the teacher.</p></div>
+        <div class="tr s1" id="t3"><span class="spk">SPEAKER 1</span><p>Fine — note it as a decision.</p></div>
+      </div></div></div>
+    </div>
+  </section>
+
+  <!-- S7 health -->
+  <section class="scene sagebg" id="s7">
+    <div class="split">
+      <div class="phone" id="s7phone"><div class="screen"><div class="hwrap">
+        <div class="k" style="font-size:clamp(7px,.75vw,10px)">TODAY · HEALTH.OS</div>
+        <div class="ringbox">
+          <svg width="100%" height="100%" viewBox="0 0 120 120">
+            <circle cx="60" cy="60" r="52" fill="none" stroke="#E4DECC" stroke-width="10"/>
+            <circle id="ringArc" cx="60" cy="60" r="52" fill="none" stroke="#5F7566" stroke-width="10" stroke-linecap="round" stroke-dasharray="326.7" stroke-dashoffset="326.7"/>
+          </svg>
+          <div class="ringpct"><b id="recPct">0%</b><span>RECOVERY</span></div>
+        </div>
+        <div class="macros">
+          <div class="mac"><b id="mKcal">0</b><span>KCAL</span></div>
+          <div class="mac"><b id="mP">0g</b><span>PROTEIN</span></div>
+          <div class="mac"><b id="mC">0g</b><span>CARBS</span></div>
+        </div>
+        <div class="meallog" id="meal">› "dal, two rotis, salad" <span style="color:var(--sage2)" id="mealOk"></span></div>
+      </div></div></div>
+      <div class="copy">
+        <span class="k">Feature 04 · Health</span>
+        <div class="med" style="margin-top:2vh;text-align:left">Log dinner<br><span class="sage it">in a sentence.</span></div>
+        <div class="sub" style="margin-top:2.4vh;text-align:left">One plain-language line becomes macros — estimated by the local model. Whoop recovery, sleep, and a 14-day trend sit beside it. <b style="color:var(--ink)">Your health graph never leaves home.</b></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- S8 voice to calendar -->
+  <section class="scene cream" id="s8">
+    <div class="split">
+      <div class="copy">
+        <span class="k">Feature 05 · Voice → Calendar</span>
+        <div class="med" style="margin-top:2vh;text-align:left">Speak a plan.<br><span class="sage it">It's on the calendar.</span></div>
+        <div class="sub" style="margin-top:2.4vh;text-align:left">Recorded on the phone, transcribed at home, parsed by the local model — one tap to confirm. The week's routine lives one tap away too.</div>
+      </div>
+      <div class="phone" id="s8phone"><div class="screen"><div class="vwrap">
+        <div class="wave" id="wave"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+        <div class="spoken" id="spoken">"coffee with Abhishek, Friday four pm"</div>
+        <div class="evcard" id="evc">
+          <b>Coffee — Abhishek</b>
+          <div>FRI · 16:00–16:45 · nearby café</div>
+          <span class="evbtn">Add to Google Calendar</span>
+        </div>
+      </div></div></div>
+    </div>
+  </section>
+
+  <!-- S9 constellation -->
+  <section class="scene cream" id="s9">
+    <div class="k">And the rest of the room</div>
+    <div class="med" style="margin-top:2vh">Sixteen native features. <span class="sage it">One life, one system.</span></div>
+    <div class="con" id="con">
+      <span class="tile">Expenses</span><span class="tile dk">IPO tracker</span><span class="tile">People</span>
+      <span class="tile">Books — scan a cover</span><span class="tile dk">RBI + markets</span><span class="tile">Journal</span>
+      <span class="tile">Reflect</span><span class="tile dk">Coffee</span><span class="tile">Piano</span>
+      <span class="tile">Tasks</span><span class="tile dk">Articles</span><span class="tile">Sleep</span>
+    </div>
+    <div class="sub" id="s9s" style="margin-top:4vh;max-width:60ch">Each one replaces a subscription, a spreadsheet, or a habit that never stuck.</div>
+  </section>
+
+  <!-- S10 the build -->
+  <section class="scene night" id="s10">
+    <div class="k">Under the hood</div>
+    <div class="med" style="margin-top:2vh">A private cloud. <span class="peachy">Population: one.</span></div>
+    <div class="stackrows">
+      <div class="srow"><span class="sn">01</span><span class="st">Native iOS app</span><span class="sd">the Lounge + 16 features · EventKit on-device</span></div>
+      <div class="srow"><span class="sn">02</span><span class="st">A VPS for the public tier</span><span class="sd">~15 Docker services · Caddy · single sign-on</span></div>
+      <div class="srow"><span class="sn">03</span><span class="st">"Helios" — a GPU at home</span><span class="sd">Ollama 14B · transcription · speaker diarization</span></div>
+      <div class="srow"><span class="sn">04</span><span class="st">An agent on the night shift</span><span class="sd">"computer-ji" deploys & smoke-tests while I sleep</span></div>
+      <div class="srow"><span class="sn">05</span><span class="st">Handoff docs for everything</span><span class="sd">any future collaborator starts at zero context loss</span></div>
+    </div>
+  </section>
+
+  <!-- S11 end -->
+  <section class="scene cream" id="s11">
+    <div class="endmark wm">personal<span class="dash">-</span>os</div>
+    <div class="endsub" id="s11a">The most personal computer is one you run yourself.</div>
+    <div class="endsub" id="s11b" style="margin-top:1vh">Built by <b>Harsh Kumar Arya</b> · <b>harsharya.com</b></div>
+    <button id="replayBtn">Replay ↻</button>
+  </section>
+
+  <div class="grain"></div>
+  <div id="progress"></div>
+  <div id="ctl">SPACE pause · R replay · F fullscreen</div>
+  <div id="paused"><span>PAUSED — CLICK TO RESUME</span></div>
+
+</div></div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+<script>
+(function(){
+  const $=s=>document.querySelector(s);
+  let started=false;
+  const tl=gsap.timeline({paused:true,onUpdate(){$("#progress").style.width=(tl.progress()*100)+"%";}});
+  const showS=s=>[s,{autoAlpha:1,duration:.001}];
+  const hideS=s=>[s,{autoAlpha:0,duration:.55,ease:"power2.inOut"}];
+  const outAll=s=>[s+" > *",{autoAlpha:0,y:-16,duration:.6,ease:"power2.in",stagger:.05}];
+  const rise=(sel,pos,st=.15)=>tl.from(sel,{yPercent:115,duration:.95,ease:"power4.out",stagger:st},pos);
+
+  /* S1 · cold open */
+  tl.to(...showS("#s1"));
+  tl.from("#s1 .med",{autoAlpha:0,y:14,duration:.9,ease:"power3.out"},"+=0.3");
+  rise("#s1 .huge .line>span","+=0.5",.9);
+  tl.to({},{duration:1.7}).to(...outAll("#s1")).to(...hideS("#s1"));
+
+  /* S2 · the question */
+  tl.to(...showS("#s2"));
+  tl.from(".s2a",{autoAlpha:0,y:18,duration:.9,ease:"power3.out"},"+=0.2");
+  rise("#s2 .line>span","+=0.9");
+  tl.to({},{duration:1.6}).to(...outAll("#s2")).to(...hideS("#s2"));
+
+  /* S3 · title */
+  tl.to(...showS("#s3"));
+  tl.from("#s3k",{autoAlpha:0,letterSpacing:".6em",duration:.9,ease:"power2.out"});
+  rise("#s3 .line>span","-=0.2");
+  tl.from("#s3t",{autoAlpha:0,y:12,duration:.8},"+=0.3");
+  tl.from("#s3s",{autoAlpha:0,duration:.8},"+=0.3");
+  tl.to({},{duration:2}).to(...outAll("#s3")).to(...hideS("#s3"));
+
+  /* S4 · lounge — background performs dawn→day→dusk→night */
+  const moods=[
+    {t:"12:20 · DAY",g:"Good afternoon.",v:"steady, light, unhurried",bg:"linear-gradient(165deg,#F4F6EC,#C9DCC5)",night:false,c1:"🥗 Log lunch in one line",c2:"📖 Twelve pages of the history book"},
+    {t:"18:45 · DUSK",g:"Evening, Harsh.",v:"the golden hour forgives everything",bg:"linear-gradient(165deg,#F5C98A,#E28B67)",night:false,c1:"🚶 A slow walk before dinner",c2:"🎙 Today's meeting notes are filed"},
+    {t:"23:10 · NIGHT",g:"Still up?",v:"the house is quiet. so is the software.",bg:"linear-gradient(165deg,#173236,#0E1B1E)",night:true,c1:"🌙 Wind-down · reflect on one line",c2:"🛏 Sleep report ready for morning"}
+  ];
+  tl.to(...showS("#s4"));
+  tl.from("#s4 .copy > *",{autoAlpha:0,y:16,duration:.7,ease:"power3.out",stagger:.18});
+  tl.from("#s4phone",{autoAlpha:0,y:50,duration:.9,ease:"power3.out"},"-=0.5");
+  moods.forEach(m=>{
+    tl.to("#lgInner",{autoAlpha:0,duration:.35},"+=1.5");
+    tl.call(()=>{ $("#loungeScr").style.background=m.bg;
+      $("#lgTime").textContent=m.t; $("#lgGreet").innerHTML=m.g; $("#lgVibe").textContent=m.v;
+      $("#lgC1").textContent=m.c1; $("#lgC2").textContent=m.c2;
+      $("#lgInner").classList.toggle("lg-night",m.night); });
+    tl.to("#lgInner",{autoAlpha:1,duration:.45});
+  });
+  tl.to({},{duration:1.6}).to(...outAll("#s4")).to(...hideS("#s4"));
+
+  /* S5 · assistant types */
+  const aiFull="You chose the 'to kindle' draft — warmer, parent-first. Flagged the fee paragraph for rewrite.";
+  const aiObj={n:0};
+  tl.to(...showS("#s5"));
+  tl.from("#s5 .copy > *",{autoAlpha:0,y:16,duration:.7,ease:"power3.out",stagger:.18});
+  tl.from("#s5phone",{autoAlpha:0,y:50,duration:.9,ease:"power3.out"},"-=0.5");
+  tl.from("#a1",{autoAlpha:0,y:12,duration:.45},"+=0.3");
+  tl.from("#a2",{autoAlpha:0,y:12,duration:.45},"+=0.5");
+  tl.to(aiObj,{n:aiFull.length,duration:2.6,ease:"none",onUpdate(){$("#aiTxt").textContent=aiFull.slice(0,Math.round(aiObj.n));}});
+  tl.set("#aiCite",{visibility:"visible"}).from("#aiCite",{autoAlpha:0,duration:.4});
+  tl.from("#a3",{autoAlpha:0,y:12,duration:.45},"+=0.5");
+  tl.from("#a4",{autoAlpha:0,scale:.7,duration:.5,ease:"back.out(2)"},"+=0.35");
+  tl.to({},{duration:1.5}).to(...outAll("#s5")).to(...hideS("#s5"));
+
+  /* S6 · recorder — lines appear with speaker labels */
+  const rec={s:4};
+  tl.to(...showS("#s6"));
+  tl.from("#s6 .copy > *",{autoAlpha:0,y:16,duration:.7,ease:"power3.out",stagger:.18});
+  tl.from("#s6phone",{autoAlpha:0,y:50,duration:.9,ease:"power3.out"},"-=0.5");
+  tl.to(rec,{s:14,duration:5,ease:"none",onUpdate(){$("#recs").textContent=String(Math.round(rec.s)).padStart(2,"0");}},"<");
+  [["#t1",0.5],["#t2",1.6],["#t3",1.4]].forEach(([id,d])=>{
+    tl.set(id,{display:"block"},"+="+d).from(id,{autoAlpha:0,y:10,duration:.45});
+  });
+  tl.to({},{duration:1.4}).to(...outAll("#s6")).to(...hideS("#s6"));
+
+  /* S7 · health — ring draws, macros count, meal logs */
+  const hp={p:0,k:0,pr:0,c:0};
+  tl.to(...showS("#s7"));
+  tl.from("#s7 .copy > *",{autoAlpha:0,y:16,duration:.7,ease:"power3.out",stagger:.18});
+  tl.from("#s7phone",{autoAlpha:0,y:50,duration:.9,ease:"power3.out"},"-=0.5");
+  tl.to(hp,{p:81,k:1460,pr:64,c:158,duration:2.2,ease:"power2.out",onUpdate(){
+    $("#recPct").textContent=Math.round(hp.p)+"%";
+    $("#ringArc").style.strokeDashoffset=String(326.7*(1-hp.p/100));
+    $("#mKcal").textContent=Math.round(hp.k);
+    $("#mP").textContent=Math.round(hp.pr)+"g"; $("#mC").textContent=Math.round(hp.c)+"g";
+  }},"+=0.3");
+  tl.call(()=>{$("#mealOk").textContent=" ✓ +410 kcal · 18g P";},null,"+=0.8");
+  tl.from("#meal",{backgroundColor:"#EFF3EA",duration:.6},"<");
+  tl.to({},{duration:1.6}).to(...outAll("#s7")).to(...hideS("#s7"));
+
+  /* S8 · voice→calendar — waveform dances, card pops */
+  tl.to(...showS("#s8"));
+  tl.from("#s8 .copy > *",{autoAlpha:0,y:16,duration:.7,ease:"power3.out",stagger:.18});
+  tl.from("#s8phone",{autoAlpha:0,y:50,duration:.9,ease:"power3.out"},"-=0.5");
+  tl.set("#evc",{autoAlpha:0});
+  tl.to("#wave i",{height:34,duration:.24,ease:"sine.inOut",yoyo:true,repeat:7,stagger:{each:.06,yoyo:true,repeat:7}},"+=0.2");
+  tl.from("#spoken",{autoAlpha:0,duration:.6},"-=1.6");
+  tl.to("#wave i",{height:10,duration:.3});
+  tl.to("#evc",{autoAlpha:1,y:0,duration:.6,ease:"back.out(1.5)"},"+=0.2");
+  tl.to({},{duration:1.7}).to(...outAll("#s8")).to(...hideS("#s8"));
+
+  /* S9 · constellation */
+  tl.to(...showS("#s9"));
+  tl.from("#s9 .k",{autoAlpha:0,y:10,duration:.5});
+  tl.from("#s9 .med",{autoAlpha:0,y:14,duration:.75,ease:"power3.out"},"-=0.15");
+  tl.from("#con .tile",{autoAlpha:0,scale:.6,y:14,duration:.45,ease:"back.out(1.7)",stagger:.11},"+=0.2");
+  tl.from("#s9s",{autoAlpha:0,duration:.7},"+=0.3");
+  tl.to({},{duration:1.7}).to(...outAll("#s9")).to(...hideS("#s9"));
+
+  /* S10 · the build */
+  tl.to(...showS("#s10"));
+  tl.from("#s10 .k",{autoAlpha:0,y:10,duration:.5});
+  tl.from("#s10 .med",{autoAlpha:0,y:16,duration:.8,ease:"power3.out"},"-=0.15");
+  tl.from("#s10 .srow",{autoAlpha:0,x:-30,duration:.5,ease:"power3.out",stagger:.4},"+=0.25");
+  tl.to({},{duration:2.1}).to(...outAll("#s10")).to(...hideS("#s10"));
+
+  /* S11 · end */
+  tl.to(...showS("#s11"));
+  tl.from("#s11 .endmark",{autoAlpha:0,y:26,duration:1,ease:"power3.out"});
+  tl.from("#s11a",{autoAlpha:0,y:12,duration:.7},"-=0.3");
+  tl.from("#s11b",{autoAlpha:0,y:12,duration:.7},"-=0.35");
+  tl.from("#replayBtn",{autoAlpha:0,duration:.8},"+=0.3");
+
+  function start(){ if(started)return; started=true;
+    gsap.to("#poster",{autoAlpha:0,duration:.7,ease:"power2.inOut",onComplete(){$("#poster").style.visibility="hidden";}});
+    gsap.to("#ctl",{opacity:1,duration:.6,delay:1});
+    tl.play(0.001);}
+  function replay(){$("#paused").style.display="none";tl.pause(0).play(0.001);}
+  function togglePause(){ if(!started||tl.progress()===0)return;
+    if(tl.paused()&&tl.progress()<0.999){tl.play();$("#paused").style.display="none";}
+    else if(!tl.paused()){tl.pause();$("#paused").style.display="flex";}}
+  function fullscreen(){const el=document.documentElement;
+    if(!document.fullscreenElement){(el.requestFullscreen||el.webkitRequestFullscreen||function(){}).call(el);}
+    else{(document.exitFullscreen||document.webkitExitFullscreen||function(){}).call(document);}}
+
+  $("#playBtn").addEventListener("click",e=>{e.stopPropagation();start();});
+  $("#replayBtn").addEventListener("click",e=>{e.stopPropagation();replay();});
+  $("#stage").addEventListener("click",()=>togglePause());
+  document.addEventListener("keydown",e=>{
+    if(e.code==="Space"){e.preventDefault();started?togglePause():start();}
+    if(e.key==="r"||e.key==="R"){if(started)replay();}
+    if(e.key==="f"||e.key==="F"){fullscreen();}});
+
+  const qp=new URLSearchParams(location.search);
+  if(qp.has("autoplay")||qp.has("t")){start();
+    if(qp.has("t")){const t=Math.max(0.02,parseFloat(qp.get("t"))||0.02);
+      qp.has("play")?tl.play(t):tl.pause(t);}}
+})();
+</script>
+</body>
+</html>
