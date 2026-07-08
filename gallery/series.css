@@ -105,59 +105,57 @@ body.is-leaving{ animation:none; opacity:0; transition:opacity .24s ease; }
 .series[data-layout="grid"] .frame-cap{ margin-top:8px; gap:8px; }
 .series[data-layout="grid"] .frame-text{ font-size:12px; }
 
-/* ── RIBBON — horizontal filmstrip (desktop) ──────────────────
-   The centrepiece, adapted from the reference clip: vertical scroll
-   drives the prints travelling sideways as a filmstrip; each print
-   rotates + scales by its distance from centre so the strip curves
-   away at both edges (the cylinder-hero / 3D-corridor feel). Driven
-   by a rAF loop in series.js using the site's own scroll-scrub math
-   (a tall .series container + a sticky stage). Mobile & reduced-motion
-   fall back to the calm vertical column — the JS never builds the
-   stage there. */
-.series[data-layout="ribbon"]{ max-width:none; padding:0; }
-.series[data-layout="ribbon"] .ribbon-stage{
-  position:sticky; top:0; height:100vh; overflow:hidden;
-  display:flex; align-items:center; perspective:1700px;
+/* ── STRIP — vertical pieced filmstrip (desktop default on opt-in pages) ──
+   Photographs stacked into one continuous vertical ribbon. As you scroll,
+   each image parallaxes within its frame (slower than the page) and the
+   frames scale + soften as they leave centre — the "pull back" / surreal
+   landing from the reference clip. Click a photo to zoom it to focus on a
+   dark field; click again (or Esc) to drop it back into the strip. Mobile
+   & reduced-motion fall back to the calm vertical column — the JS never
+   upgrades there. */
+.series[data-layout="strip"]{ max-width:none; padding:0; }
+.series[data-layout="strip"] .series-list{
+  display:flex; flex-direction:column; align-items:center; gap:0;
+  padding:12vh 0 16vh;
 }
-.series[data-layout="ribbon"] .series-list{        /* becomes the track */
-  display:flex; flex-direction:row; align-items:center;
-  gap:clamp(26px,3.4vw,60px);
-  padding:0;                                       /* JS sets side padding to centre first & last */
-  transform-style:preserve-3d; will-change:transform;
+.series[data-layout="strip"] .frame{
+  position:relative; margin:0; width:min(760px,86vw); cursor:zoom-in;
+  will-change:transform, opacity; transition:none !important;
 }
-.series[data-layout="ribbon"] .frame{
-  flex:0 0 auto; height:64vh; margin:0; position:relative;
-  transform-style:preserve-3d; will-change:transform, opacity;
-  backface-visibility:hidden;
-  transition:none !important;                      /* the rAF loop owns transform — no reveal smear */
-  opacity:1 !important;
+.series[data-layout="strip"] .frame + .frame{ margin-top:1.5vh; }
+.series[data-layout="strip"] .frame-media{
+  position:relative; width:100%; height:52vh; overflow:hidden; background:#0c0b09;
+  box-shadow:0 44px 80px -46px rgba(12,10,8,.75); will-change:transform, filter;
 }
-.series[data-layout="ribbon"] .frame-media{
-  height:100%; width:auto; display:block; overflow:hidden;
-  box-shadow:0 30px 60px -30px rgba(20,18,14,.6);
+.series[data-layout="strip"] .frame-media img{
+  position:absolute; left:0; top:-14%; width:100%; height:128%;
+  object-fit:cover; display:block; will-change:transform;   /* taller than frame → parallax room */
 }
-.series[data-layout="ribbon"] .frame-media img{ height:100%; width:auto; display:block; }
-.series[data-layout="ribbon"] .frame-cap{
-  position:absolute; left:2px; bottom:-28px; margin:0; opacity:.7;
+.series[data-layout="strip"] .frame-cap{
+  position:absolute; left:16px; bottom:14px; margin:0; z-index:2; color:#fff;
+  mix-blend-mode:difference; opacity:.85;
 }
-/* progress rail + running index */
-.ribbon-hud{ position:fixed; left:0; right:0; bottom:0; height:3px; background:rgba(20,18,14,.10); z-index:240; }
-.ribbon-hud__bar{ height:100%; width:0; background:var(--accent); transition:width .08s linear; }
-.ribbon-count{
-  position:fixed; left:clamp(18px,4vw,46px); bottom:24px; z-index:240;
-  font-family:var(--font-mono); font-size:11px; letter-spacing:.16em; color:var(--text);
-  display:flex; align-items:baseline; gap:7px; pointer-events:none;
-}
-.ribbon-count b{ font-family:var(--font-display); font-size:22px; letter-spacing:-.01em; }
-.ribbon-hint{
-  position:fixed; left:50%; bottom:26px; transform:translateX(-50%); z-index:240;
-  font-family:var(--font-mono); font-size:10.5px; letter-spacing:.2em; text-transform:uppercase;
-  color:var(--muted); pointer-events:none;
-  animation:ribbonHintFade .6s ease both;
-}
-@keyframes ribbonHintFade{ from{opacity:0;} to{opacity:.8;} }
-body[data-ribbon-scrolled="1"] .ribbon-hint{ opacity:0; transition:opacity .4s ease; }
 
+/* focus / zoom overlay (built by JS) */
+.strip-focus{ position:fixed; inset:0; z-index:400; background:rgba(8,7,5,0);
+  pointer-events:none; transition:background .55s ease; cursor:zoom-out; }
+.strip-focus.on{ background:rgba(8,7,5,.97); pointer-events:auto; }
+.strip-focus__box{ position:fixed; overflow:hidden; will-change:transform;
+  transition:transform .58s cubic-bezier(.16,1,.3,1);
+  box-shadow:0 60px 130px -40px rgba(0,0,0,.85); }
+.strip-focus__box img{ width:100%; height:100%; object-fit:cover; display:block; }
+.strip-focus__cap{ position:fixed; left:0; right:0; bottom:26px; text-align:center;
+  font-family:var(--font-serif); font-style:italic; font-size:15px; color:#e8e2d4;
+  opacity:0; transition:opacity .4s ease .2s; pointer-events:none; }
+.strip-focus.on .strip-focus__cap{ opacity:.85; }
+
+/* progress rail + running index */
+.strip-hud{ position:fixed; left:0; right:0; bottom:0; height:3px; background:rgba(20,18,14,.10); z-index:240; }
+.strip-hud__bar{ height:100%; width:0; background:var(--accent); }
+.strip-count{ position:fixed; left:clamp(18px,4vw,46px); bottom:24px; z-index:240;
+  font-family:var(--font-mono); font-size:11px; letter-spacing:.16em; color:var(--text);
+  display:flex; align-items:baseline; gap:7px; pointer-events:none; }
+.strip-count b{ font-family:var(--font-display); font-size:22px; letter-spacing:-.01em; }
 .series-end{
   text-align:center; font-family:var(--font-mono);
   font-size:11px; letter-spacing:.18em; text-transform:uppercase;

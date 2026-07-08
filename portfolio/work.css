@@ -58,6 +58,19 @@
 @media (max-width:900px){ .pf-folders{ grid-template-columns:repeat(2,1fr); gap:26px 20px; } }
 @media (max-width:520px){ .pf-folders{ grid-template-columns:1fr; max-width:340px; margin:0 auto; } .pf-head__top .pf-chip{ display:none; } }
 
+/* ── folders reuse the LIFE "creative" system straight from styles.css
+   (.folder, .peek-*, .creative-meta surlignage). Portfolio only widens
+   the grid to four and adds the Code (blue) folder + a terminal peek. ── */
+.work-page .creative-grid{ grid-template-columns:repeat(4,1fr); gap:clamp(44px,6vh,60px) clamp(16px,2vw,30px); margin-top:8px; padding-bottom:clamp(56px,9vh,104px); }
+.folder-4{ --folder-color:#a9d3ff; --folder-color-dark:#4a9df0; }
+.creative-grid .creative-tile:nth-child(4) .creative-meta p{ --surlignage-bg:rgba(74,157,240,.34); --surlignage-line:#2f7ad0; }
+.peek-terminal{ background:#0d1117; padding:14px 13px; overflow:hidden; }
+.peek-terminal .tl{ display:block; font-family:var(--font-mono); font-size:8.5px; line-height:1.95; color:#7ee787; white-space:nowrap; }
+.peek-terminal .tl b{ color:#ff7b72; font-weight:400; }
+.peek-terminal .tl i{ color:#79c0ff; font-style:normal; }
+@media (max-width:900px){ .work-page .creative-grid{ grid-template-columns:repeat(2,1fr); } }
+@media (max-width:520px){ .work-page .creative-grid{ grid-template-columns:1fr; max-width:320px; margin:0 auto; } }
+
 /* ===========================================================
    Folder pages (design / code / film) — calm editorial shell +
    inline lightbox. Shares styles.css vars + the Google fonts.

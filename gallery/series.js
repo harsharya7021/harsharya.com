@@ -95,137 +95,178 @@
     if (nBtn) nBtn.addEventListener('click', function () { smoothGo(nextS.id + '.html'); });
   }
 
-  /* layout toggle (persisted).  Layouts: 'ribbon' (horizontal filmstrip,
-     desktop opt-in pages only), 'vertical' (calm column), 'grid' (contact
-     sheet).  On non-ribbon pages / mobile / reduced-motion the pill just
-     swaps vertical<->grid exactly as before. */
+  /* layout toggle (persisted).  Layouts: 'strip' (vertical pieced
+     filmstrip w/ parallax + zoom, desktop opt-in pages), 'vertical'
+     (calm column fallback), 'grid' (contact sheet). The pill swaps
+     strip<->grid; off desktop / reduced-motion it's vertical<->grid. */
   var KEY = 'harsh-gallery-layout';
   var isDesktop = function () { return window.matchMedia('(min-width:821px)').matches; };
-  var ribbonPage = !!(seriesEl && seriesEl.getAttribute('data-ribbon') === 'on');
-  var canRibbon = ribbonPage && !reduced && isDesktop();
-  var ribbon = null;
+  var stripPage = !!(seriesEl && seriesEl.getAttribute('data-ribbon') === 'on'); // flag reused
+  var canStrip = stripPage && !reduced && isDesktop();
+  var strip = null;
 
   function applyLayout(l) {
     if (!seriesEl) return;
-    if (l === 'ribbon' && !canRibbon) l = 'vertical';     // no ribbon off desktop
-    if (l !== 'ribbon' && ribbon) { ribbon.destroy(); ribbon = null; }
+    if (l === 'strip' && !canStrip) l = 'vertical';
+    if (l !== 'strip' && strip) { strip.destroy(); strip = null; }
     seriesEl.setAttribute('data-layout', l);
     body.setAttribute('data-gallery-layout', l);
     var lbl = nav.querySelector('.gnav__lbl--layout');
-    if (lbl) lbl.textContent = (l === 'grid' ? (canRibbon ? 'Ribbon' : 'Scroll') : 'Grid');
-    if (l === 'ribbon' && !ribbon) ribbon = makeRibbon(seriesEl);
+    if (lbl) lbl.textContent = (l === 'grid' ? (canStrip ? 'Strip' : 'Scroll') : 'Grid');
+    if (l === 'strip' && !strip) strip = makeStrip(seriesEl);
     try { localStorage.setItem(KEY, l); } catch (e) {}
   }
 
   if (seriesEl) {
     var saved = null; try { saved = localStorage.getItem(KEY); } catch (e) {}
     var initial = (saved === 'grid') ? 'grid'
-                : canRibbon ? (saved === 'vertical' ? 'vertical' : 'ribbon')
+                : canStrip ? (saved === 'vertical' ? 'vertical' : 'strip')
                 : 'vertical';
     applyLayout(initial);
 
     var layoutBtn = nav.querySelector('#gnavLayout');
     if (layoutBtn) layoutBtn.addEventListener('click', function () {
       var cur = seriesEl.getAttribute('data-layout');
-      applyLayout(cur === 'grid' ? (canRibbon ? 'ribbon' : 'vertical') : 'grid');
+      applyLayout(cur === 'grid' ? (canStrip ? 'strip' : 'vertical') : 'grid');
     });
 
     seriesEl.addEventListener('click', function (e) {
       if (seriesEl.getAttribute('data-layout') !== 'grid') return;
       var fig = e.target.closest('.frame'); if (!fig) return;
-      applyLayout(canRibbon ? 'ribbon' : 'vertical');
+      applyLayout(canStrip ? 'strip' : 'vertical');
       requestAnimationFrame(function () { fig.scrollIntoView({ behavior: 'smooth', block: 'start' }); });
     });
 
     window.addEventListener('resize', function () {
-      var now = ribbonPage && !reduced && isDesktop();
-      if (now !== canRibbon) {
-        canRibbon = now;
+      var now = stripPage && !reduced && isDesktop();
+      if (now !== canStrip) {
+        canStrip = now;
         var cur = seriesEl.getAttribute('data-layout');
-        applyLayout(cur === 'grid' ? 'grid' : (canRibbon ? 'ribbon' : 'vertical'));
-      } else if (ribbon) { ribbon.measure(); }
+        applyLayout(cur === 'grid' ? 'grid' : (canStrip ? 'strip' : 'vertical'));
+      } else if (strip) { strip.measure(); }
     });
   }
 
-  /* ── the ribbon controller ──────────────────────────────────
-     Wraps the existing .series-list in a sticky stage, force-loads
-     the prints (they live in horizontal overflow), and runs one rAF
-     loop: vertical scroll progress -> track translateX, and each
-     print rotates/scales by its distance from centre (the curve).
-     Fully reversible; destroy() puts everything back for grid. */
-  function makeRibbon(el) {
+  /* ── the strip controller ───────────────────────────────────
+     A normal vertical scroll, but one rAF loop parallaxes each photo
+     inside its frame (image taller than the frame) and scales/softens
+     the frames as they leave centre — the surreal "pull back". Click a
+     frame to zoom it to focus on a dark field (a FLIP animation from
+     its place in the strip); click / Esc drops it back. Reversible. */
+  function makeStrip(el) {
     var list = el.querySelector('.series-list');
     var frames = Array.prototype.slice.call(el.querySelectorAll('.frame'));
     if (!list || !frames.length) return null;
-    el.classList.remove('reveal-on');                 // ribbon owns visibility
-    frames.forEach(function (f) { var im = f.querySelector('img'); if (im) { im.loading = 'eager'; if (im.getAttribute('loading') !== 'eager') im.setAttribute('loading', 'eager'); } });
+    el.classList.remove('reveal-on');
+    frames.forEach(function (f) { var im = f.querySelector('img'); if (im) im.loading = 'eager'; });
 
-    var stage = document.createElement('div');
-    stage.className = 'ribbon-stage';
-    el.insertBefore(stage, list); stage.appendChild(list);
-
-    var hud = document.createElement('div'); hud.className = 'ribbon-hud';
-    var bar = document.createElement('div'); bar.className = 'ribbon-hud__bar'; hud.appendChild(bar);
-    var count = document.createElement('div'); count.className = 'ribbon-count';
+    var hud = document.createElement('div'); hud.className = 'strip-hud';
+    var bar = document.createElement('div'); bar.className = 'strip-hud__bar'; hud.appendChild(bar);
+    var count = document.createElement('div'); count.className = 'strip-count';
     count.innerHTML = '<b>01</b><span>/ ' + pad(frames.length) + '</span>';
-    var hint = document.createElement('div'); hint.className = 'ribbon-hint'; hint.textContent = 'Scroll →';
-    document.body.appendChild(hud); document.body.appendChild(count); document.body.appendChild(hint);
+    document.body.appendChild(hud); document.body.appendChild(count);
     var countB = count.querySelector('b');
 
-    var travel = 0, ticking = false;
+    var ticking = false;
 
-    function measure() {
-      var vw = window.innerWidth;
-      var firstW = frames[0].offsetWidth || 0;
-      var lastW = frames[frames.length - 1].offsetWidth || 0;
-      list.style.paddingLeft = Math.max(0, (vw - firstW) / 2) + 'px';
-      list.style.paddingRight = Math.max(0, (vw - lastW) / 2) + 'px';
-      travel = Math.max(0, list.scrollWidth - vw);
-      el.style.height = (travel * 0.92 + window.innerHeight) + 'px';   // scroll distance for the pin
-      render();
-    }
-    function prog() {
-      var r = el.getBoundingClientRect();
-      var d = el.offsetHeight - window.innerHeight;
-      return d <= 0 ? 0 : Math.min(1, Math.max(0, -r.top / d));
-    }
     function render() {
-      var p = prog();
-      var x = -p * travel;
-      list.style.transform = 'translate3d(' + x.toFixed(2) + 'px,0,0)';
-      var cx = window.innerWidth / 2;
-      var reach = window.innerWidth * 0.6;
+      var vh = window.innerHeight, mid = vh / 2, nearest = 0, nd = 1e9;
       for (var i = 0; i < frames.length; i++) {
-        var fr = frames[i];
-        var fcx = fr.offsetLeft + fr.offsetWidth / 2 + x;      // on-screen centre
-        var d = (fcx - cx) / reach;
-        if (d > 1.35) d = 1.35; else if (d < -1.35) d = -1.35;
-        var ad = Math.abs(d);
-        fr.style.transform =
-          'translateZ(' + (-ad * 130).toFixed(1) + 'px) rotateY(' + (-d * 22).toFixed(2) + 'deg) scale(' + (1 - ad * 0.11).toFixed(3) + ')';
+        var fr = frames[i], media = fr.querySelector('.frame-media'), img = fr.querySelector('img');
+        if (!media || !img) continue;
+        var r = media.getBoundingClientRect();
+        var c = r.top + r.height / 2;
+        var d = (c - mid) / vh;
+        var cl = d < -1.1 ? -1.1 : d > 1.1 ? 1.1 : d;
+        var ad = Math.abs(cl);
+        img.style.transform = 'translate3d(0,' + (cl * -r.height * 0.13).toFixed(1) + 'px,0)';
+        media.style.transform = 'scale(' + (1 - ad * 0.07).toFixed(3) + ')';
+        media.style.filter = ad > 0.14 ? 'blur(' + (ad * 1.6).toFixed(2) + 'px)' : 'none';
+        fr.style.opacity = (1 - ad * 0.3).toFixed(3);
+        var ac = Math.abs(c - mid); if (ac < nd) { nd = ac; nearest = i; }
       }
-      bar.style.width = (p * 100) + '%';
-      countB.textContent = pad(Math.round(p * (frames.length - 1)) + 1);
+      var lr = list.getBoundingClientRect();
+      var total = list.scrollHeight - vh;
+      bar.style.width = (total <= 0 ? 0 : Math.min(1, Math.max(0, -lr.top / total)) * 100) + '%';
+      countB.textContent = pad(nearest + 1);
     }
-    function onScroll() {
-      if (window.scrollY > 4) document.body.setAttribute('data-ribbon-scrolled', '1');
-      if (ticking) return; ticking = true;
-      requestAnimationFrame(function () { render(); ticking = false; });
-    }
+    function onScroll() { if (ticking) return; ticking = true; requestAnimationFrame(function () { render(); ticking = false; }); }
     window.addEventListener('scroll', onScroll, { passive: true });
-    frames.forEach(function (f) { var im = f.querySelector('img'); if (im && !im.complete) im.addEventListener('load', measure, { once: true }); });
-    measure();
+
+    /* ── zoom to focus (FLIP) ── */
+    var focus, fbox, fimg, fcap, focused = null;
+    function buildFocus() {
+      focus = document.createElement('div'); focus.className = 'strip-focus';
+      fbox = document.createElement('div'); fbox.className = 'strip-focus__box';
+      fimg = document.createElement('img');
+      fcap = document.createElement('div'); fcap.className = 'strip-focus__cap';
+      fbox.appendChild(fimg); focus.appendChild(fbox); focus.appendChild(fcap);
+      document.body.appendChild(focus);
+      focus.addEventListener('click', closeFocus);
+    }
+    function openFocus(fr) {
+      if (focused) return;
+      if (!focus) buildFocus();
+      var media = fr.querySelector('.frame-media'), img = fr.querySelector('img');
+      var r = media.getBoundingClientRect();
+      focused = fr;
+      fimg.src = img.currentSrc || img.src;
+      var t = fr.querySelector('.frame-text'); fcap.textContent = t ? t.textContent : '';
+      var ar = (img.naturalWidth || 3) / (img.naturalHeight || 2);
+      var th = Math.min(window.innerHeight * 0.86, (window.innerWidth * 0.92) / ar);
+      var tw = th * ar;
+      var tx = (window.innerWidth - tw) / 2, ty = (window.innerHeight - th) / 2;
+      fbox.style.left = tx + 'px'; fbox.style.top = ty + 'px';
+      fbox.style.width = tw + 'px'; fbox.style.height = th + 'px';
+      fbox.style.transformOrigin = 'top left';
+      fbox.style.transition = 'none';
+      fbox.style.transform = 'translate(' + (r.left - tx) + 'px,' + (r.top - ty) + 'px) scale(' + (r.width / tw) + ',' + (r.height / th) + ')';
+      media.style.visibility = 'hidden';
+      document.documentElement.style.overflow = 'hidden';
+      requestAnimationFrame(function () {
+        focus.classList.add('on');
+        fbox.style.transition = '';
+        fbox.style.transform = 'none';
+      });
+    }
+    function closeFocus() {
+      if (!focused) return;
+      var fr = focused, media = fr.querySelector('.frame-media');
+      var r = media.getBoundingClientRect();
+      var tx = parseFloat(fbox.style.left), ty = parseFloat(fbox.style.top),
+          tw = parseFloat(fbox.style.width), th = parseFloat(fbox.style.height);
+      fbox.style.transform = 'translate(' + (r.left - tx) + 'px,' + (r.top - ty) + 'px) scale(' + (r.width / tw) + ',' + (r.height / th) + ')';
+      focus.classList.remove('on');
+      var done = function () {
+        media.style.visibility = '';
+        document.documentElement.style.overflow = '';
+        fbox.removeEventListener('transitionend', done);
+        focused = null;
+      };
+      fbox.addEventListener('transitionend', done);
+    }
+    var clickH = function (e) { var fr = e.target.closest('.frame'); if (!fr) return; e.preventDefault(); openFocus(fr); };
+    var keyH = function (e) { if (e.key === 'Escape') closeFocus(); };
+    el.addEventListener('click', clickH);
+    document.addEventListener('keydown', keyH);
+
+    frames.forEach(function (f) { var im = f.querySelector('img'); if (im && !im.complete) im.addEventListener('load', render, { once: true }); });
+    render();
 
     return {
-      measure: measure,
+      measure: render,
       destroy: function () {
         window.removeEventListener('scroll', onScroll);
-        el.insertBefore(list, stage); stage.remove();
-        el.style.height = '';
-        list.style.transform = ''; list.style.paddingLeft = ''; list.style.paddingRight = '';
-        frames.forEach(function (f) { f.style.transform = ''; });
-        hud.remove(); count.remove(); hint.remove();
-        document.body.removeAttribute('data-ribbon-scrolled');
+        el.removeEventListener('click', clickH);
+        document.removeEventListener('keydown', keyH);
+        if (focused) { focused.querySelector('.frame-media').style.visibility = ''; focused = null; document.documentElement.style.overflow = ''; }
+        frames.forEach(function (f) {
+          var m = f.querySelector('.frame-media'), im = f.querySelector('img');
+          if (m) { m.style.transform = ''; m.style.filter = ''; m.style.visibility = ''; }
+          if (im) im.style.transform = ''; f.style.opacity = '';
+        });
+        hud.remove(); count.remove();
+        if (focus) { focus.remove(); focus = null; }
       }
     };
   }

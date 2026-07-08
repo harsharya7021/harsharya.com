@@ -46,6 +46,18 @@
     open(t.getAttribute('data-embed'), t.getAttribute('data-embed-mode') || 'page', t.getAttribute('data-embed-label') || '');
   });
 
+  /* portfolio hub: rotate the photos peeking out of each folder (Life-style) */
+  document.querySelectorAll('.peek-front').forEach(function (g) {
+    var imgs = g.querySelectorAll('img');
+    if (imgs.length < 2) return;
+    var i = 0; imgs[0].classList.add('active');
+    setInterval(function () {
+      imgs[i].classList.remove('active');
+      i = (i + 1) % imgs.length;
+      imgs[i].classList.add('active');
+    }, 3500);
+  });
+
   /* site parity: year + nav shadow on scroll */
   var y = document.getElementById('year'); if (y) y.textContent = new Date().getFullYear();
   var nav = document.getElementById('nav');
