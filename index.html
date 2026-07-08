@@ -1122,11 +1122,12 @@
     m2eye.style.opacity=0;
 
     // ── JAIL (scroll-scrubbed continuation of Movement 2 — no lock, no timers) ──
-    // cine2 grew from 720vh to 940vh; JAIL_START is where the legacy 0-1 reveal above
+    // cine2 grew from 720vh to 990vh; JAIL_START is where the legacy 0-1 reveal above
     // now ends as a *fraction* of the new, longer scrollable range, so every existing
     // threshold above keeps its original on-screen scroll distance untouched. The
-    // 220vh tail gives each jail beat its own stretch of scroll — one thing at a time.
-    var CINE2_OLD_VH=720, CINE2_NEW_VH=940;
+    // 270vh tail gives each jail beat its own stretch of scroll — and the busted theme
+    // completes fully (pill filled, gray held) BEFORE the release toward About begins.
+    var CINE2_OLD_VH=720, CINE2_NEW_VH=990;
     var JAIL_START=(CINE2_OLD_VH-100)/(CINE2_NEW_VH-100);
     var busted=document.getElementById('busted'),
         desat =busted.querySelector('.desat'),
@@ -1201,10 +1202,10 @@
       var slotOff=Math.min(342, window.innerHeight*0.46);   // caption slot: below the card, always on screen
 
       var grayT=ease(range(pj,0.06,0.20));
-      var grayMul=1-ease(range(pj,0.74,0.98));              // the busted theme drains out slowly, not abruptly
+      var grayMul=1-ease(range(pj,0.84,1.0));               // drain starts ONLY after the theme has fully played (fill done + hold)
       var flipT=ease(range(pj,0.24,0.44));
       var slamT=ease(range(pj,0.46,0.54));
-      var cardMul=1-ease(range(pj,0.82,0.96));
+      var cardMul=1-ease(range(pj,0.86,0.97));
       card3d.style.transform='rotateY('+(flipT*180)+'deg)';
       vigg.style.transform='scale('+lerp(1.15,1,grayT)+')';
       band.style.transform='translateY(-50%) scaleY('+slamT+')';
@@ -1221,7 +1222,7 @@
       // verdict text, the pill says it all. Its green capsule fills as you serve out
       // the rest of the scroll, holds full, and it's the last thing to leave.
       var cueT=ease(range(pj,0.56,0.66))*(1-ease(range(pj,0.96,1.0)));
-      var fillT=range(pj,0.58,0.92);
+      var fillT=range(pj,0.58,0.80);                        // full by .80, then a .80-.84 hold: gray world + full green pill, THEN the drain
       jcueFill.style.width='calc(49px + '+fillT.toFixed(4)+'*(100% - 55px))';
       jailPanel.style.opacity=cueT;
       jailPanel.style.transform='translate(-50%,calc(-50% + '+(slotOff+lerp(10,0,cueT))+'px))';

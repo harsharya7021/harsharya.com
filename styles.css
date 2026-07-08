@@ -3614,7 +3614,7 @@ body[data-mode="warhol"] .form-gist::placeholder {
 }
 
 /* ── Movement 2 — gradient takeover + press leaflets ── */
-.cine2 { position: relative; height: 940vh; } /* 720vh legacy reveal + 220vh scroll-scrubbed jail sequence — each beat gets its own scroll room */
+.cine2 { position: relative; height: 990vh; } /* 720vh legacy reveal + 270vh scroll-scrubbed jail sequence — the busted theme plays out FULLY (fill, hold) before the release */
 .cine2-pin {
   position: sticky; top: 0;
   height: 100vh; overflow: hidden;
