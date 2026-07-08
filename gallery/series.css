@@ -24,6 +24,18 @@ body.gallery-page{
   --accent:#ff5a00;                       /* match the site orange */
   background:var(--gx-canvas) !important;
   animation:gx-pin .5s ease both;
+  /* sticky footer: on short pages (grid layout / tall windows) the footer used to
+     end mid-screen with a void below it and the floating pill orbiting that void.
+     A flex column pins the footer to the true bottom of the window instead. */
+  min-height:100vh; display:flex; flex-direction:column;
+}
+body.series-page main.series,
+body.gallery-page .gx-grid{ flex:1 0 auto; width:100%; }
+body.series-page footer,
+body.gallery-page footer{
+  margin-top:auto;
+  /* clearance so the frosted pill floats over the footer band, not over its text */
+  padding-bottom:84px;
 }
 body.is-leaving{ animation:none; opacity:0; transition:opacity .24s ease; }
 
@@ -72,6 +84,28 @@ body.is-leaving{ animation:none; opacity:0; transition:opacity .24s ease; }
 .frame{ margin:0; }
 .frame-media{ position:relative; background:var(--gx-frame); overflow:hidden; }
 .frame-media img{ display:block; width:100%; height:auto; }
+
+/* ── sliced prints (vertical layout) ─────────────────────────
+   Each photo is rebuilt as N vertical slices of the same image
+   (background-position spreads one image across the strip row).
+   A rAF loop shears the slices with scroll VELOCITY — edges lag
+   more than the centre, odd strips a touch more than even — and
+   they spring back flush the moment the scroll settles. The
+   effect language is inspired by aikawakenichi.com; the
+   implementation (DOM strips + transforms, no WebGL) is ours. */
+.frame-media .fx-slices{ position:absolute; inset:0; display:flex; pointer-events:none; }
+.frame-media .fx-slice{
+  position:relative; height:100%;
+  width:calc(100% / var(--n) + .75px);   /* hair of overlap kills sub-pixel seams */
+  margin-right:-.75px;
+  background-repeat:no-repeat;
+  background-size:calc(var(--n) * 100%) 100%;
+  will-change:transform;
+}
+.frame-media.is-sliced > img{ visibility:hidden; }   /* keeps sizing the box + SEO/no-JS */
+/* grid (contact sheet) shows the plain print — slices are a scroll-mode thing */
+.series[data-layout="grid"] .fx-slices{ display:none; }
+.series[data-layout="grid"] .frame-media.is-sliced > img{ visibility:visible; }
 .frame-cap{ display:flex; align-items:baseline; gap:11px; margin-top:12px; }
 .frame-no{ font-family:var(--font-mono); font-size:10px; letter-spacing:.12em; color:var(--gx-cap-no); }
 .frame-text{ font-family:var(--font-serif); font-style:italic; font-size:14px; color:var(--gx-cap); line-height:1.4; }
