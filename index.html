@@ -12,6 +12,13 @@
 
   <link rel="stylesheet" href="styles.css?v=15">
   <style id="warhol-fx">
+  /* The cinematic (hero + "as featured in" + jail) is scroll-scrubbed and sits
+     above the content, so a SMOOTH anchor jump would replay the whole charade
+     on every nav click / back-to-top. Make jumps INSTANT on the homepage — the
+     cinematic then only plays when someone actually scrolls it, not on return
+     trips. (Deliberate smooth scrolls in JS still animate; they set behavior
+     explicitly.) */
+  html{ scroll-behavior:auto !important; }
   body{ background:transparent !important; }
   #paper{ position:fixed; inset:0; z-index:-3; background:#fff8e7; }
   #paper::after{ content:""; position:absolute; inset:0; opacity:.5; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .035 0'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E"); }
@@ -552,7 +559,7 @@
       }
     });
     if (b2t) b2t.addEventListener("click", function () {
-      window.scrollTo({ top: 0, behavior: "smooth" });
+      window.scrollTo({ top: 0, behavior: "instant" });   // instant — don't replay the cinematic on the way up
     });
     // Photo gallery rotation
     (function () {
