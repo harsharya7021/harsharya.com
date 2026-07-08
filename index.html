@@ -41,16 +41,18 @@
   #busted .word{ display:none; }
   @keyframes bSlam{ from{transform:translate(-50%,-54%) scale(2.8);opacity:0;} 60%{opacity:1;} to{transform:translate(-50%,-54%) scale(1);opacity:1;} }
   @keyframes bShake{ 0%{transform:translate(-50%,-54%);}25%{transform:translate(calc(-50% - 7px),-53%) rotate(-.6deg);}50%{transform:translate(calc(-50% + 5px),-55%) rotate(.5deg);}75%{transform:translate(calc(-50% - 3px),-54%);}100%{transform:translate(-50%,-54%);} }
-  /* jail sequence is scroll-scrubbed (part of the cine2 pin, no scroll-lock): this panel
-     sits centered under the card and rides the same scroll progress as the flip/slam,
-     so the "Get Out of Jail" pill's fill is literally how far you've scrolled through it. */
-  #jail-panel{ position:absolute; left:50%; top:min(calc(46% + 230px),calc(100vh - 210px)); transform:translateX(-50%); width:min(620px,86vw); z-index:1310; display:flex; flex-direction:column; align-items:center; gap:16px; opacity:0; pointer-events:none; }
+  /* jail sequence is scroll-scrubbed (part of the cine2 pin, no scroll-lock). The panel
+     lives at body level, ABOVE the #busted gray veil (the veil's backdrop-filter would
+     otherwise desaturate the pill too), and is driven by frame2(). NRG-style escape
+     meter: a green capsule grows from the left circle to fill the white pill as you
+     scroll through the sequence — full pill = you're out. */
+  #jail-panel{ position:fixed; left:50%; top:min(calc(46% + 230px),calc(100vh - 210px)); transform:translateX(-50%); width:min(620px,86vw); z-index:1300; display:flex; flex-direction:column; align-items:center; gap:16px; opacity:0; pointer-events:none; }
   #busted-dig{ text-align:center; font-family:var(--font-serif),serif; font-style:italic; font-size:18px; line-height:1.35; color:#0a0a0a; opacity:0; padding:8px 12px; background:rgba(255,248,231,.8); box-shadow:0 0 0 1px rgba(10,10,10,.08); }
-  #jail-cue{ display:flex; align-items:center; gap:9px; padding:10px 20px 10px 14px; background:#fff8e7; border:2.5px solid #0a0a0a; border-radius:999px; box-shadow:5px 5px 0 #0a0a0a; cursor:pointer; opacity:0; pointer-events:auto; overflow:hidden; }
-  #jail-cue:active{ transform:scale(.95); }
-  #jail-cue .jc-fill{ position:absolute; inset:0; width:0%; background:#ff5a00; opacity:.24; z-index:0; }
-  #jail-cue .jc-icon{ position:relative; z-index:1; width:15px; height:15px; flex:none; color:#0a0a0a; }
-  #jail-cue .jc-label{ position:relative; z-index:1; font-family:"Space Mono",monospace; font-size:11px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; white-space:nowrap; color:#0a0a0a; }
+  #jail-cue{ position:relative; width:min(300px,80vw); height:60px; background:#fff; border:2.5px solid #0a0a0a; border-radius:30px; box-shadow:6px 6px 0 rgba(10,10,10,.85); cursor:pointer; opacity:0; pointer-events:auto; overflow:hidden; }
+  #jail-cue:active{ transform:scale(.96); }
+  #jail-cue .jc-fill{ position:absolute; left:3px; top:3px; bottom:3px; width:49px; border-radius:25px; background:#6fe45d; z-index:0; }
+  #jail-cue .jc-icon{ position:absolute; left:19px; top:50%; transform:translateY(-50%); width:17px; height:17px; color:#0a0a0a; z-index:1; }
+  #jail-cue .jc-label{ position:absolute; left:55%; top:50%; transform:translate(-50%,-50%); font-family:"Space Mono",monospace; font-size:12px; font-weight:700; letter-spacing:.08em; text-transform:uppercase; white-space:nowrap; color:#0a0a0a; z-index:1; }
   @media (max-width:820px){ #jail-panel{ display:none; } }
   @media (prefers-reduced-motion:reduce){ #dots{display:none;} }
   /* C: hero headline clears the nav divider (desktop) */
@@ -299,14 +301,6 @@
           </div>
         </div>
         <p class="dig" id="dig">Not on it. <em>Have you seen the alumni? I'm filing that as a feature, not a bug.</em></p>
-        <div id="jail-panel">
-          <div id="busted-dig">Not on the list. <em>Go directly to About. Do not pass GO. Do not collect $200.</em></div>
-          <div id="jail-cue" role="button" tabindex="0" aria-label="Skip ahead to About">
-            <span class="jc-fill"></span>
-            <svg class="jc-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect x="1.2" y="1.2" width="13.6" height="13.6" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M4.9 1.2v13.6M8 1.2v13.6M11.1 1.2v13.6" stroke="currentColor" stroke-width="1.5"/></svg>
-            <span class="jc-label">Get out of jail — free</span>
-          </div>
-        </div>
       </div>
     </div>
   </div>
@@ -522,6 +516,16 @@
   </footer>
 
   <div id="busted"><div class="desat"></div><div class="vigg"></div><div class="band"></div></div>
+
+  <!-- jail escape panel — body-level so it stacks ABOVE the #busted veil; frame2() drives it -->
+  <div id="jail-panel">
+    <div id="busted-dig">Not on the list. <em>Go directly to About. Do not pass GO. Do not collect $200.</em></div>
+    <div id="jail-cue" role="button" tabindex="0" aria-label="Skip ahead to About">
+      <span class="jc-fill"></span>
+      <svg class="jc-icon" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true"><rect x="1.2" y="1.2" width="13.6" height="13.6" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M4.9 1.2v13.6M8 1.2v13.6M11.1 1.2v13.6" stroke="currentColor" stroke-width="1.5"/></svg>
+      <span class="jc-label">Get out of jail — free</span>
+    </div>
+  </div>
 
   <button id="back-to-top" type="button" aria-label="Back to top">
     <span class="b2t-arrow" aria-hidden="true">&uarr;</span>
@@ -1120,6 +1124,7 @@
     var CINE2_OLD_VH=720, CINE2_NEW_VH=870;
     var JAIL_START=(CINE2_OLD_VH-100)/(CINE2_NEW_VH-100);
     var busted=document.getElementById('busted'),
+        desat =busted.querySelector('.desat'),
         vigg  =busted.querySelector('.vigg'),
         band  =busted.querySelector('.band'),
         card3d=forbes.querySelector('.card3d'),
@@ -1130,7 +1135,9 @@
         aboutEl=document.getElementById('about');
     // we drive these every scroll frame — kill their CSS transitions so they track
     // the scrollbar 1:1 instead of chasing it (inline style wins over the class rules)
-    [busted,vigg,band,card3d].forEach(function(el){ el.style.transition='none'; });
+    [busted,desat,vigg,band,card3d].forEach(function(el){ el.style.transition='none'; });
+    // the veil's layers are driven per-frame below; the wrapper just stays on duty
+    busted.style.opacity=0;
     jcue.addEventListener('click',function(){ aboutEl.scrollIntoView({behavior:'smooth',block:'start'}); });
     jcue.addEventListener('keydown',function(e){ if(e.key==='Enter'||e.key===' '){ e.preventDefault(); aboutEl.scrollIntoView({behavior:'smooth',block:'start'}); } });
     // each leaflet: hurled in on the wind → fights it → SLAMS the wall → turns → settles
@@ -1190,30 +1197,40 @@
       dig.style.transform='translate(-50%,calc(-50% + '+lerp(318,342,dg)+'px))';
 
       var grayT=ease(range(pj,0.03,0.16));
-      var flipT=ease(range(pj,0.18,0.38));
-      var slamT=ease(range(pj,0.38,0.46));
+      var flipT=ease(range(pj,0.20,0.40));
+      var slamT=ease(range(pj,0.40,0.48));
       card3d.style.transform='rotateY('+(flipT*180)+'deg)';
       vigg.style.transform='scale('+lerp(1.15,1,grayT)+')';
       band.style.transform='translateY(-50%) scaleY('+slamT+')';
-      forbes.classList.toggle('busted-card', pj>0.40);
+      forbes.classList.toggle('busted-card', pj>0.42);
 
-      var panelT=ease(range(pj,0.46,0.58));
-      var cueT=ease(range(pj,0.50,0.62));
+      // caption + escape pill arrive EARLY (right as the gray settles), so the whole
+      // flip/slam plays out while the meter visibly fills — NRG-style: the green
+      // capsule grows from the left circle across the pill over the WHOLE sequence
+      var panelT=ease(range(pj,0.10,0.22));
       jdig.style.opacity=panelT;
-      jailPanel.style.transform='translateX(-50%) translateY('+lerp(14,0,Math.min(panelT,cueT))+'px)';
+      jailPanel.style.transform='translateX(-50%) translateY('+lerp(14,0,panelT)+'px)';
 
-      var fillT=range(pj,0.55,0.92);
-      jcueFill.style.width=(fillT*100)+'%';
-      jcue.style.opacity=cueT;
-      jcue.style.pointerEvents=cueT>0.05?'auto':'none';
+      var fillT=range(pj,0.16,0.88);
+      jcueFill.style.width='calc(49px + '+fillT.toFixed(4)+'*(100% - 55px))';
+      jcue.style.opacity=panelT;
+      jcue.style.pointerEvents=(panelT>0.05&&pj<0.98)?'auto':'none';
 
       // final stretch: everything settles back out so About arrives in full colour
-      var showMul=1-ease(range(pj,0.90,1.0));
+      var showMul=1-ease(range(pj,0.92,1.0));
       var riseScale=lerp(0.72,1,fin), bump=0.14*flipT-0.14*slamT;
       forbes.style.opacity=fin*showMul;
       forbes.style.transform='translate(-50%,-46%) scale('+(riseScale+bump)+')';
-      jailPanel.style.opacity=Math.max(panelT,cueT)*showMul;
-      busted.style.opacity=grayT*showMul;
+      jailPanel.style.opacity=panelT*showMul;
+
+      // the desaturation is scrubbed via FILTER STRENGTH, not overlay opacity —
+      // backdrop-filter ignores ancestor opacity (it's all-or-nothing), which is
+      // exactly what made the gray SNAP on/off when the card came into view
+      var g=grayT*showMul;
+      var bf=g<0.004?'none':'grayscale('+g.toFixed(3)+') contrast('+(1+0.05*g).toFixed(3)+')';
+      desat.style.webkitBackdropFilter=bf; desat.style.backdropFilter=bf;
+      vigg.style.opacity=g; band.style.opacity=g;
+      busted.style.opacity=g>0?1:0;
     }
 
     var ticking=false;
