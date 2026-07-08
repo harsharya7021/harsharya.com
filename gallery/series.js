@@ -95,29 +95,139 @@
     if (nBtn) nBtn.addEventListener('click', function () { smoothGo(nextS.id + '.html'); });
   }
 
-  /* layout toggle (persisted) */
+  /* layout toggle (persisted).  Layouts: 'ribbon' (horizontal filmstrip,
+     desktop opt-in pages only), 'vertical' (calm column), 'grid' (contact
+     sheet).  On non-ribbon pages / mobile / reduced-motion the pill just
+     swaps vertical<->grid exactly as before. */
   var KEY = 'harsh-gallery-layout';
+  var isDesktop = function () { return window.matchMedia('(min-width:821px)').matches; };
+  var ribbonPage = !!(seriesEl && seriesEl.getAttribute('data-ribbon') === 'on');
+  var canRibbon = ribbonPage && !reduced && isDesktop();
+  var ribbon = null;
+
   function applyLayout(l) {
     if (!seriesEl) return;
+    if (l === 'ribbon' && !canRibbon) l = 'vertical';     // no ribbon off desktop
+    if (l !== 'ribbon' && ribbon) { ribbon.destroy(); ribbon = null; }
     seriesEl.setAttribute('data-layout', l);
     body.setAttribute('data-gallery-layout', l);
     var lbl = nav.querySelector('.gnav__lbl--layout');
-    if (lbl) lbl.textContent = (l === 'grid' ? 'Scroll' : 'Grid');
+    if (lbl) lbl.textContent = (l === 'grid' ? (canRibbon ? 'Ribbon' : 'Scroll') : 'Grid');
+    if (l === 'ribbon' && !ribbon) ribbon = makeRibbon(seriesEl);
     try { localStorage.setItem(KEY, l); } catch (e) {}
   }
+
   if (seriesEl) {
     var saved = null; try { saved = localStorage.getItem(KEY); } catch (e) {}
-    applyLayout(saved === 'grid' ? 'grid' : 'vertical');
+    var initial = (saved === 'grid') ? 'grid'
+                : canRibbon ? (saved === 'vertical' ? 'vertical' : 'ribbon')
+                : 'vertical';
+    applyLayout(initial);
+
     var layoutBtn = nav.querySelector('#gnavLayout');
     if (layoutBtn) layoutBtn.addEventListener('click', function () {
-      applyLayout(seriesEl.getAttribute('data-layout') === 'grid' ? 'vertical' : 'grid');
+      var cur = seriesEl.getAttribute('data-layout');
+      applyLayout(cur === 'grid' ? (canRibbon ? 'ribbon' : 'vertical') : 'grid');
     });
+
     seriesEl.addEventListener('click', function (e) {
       if (seriesEl.getAttribute('data-layout') !== 'grid') return;
       var fig = e.target.closest('.frame'); if (!fig) return;
-      applyLayout('vertical');
+      applyLayout(canRibbon ? 'ribbon' : 'vertical');
       requestAnimationFrame(function () { fig.scrollIntoView({ behavior: 'smooth', block: 'start' }); });
     });
+
+    window.addEventListener('resize', function () {
+      var now = ribbonPage && !reduced && isDesktop();
+      if (now !== canRibbon) {
+        canRibbon = now;
+        var cur = seriesEl.getAttribute('data-layout');
+        applyLayout(cur === 'grid' ? 'grid' : (canRibbon ? 'ribbon' : 'vertical'));
+      } else if (ribbon) { ribbon.measure(); }
+    });
+  }
+
+  /* ── the ribbon controller ──────────────────────────────────
+     Wraps the existing .series-list in a sticky stage, force-loads
+     the prints (they live in horizontal overflow), and runs one rAF
+     loop: vertical scroll progress -> track translateX, and each
+     print rotates/scales by its distance from centre (the curve).
+     Fully reversible; destroy() puts everything back for grid. */
+  function makeRibbon(el) {
+    var list = el.querySelector('.series-list');
+    var frames = Array.prototype.slice.call(el.querySelectorAll('.frame'));
+    if (!list || !frames.length) return null;
+    el.classList.remove('reveal-on');                 // ribbon owns visibility
+    frames.forEach(function (f) { var im = f.querySelector('img'); if (im) { im.loading = 'eager'; if (im.getAttribute('loading') !== 'eager') im.setAttribute('loading', 'eager'); } });
+
+    var stage = document.createElement('div');
+    stage.className = 'ribbon-stage';
+    el.insertBefore(stage, list); stage.appendChild(list);
+
+    var hud = document.createElement('div'); hud.className = 'ribbon-hud';
+    var bar = document.createElement('div'); bar.className = 'ribbon-hud__bar'; hud.appendChild(bar);
+    var count = document.createElement('div'); count.className = 'ribbon-count';
+    count.innerHTML = '<b>01</b><span>/ ' + pad(frames.length) + '</span>';
+    var hint = document.createElement('div'); hint.className = 'ribbon-hint'; hint.textContent = 'Scroll →';
+    document.body.appendChild(hud); document.body.appendChild(count); document.body.appendChild(hint);
+    var countB = count.querySelector('b');
+
+    var travel = 0, ticking = false;
+
+    function measure() {
+      var vw = window.innerWidth;
+      var firstW = frames[0].offsetWidth || 0;
+      var lastW = frames[frames.length - 1].offsetWidth || 0;
+      list.style.paddingLeft = Math.max(0, (vw - firstW) / 2) + 'px';
+      list.style.paddingRight = Math.max(0, (vw - lastW) / 2) + 'px';
+      travel = Math.max(0, list.scrollWidth - vw);
+      el.style.height = (travel * 0.92 + window.innerHeight) + 'px';   // scroll distance for the pin
+      render();
+    }
+    function prog() {
+      var r = el.getBoundingClientRect();
+      var d = el.offsetHeight - window.innerHeight;
+      return d <= 0 ? 0 : Math.min(1, Math.max(0, -r.top / d));
+    }
+    function render() {
+      var p = prog();
+      var x = -p * travel;
+      list.style.transform = 'translate3d(' + x.toFixed(2) + 'px,0,0)';
+      var cx = window.innerWidth / 2;
+      var reach = window.innerWidth * 0.6;
+      for (var i = 0; i < frames.length; i++) {
+        var fr = frames[i];
+        var fcx = fr.offsetLeft + fr.offsetWidth / 2 + x;      // on-screen centre
+        var d = (fcx - cx) / reach;
+        if (d > 1.35) d = 1.35; else if (d < -1.35) d = -1.35;
+        var ad = Math.abs(d);
+        fr.style.transform =
+          'translateZ(' + (-ad * 130).toFixed(1) + 'px) rotateY(' + (-d * 22).toFixed(2) + 'deg) scale(' + (1 - ad * 0.11).toFixed(3) + ')';
+      }
+      bar.style.width = (p * 100) + '%';
+      countB.textContent = pad(Math.round(p * (frames.length - 1)) + 1);
+    }
+    function onScroll() {
+      if (window.scrollY > 4) document.body.setAttribute('data-ribbon-scrolled', '1');
+      if (ticking) return; ticking = true;
+      requestAnimationFrame(function () { render(); ticking = false; });
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    frames.forEach(function (f) { var im = f.querySelector('img'); if (im && !im.complete) im.addEventListener('load', measure, { once: true }); });
+    measure();
+
+    return {
+      measure: measure,
+      destroy: function () {
+        window.removeEventListener('scroll', onScroll);
+        el.insertBefore(list, stage); stage.remove();
+        el.style.height = '';
+        list.style.transform = ''; list.style.paddingLeft = ''; list.style.paddingRight = '';
+        frames.forEach(function (f) { f.style.transform = ''; });
+        hud.remove(); count.remove(); hint.remove();
+        document.body.removeAttribute('data-ribbon-scrolled');
+      }
+    };
   }
 
   /* series menu */

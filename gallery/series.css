@@ -105,6 +105,59 @@ body.is-leaving{ animation:none; opacity:0; transition:opacity .24s ease; }
 .series[data-layout="grid"] .frame-cap{ margin-top:8px; gap:8px; }
 .series[data-layout="grid"] .frame-text{ font-size:12px; }
 
+/* ── RIBBON — horizontal filmstrip (desktop) ──────────────────
+   The centrepiece, adapted from the reference clip: vertical scroll
+   drives the prints travelling sideways as a filmstrip; each print
+   rotates + scales by its distance from centre so the strip curves
+   away at both edges (the cylinder-hero / 3D-corridor feel). Driven
+   by a rAF loop in series.js using the site's own scroll-scrub math
+   (a tall .series container + a sticky stage). Mobile & reduced-motion
+   fall back to the calm vertical column — the JS never builds the
+   stage there. */
+.series[data-layout="ribbon"]{ max-width:none; padding:0; }
+.series[data-layout="ribbon"] .ribbon-stage{
+  position:sticky; top:0; height:100vh; overflow:hidden;
+  display:flex; align-items:center; perspective:1700px;
+}
+.series[data-layout="ribbon"] .series-list{        /* becomes the track */
+  display:flex; flex-direction:row; align-items:center;
+  gap:clamp(26px,3.4vw,60px);
+  padding:0;                                       /* JS sets side padding to centre first & last */
+  transform-style:preserve-3d; will-change:transform;
+}
+.series[data-layout="ribbon"] .frame{
+  flex:0 0 auto; height:64vh; margin:0; position:relative;
+  transform-style:preserve-3d; will-change:transform, opacity;
+  backface-visibility:hidden;
+  transition:none !important;                      /* the rAF loop owns transform — no reveal smear */
+  opacity:1 !important;
+}
+.series[data-layout="ribbon"] .frame-media{
+  height:100%; width:auto; display:block; overflow:hidden;
+  box-shadow:0 30px 60px -30px rgba(20,18,14,.6);
+}
+.series[data-layout="ribbon"] .frame-media img{ height:100%; width:auto; display:block; }
+.series[data-layout="ribbon"] .frame-cap{
+  position:absolute; left:2px; bottom:-28px; margin:0; opacity:.7;
+}
+/* progress rail + running index */
+.ribbon-hud{ position:fixed; left:0; right:0; bottom:0; height:3px; background:rgba(20,18,14,.10); z-index:240; }
+.ribbon-hud__bar{ height:100%; width:0; background:var(--accent); transition:width .08s linear; }
+.ribbon-count{
+  position:fixed; left:clamp(18px,4vw,46px); bottom:24px; z-index:240;
+  font-family:var(--font-mono); font-size:11px; letter-spacing:.16em; color:var(--text);
+  display:flex; align-items:baseline; gap:7px; pointer-events:none;
+}
+.ribbon-count b{ font-family:var(--font-display); font-size:22px; letter-spacing:-.01em; }
+.ribbon-hint{
+  position:fixed; left:50%; bottom:26px; transform:translateX(-50%); z-index:240;
+  font-family:var(--font-mono); font-size:10.5px; letter-spacing:.2em; text-transform:uppercase;
+  color:var(--muted); pointer-events:none;
+  animation:ribbonHintFade .6s ease both;
+}
+@keyframes ribbonHintFade{ from{opacity:0;} to{opacity:.8;} }
+body[data-ribbon-scrolled="1"] .ribbon-hint{ opacity:0; transition:opacity .4s ease; }
+
 .series-end{
   text-align:center; font-family:var(--font-mono);
   font-size:11px; letter-spacing:.18em; text-transform:uppercase;
