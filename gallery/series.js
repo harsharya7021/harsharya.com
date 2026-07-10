@@ -95,183 +95,115 @@
     if (nBtn) nBtn.addEventListener('click', function () { smoothGo(nextS.id + '.html'); });
   }
 
-  /* layout toggle (persisted).  Layouts: 'strip' (vertical pieced
-     filmstrip w/ parallax + zoom, desktop opt-in pages), 'vertical'
-     (calm column fallback), 'grid' (contact sheet). The pill swaps
-     strip<->grid; off desktop / reduced-motion it's vertical<->grid. */
+  /* layout toggle (persisted). Fancy layouts, both built by slits.js:
+     'slits' (horizontal slit strip) and 'scroll' (big photographs in a
+     vertical column with a lerped virtual scroll). 'grid' is the
+     contact sheet; 'vertical' the plain no-JS / reduced-motion column.
+     The pill cycles slits → scroll → grid; the label always names the
+     NEXT layout. Leaving a live stage fades it out first, and flow
+     layouts arrive with a soft rise (gx-arrive). */
   var KEY = 'harsh-gallery-layout';
   var isDesktop = function () { return window.matchMedia('(min-width:821px)').matches; };
   var stripPage = !!(seriesEl && seriesEl.getAttribute('data-ribbon') === 'on'); // flag reused
-  var canStrip = stripPage && !reduced && isDesktop();
-  var strip = null;
+  var canFancy = stripPage && !reduced && !!(window.SlitGallery && window.SlitGallery.supported());
+  var engine = null, engineDesktop = isDesktop(), swapping = false;
 
-  function applyLayout(l) {
-    if (!seriesEl) return;
-    if (l === 'strip' && !canStrip) l = 'vertical';
-    if (l !== 'strip' && strip) { strip.destroy(); strip = null; }
+  var CYCLE = { slits: 'scroll', scroll: 'grid', grid: 'slits' };
+  var NICE = { slits: 'Slits', scroll: 'Scroll', grid: 'Grid', vertical: 'Scroll' };
+
+  function nextLayout(l) {
+    if (!canFancy) return l === 'grid' ? 'vertical' : 'grid';
+    return CYCLE[l] || 'slits';
+  }
+
+  function makeEngine(m, el, openAt) {
+    var tEl = document.querySelector('.series-title');
+    var t = tEl ? tEl.textContent.replace(/\s*\.\s*$/, '').trim() : 'Series';
+    return window.SlitGallery.create(el, { mode: m, title: t, openAt: (typeof openAt === 'number' ? openAt : undefined) });
+  }
+
+  function arrive() {
+    seriesEl.classList.remove('gx-arrive');
+    void seriesEl.offsetWidth;                       /* restart the animation */
+    seriesEl.classList.add('gx-arrive');
+    setTimeout(function () { seriesEl.classList.remove('gx-arrive'); }, 750);
+  }
+
+  function setLayout(l, openAt) {
+    if (l === 'strip') l = 'slits';                  /* legacy saved value */
+    if ((l === 'slits' || l === 'scroll') && !canFancy) l = 'vertical';
+    if (engine) { engine.destroy(); engine = null; }
+    if (l === 'slits' || l === 'scroll') {
+      engine = makeEngine(l, seriesEl, openAt);
+      if (!engine) { canFancy = false; l = 'vertical'; }
+    }
     seriesEl.setAttribute('data-layout', l);
     body.setAttribute('data-gallery-layout', l);
+    if (l === 'grid' || l === 'vertical') { arrive(); window.scrollTo(0, 0); }
     var lbl = nav.querySelector('.gnav__lbl--layout');
-    if (lbl) lbl.textContent = (l === 'grid' ? (canStrip ? 'Strip' : 'Scroll') : 'Grid');
-    if (l === 'strip' && !strip) strip = makeStrip(seriesEl);
+    if (lbl) lbl.textContent = NICE[nextLayout(l)] || 'Grid';
     try { localStorage.setItem(KEY, l); } catch (e) {}
+  }
+
+  function applyLayout(l, openAt) {
+    if (!seriesEl || swapping) return;
+    if (engine) {
+      /* fade the live stage out, then let the next layout arrive.
+         Reset the page scroll now, while the stage still covers it. */
+      if (l === 'grid' || l === 'vertical') window.scrollTo(0, 0);
+      swapping = true;
+      engine.leave(function () {
+        swapping = false;
+        setLayout(l, openAt);
+      });
+    } else {
+      setLayout(l, openAt);
+    }
   }
 
   if (seriesEl) {
     var saved = null; try { saved = localStorage.getItem(KEY); } catch (e) {}
-    var initial = (saved === 'grid') ? 'grid'
-                : canStrip ? (saved === 'vertical' ? 'vertical' : 'strip')
-                : 'vertical';
-    applyLayout(initial);
+    if (saved === 'strip') saved = 'slits';
+    if (saved === 'vertical' && canFancy) saved = 'scroll';
+    var initial = canFancy
+      ? (saved === 'grid' || saved === 'scroll' ? saved : 'slits')
+      : (saved === 'grid' ? 'grid' : 'vertical');
+    setLayout(initial);
 
     var layoutBtn = nav.querySelector('#gnavLayout');
     if (layoutBtn) layoutBtn.addEventListener('click', function () {
-      var cur = seriesEl.getAttribute('data-layout');
-      applyLayout(cur === 'grid' ? (canStrip ? 'strip' : 'vertical') : 'grid');
+      applyLayout(nextLayout(seriesEl.getAttribute('data-layout')));
     });
 
     seriesEl.addEventListener('click', function (e) {
       if (seriesEl.getAttribute('data-layout') !== 'grid') return;
       var fig = e.target.closest('.frame'); if (!fig) return;
-      applyLayout(canStrip ? 'strip' : 'vertical');
-      requestAnimationFrame(function () { fig.scrollIntoView({ behavior: 'smooth', block: 'start' }); });
+      if (canFancy) {
+        var idx = Array.prototype.indexOf.call(seriesEl.querySelectorAll('.frame'), fig);
+        applyLayout('slits', idx);
+      } else {
+        applyLayout('vertical');
+        requestAnimationFrame(function () { fig.scrollIntoView({ behavior: 'smooth', block: 'start' }); });
+      }
     });
 
     window.addEventListener('resize', function () {
-      var now = stripPage && !reduced && isDesktop();
-      if (now !== canStrip) {
-        canStrip = now;
+      /* the engine handles its own re-measure; recreate only when the
+         GL/DOM breakpoint is crossed so the right renderer is active */
+      var d = isDesktop();
+      if (d !== engineDesktop) {
+        engineDesktop = d;
         var cur = seriesEl.getAttribute('data-layout');
-        applyLayout(cur === 'grid' ? 'grid' : (canStrip ? 'strip' : 'vertical'));
-      } else if (strip) { strip.measure(); }
+        if (engine && (cur === 'slits' || cur === 'scroll')) {
+          engine.destroy(); engine = null; setLayout(cur);
+        }
+      }
     });
   }
 
-  /* ── the strip controller ───────────────────────────────────
-     A normal vertical scroll, but one rAF loop parallaxes each photo
-     inside its frame (image taller than the frame) and scales/softens
-     the frames as they leave centre — the surreal "pull back". Click a
-     frame to zoom it to focus on a dark field (a FLIP animation from
-     its place in the strip); click / Esc drops it back. Reversible. */
-  function makeStrip(el) {
-    var list = el.querySelector('.series-list');
-    var frames = Array.prototype.slice.call(el.querySelectorAll('.frame'));
-    if (!list || !frames.length) return null;
-    el.classList.remove('reveal-on');
-    frames.forEach(function (f) { var im = f.querySelector('img'); if (im) im.loading = 'eager'; });
-
-    var hud = document.createElement('div'); hud.className = 'strip-hud';
-    var bar = document.createElement('div'); bar.className = 'strip-hud__bar'; hud.appendChild(bar);
-    var count = document.createElement('div'); count.className = 'strip-count';
-    count.innerHTML = '<b>01</b><span>/ ' + pad(frames.length) + '</span>';
-    document.body.appendChild(hud); document.body.appendChild(count);
-    var countB = count.querySelector('b');
-
-    var ticking = false;
-
-    function render() {
-      var vh = window.innerHeight, mid = vh / 2, nearest = 0, nd = 1e9;
-      for (var i = 0; i < frames.length; i++) {
-        var fr = frames[i], media = fr.querySelector('.frame-media'), img = fr.querySelector('img');
-        if (!media || !img) continue;
-        var r = media.getBoundingClientRect();
-        var c = r.top + r.height / 2;
-        var d = (c - mid) / vh;
-        var cl = d < -1.1 ? -1.1 : d > 1.1 ? 1.1 : d;
-        var ad = Math.abs(cl);
-        img.style.transform = 'translate3d(0,' + (cl * -r.height * 0.13).toFixed(1) + 'px,0)';
-        // 3D pull-back: photos above/below tilt + recede, then un-curve and land flat at centre
-        media.style.transform = 'translateZ(' + (-ad * 120).toFixed(1) + 'px) rotateX(' + (cl * 9).toFixed(2) + 'deg) scale(' + (1 - ad * 0.05).toFixed(3) + ')';
-        media.style.filter = (ad > 0.1 ? 'blur(' + (ad * 1.5).toFixed(2) + 'px) ' : '') + 'brightness(' + (1 - ad * 0.28).toFixed(3) + ')';
-        fr.style.opacity = (1 - ad * 0.22).toFixed(3);
-        var ac = Math.abs(c - mid); if (ac < nd) { nd = ac; nearest = i; }
-      }
-      var lr = list.getBoundingClientRect();
-      var total = list.scrollHeight - vh;
-      bar.style.width = (total <= 0 ? 0 : Math.min(1, Math.max(0, -lr.top / total)) * 100) + '%';
-      countB.textContent = pad(nearest + 1);
-    }
-    function onScroll() { if (ticking) return; ticking = true; requestAnimationFrame(function () { render(); ticking = false; }); }
-    window.addEventListener('scroll', onScroll, { passive: true });
-
-    /* ── zoom to focus (FLIP) ── */
-    var focus, fbox, fimg, fcap, focused = null;
-    function buildFocus() {
-      focus = document.createElement('div'); focus.className = 'strip-focus';
-      fbox = document.createElement('div'); fbox.className = 'strip-focus__box';
-      fimg = document.createElement('img');
-      fcap = document.createElement('div'); fcap.className = 'strip-focus__cap';
-      fbox.appendChild(fimg); focus.appendChild(fbox); focus.appendChild(fcap);
-      document.body.appendChild(focus);
-      focus.addEventListener('click', closeFocus);
-    }
-    function openFocus(fr) {
-      if (focused) return;
-      if (!focus) buildFocus();
-      var media = fr.querySelector('.frame-media'), img = fr.querySelector('img');
-      var r = media.getBoundingClientRect();
-      focused = fr;
-      fimg.src = img.currentSrc || img.src;
-      var t = fr.querySelector('.frame-text'); fcap.textContent = t ? t.textContent : '';
-      var ar = (img.naturalWidth || 3) / (img.naturalHeight || 2);
-      var th = Math.min(window.innerHeight * 0.86, (window.innerWidth * 0.92) / ar);
-      var tw = th * ar;
-      var tx = (window.innerWidth - tw) / 2, ty = (window.innerHeight - th) / 2;
-      fbox.style.left = tx + 'px'; fbox.style.top = ty + 'px';
-      fbox.style.width = tw + 'px'; fbox.style.height = th + 'px';
-      fbox.style.transformOrigin = 'top left';
-      fbox.style.transition = 'none';
-      fbox.style.transform = 'translate(' + (r.left - tx) + 'px,' + (r.top - ty) + 'px) scale(' + (r.width / tw) + ',' + (r.height / th) + ')';
-      media.style.visibility = 'hidden';
-      document.documentElement.style.overflow = 'hidden';
-      requestAnimationFrame(function () {
-        focus.classList.add('on');
-        fbox.style.transition = '';
-        fbox.style.transform = 'none';
-      });
-    }
-    function closeFocus() {
-      if (!focused) return;
-      var fr = focused, media = fr.querySelector('.frame-media');
-      var r = media.getBoundingClientRect();
-      var tx = parseFloat(fbox.style.left), ty = parseFloat(fbox.style.top),
-          tw = parseFloat(fbox.style.width), th = parseFloat(fbox.style.height);
-      fbox.style.transform = 'translate(' + (r.left - tx) + 'px,' + (r.top - ty) + 'px) scale(' + (r.width / tw) + ',' + (r.height / th) + ')';
-      focus.classList.remove('on');
-      var done = function () {
-        media.style.visibility = '';
-        document.documentElement.style.overflow = '';
-        fbox.removeEventListener('transitionend', done);
-        focused = null;
-      };
-      fbox.addEventListener('transitionend', done);
-    }
-    var clickH = function (e) { var fr = e.target.closest('.frame'); if (!fr) return; e.preventDefault(); openFocus(fr); };
-    var keyH = function (e) { if (e.key === 'Escape') closeFocus(); };
-    el.addEventListener('click', clickH);
-    document.addEventListener('keydown', keyH);
-
-    frames.forEach(function (f) { var im = f.querySelector('img'); if (im && !im.complete) im.addEventListener('load', render, { once: true }); });
-    render();
-
-    return {
-      measure: render,
-      destroy: function () {
-        window.removeEventListener('scroll', onScroll);
-        el.removeEventListener('click', clickH);
-        document.removeEventListener('keydown', keyH);
-        if (focused) { focused.querySelector('.frame-media').style.visibility = ''; focused = null; document.documentElement.style.overflow = ''; }
-        frames.forEach(function (f) {
-          var m = f.querySelector('.frame-media'), im = f.querySelector('img');
-          if (m) { m.style.transform = ''; m.style.filter = ''; m.style.visibility = ''; }
-          if (im) im.style.transform = ''; f.style.opacity = '';
-        });
-        hud.remove(); count.remove();
-        if (focus) { focus.remove(); focus = null; }
-      }
-    };
-  }
-
+  /* ── (the old vertical filmstrip controller lived here; it has been
+     replaced by the slit-strip engine in slits.js. The 'strip' saved
+     preference is migrated to 'slits' above.) ── */
   /* series menu */
   var catBtn = nav.querySelector('#gnavCat'), menu = nav.querySelector('#gnavMenu');
   if (catBtn && menu) {
