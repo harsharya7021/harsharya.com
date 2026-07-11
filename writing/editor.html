@@ -459,6 +459,8 @@
       <button class="b-link" data-cmd="link" title="Link (⌘K)">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.5.6l3-3a5 5 0 0 0-7-7l-1.7 1.6"/><path d="M14 11a5 5 0 0 0-7.5-.6l-3 3a5 5 0 0 0 7 7l1.7-1.6"/></svg>
       </button>
+      <span class="divide"></span>
+      <button class="b-clear" data-cmd="clear" title="Clear formatting (removes italics, bold, etc.)" style="font-family:var(--font-mono);font-size:11px;font-weight:700;">T⌫</button>
     </div>
     <div class="link-form">
       <input type="url" id="linkInput" placeholder="Paste link, press Enter" />
@@ -749,7 +751,20 @@
     else if(cmd==="quote") toggleBlock("blockquote");
     else if(cmd==="pull") togglePull();
     else if(cmd==="link") startLink();
+    else if(cmd==="clear") clearFormat();
   });
+  // Strip inline formatting (italic/bold/etc.) from the selection, and
+  // demote a pull-quote / blockquote block back to a normal paragraph.
+  function clearFormat(){
+    document.execCommand("removeFormat");
+    document.execCommand("unlink");
+    var b=currentBlock();
+    if(b){
+      if(b.classList) b.classList.remove("pull");
+      if(b.nodeName==="BLOCKQUOTE"||b.nodeName==="H2") document.execCommand("formatBlock",false,"<p>");
+    }
+    bodyEl.focus(); scheduleSave(); showBubble();
+  }
   function startLink(){
     var s=sel(); if(s.isCollapsed) return;
     startLink._range=s.getRangeAt(0).cloneRange();
@@ -860,7 +875,40 @@
   bodyEl.addEventListener("paste", function(e){
     var items=(e.clipboardData&&e.clipboardData.items)||[];
     for(var i=0;i<items.length;i++){ if(items[i].type && items[i].type.indexOf("image")===0){ var f=items[i].getAsFile(); if(f){ e.preventDefault(); insertImageFile(f, null); return; } } }
+    // Text paste: sanitize so Docs/Word/Notes styling (esp. italic spans)
+    // doesn't leak in. Keep structure + bold + links; drop the rest.
+    var cd=e.clipboardData; if(!cd) return;
+    var html=cd.getData("text/html"), text=cd.getData("text/plain");
+    if(html){ e.preventDefault(); document.execCommand("insertHTML", false, sanitizePaste(html)); scheduleSave(); updatePlaceholders(); updateMetric(); }
+    else if(text){ e.preventDefault(); document.execCommand("insertText", false, text); scheduleSave(); }
   });
+  // Keep structure + genuine bold + links; drop italics, spans, fonts and
+  // all styling. Weight-aware so Google Docs' <b style="font-weight:normal">
+  // wrapper unwraps instead of turning the whole paste bold.
+  function sanitizePaste(html){
+    var tmp=document.createElement("div"); tmp.innerHTML=html;
+    var ALLOW={P:1,BR:1,A:1,UL:1,OL:1,LI:1,H2:1,BLOCKQUOTE:1};
+    function isBold(n){
+      var w=String((n.style&&n.style.fontWeight)||"").toLowerCase();
+      if(w==="bold"||parseInt(w,10)>=600) return true;               // explicit bold weight
+      if(w==="normal"||(parseInt(w,10)>0&&parseInt(w,10)<600)) return false; // explicitly not bold
+      return n.nodeName==="B"||n.nodeName==="STRONG";                 // bare <b>/<strong> = bold
+    }
+    function toStrong(node,n){ var s=document.createElement("strong"); while(n.firstChild) s.appendChild(n.firstChild); node.replaceChild(s,n); }
+    function unwrap(node,n){ while(n.firstChild) node.insertBefore(n.firstChild,n); node.removeChild(n); }
+    (function walk(node){
+      Array.prototype.slice.call(node.childNodes).forEach(function(n){
+        if(n.nodeType===8){ node.removeChild(n); return; }            // comments
+        if(n.nodeType!==1) return;                                    // keep text nodes
+        walk(n);
+        if(n.nodeName==="DIV"){ var p=document.createElement("p"); while(n.firstChild) p.appendChild(n.firstChild); node.replaceChild(p,n); return; }
+        if(n.nodeName==="B"||n.nodeName==="STRONG"){ isBold(n)?toStrong(node,n):unwrap(node,n); return; }
+        if(!ALLOW[n.nodeName]){ isBold(n)?toStrong(node,n):unwrap(node,n); return; }  // spans etc. → strong only if genuinely bold
+        Array.prototype.slice.call(n.attributes).forEach(function(a){ if(!(n.nodeName==="A"&&a.name==="href")) n.removeAttribute(a.name); });
+      });
+    })(tmp);
+    return tmp.innerHTML.replace(/<p>\s*<\/p>/g,"");
+  }
   bodyEl.addEventListener("dragover", function(e){ if(e.dataTransfer && Array.prototype.some.call(e.dataTransfer.items||[], function(it){ return it.kind==="file"; })) e.preventDefault(); });
   bodyEl.addEventListener("drop", function(e){
     var files=e.dataTransfer&&e.dataTransfer.files; if(!files||!files.length) return;
