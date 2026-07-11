@@ -230,6 +230,10 @@
     .draft.active .t{color:var(--accent);}
     .draft .del{border:0; background:transparent; color:var(--muted); cursor:pointer; font-size:15px; padding:2px 6px;}
     .draft .del:hover{color:var(--accent);}
+    .audio-has{display:flex; align-items:center; justify-content:space-between; gap:10px; border:2px solid var(--text); padding:8px 10px; margin-top:4px;}
+    .audio-name{font-family:var(--font-mono); font-size:12px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+    .audio-del{border:0; background:transparent; color:var(--muted); cursor:pointer; font-size:14px; padding:2px 6px; flex:none;}
+    .audio-del:hover{color:var(--accent);}
 
     /* ───────── Toast + help ───────── */
     .toast{
@@ -391,6 +395,7 @@
     <span class="status" id="status"><span class="dot">●</span> Ready</span>
     <span class="spacer"></span>
     <span class="metric" id="metric">0 words · 0 min</span>
+    <button class="btn ghost" id="btnImg" title="Add image from this device">＋ Image</button>
     <button class="btn ghost" id="btnMeta">Details</button>
     <button class="btn ghost" id="btnPreview">Preview</button>
     <div class="menu-wrap">
@@ -446,10 +451,12 @@
   <button class="plus" id="plus" title="Add">+</button>
   <div class="plus-menu" id="plusMenu">
     <button data-ins="image"><span class="g">▣</span>Image</button>
+    <button data-ins="imageurl"><span class="g">↗</span>Image URL</button>
     <button data-ins="divider"><span class="g">―</span>Divider</button>
     <button data-ins="h2"><span class="g">H</span>Heading</button>
     <button data-ins="quote"><span class="g">&#10077;</span>Quote</button>
   </div>
+  <input type="file" id="imgFile" accept="image/*" hidden />
 
   <!-- ───────── Drawer ───────── -->
   <div class="overlay" id="overlay"></div>
@@ -473,6 +480,16 @@
       <label class="lab" for="fSlug">Slug</label>
       <input type="text" id="fSlug" />
       <div class="hint" id="urlHint">/writing/…</div>
+    </div>
+    <div class="sec">
+      <label class="lab">Narration — listen in your voice</label>
+      <button class="btn ghost" id="audioPick" type="button">＋ Attach audio</button>
+      <input type="file" id="audioFile" accept="audio/*" hidden />
+      <div class="audio-has" id="audioHas" hidden>
+        <span class="audio-name" id="audioName"></span>
+        <button class="audio-del" id="audioDel" type="button" title="Remove narration">✕</button>
+      </div>
+      <div class="hint">One MP3 (mono, ~80 kbps) — stitch the voice chunks first (see <b>_os/audio</b>). Adds a “Listen” player to the published note.</div>
     </div>
     <div class="sec">
       <label class="lab">Notebook — local drafts</label>
@@ -552,7 +569,7 @@
     fTag.value=doc.tag||"Musings";
     fDate.value=doc.date||todayISO();
     fSlug.value=doc.slug||slugify(textOf(doc.title));
-    refreshMeta(); updatePlaceholders(); updateMetric(); renderDrafts();
+    refreshMeta(); updatePlaceholders(); updateMetric(); renderDrafts(); renderAudioState();
   }
   function refreshMeta(){
     datePreview.textContent=monthYear(fDate.value||todayISO());
@@ -737,11 +754,12 @@
     var kind=btn.getAttribute("data-ins");
     plusOpen=false; plus.classList.remove("on"); plusMenu.classList.remove("open");
     if(!plusBlock) return;
-    if(kind==="divider"){ replaceBlock(plusBlock, '<hr><p><br></p>'); }
-    else if(kind==="image"){
+    if(kind==="image"){ pendingImageBlock=plusBlock; imgFile.value=""; imgFile.click(); return; }  // insert happens on file pick
+    if(kind==="imageurl"){
       var url=window.prompt("Image URL (https://…):",""); if(!url) return;
       replaceBlock(plusBlock, '<figure><img src="'+esc(url)+'" alt=""><figcaption>Caption</figcaption></figure><p><br></p>');
     }
+    else if(kind==="divider"){ replaceBlock(plusBlock, '<hr><p><br></p>'); }
     else if(kind==="h2"){ convertBlock(plusBlock,"h2"); }
     else if(kind==="quote"){ convertBlock(plusBlock,"blockquote"); }
     scheduleSave(); updatePlaceholders();
@@ -755,6 +773,115 @@
     var p=null, s=next; while(s){ if(s.nodeName==="P"){ p=s; } s=s.nextElementSibling; }
     if(p){ placeCaret(p); } bodyEl.focus();
   }
+
+  /* ─── Local images: pick from device / paste / drag-drop ───────────
+     While editing, images live inline as scaled data-URLs, so drafts
+     autosave and a downloaded note stays self-contained. On Publish
+     live they're lifted out into committed asset files (see publishLive).
+     On a phone the file picker offers Camera / Photo Library. */
+  var imgFile=$("#imgFile"), pendingImageBlock=null;
+  function loadImg(url){ return new Promise(function(res,rej){ var im=new Image(); im.onload=function(){res(im);}; im.onerror=function(){rej(new Error("decode"));}; im.src=url; }); }
+  async function fileToScaledDataURL(file){
+    var url=URL.createObjectURL(file), img=await loadImg(url);
+    var MAX=1600, w=img.naturalWidth||img.width, h=img.naturalHeight||img.height;
+    var s=Math.min(1, MAX/Math.max(w,h)), cw=Math.max(1,Math.round(w*s)), ch=Math.max(1,Math.round(h*s));
+    var c=document.createElement("canvas"); c.width=cw; c.height=ch;
+    c.getContext("2d").drawImage(img,0,0,cw,ch);
+    URL.revokeObjectURL(url);
+    var png=/png/i.test(file.type);
+    return c.toDataURL(png?"image/png":"image/jpeg", png?undefined:0.82);
+  }
+  async function insertImageFile(file, atBlock){
+    if(!file || !/^image\//.test(file.type)){ toast("That's not an image"); return; }
+    toast("Adding image…");
+    try{
+      var durl=await fileToScaledDataURL(file);
+      var fig='<figure><img src="'+durl+'" alt=""><figcaption>Caption</figcaption></figure><p><br></p>';
+      if(atBlock && bodyEl.contains(atBlock)){ replaceBlock(atBlock, fig); }
+      else { bodyEl.focus(); document.execCommand("insertHTML", false, fig); }
+      scheduleSave(); updatePlaceholders(); updateMetric();
+    }catch(e){ toast("Couldn't read that image"); }
+  }
+  if(imgFile) imgFile.addEventListener("change", function(){
+    var f=imgFile.files && imgFile.files[0], blk=pendingImageBlock; pendingImageBlock=null;
+    if(f) insertImageFile(f, blk); imgFile.value="";
+  });
+  var btnImg=$("#btnImg");
+  if(btnImg) btnImg.addEventListener("click", function(){
+    bodyEl.focus(); var s=sel();
+    if(!s.rangeCount || !inBody(s.anchorNode)) placeCaret(bodyEl, true);   // caret to end if not in body
+    pendingImageBlock=null; imgFile.value=""; imgFile.click();
+  });
+  bodyEl.addEventListener("paste", function(e){
+    var items=(e.clipboardData&&e.clipboardData.items)||[];
+    for(var i=0;i<items.length;i++){ if(items[i].type && items[i].type.indexOf("image")===0){ var f=items[i].getAsFile(); if(f){ e.preventDefault(); insertImageFile(f, null); return; } } }
+  });
+  bodyEl.addEventListener("dragover", function(e){ if(e.dataTransfer && Array.prototype.some.call(e.dataTransfer.items||[], function(it){ return it.kind==="file"; })) e.preventDefault(); });
+  bodyEl.addEventListener("drop", function(e){
+    var files=e.dataTransfer&&e.dataTransfer.files; if(!files||!files.length) return;
+    var img=Array.prototype.filter.call(files, function(f){ return /^image\//.test(f.type); })[0];
+    if(img){ e.preventDefault(); insertImageFile(img, null); }
+  });
+
+  /* ─── Narration audio ──────────────────────────────────────────────
+     One audio file per note (the stitched MP3). Too big for localStorage,
+     so the blob is kept in IndexedDB keyed by draft id; the draft only
+     records its name/ext. On Publish live it's committed to
+     assets/writing/<slug>/listen.<ext> and the note renders a Listen player. */
+  var audioFile=$("#audioFile"), audioPick=$("#audioPick"), audioHas=$("#audioHas"),
+      audioNameEl=$("#audioName"), audioDel=$("#audioDel");
+  var AUDIO_DB="hka-editor", AUDIO_STORE="audio";
+  function audioDBopen(){ return new Promise(function(res,rej){ var r=indexedDB.open(AUDIO_DB,1);
+    r.onupgradeneeded=function(){ r.result.createObjectStore(AUDIO_STORE); };
+    r.onsuccess=function(){ res(r.result); }; r.onerror=function(){ rej(r.error); }; }); }
+  function audioTx(id, mode, fn){ return audioDBopen().then(function(db){ return new Promise(function(res,rej){
+    var t=db.transaction(AUDIO_STORE, mode), s=t.objectStore(AUDIO_STORE), q=fn(s);
+    t.oncomplete=function(){ res(q&&q.result); }; t.onerror=function(){ rej(t.error); }; }); }); }
+  function audioPut(id,val){ return audioTx(id,"readwrite",function(s){ return s.put(val,id); }); }
+  function audioGet(id){ return audioTx(id,"readonly",function(s){ return s.get(id); }); }
+  function audioDelete(id){ return audioTx(id,"readwrite",function(s){ return s.delete(id); }); }
+  function extForAudio(name,type){ var t=(type||"").toLowerCase(), n=(name||"").toLowerCase();
+    if(t.indexOf("mpeg")>-1||/\.mp3$/.test(n)) return "mp3";
+    if(t.indexOf("mp4")>-1||t.indexOf("m4a")>-1||t.indexOf("aac")>-1||/\.(m4a|aac|mp4)$/.test(n)) return t.indexOf("aac")>-1?"aac":"m4a";
+    if(t.indexOf("wav")>-1||/\.wav$/.test(n)) return "wav";
+    if(t.indexOf("ogg")>-1||t.indexOf("opus")>-1||/\.(ogg|opus)$/.test(n)) return "ogg";
+    return "mp3"; }
+  function arrayBufferToBase64(buf){ var bytes=new Uint8Array(buf), CH=0x8000, bin=""; for(var i=0;i<bytes.length;i+=CH){ bin+=String.fromCharCode.apply(null, bytes.subarray(i,i+CH)); } return btoa(bin); }
+  function renderAudioState(){
+    if(!audioHas) return;
+    if(doc.audioName){ audioNameEl.textContent=doc.audioName; audioHas.hidden=false; if(audioPick) audioPick.textContent="Replace audio"; }
+    else{ audioHas.hidden=true; if(audioPick) audioPick.textContent="＋ Attach audio"; }
+  }
+  function audioPlayerHTML(){
+    if(!doc.audioName) return "";
+    var ext=doc.audioExt||extForAudio(doc.audioName,"");
+    var src="../assets/writing/"+(doc.slug||slugify(textOf(titleEl.innerHTML)))+"/listen."+ext;
+    return '<div class="listen" data-listen>'+
+      '<button class="listen-play" type="button" aria-label="Play narration" aria-pressed="false">'+
+        '<svg class="ic-play" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>'+
+        '<svg class="ic-pause" viewBox="0 0 24 24" fill="currentColor"><rect x="6" y="5" width="4" height="14"/><rect x="14" y="5" width="4" height="14"/></svg>'+
+      '</button>'+
+      '<div class="listen-main"><div class="listen-top">'+
+        '<span class="listen-kicker">Listen in Harsh’s voice</span>'+
+        '<span class="listen-time"><b class="listen-cur">0:00</b> / <span class="listen-dur">–:–</span></span>'+
+      '</div><div class="listen-track"><div class="listen-fill"></div></div></div>'+
+      '<audio class="listen-audio" preload="metadata" src="'+src+'"></audio>'+
+    '</div>';
+  }
+  if(audioPick) audioPick.addEventListener("click", function(){ audioFile.value=""; audioFile.click(); });
+  if(audioFile) audioFile.addEventListener("change", function(){
+    var f=audioFile.files && audioFile.files[0]; if(!f){ return; }
+    if(!/^audio\//.test(f.type) && !/\.(mp3|m4a|aac|ogg|opus|wav)$/i.test(f.name)){ toast("That's not an audio file"); audioFile.value=""; return; }
+    audioPut(doc.id, { name:f.name, type:f.type||"", blob:f }).then(function(){
+      doc.audioName=f.name; doc.audioExt=extForAudio(f.name,f.type); collect(); Vault.save(doc); stamp();
+      renderAudioState(); toast("Narration attached");
+    }).catch(function(e){ toast("Couldn't store audio: "+(e&&e.message||e)); });
+    audioFile.value="";
+  });
+  if(audioDel) audioDel.addEventListener("click", function(){
+    audioDelete(doc.id).catch(function(){});
+    doc.audioName=""; doc.audioExt=""; collect(); Vault.save(doc); stamp(); renderAudioState(); toast("Narration removed");
+  });
 
   /* ─── Markdown-style shortcuts ─── */
   bodyEl.addEventListener("keydown", function(e){
@@ -870,7 +997,8 @@
     var desc=textOf(subtitleEl.innerHTML)||"";
     return fill(NOTE_TPL,{
       TITLE_PLAIN:esc(titlePlain), TITLE_HTML:titleHTML(), DESC:esc(desc),
-      DATE_LABEL:monthYear(doc.date), TAG:esc(doc.tag), SLUG:doc.slug, BODY:cleanBodyHTML()
+      DATE_LABEL:monthYear(doc.date), TAG:esc(doc.tag), SLUG:doc.slug, BODY:cleanBodyHTML(),
+      AUDIO:audioPlayerHTML()
     });
   }
   function buildRow(){
@@ -987,8 +1115,16 @@
     var ref=await ghApi(base+"/git/ref/heads/"+CONFIG.branch);
     var baseSha=ref.object.sha;
     var baseCommit=await ghApi(base+"/git/commits/"+baseSha);
-    var tree=await ghApi(base+"/git/trees",{method:"POST",body:{ base_tree:baseCommit.tree.sha,
-      tree:files.map(function(f){ return {path:f.path,mode:"100644",type:"blob",content:f.content}; }) }});
+    var items=[];
+    for(var i=0;i<files.length;i++){ var f=files[i];
+      if(f.contentBase64!=null){                       // binary (image) → make a blob, ref by sha
+        var blob=await ghApi(base+"/git/blobs",{method:"POST",body:{ content:f.contentBase64, encoding:"base64" }});
+        items.push({ path:f.path, mode:"100644", type:"blob", sha:blob.sha });
+      } else {
+        items.push({ path:f.path, mode:"100644", type:"blob", content:f.content });
+      }
+    }
+    var tree=await ghApi(base+"/git/trees",{method:"POST",body:{ base_tree:baseCommit.tree.sha, tree:items }});
     var commit=await ghApi(base+"/git/commits",{method:"POST",body:{ message:message, tree:tree.sha, parents:[baseSha] }});
     await ghApi(base+"/git/refs/heads/"+CONFIG.branch,{method:"PATCH",body:{ sha:commit.sha }});
     return commit;
@@ -1051,18 +1187,36 @@
     var title=textOf(titleEl.innerHTML);
     if(!title){ toast("Give it a title first"); titleEl.focus(); return; }
     if(!bodyEl.textContent.trim() && !bodyEl.querySelector("img")){ toast("Write something first"); return; }
-    var slug=doc.slug||slugify(title);
+    var slug=doc.slug||slugify(title); doc.slug=slug;   // lock slug so note + asset paths agree
     publishing=true; var T=transport(); setPub("Publishing…");
     try{
       var noteHTML=buildNote();
+      // Lift inline (device/pasted) images out into committed asset files,
+      // rewriting each src to ../assets/writing/<slug>/NN.ext
+      var assets=[], ai=0;
+      noteHTML=noteHTML.replace(/src="data:image\/([a-z0-9.+-]+);base64,([^"]+)"/gi, function(_m, mime, b64){
+        ai++; var ext=mime.toLowerCase().replace("jpeg","jpg").replace(/[^a-z0-9]/g,"")||"jpg";
+        var apath="assets/writing/"+slug+"/"+String(ai).padStart(2,"0")+"."+ext;
+        assets.push({ path:apath, contentBase64:b64 });
+        return 'src="../'+apath+'"';
+      });
+      // Narration audio → committed alongside as listen.<ext>
+      if(doc.audioName){
+        setPub("Reading narration…");
+        var arec=await audioGet(doc.id);
+        if(arec && arec.blob){
+          var ab=await arec.blob.arrayBuffer();
+          assets.push({ path:"assets/writing/"+slug+"/listen."+(doc.audioExt||extForAudio(doc.audioName,arec.type)), contentBase64:arrayBufferToBase64(ab) });
+        }
+      }
       setPub("Reading index…");
       var indexRaw=await T.readFile("writing/index.html");
       var newIndex=spliceIndex(indexRaw,{ slug:slug, title:title, date:doc.date, tag:doc.tag });
-      setPub("Committing…");
+      setPub(assets.length ? ("Committing "+assets.length+" file"+(assets.length>1?"s":"")+"…") : "Committing…");
       await T.commit([
         { path:"writing/"+slug+".html", content:noteHTML },
         { path:"writing/index.html", content:newIndex }
-      ], "Publish note: "+title);
+      ].concat(assets), "Publish note: "+title);
       doc.published=true; doc.slug=slug; persist();
       setPub(""); toast("Published ✓"); showDone(slug, title);
     }catch(e){
@@ -1179,6 +1333,20 @@
 '    .post-footer a { color:var(--text); border-bottom:2px solid var(--text); padding-bottom:2px; font-weight:700; }\n'+
 '    .post-footer a:hover { color:var(--accent); border-bottom-color:var(--accent); }\n'+
 '    @media (max-width:720px){ .post{padding:32px 0 64px;} .post-body{font-size:16px;} .post-body h2{font-size:30px;margin-top:44px;} .post-body .pull{font-size:22px;} }\n'+
+'    .listen{ display:flex; align-items:center; gap:14px; border:2px solid var(--text); padding:12px 14px; margin:0 0 48px; max-width:600px; background:var(--bg); }\n'+
+'    .listen-play{ flex:none; width:44px; height:44px; border:2px solid var(--text); background:var(--accent); color:var(--text); cursor:pointer; display:flex; align-items:center; justify-content:center; transition:background .15s, color .15s; }\n'+
+'    .listen-play:hover{ background:var(--text); color:var(--bg); }\n'+
+'    .listen-play svg{ width:16px; height:16px; display:block; }\n'+
+'    .listen-play .ic-pause{ display:none; }\n'+
+'    .listen.is-playing .ic-play{ display:none; } .listen.is-playing .ic-pause{ display:block; }\n'+
+'    .listen-main{ flex:1; min-width:0; }\n'+
+'    .listen-top{ display:flex; align-items:baseline; justify-content:space-between; gap:12px; margin-bottom:8px; }\n'+
+'    .listen-kicker{ font-family:var(--font-mono); font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }\n'+
+'    .listen-time{ font-family:var(--font-mono); font-size:11px; letter-spacing:0.04em; color:var(--muted); white-space:nowrap; }\n'+
+'    .listen-time b{ color:var(--text); font-weight:700; }\n'+
+'    .listen-track{ height:6px; background:color-mix(in srgb, var(--text) 12%, transparent); cursor:pointer; position:relative; }\n'+
+'    .listen-fill{ position:absolute; left:0; top:0; bottom:0; width:0; background:var(--accent); }\n'+
+'    @media (max-width:720px){ .listen{ margin-bottom:36px; } .listen-kicker{ font-size:10px; } }\n'+
 '  </style>\n'+
 '  <link rel="icon" href="../favicon.ico" sizes="48x48">\n'+
 '  <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">\n'+
@@ -1216,6 +1384,7 @@
 '      <h1 class="post-title">{{TITLE_HTML}}</h1>\n'+
 '      <p class="post-description">{{DESC}}</p>\n'+
 '    </header>\n'+
+'    {{AUDIO}}\n'+
 '    <div class="post-body">\n'+
 '{{BODY}}\n'+
 '    </div>\n'+
@@ -1231,6 +1400,18 @@
 '    </div>\n'+
 '  </footer>\n'+
 '  <script>document.getElementById("year").textContent=new Date().getFullYear();var n=document.getElementById("nav");window.addEventListener("scroll",function(){if(window.scrollY>8)n.classList.add("scrolled");else n.classList.remove("scrolled");});<\/script>\n'+
+'  <script>(function(){\n'+
+'    var L=document.querySelector("[data-listen]"); if(!L) return;\n'+
+'    var a=L.querySelector(".listen-audio"),play=L.querySelector(".listen-play"),fill=L.querySelector(".listen-fill"),track=L.querySelector(".listen-track"),cur=L.querySelector(".listen-cur"),dur=L.querySelector(".listen-dur");\n'+
+'    function fmt(s){ s=Math.max(0,Math.floor(s||0)); return Math.floor(s/60)+":"+("0"+(s%60)).slice(-2); }\n'+
+'    a.addEventListener("loadedmetadata",function(){ if(isFinite(a.duration)) dur.textContent=fmt(a.duration); });\n'+
+'    a.addEventListener("timeupdate",function(){ fill.style.width=((a.currentTime/(a.duration||1))*100)+"%"; cur.textContent=fmt(a.currentTime); });\n'+
+'    a.addEventListener("play",function(){ L.classList.add("is-playing"); play.setAttribute("aria-pressed","true"); });\n'+
+'    a.addEventListener("pause",function(){ L.classList.remove("is-playing"); play.setAttribute("aria-pressed","false"); });\n'+
+'    a.addEventListener("ended",function(){ L.classList.remove("is-playing"); fill.style.width="0%"; cur.textContent="0:00"; });\n'+
+'    play.addEventListener("click",function(){ if(a.paused) a.play(); else a.pause(); });\n'+
+'    track.addEventListener("click",function(e){ var r=track.getBoundingClientRect(); if(a.duration) a.currentTime=Math.min(a.duration,Math.max(0,((e.clientX-r.left)/r.width)*a.duration)); });\n'+
+'  })();<\/script>\n'+
 '</body>\n'+
 '</html>\n';
 
