@@ -27,6 +27,22 @@
   var current  = body.getAttribute('data-series');
   var curIdx   = current ? find(current) : -1;
 
+  /* arrival hand-off from the globe: the same photograph that expanded
+     over the globe covers this page too, then recedes into the gallery */
+  (function () {
+    var cov = null;
+    try { cov = sessionStorage.getItem('gm-cover'); sessionStorage.removeItem('gm-cover'); } catch (e) {}
+    if (!cov || !seriesEl) return;
+    var ov = document.createElement('div');
+    ov.className = 'sg-arrive';
+    ov.style.backgroundImage = 'url(\'' + cov + '\')';
+    body.appendChild(ov);
+    setTimeout(function () {
+      ov.classList.add('out');
+      setTimeout(function () { ov.remove(); }, 1100);
+    }, reduced ? 60 : 420);
+  })();
+
   function menuItems() {
     return SERIES.map(function (s) {
       return '<a href="' + s.id + '.html" data-go' + (s.id === current ? ' class="is-current"' : '') +

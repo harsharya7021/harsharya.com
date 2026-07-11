@@ -19,6 +19,11 @@ WORKING-WITH-HARSH.md
 # contact-form backend: runs on a separate host, must never be served by the
 # site (.nojekyll publishes every committed file), so it's kept out of git
 _source/
+# publish service: runs on the VPS, must never be served by the site — same
+# reason as _source/. Deployed by scp/rsync from this folder, not via git.
+_os/
+# never track any env secrets, wherever they live
+**/.env
 test-harness.html
 test-reveal.html
 test-credrev.html

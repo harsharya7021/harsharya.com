@@ -10,6 +10,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo+Black&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,700;0,6..96,900;1,6..96,400&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=Inter:wght@400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="../styles.css?v=15" />
   <link rel="stylesheet" href="series.css?v=10" />
+  <link rel="stylesheet" href="globe.css?v=2" />
 
   <!-- icons / share cards / canonical -->
   <link rel="icon" href="../favicon.ico" sizes="48x48">
@@ -51,6 +52,9 @@
     <h1 class="gx-title">Series from places I <em>keep going back to.</em></h1>
     <p class="gx-lead">Film and digital. Long-form rather than greatest-hits — each series is a single trip, a single roll of mood, sequenced the way I'd flip through prints in a sleeve.</p>
   </header>
+
+  <!-- photos on the map — built by globe.js; hides itself without WebGL -->
+  <section class="gm-hero" id="gm" aria-label="Photo series on a globe"></section>
 
   <main class="gx-grid">
 
@@ -125,6 +129,10 @@
     </div>
   </footer>
 
-  <script src="series.js?v=7"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="globe-data.js?v=1"></script>
+  <script src="globe.js?v=2"></script>
+  <script src="series.js?v=10"></script>
 </body>
 </html>

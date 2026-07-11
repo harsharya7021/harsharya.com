@@ -1,0 +1,1240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Editor — Harsh Kumar Arya</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo+Black&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;1,6..96,400&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="icon" href="../favicon.ico" sizes="48x48">
+  <style>
+    :root{
+      --bg:#f6f3eb; --text:#1a1a1a; --muted:#6b6358; --line:#d6cfc1;
+      --accent:#ff2d87; --accent-2:#00b3ff; --accent-3:#ffc700; --accent-4:#00d68f;
+      --font-display:"Anton","Archivo Black",sans-serif;
+      --font-body:"Inter",-apple-system,sans-serif;
+      --font-serif:"Fraunces","Bodoni Moda",serif;
+      --font-mono:"Space Mono",ui-monospace,"SF Mono",Menlo,monospace;
+    }
+    *{box-sizing:border-box;}
+    html,body{margin:0;padding:0;}
+    body{
+      background:var(--bg); color:var(--text);
+      font-family:var(--font-body);
+      -webkit-font-smoothing:antialiased; text-rendering:optimizeLegibility;
+      overflow-x:clip; /* contain the off-canvas drawer without breaking the sticky top bar */
+    }
+    a{color:inherit;}
+
+    /* ───────── Top bar ───────── */
+    .topbar{
+      position:sticky; top:0; z-index:40;
+      display:flex; align-items:center; gap:16px;
+      padding:0 20px; height:56px;
+      background:color-mix(in srgb, var(--bg) 86%, transparent);
+      backdrop-filter:saturate(1.4) blur(10px);
+      -webkit-backdrop-filter:saturate(1.4) blur(10px);
+      border-bottom:1px solid var(--line);
+    }
+    .brand{
+      font-family:var(--font-mono); font-size:12px; font-weight:700;
+      letter-spacing:0.14em; text-transform:uppercase; text-decoration:none;
+      white-space:nowrap;
+    }
+    .brand sup{color:var(--accent); font-size:0.7em;}
+    .brand:hover{color:var(--accent);}
+    .status{
+      font-family:var(--font-mono); font-size:11px; letter-spacing:0.08em;
+      color:var(--muted); text-transform:uppercase; white-space:nowrap;
+    }
+    .status .dot{color:var(--accent-4);}
+    .spacer{flex:1 1 auto;}
+    .metric{font-family:var(--font-mono); font-size:11px; letter-spacing:0.06em; color:var(--muted); white-space:nowrap;}
+    .btn{
+      font-family:var(--font-mono); font-size:11px; font-weight:700;
+      letter-spacing:0.12em; text-transform:uppercase;
+      border:2px solid var(--text); background:transparent; color:var(--text);
+      padding:7px 12px; cursor:pointer; line-height:1; white-space:nowrap;
+      transition:background .15s, color .15s, transform .05s;
+    }
+    .btn:hover{background:var(--text); color:var(--bg);}
+    .btn:active{transform:translateY(1px);}
+    .btn.primary{background:var(--accent); border-color:var(--text);}
+    .btn.primary:hover{background:var(--text); color:var(--bg);}
+    .btn.ghost{border-color:var(--line);}
+    .btn.ghost:hover{border-color:var(--text);}
+
+    .menu-wrap{position:relative;}
+    .menu{
+      position:absolute; right:0; top:calc(100% + 8px);
+      background:var(--bg); border:2px solid var(--text);
+      box-shadow:6px 6px 0 rgba(26,26,26,.12);
+      min-width:230px; padding:6px; display:none; z-index:60;
+    }
+    .menu.open{display:block;}
+    .menu button{
+      display:flex; width:100%; align-items:center; justify-content:space-between; gap:14px;
+      background:transparent; border:0; cursor:pointer; text-align:left;
+      font-family:var(--font-mono); font-size:12px; letter-spacing:0.04em;
+      color:var(--text); padding:10px 10px;
+    }
+    .menu button:hover{background:var(--accent);}
+    .menu button .k{color:var(--muted); font-size:10px; letter-spacing:0.08em;}
+    .menu button:hover .k{color:var(--text);}
+    .menu .sep{height:1px; background:var(--line); margin:6px 4px;}
+    .menu .head{font-family:var(--font-mono); font-size:10px; letter-spacing:0.14em; text-transform:uppercase; color:var(--muted); padding:8px 10px 4px;}
+
+    /* ───────── Writing canvas ───────── */
+    .wrap{max-width:760px; margin:0 auto; padding:56px 24px 40vh; position:relative;}
+    .doc-meta{
+      display:flex; align-items:center; gap:12px; flex-wrap:wrap;
+      font-family:var(--font-mono); font-size:11px; letter-spacing:0.14em;
+      text-transform:uppercase; color:var(--muted); margin-bottom:22px;
+    }
+    .doc-meta .chip{
+      border:2px solid var(--text); background:var(--accent); color:var(--text);
+      padding:3px 10px; font-weight:700; cursor:pointer;
+    }
+    .doc-meta .date{cursor:pointer;}
+    .doc-meta .date:hover, .doc-meta .chip:hover{color:var(--text); box-shadow:2px 2px 0 var(--text);}
+
+    [contenteditable]{outline:none;}
+    #title{
+      font-family:var(--font-display);
+      font-size:clamp(40px,6.4vw,84px); line-height:0.95;
+      letter-spacing:-0.02em; text-transform:uppercase;
+      margin:0 0 14px; word-break:break-word;
+    }
+    #title em{font-family:var(--font-serif); font-style:italic; font-weight:700; color:var(--accent); text-transform:none;}
+    #subtitle{
+      font-family:var(--font-serif); font-style:italic; font-weight:400;
+      font-size:clamp(19px,2.4vw,23px); line-height:1.45; color:var(--muted);
+      margin:0 0 44px; max-width:620px;
+    }
+    /* Body — mirrors the published .post-body exactly (true WYSIWYG) */
+    #body{font-size:18px; line-height:1.7; color:var(--text); min-height:38vh;}
+    #body > * + *{margin-top:22px;}
+    #body h2{font-family:var(--font-display); font-size:36px; line-height:1.05; text-transform:uppercase; letter-spacing:-0.01em; margin:52px 0 8px;}
+    #body p{margin:0;}
+    #body strong{font-weight:600;}
+    #body em{font-style:italic;}
+    #body a{color:inherit; border-bottom:2px solid var(--line); padding-bottom:1px;}
+    #body ul, #body ol{padding-left:0; list-style:none; margin:0;}
+    #body li{padding:10px 0 10px 28px; position:relative; border-top:1px dashed var(--line);}
+    #body li:first-child{border-top:0;}
+    #body li::before{content:"→"; position:absolute; left:0; top:10px; font-family:var(--font-display); color:var(--accent); font-size:18px;}
+    #body blockquote{margin:0; padding:14px 0 14px 24px; border-left:4px solid var(--accent); color:var(--muted); font-style:italic; font-family:var(--font-serif); font-size:22px; line-height:1.5;}
+    #body .pull{font-family:var(--font-serif); font-style:italic; font-size:26px; line-height:1.4; color:var(--text); padding:8px 0; margin:40px 0; max-width:620px;}
+    #body figure{margin:40px 0;}
+    #body img{display:block; max-width:100%; height:auto; border:2px solid var(--text);}
+    #body figcaption{font-family:var(--font-mono); font-size:12px; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); margin-top:10px;}
+    #body hr{border:0; border-top:3px solid var(--text); margin:48px 0;}
+
+    /* Placeholders */
+    .is-empty::before{content:attr(data-ph); color:var(--muted); opacity:0.5; pointer-events:none;}
+    #body.is-empty::before{font-family:var(--font-body);}
+
+    /* ───────── Selection bubble ───────── */
+    .bubble{
+      position:absolute; z-index:60; top:0; left:0;
+      transform:translate(-50%,-100%);
+      display:flex; align-items:center; gap:2px;
+      background:var(--text); color:var(--bg);
+      padding:4px; border-radius:6px;
+      box-shadow:0 6px 20px rgba(0,0,0,.28);
+      opacity:0; visibility:hidden; transition:opacity .12s;
+      white-space:nowrap;
+    }
+    .bubble::after{content:""; position:absolute; left:50%; bottom:-6px; transform:translateX(-50%); border:6px solid transparent; border-top-color:var(--text); border-bottom:0;}
+    .bubble button{
+      width:34px; height:34px; border:0; background:transparent; color:var(--bg);
+      cursor:pointer; display:flex; align-items:center; justify-content:center;
+      font-family:var(--font-body); font-size:16px; border-radius:4px;
+    }
+    .bubble button:hover{background:rgba(255,255,255,.16);}
+    .bubble button.active{color:var(--accent-3);}
+    .bubble .b-bold{font-family:var(--font-display); font-size:17px;}
+    .bubble .b-ital{font-family:var(--font-serif); font-style:italic; font-weight:700; font-size:18px;}
+    .bubble .b-h2{font-family:var(--font-mono); font-weight:700; font-size:12px;}
+    .bubble .b-quote{font-family:var(--font-serif); font-size:22px; line-height:1;}
+    .bubble .divide{width:1px; height:22px; background:rgba(255,255,255,.22); margin:0 3px;}
+    .bubble .link-form{display:none; align-items:center; gap:6px; padding:0 6px;}
+    .bubble.linking .btns{display:none;}
+    .bubble.linking .link-form{display:flex;}
+    .bubble .link-form input{
+      width:210px; background:transparent; border:0; border-bottom:1px solid rgba(255,255,255,.4);
+      color:var(--bg); font-family:var(--font-mono); font-size:12px; padding:6px 2px; outline:none;
+    }
+    .bubble .link-form input::placeholder{color:rgba(255,255,255,.5);}
+    .bubble .link-form button{width:auto; padding:0 8px; height:28px; font-family:var(--font-mono); font-size:11px; font-weight:700; letter-spacing:.1em;}
+
+    /* ───────── Plus inserter ───────── */
+    .plus{
+      position:absolute; z-index:30; top:0; left:0; width:34px; height:34px;
+      border:2px solid var(--text); border-radius:50%; background:var(--bg);
+      color:var(--text); font-size:22px; line-height:0; cursor:pointer;
+      display:flex; align-items:center; justify-content:center;
+      opacity:0; pointer-events:none; transition:opacity .15s, transform .2s;
+    }
+    .plus.on{transform:rotate(45deg); border-color:var(--accent);}
+    .plus-menu{
+      position:absolute; z-index:31; top:0; left:0;
+      display:none; gap:6px; background:var(--bg); border:2px solid var(--text);
+      padding:6px; box-shadow:6px 6px 0 rgba(26,26,26,.12);
+    }
+    .plus-menu.open{display:flex;}
+    .plus-menu button{
+      display:flex; flex-direction:column; align-items:center; gap:4px;
+      border:0; background:transparent; cursor:pointer; padding:8px 10px;
+      font-family:var(--font-mono); font-size:9px; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted);
+    }
+    .plus-menu button .g{font-size:18px; color:var(--text); line-height:1;}
+    .plus-menu button:hover{color:var(--text);}
+    .plus-menu button:hover .g{color:var(--accent);}
+
+    /* ───────── Drawer (frontmatter + notebook) ───────── */
+    .overlay{position:fixed; inset:0; background:rgba(26,26,26,.34); opacity:0; visibility:hidden; transition:opacity .2s; z-index:70;}
+    .overlay.on{opacity:1; visibility:visible;}
+    /* Fixed, viewport-sized shell clips the off-canvas panel so it never adds horizontal scroll */
+    .drawer-shell{position:fixed; inset:0; overflow:hidden; pointer-events:none; z-index:80;}
+    .drawer{
+      position:absolute; top:0; right:0; height:100%; width:360px; max-width:88vw;
+      background:var(--bg); border-left:2px solid var(--text); pointer-events:auto;
+      transform:translateX(100%); transition:transform .24s cubic-bezier(.2,.7,.2,1);
+      display:flex; flex-direction:column; overflow-y:auto;
+    }
+    .drawer.on{transform:none;}
+    .drawer h3{font-family:var(--font-display); text-transform:uppercase; font-size:22px; letter-spacing:0.01em; margin:0;}
+    .drawer .d-head{display:flex; align-items:center; justify-content:space-between; padding:18px 20px; border-bottom:2px solid var(--text);}
+    .drawer .sec{padding:20px; border-bottom:1px solid var(--line);}
+    .drawer .lab{font-family:var(--font-mono); font-size:10px; letter-spacing:0.14em; text-transform:uppercase; color:var(--muted); display:block; margin-bottom:8px;}
+    .drawer input[type=text], .drawer input[type=date], .drawer select{
+      width:100%; font-family:var(--font-body); font-size:14px; color:var(--text);
+      background:transparent; border:2px solid var(--line); padding:9px 10px; outline:none;
+    }
+    .drawer input:focus, .drawer select:focus{border-color:var(--text);}
+    .drawer .hint{font-family:var(--font-mono); font-size:11px; color:var(--muted); margin-top:8px; word-break:break-all;}
+    .tagrow{display:flex; flex-wrap:wrap; gap:6px; margin-top:10px;}
+    .tagrow button{font-family:var(--font-mono); font-size:10px; letter-spacing:0.1em; text-transform:uppercase; border:2px solid var(--text); background:transparent; padding:4px 8px; cursor:pointer; font-weight:700;}
+    .tagrow button:hover{background:var(--accent);}
+    .drafts{display:flex; flex-direction:column; gap:0;}
+    .draft{
+      display:flex; align-items:center; justify-content:space-between; gap:8px;
+      padding:11px 0; border-top:1px solid var(--line); cursor:pointer;
+    }
+    .draft:first-child{border-top:0;}
+    .draft .t{font-size:14px; font-weight:600; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
+    .draft .m{font-family:var(--font-mono); font-size:10px; color:var(--muted); letter-spacing:0.06em;}
+    .draft.active .t{color:var(--accent);}
+    .draft .del{border:0; background:transparent; color:var(--muted); cursor:pointer; font-size:15px; padding:2px 6px;}
+    .draft .del:hover{color:var(--accent);}
+
+    /* ───────── Toast + help ───────── */
+    .toast{
+      position:fixed; left:50%; bottom:28px; transform:translateX(-50%) translateY(20px);
+      background:var(--text); color:var(--bg); padding:11px 18px;
+      font-family:var(--font-mono); font-size:12px; letter-spacing:0.05em;
+      opacity:0; visibility:hidden; transition:opacity .2s, transform .2s; z-index:100;
+      box-shadow:0 8px 24px rgba(0,0,0,.25);
+    }
+    .toast.on{opacity:1; visibility:visible; transform:translateX(-50%) translateY(0);}
+
+    .help{
+      position:fixed; left:20px; bottom:20px; z-index:90; max-width:320px;
+      background:var(--bg); border:2px solid var(--text); padding:16px 18px;
+      box-shadow:6px 6px 0 rgba(26,26,26,.12);
+    }
+    .help h4{font-family:var(--font-mono); font-size:11px; letter-spacing:0.12em; text-transform:uppercase; margin:0 0 10px;}
+    .help ul{margin:0; padding:0; list-style:none; font-family:var(--font-mono); font-size:11px; color:var(--muted); line-height:1.9;}
+    .help kbd{font-family:var(--font-mono); background:var(--text); color:var(--bg); padding:1px 5px; font-size:10px;}
+    .help .x{position:absolute; top:8px; right:10px; border:0; background:transparent; cursor:pointer; font-size:15px; color:var(--muted);}
+    .help.hide{display:none;}
+
+    @media (max-width:720px){
+      .wrap{padding:34px 18px 40vh;}
+      .metric, .status{display:none;}
+      #btnPreview{display:none;}          /* Preview also lives in the Publish menu */
+      .topbar{gap:10px; padding:0 14px;}
+      .btn{padding:6px 9px; font-size:10px; letter-spacing:0.08em;}
+      .plus{display:none;}
+      .help{left:12px; right:12px; bottom:12px; max-width:none;}
+      .brand .long{display:none;}
+    }
+
+    /* ───────── Publish access lock ───────── */
+    body.locked{ overflow:hidden; }
+    .lock{
+      position:fixed; inset:0; z-index:200; display:none;
+      align-items:center; justify-content:center; padding:24px; background:var(--bg);
+    }
+    .lock.on{ display:flex; }
+    .lock-card{
+      width:100%; max-width:430px; border:2px solid var(--text); background:var(--bg);
+      box-shadow:10px 10px 0 rgba(26,26,26,.10); padding:28px 26px;
+    }
+    .lock-badge{
+      display:inline-block; font-family:var(--font-mono); font-size:10px; font-weight:700;
+      letter-spacing:0.16em; text-transform:uppercase; border:2px solid var(--text);
+      background:var(--accent-3); color:var(--text); padding:4px 9px; margin-bottom:16px;
+    }
+    .lock-card h2{ font-family:var(--font-display); text-transform:uppercase; font-size:32px; line-height:0.95; letter-spacing:-0.01em; margin:0 0 10px; }
+    .lock-sub{ font-size:13.5px; line-height:1.5; color:var(--muted); margin:0 0 18px; }
+    .lock-tabs{ display:flex; gap:0; margin-bottom:18px; border:2px solid var(--text); }
+    .lock-tab{
+      flex:1; font-family:var(--font-mono); font-size:11px; font-weight:700; letter-spacing:0.1em;
+      text-transform:uppercase; background:transparent; border:0; color:var(--muted);
+      padding:9px 8px; cursor:pointer; border-right:2px solid var(--text);
+    }
+    .lock-tab:last-child{ border-right:0; }
+    .lock-tab.is-on{ background:var(--text); color:var(--bg); }
+    .lock-pane[hidden]{ display:none; }
+    .lock-card label.lab{ display:block; font-family:var(--font-mono); font-size:10px; letter-spacing:0.14em; text-transform:uppercase; color:var(--muted); margin:0 0 6px; }
+    .lock-card input{
+      width:100%; font-family:var(--font-mono); font-size:13px; color:var(--text);
+      background:transparent; border:2px solid var(--text); padding:11px; outline:none; margin-bottom:12px;
+    }
+    .lock-card input:focus{ border-color:var(--accent); }
+    .lock-card .btn.primary{ width:100%; padding:12px; font-size:12px; }
+    .lock-err{ font-family:var(--font-mono); font-size:11px; color:#c0392b; margin-top:12px; min-height:14px; letter-spacing:0.02em; line-height:1.4; }
+    .lock-err.ok{ color:var(--accent-4); }
+    .lock-help{ margin-top:16px; border-top:1px solid var(--line); padding-top:14px; }
+    .lock-help summary{ font-family:var(--font-mono); font-size:11px; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); cursor:pointer; }
+    .lock-help ol{ margin:12px 0 0; padding-left:18px; font-size:12.5px; line-height:1.7; color:var(--muted); }
+    .lock-help code{ font-family:var(--font-mono); font-size:11px; background:var(--text); color:var(--bg); padding:1px 5px; }
+    .lock-help a{ color:var(--accent); border-bottom:1px solid var(--accent); }
+
+    /* Publishing progress + done */
+    .status.pub{ color:var(--accent); }
+    .pubdone{ position:fixed; inset:0; z-index:210; display:none; align-items:center; justify-content:center; padding:24px; background:rgba(26,26,26,.42); }
+    .pubdone.on{ display:flex; }
+    .pubdone-card{ width:100%; max-width:440px; border:2px solid var(--text); background:var(--bg); box-shadow:10px 10px 0 rgba(26,26,26,.16); padding:28px 26px; }
+    .pubdone-card .k{ font-family:var(--font-mono); font-size:10px; letter-spacing:0.16em; text-transform:uppercase; color:var(--accent-4); font-weight:700; }
+    .pubdone-card h3{ font-family:var(--font-display); text-transform:uppercase; font-size:30px; line-height:0.96; margin:8px 0 12px; word-break:break-word; }
+    .pubdone-card p{ font-size:13.5px; line-height:1.55; color:var(--muted); margin:0 0 16px; }
+    .pubdone-url{ font-family:var(--font-mono); font-size:12px; word-break:break-all; border:2px solid var(--line); padding:10px; margin-bottom:16px; }
+    .pubdone-row{ display:flex; gap:10px; flex-wrap:wrap; }
+    .pubdone-row .btn{ text-decoration:none; }
+
+    @media (max-width:720px){
+      .lock-card{ padding:22px 18px; } .lock-card h2{ font-size:27px; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ───────── Publish access lock ───────── -->
+  <div class="lock" id="lock">
+    <div class="lock-card">
+      <span class="lock-badge">Notes · Publisher</span>
+      <h2>Unlock to publish</h2>
+      <p class="lock-sub">Sign in once on this device. This gate is what lets you publish straight to <b>harsharya.com</b> — from any laptop or your phone.</p>
+      <div class="lock-tabs">
+        <button class="lock-tab is-on" data-tab="key" type="button">Publish key</button>
+        <button class="lock-tab" data-tab="server" type="button">Server login</button>
+      </div>
+
+      <div class="lock-pane" data-pane="key">
+        <label class="lab" for="lockKey">GitHub publish key</label>
+        <input type="password" id="lockKey" placeholder="github_pat_… / ghp_…" autocomplete="off" autocapitalize="off" spellcheck="false" />
+        <button class="btn primary" id="lockKeyGo" type="button">Unlock</button>
+        <details class="lock-help">
+          <summary>How do I make a key?</summary>
+          <ol>
+            <li>GitHub → <b>Settings → Developer settings → Personal access tokens → Fine-grained</b> → <a href="https://github.com/settings/personal-access-tokens/new" target="_blank" rel="noopener">Generate new</a>.</li>
+            <li>Resource owner <b>harsharya7021</b> · Repository access → <b>Only select</b> → <code>harsharya.com</code>.</li>
+            <li>Permissions → <b>Contents</b> → <b>Read and write</b>. Generate, copy, paste above.</li>
+            <li>Keep a copy in your password manager. The key stays only on this device.</li>
+          </ol>
+        </details>
+      </div>
+
+      <div class="lock-pane" data-pane="server" hidden>
+        <label class="lab" for="lockUrl">Publish server</label>
+        <input type="text" id="lockUrl" placeholder="https://os.harsharya.com" autocomplete="off" autocapitalize="off" spellcheck="false" />
+        <label class="lab" for="lockPass">Password</label>
+        <input type="password" id="lockPass" placeholder="your password" autocomplete="off" />
+        <button class="btn primary" id="lockServerGo" type="button">Sign in</button>
+        <details class="lock-help">
+          <summary>Not set up yet?</summary>
+          <ol>
+            <li>The server is optional — the <b>Publish key</b> tab works today with zero setup.</li>
+            <li>To route through your VPS instead, deploy <code>_os/publish-service</code> (see its README), point <code>os.harsharya.com</code> at the box, then sign in here.</li>
+            <li>With the server, your GitHub token lives on the box — never in this browser.</li>
+          </ol>
+        </details>
+      </div>
+
+      <div class="lock-err" id="lockErr"></div>
+    </div>
+  </div>
+
+  <!-- ───────── Published ───────── -->
+  <div class="pubdone" id="pubdone">
+    <div class="pubdone-card">
+      <div class="k">● Published</div>
+      <h3 id="pubdoneTitle">It's live</h3>
+      <p>GitHub Pages is rebuilding — your note will be live in about a minute. Refresh the URL if it's not there yet.</p>
+      <div class="pubdone-url" id="pubdoneUrl"></div>
+      <div class="pubdone-row">
+        <a class="btn primary" id="pubdoneView" target="_blank" rel="noopener">View note ↗</a>
+        <button class="btn ghost" id="pubdoneCopy" type="button">Copy link</button>
+        <button class="btn ghost" id="pubdoneClose" type="button">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ───────── Top bar ───────── -->
+  <div class="topbar">
+    <a class="brand" href="index.html">← <span class="long">Notes ·</span> Harsh<sup>1</sup></a>
+    <span class="status" id="status"><span class="dot">●</span> Ready</span>
+    <span class="spacer"></span>
+    <span class="metric" id="metric">0 words · 0 min</span>
+    <button class="btn ghost" id="btnMeta">Details</button>
+    <button class="btn ghost" id="btnPreview">Preview</button>
+    <div class="menu-wrap">
+      <button class="btn primary" id="btnPublish">Publish ▾</button>
+      <div class="menu" id="pubMenu">
+        <div class="head">Publish</div>
+        <button data-act="live">Publish live <span class="k">↗ site</span></button>
+        <button data-act="preview2">Preview <span class="k">tab</span></button>
+        <div class="sep"></div>
+        <div class="head">Export</div>
+        <button data-act="note">Download note <span class="k">.html</span></button>
+        <button data-act="row">Copy index row <span class="k">clip</span></button>
+        <button data-act="md">Download markdown <span class="k">.md</span></button>
+        <div class="sep"></div>
+        <button data-act="forget">Sign out this device <span class="k">lock</span></button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ───────── Canvas ───────── -->
+  <div class="wrap" id="wrap">
+    <div class="doc-meta">
+      <span class="date" id="datePreview" title="Edit in Details">July 2026</span>
+      <span>/</span>
+      <span class="chip" id="tagPreview" title="Edit in Details">Musings</span>
+    </div>
+    <h1 id="title" contenteditable="true" data-ph="Title"></h1>
+    <div id="subtitle" contenteditable="true" data-ph="Add a subtitle…"></div>
+    <div id="body" contenteditable="true" data-ph="Tell the story. Select text to format, or hit + for images and dividers. Try “## ”, “&gt; ”, or “- ”."></div>
+  </div>
+
+  <!-- ───────── Selection bubble ───────── -->
+  <div class="bubble" id="bubble">
+    <div class="btns" style="display:flex; align-items:center; gap:2px;">
+      <button class="b-bold" data-cmd="bold" title="Bold (⌘B)">B</button>
+      <button class="b-ital" data-cmd="italic" title="Italic (⌘I)">I</button>
+      <span class="divide"></span>
+      <button class="b-h2" data-cmd="h2" title="Heading">H2</button>
+      <button class="b-quote" data-cmd="quote" title="Quote">&#10077;</button>
+      <button class="b-pull" data-cmd="pull" title="Pull-quote" style="font-family:var(--font-serif);font-style:italic;font-size:13px;">“ ”</button>
+      <span class="divide"></span>
+      <button class="b-link" data-cmd="link" title="Link (⌘K)">
+        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.5.6l3-3a5 5 0 0 0-7-7l-1.7 1.6"/><path d="M14 11a5 5 0 0 0-7.5-.6l-3 3a5 5 0 0 0 7 7l1.7-1.6"/></svg>
+      </button>
+    </div>
+    <div class="link-form">
+      <input type="url" id="linkInput" placeholder="Paste link, press Enter" />
+      <button id="linkApply">OK</button>
+    </div>
+  </div>
+
+  <!-- ───────── Plus inserter ───────── -->
+  <button class="plus" id="plus" title="Add">+</button>
+  <div class="plus-menu" id="plusMenu">
+    <button data-ins="image"><span class="g">▣</span>Image</button>
+    <button data-ins="divider"><span class="g">―</span>Divider</button>
+    <button data-ins="h2"><span class="g">H</span>Heading</button>
+    <button data-ins="quote"><span class="g">&#10077;</span>Quote</button>
+  </div>
+
+  <!-- ───────── Drawer ───────── -->
+  <div class="overlay" id="overlay"></div>
+  <div class="drawer-shell">
+  <aside class="drawer" id="drawer" aria-label="Note details">
+    <div class="d-head"><h3>Details</h3><button class="btn ghost" id="drawerClose">Close</button></div>
+    <div class="sec">
+      <label class="lab" for="fTag">Tag</label>
+      <input type="text" id="fTag" list="tagOptions" />
+      <datalist id="tagOptions">
+        <option>Musings</option><option>Intro</option><option>Agency</option>
+        <option>Talent</option><option>Sports</option><option>Strategy</option><option>Ideas</option>
+      </datalist>
+      <div class="tagrow" id="tagQuick"></div>
+    </div>
+    <div class="sec">
+      <label class="lab" for="fDate">Date</label>
+      <input type="date" id="fDate" />
+    </div>
+    <div class="sec">
+      <label class="lab" for="fSlug">Slug</label>
+      <input type="text" id="fSlug" />
+      <div class="hint" id="urlHint">/writing/…</div>
+    </div>
+    <div class="sec">
+      <label class="lab">Notebook — local drafts</label>
+      <div class="drafts" id="draftsList"></div>
+      <button class="btn ghost" id="newDraft" style="margin-top:14px;">+ New note</button>
+    </div>
+    <div class="sec" style="border-bottom:0;">
+      <label class="lab">How publishing works</label>
+      <div class="hint">Drafts autosave in this browser. <b>Publish live</b> commits the note + updates the index in one go — live on harsharya.com in ~1 min, from any device. Unlock with a GitHub key, or sign in to your own server (<b>os.harsharya.com</b>) to keep the key off the browser.</div>
+    </div>
+  </aside>
+  </div>
+
+  <!-- ───────── Toast + first-run help ───────── -->
+  <div class="toast" id="toast"></div>
+  <div class="help hide" id="help">
+    <button class="x" id="helpX">×</button>
+    <h4>Quick keys</h4>
+    <ul>
+      <li><kbd>⌘/Ctrl B</kbd> bold · <kbd>⌘ I</kbd> italic · <kbd>⌘ K</kbd> link</li>
+      <li><kbd>## </kbd> heading · <kbd>&gt; </kbd> quote · <kbd>- </kbd> list</li>
+      <li><kbd>---</kbd> + enter → divider</li>
+      <li>Select text → formatting bar · <kbd>+</kbd> on empty line → insert</li>
+      <li><kbd>⌘ S</kbd> save · everything autosaves</li>
+    </ul>
+  </div>
+
+<script>
+(function(){
+  "use strict";
+  var $ = function(s,r){ return (r||document).querySelector(s); };
+
+  /* ─── Elements ─── */
+  var titleEl=$("#title"), subtitleEl=$("#subtitle"), bodyEl=$("#body");
+  var statusEl=$("#status"), metricEl=$("#metric");
+  var bubble=$("#bubble"), linkInput=$("#linkInput");
+  var plus=$("#plus"), plusMenu=$("#plusMenu");
+  var drawer=$("#drawer"), overlay=$("#overlay");
+  var toastEl=$("#toast");
+  var fTag=$("#fTag"), fDate=$("#fDate"), fSlug=$("#fSlug"), urlHint=$("#urlHint");
+  var datePreview=$("#datePreview"), tagPreview=$("#tagPreview");
+  var draftsList=$("#draftsList");
+  var pubMenu=$("#pubMenu");
+
+  /* ─── State / persistence ─── */
+  var LS_DRAFTS="hka.editor.drafts.v1", LS_CURRENT="hka.editor.current.v1", LS_HELP="hka.editor.help.v1";
+  function uid(){ return "n"+Date.now().toString(36)+Math.random().toString(36).slice(2,6); }
+  function todayISO(){ var d=new Date(); return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,10); }
+  function blankDoc(){ return {id:uid(), title:"", subtitle:"", tag:"Musings", date:todayISO(), slug:"", body:"", updated:Date.now()}; }
+
+  var state=(function(){
+    try{
+      var drafts=JSON.parse(localStorage.getItem(LS_DRAFTS)||"{}");
+      var cur=localStorage.getItem(LS_CURRENT);
+      if(!drafts || Object.keys(drafts).length===0){ var d=blankDoc(); drafts={}; drafts[d.id]=d; cur=d.id; }
+      if(!cur || !drafts[cur]) cur=Object.keys(drafts)[0];
+      return {drafts:drafts, currentId:cur};
+    }catch(e){ var d2=blankDoc(); var o={}; o[d2.id]=d2; return {drafts:o, currentId:d2.id}; }
+  })();
+  var doc=state.drafts[state.currentId];
+
+  function persist(){ try{ localStorage.setItem(LS_DRAFTS, JSON.stringify(state.drafts)); localStorage.setItem(LS_CURRENT, state.currentId);}catch(e){} }
+
+  /* ─── Small helpers ─── */
+  function textOf(html){ var d=document.createElement("div"); d.innerHTML=html||""; return (d.textContent||"").trim(); }
+  function slugify(s){ return (s||"").toLowerCase().replace(/[^a-z0-9\s-]/g,"").trim().replace(/\s+/g,"-").replace(/-+/g,"-").slice(0,60)||"untitled"; }
+  function esc(s){ return (s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+  function fill(tpl,map){ Object.keys(map).forEach(function(k){ tpl=tpl.split("{{"+k+"}}").join(map[k]); }); return tpl; }
+  function monthYear(iso){ try{ return new Date(iso+"T00:00:00").toLocaleString("en-US",{month:"long",year:"numeric"}); }catch(e){ return iso; } }
+  function toast(msg){ toastEl.textContent=msg; toastEl.classList.add("on"); clearTimeout(toast._t); toast._t=setTimeout(function(){ toastEl.classList.remove("on"); },2200); }
+
+  /* ─── Render current doc into the surface ─── */
+  function renderDoc(){
+    titleEl.innerHTML=doc.title||"";
+    subtitleEl.innerHTML=doc.subtitle||"";
+    bodyEl.innerHTML=doc.body||"";
+    fTag.value=doc.tag||"Musings";
+    fDate.value=doc.date||todayISO();
+    fSlug.value=doc.slug||slugify(textOf(doc.title));
+    refreshMeta(); updatePlaceholders(); updateMetric(); renderDrafts();
+  }
+  function refreshMeta(){
+    datePreview.textContent=monthYear(fDate.value||todayISO());
+    tagPreview.textContent=fTag.value||"Musings";
+    var slug=fSlug.value||slugify(textOf(titleEl.innerHTML));
+    urlHint.textContent="/writing/"+slug+".html";
+  }
+
+  /* ─── Autosave ─── */
+  var saveT;
+  function collect(){
+    doc.title=titleEl.innerHTML.trim();
+    doc.subtitle=subtitleEl.innerHTML.trim();
+    doc.body=bodyEl.innerHTML.trim();
+    doc.tag=(fTag.value||"Musings").trim();
+    doc.date=fDate.value||todayISO();
+    doc.slug=(fSlug.value.trim()||slugify(textOf(doc.title)));
+    doc.updated=Date.now();
+  }
+  function scheduleSave(){
+    statusEl.innerHTML="Saving…";
+    clearTimeout(saveT);
+    saveT=setTimeout(function(){ collect(); Vault.save(doc); stamp(); },500);
+  }
+  function stamp(){
+    var t=new Date(doc.updated);
+    statusEl.innerHTML='<span class="dot">●</span> Saved · '+t.toLocaleTimeString([], {hour:"2-digit",minute:"2-digit"});
+  }
+
+  /* ─── Vault adapter ──────────────────────────────────────────────
+     Today: 'local' — autosave to localStorage, publish = file export.
+     Later (Hetzner / editor.os.harsharya.com): flip mode to 'api'
+     and these two methods talk to your vault. Nothing else changes. */
+  var Vault={
+    mode:"local",
+    apiBase:"https://editor.os.harsharya.com/api",  // reserved for phase 2
+    save:function(d){
+      if(this.mode==="local"){ persist(); return Promise.resolve(); }
+      // return fetch(this.apiBase+"/notes/"+d.slug,{method:"PUT",headers:{ "Content-Type":"application/json" },credentials:"include",body:JSON.stringify(d)});
+    },
+    publish:function(d){
+      if(this.mode==="local"){ downloadFile(d.slug+".html", buildNote(), "text/html"); return Promise.resolve(); }
+      // return fetch(this.apiBase+"/publish/"+d.slug,{method:"POST",credentials:"include"});
+    }
+  };
+
+  /* ─── Placeholders ─── */
+  function updatePlaceholders(){
+    toggleEmpty(titleEl); toggleEmpty(subtitleEl);
+    var empty=(bodyEl.textContent.trim()==="" && !bodyEl.querySelector("img,hr"));
+    bodyEl.classList.toggle("is-empty", empty);
+  }
+  function toggleEmpty(el){ el.classList.toggle("is-empty", el.textContent.trim()===""); }
+
+  /* ─── Word metric ─── */
+  function updateMetric(){
+    var w=(bodyEl.innerText||"").trim(); var n=w?w.split(/\s+/).length:0;
+    metricEl.textContent=n+" word"+(n===1?"":"s")+" · "+Math.max(1,Math.ceil(n/220))+" min";
+  }
+
+  /* ─── Selection helpers ─── */
+  function sel(){ return window.getSelection(); }
+  function inBody(node){ return node && bodyEl.contains(node); }
+  function currentBlock(){
+    var s=sel(); if(!s.rangeCount) return null;
+    var n=s.anchorNode; if(n && n.nodeType===3) n=n.parentNode;
+    while(n && n!==bodyEl && !/^(P|H2|BLOCKQUOTE|LI|FIGURE|DIV)$/.test(n.nodeName)) n=n.parentNode;
+    return (n===bodyEl||!n)?null:n;
+  }
+  function placeCaret(node,atEnd){
+    var r=document.createRange(); r.selectNodeContents(node); r.collapse(!atEnd);
+    var s=sel(); s.removeAllRanges(); s.addRange(r);
+  }
+  function caretInto(el){ var r=document.createRange(); r.setStart(el,0); r.collapse(true); var s=sel(); s.removeAllRanges(); s.addRange(r); }
+  function emptyBlock(b){ while(b.firstChild) b.removeChild(b.firstChild); caretInto(b); }
+  // Reliable block transform: swap the element instead of formatBlock-on-empty (which misfires onto the
+  // previous block). Seed a <br> so Chromium keeps the caret inside the new empty block for the next keystroke.
+  function convertBlock(b, tag){
+    var el=document.createElement(tag); el.appendChild(document.createElement("br"));
+    b.parentNode.replaceChild(el, b);
+    var r=document.createRange(); r.setStart(el,0); r.collapse(true);
+    var s=sel(); s.removeAllRanges(); s.addRange(r); bodyEl.focus(); return el;
+  }
+
+  /* ─── Selection bubble ─── */
+  function hideBubble(){ bubble.classList.remove("linking"); bubble.style.opacity="0"; bubble.style.visibility="hidden"; }
+  function showBubble(){
+    var s=sel();
+    if(!s || s.isCollapsed || !s.rangeCount || !inBody(s.anchorNode) || !inBody(s.focusNode)){ if(!bubble.classList.contains("linking")) hideBubble(); return; }
+    var rect=s.getRangeAt(0).getBoundingClientRect();
+    if(!rect.width && !rect.height){ hideBubble(); return; }
+    bubble.style.visibility="visible"; bubble.style.opacity="1";
+    var bw=bubble.offsetWidth||260;
+    var x=rect.left+rect.width/2+window.scrollX;
+    x=Math.max(bw/2+8, Math.min(x, window.scrollX+document.documentElement.clientWidth-bw/2-8));
+    bubble.style.left=x+"px";
+    bubble.style.top=(rect.top+window.scrollY-10)+"px";
+    syncActive();
+  }
+  function syncActive(){
+    try{
+      q(".b-bold", document.queryCommandState("bold"));
+      q(".b-ital", document.queryCommandState("italic"));
+    }catch(e){}
+    var b=currentBlock();
+    q(".b-h2", !!(b&&b.nodeName==="H2"));
+    q(".b-quote", !!(b&&b.nodeName==="BLOCKQUOTE"));
+    q(".b-pull", !!(b&&b.classList&&b.classList.contains("pull")));
+  }
+  function q(selr,on){ var el=$(selr,bubble); if(el) el.classList.toggle("active",!!on); }
+
+  function exec(cmd,val){ document.execCommand(cmd,false,val); bodyEl.focus(); scheduleSave(); showBubble(); }
+  function toggleBlock(tag){
+    var b=currentBlock(); var is=b&&b.nodeName===tag.toUpperCase();
+    document.execCommand("formatBlock",false, is?"<p>":"<"+tag.toLowerCase()+">");
+    if(b&&b.classList) b.classList.remove("pull");
+    bodyEl.focus(); scheduleSave(); syncActive();
+  }
+  function togglePull(){
+    var b=currentBlock(); if(!b) return;
+    if(b.nodeName!=="P"){ document.execCommand("formatBlock",false,"<p>"); b=currentBlock(); }
+    if(b) b.classList.toggle("pull");
+    bodyEl.focus(); scheduleSave(); syncActive();
+  }
+
+  bubble.addEventListener("mousedown", function(e){ e.preventDefault(); }); // keep selection
+  bubble.addEventListener("click", function(e){
+    var btn=e.target.closest("button[data-cmd]"); if(!btn) return;
+    var cmd=btn.getAttribute("data-cmd");
+    if(cmd==="bold"||cmd==="italic") exec(cmd);
+    else if(cmd==="h2") toggleBlock("h2");
+    else if(cmd==="quote") toggleBlock("blockquote");
+    else if(cmd==="pull") togglePull();
+    else if(cmd==="link") startLink();
+  });
+  function startLink(){
+    var s=sel(); if(s.isCollapsed) return;
+    startLink._range=s.getRangeAt(0).cloneRange();
+    bubble.classList.add("linking");
+    var a=s.anchorNode&&s.anchorNode.parentNode&&s.anchorNode.parentNode.closest?s.anchorNode.parentNode.closest("a"):null;
+    linkInput.value=a?a.getAttribute("href"):"";
+    setTimeout(function(){ linkInput.focus(); },10);
+  }
+  function applyLink(){
+    var url=linkInput.value.trim();
+    var s=sel(); s.removeAllRanges(); if(startLink._range) s.addRange(startLink._range);
+    if(url){ if(!/^https?:|^mailto:|^\//.test(url)) url="https://"+url; document.execCommand("createLink",false,url); }
+    else document.execCommand("unlink");
+    bubble.classList.remove("linking"); bodyEl.focus(); scheduleSave(); hideBubble();
+  }
+  linkInput.addEventListener("keydown", function(e){ if(e.key==="Enter"){ e.preventDefault(); applyLink(); } if(e.key==="Escape"){ bubble.classList.remove("linking"); hideBubble(); } });
+  $("#linkApply").addEventListener("click", applyLink);
+
+  document.addEventListener("selectionchange", function(){ if(document.activeElement===bodyEl) { showBubble(); updatePlus(); } });
+  bodyEl.addEventListener("mouseup", showBubble);
+  bodyEl.addEventListener("keyup", function(){ showBubble(); updatePlus(); });
+  window.addEventListener("scroll", function(){ if(bubble.style.opacity==="1") showBubble(); if(plus.classList.contains("on")) {} else updatePlus(); });
+
+  /* ─── Plus inserter ─── */
+  var plusBlock=null, plusOpen=false;
+  function updatePlus(){
+    if(plusOpen) return;
+    var b=currentBlock();
+    if(b && b.nodeName==="P" && !b.textContent.trim() && !b.querySelector("img")){
+      var r=b.getBoundingClientRect();
+      plus.style.top=(r.top+window.scrollY+r.height/2-17)+"px";
+      plus.style.left=(r.left+window.scrollX-46)+"px";
+      plus.style.opacity="1"; plus.style.pointerEvents="auto"; plusBlock=b;
+    } else { plus.style.opacity="0"; plus.style.pointerEvents="none"; }
+  }
+  plus.addEventListener("click", function(){
+    plusOpen=!plusOpen; plus.classList.toggle("on",plusOpen);
+    if(plusOpen){
+      var r=plus.getBoundingClientRect();
+      plusMenu.style.top=(r.top+window.scrollY)+"px";
+      plusMenu.style.left=(r.right+window.scrollX+8)+"px";
+      plusMenu.classList.add("open");
+    } else plusMenu.classList.remove("open");
+  });
+  plusMenu.addEventListener("click", function(e){
+    var btn=e.target.closest("button[data-ins]"); if(!btn) return;
+    var kind=btn.getAttribute("data-ins");
+    plusOpen=false; plus.classList.remove("on"); plusMenu.classList.remove("open");
+    if(!plusBlock) return;
+    if(kind==="divider"){ replaceBlock(plusBlock, '<hr><p><br></p>'); }
+    else if(kind==="image"){
+      var url=window.prompt("Image URL (https://…):",""); if(!url) return;
+      replaceBlock(plusBlock, '<figure><img src="'+esc(url)+'" alt=""><figcaption>Caption</figcaption></figure><p><br></p>');
+    }
+    else if(kind==="h2"){ convertBlock(plusBlock,"h2"); }
+    else if(kind==="quote"){ convertBlock(plusBlock,"blockquote"); }
+    scheduleSave(); updatePlaceholders();
+  });
+  function replaceBlock(block, html){
+    block.insertAdjacentHTML("afterend", html);
+    var next=block.nextElementSibling;
+    block.remove();
+    // caret into the trailing empty <p>
+    var tail=next; while(tail && tail.nextElementSibling && tail.nextElementSibling.nodeName==="P") tail=tail.nextElementSibling;
+    var p=null, s=next; while(s){ if(s.nodeName==="P"){ p=s; } s=s.nextElementSibling; }
+    if(p){ placeCaret(p); } bodyEl.focus();
+  }
+
+  /* ─── Markdown-style shortcuts ─── */
+  bodyEl.addEventListener("keydown", function(e){
+    if(e.key===" "){
+      var b=currentBlock(); if(!b||b.nodeName!=="P") return;
+      var t=b.textContent;
+      if(t==="#"||t==="##"){ e.preventDefault(); convertBlock(b,"h2"); scheduleSave(); return; }
+      if(t===">"){ e.preventDefault(); convertBlock(b,"blockquote"); scheduleSave(); return; }
+      if(t==="-"||t==="*"){ e.preventDefault(); emptyBlock(b); document.execCommand("insertUnorderedList"); scheduleSave(); return; }
+      if(t==="1."){ e.preventDefault(); emptyBlock(b); document.execCommand("insertOrderedList"); scheduleSave(); return; }
+    }
+    if(e.key==="Enter"){
+      var bb=currentBlock();
+      if(bb && bb.nodeName==="P"){ var tt=bb.textContent.trim();
+        if(tt==="---"||tt==="***"){ e.preventDefault(); emptyBlock(bb); replaceBlock(bb,'<hr><p><br></p>'); scheduleSave(); return; }
+      }
+    }
+  });
+
+  /* ─── Global shortcuts ─── */
+  document.addEventListener("keydown", function(e){
+    var mod=e.metaKey||e.ctrlKey; if(!mod) return;
+    var k=e.key.toLowerCase();
+    if(k==="s"){ e.preventDefault(); collect(); Vault.save(doc); stamp(); toast("Saved locally"); }
+    else if(document.activeElement===bodyEl){
+      if(k==="b"){ e.preventDefault(); exec("bold"); }
+      else if(k==="i"){ e.preventDefault(); exec("italic"); }
+      else if(k==="k"){ e.preventDefault(); startLink(); }
+    }
+  });
+
+  /* ─── Typing / input wiring ─── */
+  ["input","blur"].forEach(function(ev){
+    titleEl.addEventListener(ev,function(){ if(!fSlug.value || fSlug.value===fSlug._auto){ fSlug.value=slugify(textOf(titleEl.innerHTML)); fSlug._auto=fSlug.value; } toggleEmpty(titleEl); refreshMeta(); scheduleSave(); });
+    subtitleEl.addEventListener(ev,function(){ toggleEmpty(subtitleEl); scheduleSave(); });
+    bodyEl.addEventListener(ev,function(){ updatePlaceholders(); updateMetric(); scheduleSave(); });
+  });
+  // keep title/subtitle single-ish: block Enter making new blocks in title
+  titleEl.addEventListener("keydown",function(e){ if(e.key==="Enter"){ e.preventDefault(); subtitleEl.focus(); } });
+  subtitleEl.addEventListener("keydown",function(e){ if(e.key==="Enter"){ e.preventDefault(); bodyEl.focus(); ensureBodyStart(); } });
+  function ensureBodyStart(){ if(!bodyEl.textContent.trim() && !bodyEl.querySelector("p")){ bodyEl.innerHTML="<p><br></p>"; placeCaret(bodyEl.querySelector("p")); } }
+
+  /* ─── Drawer (details + notebook) ─── */
+  function openDrawer(){ drawer.classList.add("on"); overlay.classList.add("on"); renderDrafts(); }
+  function closeDrawer(){ drawer.classList.remove("on"); overlay.classList.remove("on"); }
+  $("#btnMeta").addEventListener("click",openDrawer);
+  $("#drawerClose").addEventListener("click",closeDrawer);
+  overlay.addEventListener("click",closeDrawer);
+  datePreview.addEventListener("click",openDrawer);
+  tagPreview.addEventListener("click",openDrawer);
+  [fTag,fDate,fSlug].forEach(function(el){ el.addEventListener("input",function(){ if(el===fSlug) fSlug._auto=null; refreshMeta(); scheduleSave(); }); });
+  (function(){ var tags=["Musings","Ideas","Agency","Talent","Sports","Strategy","Intro"]; var wrap=$("#tagQuick");
+    tags.forEach(function(t){ var b=document.createElement("button"); b.textContent=t; b.onclick=function(){ fTag.value=t; refreshMeta(); scheduleSave(); }; wrap.appendChild(b); }); })();
+
+  $("#newDraft").addEventListener("click",function(){
+    collect(); persist();
+    var d=blankDoc(); state.drafts[d.id]=d; state.currentId=d.id; doc=d; persist();
+    renderDoc(); closeDrawer(); titleEl.focus(); toast("New note");
+  });
+  function renderDrafts(){
+    var ids=Object.keys(state.drafts).sort(function(a,b){ return state.drafts[b].updated-state.drafts[a].updated; });
+    draftsList.innerHTML="";
+    ids.forEach(function(id){
+      var d=state.drafts[id];
+      var row=document.createElement("div"); row.className="draft"+(id===state.currentId?" active":"");
+      var title=textOf(d.title)||"Untitled";
+      row.innerHTML='<div style="min-width:0;"><div class="t">'+esc(title)+'</div><div class="m">'+monthYear(d.date)+' · '+(d.tag||"")+'</div></div>';
+      var del=document.createElement("button"); del.className="del"; del.innerHTML="🗑"; del.title="Delete";
+      del.onclick=function(ev){ ev.stopPropagation(); if(!confirm("Delete “"+title+"”?")) return;
+        delete state.drafts[id];
+        if(id===state.currentId){ var rest=Object.keys(state.drafts); if(rest.length===0){ var nd=blankDoc(); state.drafts[nd.id]=nd; rest=[nd.id]; } state.currentId=rest[0]; doc=state.drafts[state.currentId]; renderDoc(); }
+        persist(); renderDrafts(); };
+      row.appendChild(del);
+      row.addEventListener("click",function(){ collect(); persist(); state.currentId=id; doc=d; renderDoc(); closeDrawer(); });
+      draftsList.appendChild(row);
+    });
+  }
+
+  /* ─── Publish menu ─── */
+  var btnPublish=$("#btnPublish");
+  btnPublish.addEventListener("click",function(e){ e.stopPropagation(); pubMenu.classList.toggle("open"); });
+  document.addEventListener("click",function(e){ if(!e.target.closest(".menu-wrap")) pubMenu.classList.remove("open"); if(!e.target.closest("#plus,#plusMenu")){ plusOpen=false; plus.classList.remove("on"); plusMenu.classList.remove("open"); } });
+  pubMenu.addEventListener("click",function(e){
+    var b=e.target.closest("button[data-act]"); if(!b) return;
+    var act=b.getAttribute("data-act"); pubMenu.classList.remove("open"); collect();
+    if(act==="note"){ downloadFile(doc.slug+".html", buildNote(), "text/html"); toast("Note downloaded — drop it in /writing/"); }
+    else if(act==="md"){ downloadFile(doc.slug+".md", buildMD(), "text/markdown"); toast("Vault markdown downloaded"); }
+    else if(act==="row"){ copy(buildRow()); toast("Index row copied — paste into writing/index.html"); }
+    else if(act==="preview2"){ openPreview(); }
+    else if(act==="live"){ publishLive(); }
+    else if(act==="forget"){ forgetKey(); }
+  });
+  $("#btnPreview").addEventListener("click",openPreview);
+
+  /* ─── Build outputs ─── */
+  function cleanBodyHTML(){
+    var c=bodyEl.cloneNode(true);
+    Array.prototype.forEach.call(c.querySelectorAll("[contenteditable]"),function(n){ n.removeAttribute("contenteditable"); });
+    Array.prototype.forEach.call(c.querySelectorAll("[style]"),function(n){ n.removeAttribute("style"); });
+    Array.prototype.forEach.call(c.querySelectorAll("p"),function(p){ if(!p.textContent.trim() && !p.querySelector("img,br")) p.remove(); else if(p.innerHTML==="<br>"||p.innerHTML==="") p.remove(); });
+    var html=c.innerHTML
+      .replace(/<b>/g,"<strong>").replace(/<\/b>/g,"</strong>")
+      .replace(/<i>/g,"<em>").replace(/<\/i>/g,"</em>")
+      .replace(/<div>/g,"<p>").replace(/<\/div>/g,"</p>")
+      .replace(/&nbsp;/g," ");
+    // one block per line, indented for the template
+    html=html.replace(/></g,">\n<").split("\n").map(function(l){ return l.trim()?("      "+l):""; }).filter(Boolean).join("\n");
+    return html;
+  }
+  function titleHTML(){ var h=titleEl.innerHTML.trim(); return h|| "Untitled"; }
+  function buildNote(){
+    var titlePlain=textOf(titleEl.innerHTML)||"Untitled";
+    var desc=textOf(subtitleEl.innerHTML)||"";
+    return fill(NOTE_TPL,{
+      TITLE_PLAIN:esc(titlePlain), TITLE_HTML:titleHTML(), DESC:esc(desc),
+      DATE_LABEL:monthYear(doc.date), TAG:esc(doc.tag), SLUG:doc.slug, BODY:cleanBodyHTML()
+    });
+  }
+  function buildRow(){
+    return '      <a class="note-item" href="'+doc.slug+'.html">\n'+
+           '        <span class="note-num">N°XX</span>\n'+
+           '        <span class="note-date">'+monthYear(doc.date)+'</span>\n'+
+           '        <span class="note-title">'+esc(textOf(titleEl.innerHTML)||"Untitled")+'</span>\n'+
+           '        <span class="note-tag">'+esc(doc.tag)+'</span>\n'+
+           '      </a>';
+  }
+  function buildMD(){
+    var fm="---\ntitle: \""+(textOf(titleEl.innerHTML)||"Untitled").replace(/"/g,'\\"')+"\"\n"+
+           "date: "+doc.date+"\n"+
+           "tag: "+doc.tag+"\n"+
+           "description: \""+textOf(subtitleEl.innerHTML).replace(/"/g,'\\"')+"\"\n"+
+           "slug: "+doc.slug+"\n---\n\n";
+    return fm+htmlToMD(bodyEl);
+  }
+  function htmlToMD(root){
+    function inline(node){
+      var out="";
+      node.childNodes.forEach(function(n){
+        if(n.nodeType===3){ out+=n.nodeValue; return; }
+        var t=n.nodeName;
+        if(t==="STRONG"||t==="B") out+="**"+inline(n)+"**";
+        else if(t==="EM"||t==="I") out+="_"+inline(n)+"_";
+        else if(t==="A") out+="["+inline(n)+"]("+(n.getAttribute("href")||"")+")";
+        else if(t==="BR") out+="  \n";
+        else out+=inline(n);
+      });
+      return out;
+    }
+    var md=[];
+    root.childNodes.forEach(function(n){
+      if(n.nodeType!==1) return;
+      var t=n.nodeName;
+      if(t==="H2") md.push("## "+inline(n));
+      else if(t==="BLOCKQUOTE") md.push("> "+inline(n));
+      else if(t==="HR") md.push("---");
+      else if(t==="UL") n.querySelectorAll("li").forEach(function(li){ md.push("- "+inline(li)); });
+      else if(t==="OL"){ var i=1; n.querySelectorAll("li").forEach(function(li){ md.push((i++)+". "+inline(li)); }); }
+      else if(t==="FIGURE"){ var img=n.querySelector("img"); var cap=n.querySelector("figcaption"); if(img) md.push("!["+(cap?cap.textContent:"")+"]("+img.getAttribute("src")+")"); }
+      else if(t==="P"){ var s=inline(n).trim(); if(s){ md.push(n.classList.contains("pull")?("> "+s):s); } }
+      else { var x=inline(n).trim(); if(x) md.push(x); }
+    });
+    return md.join("\n\n")+"\n";
+  }
+
+  function openPreview(){
+    // Downloaded note uses relative ../styles.css (correct in /writing/). For a blob preview that path
+    // can't resolve, so point at the live stylesheet + assets so the preview matches the published look.
+    var html=buildNote()
+      .split('href="../styles.css?v=11"').join('href="https://harsharya.com/styles.css?v=11"')
+      .split('href="../favicon.ico"').join('href="https://harsharya.com/favicon.ico"')
+      .split('href="../assets/apple-touch-icon.png"').join('href="https://harsharya.com/assets/apple-touch-icon.png"');
+    var blob=new Blob([html],{type:"text/html"}); var url=URL.createObjectURL(blob);
+    window.open(url,"_blank"); setTimeout(function(){ URL.revokeObjectURL(url); },15000);
+  }
+  function downloadFile(name, content, type){
+    var blob=new Blob([content],{type:type||"text/plain"}); var url=URL.createObjectURL(blob);
+    var a=document.createElement("a"); a.href=url; a.download=name; document.body.appendChild(a); a.click();
+    setTimeout(function(){ document.body.removeChild(a); URL.revokeObjectURL(url); },100);
+  }
+  function copy(text){
+    if(navigator.clipboard && navigator.clipboard.writeText){ navigator.clipboard.writeText(text); }
+    else { var ta=document.createElement("textarea"); ta.value=text; document.body.appendChild(ta); ta.select(); try{document.execCommand("copy");}catch(e){} document.body.removeChild(ta); }
+  }
+
+  /* ─── First-run help ─── */
+  var help=$("#help");
+  if(!localStorage.getItem(LS_HELP)) help.classList.remove("hide");
+  $("#helpX").addEventListener("click",function(){ help.classList.add("hide"); try{localStorage.setItem(LS_HELP,"1");}catch(e){} });
+
+  /* ─── Publisher: access lock + live publish ──────────────────────
+     One editor, two transports behind a tiny adapter:
+       · github — the browser commits straight to the Pages repo with
+                  a fine-grained token (the "publish key").
+       · vps    — the browser calls your own publish service (password
+                  login); the GitHub secret lives on your box, not here.
+     Both build the exact same commit (note html + spliced index) and
+     go live on GitHub Pages in ~1 min. Swapping transport is just
+     which object `transport()` returns — nothing else changes. */
+  var CONFIG={
+    owner:"harsharya7021", repo:"harsharya.com", branch:"main",
+    site:"https://harsharya.com",
+    vpsBase:"https://os.harsharya.com",            // your VPS publish service
+    connKey:"hka.editor.conn.v1"
+  };
+
+  function getConn(){ try{ return JSON.parse(localStorage.getItem(CONFIG.connKey)||"null"); }catch(e){ return null; } }
+  function setConn(c){ conn=c; try{ localStorage.setItem(CONFIG.connKey, JSON.stringify(c)); }catch(e){} }
+  function clearConn(){ conn={mode:null, ghToken:"", vps:{base:CONFIG.vpsBase, session:"", exp:0}}; try{ localStorage.removeItem(CONFIG.connKey); }catch(e){} }
+  var conn=getConn()||{ mode:null, ghToken:"", vps:{base:CONFIG.vpsBase, session:"", exp:0} };
+
+  /* GitHub REST (browser → api.github.com, used by the 'github' transport) */
+  async function ghApi(path, opts){
+    opts=opts||{};
+    var headers={
+      "Accept": opts.raw?"application/vnd.github.raw":"application/vnd.github+json",
+      "Authorization":"Bearer "+(conn.ghToken||""),
+      "X-GitHub-Api-Version":"2022-11-28"
+    };
+    var init={ method:opts.method||"GET", headers:headers };
+    if(opts.body){ headers["Content-Type"]="application/json"; init.body=JSON.stringify(opts.body); }
+    var res=await fetch("https://api.github.com"+path, init);
+    if(res.status===401||res.status===403) throw new Error("auth");
+    if(!res.ok){ var m=""; try{ m=(await res.json()).message; }catch(e){} throw new Error(m||("GitHub "+res.status)); }
+    if(opts.raw) return res.text();
+    if(res.status===204) return null;
+    return res.json();
+  }
+  async function ghCommit(message, files){
+    var base="/repos/"+CONFIG.owner+"/"+CONFIG.repo;
+    var ref=await ghApi(base+"/git/ref/heads/"+CONFIG.branch);
+    var baseSha=ref.object.sha;
+    var baseCommit=await ghApi(base+"/git/commits/"+baseSha);
+    var tree=await ghApi(base+"/git/trees",{method:"POST",body:{ base_tree:baseCommit.tree.sha,
+      tree:files.map(function(f){ return {path:f.path,mode:"100644",type:"blob",content:f.content}; }) }});
+    var commit=await ghApi(base+"/git/commits",{method:"POST",body:{ message:message, tree:tree.sha, parents:[baseSha] }});
+    await ghApi(base+"/git/refs/heads/"+CONFIG.branch,{method:"PATCH",body:{ sha:commit.sha }});
+    return commit;
+  }
+
+  /* the two transports — same shape: readFile(path) + commit(files,msg) + validate() */
+  var GH={
+    readFile:function(path){ return ghApi("/repos/"+CONFIG.owner+"/"+CONFIG.repo+"/contents/"+path+"?ref="+CONFIG.branch,{raw:true}); },
+    commit:function(files,message){ return ghCommit(message,files); },
+    validate:async function(){ var r=await ghApi("/repos/"+CONFIG.owner+"/"+CONFIG.repo);
+      if(r&&r.permissions&&r.permissions.push===false) throw new Error("This key can read but not write — give Contents: Read and write."); return true; }
+  };
+  var VPS={
+    _f:async function(path,opts){ opts=opts||{};
+      var h={ "Authorization":"Bearer "+((conn.vps&&conn.vps.session)||"") };
+      var init={ method:opts.method||"GET", headers:h };
+      if(opts.body){ h["Content-Type"]="application/json"; init.body=JSON.stringify(opts.body); }
+      var res=await fetch((conn.vps&&conn.vps.base)+path, init);
+      if(res.status===401) throw new Error("auth");
+      if(!res.ok){ var m=""; try{ m=(await res.json()).error; }catch(e){} throw new Error(m||("Server "+res.status)); }
+      return res;
+    },
+    readFile:async function(path){ return (await this._f("/api/file?path="+encodeURIComponent(path))).text(); },
+    commit:async function(files,message){ return (await this._f("/api/commit",{method:"POST",body:{message:message,files:files}})).json(); },
+    validate:async function(){ await this._f("/api/ping"); return true; }
+  };
+  function transport(){ return conn.mode==="vps" ? VPS : GH; }
+
+  /* Insert / update this note's row in the notes index, renumber, return HTML.
+     Same for both transports — the browser owns the splice. */
+  function spliceIndex(indexHTML, entry){
+    var pdoc=new DOMParser().parseFromString(indexHTML,"text/html");
+    var list=pdoc.querySelector(".notes-list");
+    if(!list) throw new Error("couldn't find the notes list in index.html");
+    var rowInner=
+      '<span class="note-num">N°XX</span>'+
+      '<span class="note-date">'+monthYear(entry.date)+'</span>'+
+      '<span class="note-title">'+esc(entry.title)+'</span>'+
+      '<span class="note-tag">'+esc(entry.tag)+'</span>';
+    var existing=list.querySelector('a.note-item[href="'+entry.slug+'.html"]');
+    if(existing){ existing.innerHTML=rowInner; existing.removeAttribute("data-pending"); }
+    else{
+      var a=pdoc.createElement("a"); a.className="note-item"; a.setAttribute("href",entry.slug+".html"); a.innerHTML=rowInner;
+      var pending=list.querySelector("a.note-item[data-pending]");
+      if(pending) list.insertBefore(a,pending); else list.appendChild(a);
+    }
+    Array.prototype.forEach.call(list.querySelectorAll("a.note-item"),function(it,i){
+      var num=it.querySelector(".note-num"); if(num) num.textContent="N°"+String(i+1).padStart(2,"0");
+    });
+    return "<!DOCTYPE html>\n"+pdoc.documentElement.outerHTML+"\n";
+  }
+
+  function setPub(msg){ if(msg){ statusEl.classList.add("pub"); statusEl.innerHTML='<span class="dot">●</span> '+msg; } else { statusEl.classList.remove("pub"); stamp(); } }
+
+  var publishing=false;
+  async function publishLive(){
+    if(publishing) return;
+    if(!conn || !conn.mode){ showLock(); return; }
+    collect();
+    var title=textOf(titleEl.innerHTML);
+    if(!title){ toast("Give it a title first"); titleEl.focus(); return; }
+    if(!bodyEl.textContent.trim() && !bodyEl.querySelector("img")){ toast("Write something first"); return; }
+    var slug=doc.slug||slugify(title);
+    publishing=true; var T=transport(); setPub("Publishing…");
+    try{
+      var noteHTML=buildNote();
+      setPub("Reading index…");
+      var indexRaw=await T.readFile("writing/index.html");
+      var newIndex=spliceIndex(indexRaw,{ slug:slug, title:title, date:doc.date, tag:doc.tag });
+      setPub("Committing…");
+      await T.commit([
+        { path:"writing/"+slug+".html", content:noteHTML },
+        { path:"writing/index.html", content:newIndex }
+      ], "Publish note: "+title);
+      doc.published=true; doc.slug=slug; persist();
+      setPub(""); toast("Published ✓"); showDone(slug, title);
+    }catch(e){
+      setPub("");
+      if(e.message==="auth"){ toast(conn.mode==="vps"?"Session expired — sign in again":"Key rejected — unlock again"); showLock(); }
+      else toast("Publish failed: "+e.message);
+    }finally{ publishing=false; }
+  }
+
+  /* ─── Done modal ─── */
+  var pubdone=$("#pubdone");
+  function showDone(slug,title){
+    var url=CONFIG.site+"/writing/"+slug+".html";
+    $("#pubdoneTitle").textContent=title||"It's live";
+    $("#pubdoneUrl").textContent=url;
+    $("#pubdoneView").href=url;
+    pubdone.classList.add("on");
+  }
+  $("#pubdoneClose").addEventListener("click",function(){ pubdone.classList.remove("on"); });
+  $("#pubdoneCopy").addEventListener("click",function(){ copy($("#pubdoneUrl").textContent); toast("Link copied"); });
+  pubdone.addEventListener("click",function(e){ if(e.target===pubdone) pubdone.classList.remove("on"); });
+
+  /* ─── Lock (two sign-in modes) ─── */
+  var lock=$("#lock"), lockErr=$("#lockErr");
+  var lockKey=$("#lockKey"), lockUrl=$("#lockUrl"), lockPass=$("#lockPass");
+  function showLock(){ document.body.classList.add("locked"); lock.classList.add("on"); if(conn.vps&&conn.vps.base) lockUrl.value=conn.vps.base; setTimeout(function(){ (lock.querySelector('.lock-pane:not([hidden]) input')||lockKey).focus(); },60); }
+  function hideLock(){ document.body.classList.remove("locked"); lock.classList.remove("on"); }
+  function lockSay(msg,ok){ lockErr.textContent=msg||""; lockErr.classList.toggle("ok",!!ok); }
+  Array.prototype.forEach.call(lock.querySelectorAll(".lock-tab"),function(tab){
+    tab.addEventListener("click",function(){
+      var name=tab.getAttribute("data-tab"); lockSay("");
+      Array.prototype.forEach.call(lock.querySelectorAll(".lock-tab"),function(t){ t.classList.toggle("is-on",t===tab); });
+      Array.prototype.forEach.call(lock.querySelectorAll(".lock-pane"),function(p){ p.hidden=(p.getAttribute("data-pane")!==name); });
+      var inp=lock.querySelector('.lock-pane:not([hidden]) input'); if(inp) inp.focus();
+    });
+  });
+  async function unlockKey(){
+    var t=lockKey.value.trim(); if(!t){ lockSay("Paste a key first."); return; }
+    lockSay("Checking…");
+    setConn({ mode:"github", ghToken:t, vps:conn.vps||{base:CONFIG.vpsBase,session:"",exp:0} });
+    try{ await GH.validate(); lockSay("Unlocked ✓",true); lockKey.value=""; setTimeout(hideLock,350); toast("You're in"); }
+    catch(e){ conn.mode=null; lockSay(e.message==="auth"?"Key rejected. Check it has Contents access to this repo.":e.message); }
+  }
+  async function unlockServer(){
+    var base=(lockUrl.value.trim()||CONFIG.vpsBase).replace(/\/+$/,""); var pass=lockPass.value;
+    if(!pass){ lockSay("Enter your password."); return; }
+    lockSay("Signing in…");
+    try{
+      var res=await fetch(base+"/api/login",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({password:pass})});
+      if(res.status===401) throw new Error("Wrong password.");
+      if(!res.ok) throw new Error("Server "+res.status+" — is it deployed at that URL?");
+      var data=await res.json();
+      setConn({ mode:"vps", ghToken:conn.ghToken||"", vps:{ base:base, session:data.token, exp:data.expires||0 } });
+      lockSay("Signed in ✓",true); lockPass.value=""; setTimeout(hideLock,350); toast("You're in — via your server");
+    }catch(e){
+      conn.mode=null;
+      lockSay(/Failed to fetch|NetworkError/.test(e.message)?"Can't reach that server. Check the URL / that it's running.":e.message);
+    }
+  }
+  function forgetKey(){ clearConn(); toast("Signed out on this device"); showLock(); }
+  $("#lockKeyGo").addEventListener("click",unlockKey);
+  $("#lockServerGo").addEventListener("click",unlockServer);
+  lockKey.addEventListener("keydown",function(e){ if(e.key==="Enter"){ e.preventDefault(); unlockKey(); } });
+  lockPass.addEventListener("keydown",function(e){ if(e.key==="Enter"){ e.preventDefault(); unlockServer(); } });
+
+  /* gate on load */
+  if(!conn.mode) showLock();
+
+  /* ─── Boot ─── */
+  document.execCommand("defaultParagraphSeparator",false,"p");
+  renderDoc(); stamp();
+  if(!doc.body){ bodyEl.innerHTML="<p><br></p>"; }
+  fSlug._auto=fSlug.value;
+
+  /* ─── The exported note skeleton (matches /writing/*.html) ─── */
+  var NOTE_TPL='<!DOCTYPE html>\n'+
+'<html lang="en">\n'+
+'<head>\n'+
+'  <meta charset="UTF-8" />\n'+
+'  <meta name="viewport" content="width=device-width, initial-scale=1.0" />\n'+
+'  <title>{{TITLE_PLAIN}} — Harsh Kumar Arya</title>\n'+
+'  <meta name="description" content="{{DESC}}" />\n'+
+'  <link rel="preconnect" href="https://fonts.googleapis.com">\n'+
+'  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n'+
+'  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo+Black&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;1,6..96,400&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=Inter:wght@400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">\n'+
+'  <link rel="stylesheet" href="../styles.css?v=11" />\n'+
+'  <style>\n'+
+'    .post { padding: 56px 0 88px; max-width: 760px; margin: 0 auto; }\n'+
+'    .post-back { display:inline-block; font-family:var(--font-mono); font-size:12px; letter-spacing:0.14em; text-transform:uppercase; background:var(--text); color:var(--bg); padding:6px 12px; border:2px solid var(--text); margin-bottom:36px; }\n'+
+'    .post-back:hover { background:var(--accent); color:var(--text); }\n'+
+'    .post-meta { display:flex; gap:12px; align-items:center; flex-wrap:wrap; font-family:var(--font-mono); font-size:11px; letter-spacing:0.14em; color:var(--muted); text-transform:uppercase; margin-bottom:24px; }\n'+
+'    .post-tag { background:var(--accent); color:var(--text); border:2px solid var(--text); padding:3px 10px; font-weight:700; }\n'+
+'    .post-title { font-family:var(--font-display); font-size:clamp(44px,6.5vw,96px); line-height:0.92; letter-spacing:-0.02em; text-transform:uppercase; margin-bottom:24px; }\n'+
+'    .post-title em { font-family:var(--font-serif); font-style:italic; font-weight:700; color:var(--accent); text-transform:none; }\n'+
+'    .post-description { font-family:var(--font-serif); font-style:italic; font-size:22px; line-height:1.45; color:var(--muted); max-width:600px; margin-bottom:56px; }\n'+
+'    .post-body { font-size:18px; line-height:1.7; color:var(--text); }\n'+
+'    .post-body > * + * { margin-top:22px; }\n'+
+'    .post-body h2 { font-family:var(--font-display); font-size:38px; line-height:1.05; text-transform:uppercase; letter-spacing:-0.01em; margin-top:56px; margin-bottom:8px; }\n'+
+'    .post-body p { color:var(--text); }\n'+
+'    .post-body strong { font-weight:600; } .post-body em { font-style:italic; }\n'+
+'    .post-body a { color:inherit; border-bottom:2px solid var(--line); padding-bottom:1px; transition:border-color .15s,color .15s; }\n'+
+'    .post-body a:hover { background:var(--accent); color:var(--text); border-bottom-color:var(--text); padding:1px 4px; margin:-1px -4px; }\n'+
+'    .post-body ul, .post-body ol { padding-left:0; list-style:none; }\n'+
+'    .post-body li { padding:10px 0 10px 28px; position:relative; border-top:1px dashed var(--line); }\n'+
+'    .post-body li:first-child { border-top:0; }\n'+
+'    .post-body li::before { content:"\\2192"; position:absolute; left:0; top:10px; font-family:var(--font-display); color:var(--accent); font-size:18px; }\n'+
+'    .post-body blockquote { padding:14px 0 14px 24px; border-left:4px solid var(--accent); color:var(--muted); font-style:italic; font-family:var(--font-serif); font-size:22px; line-height:1.5; }\n'+
+'    .post-body .pull { font-family:var(--font-serif); font-style:italic; font-size:26px; line-height:1.4; color:var(--text); padding:8px 0; margin:40px 0; max-width:620px; }\n'+
+'    .post-body figure { margin:40px 0; }\n'+
+'    .post-body img { display:block; max-width:100%; height:auto; border:2px solid var(--text); }\n'+
+'    .post-body figcaption { font-family:var(--font-mono); font-size:12px; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); margin-top:10px; }\n'+
+'    .post-body hr { border:0; border-top:3px solid var(--text); margin:48px 0; }\n'+
+'    .post-footer { margin-top:72px; padding-top:32px; border-top:2px solid var(--text); display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap; font-family:var(--font-mono); font-size:12px; letter-spacing:0.12em; text-transform:uppercase; }\n'+
+'    .post-footer a { color:var(--text); border-bottom:2px solid var(--text); padding-bottom:2px; font-weight:700; }\n'+
+'    .post-footer a:hover { color:var(--accent); border-bottom-color:var(--accent); }\n'+
+'    @media (max-width:720px){ .post{padding:32px 0 64px;} .post-body{font-size:16px;} .post-body h2{font-size:30px;margin-top:44px;} .post-body .pull{font-size:22px;} }\n'+
+'  </style>\n'+
+'  <link rel="icon" href="../favicon.ico" sizes="48x48">\n'+
+'  <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">\n'+
+'  <link rel="canonical" href="https://harsharya.com/writing/{{SLUG}}.html">\n'+
+'  <meta property="og:type" content="article">\n'+
+'  <meta property="og:site_name" content="Harsh Kumar Arya">\n'+
+'  <meta property="og:title" content="{{TITLE_PLAIN}} — Harsh Kumar Arya">\n'+
+'  <meta property="og:description" content="{{DESC}}">\n'+
+'  <meta property="og:url" content="https://harsharya.com/writing/{{SLUG}}.html">\n'+
+'  <meta property="og:image" content="https://harsharya.com/assets/portrait.jpg">\n'+
+'  <meta name="twitter:card" content="summary_large_image">\n'+
+'</head>\n'+
+'<body data-mode="warhol" data-density="normal" class="post-page">\n'+
+'  <nav class="nav" id="nav">\n'+
+'    <div class="container nav-inner">\n'+
+'      <a href="../" class="logo">Harsh<sup>1</sup></a>\n'+
+'      <div class="nav-links">\n'+
+'        <a href="../#about">About</a>\n'+
+'        <a href="/#work">Work</a>\n'+
+'        <a href="/portfolio/">Portfolio</a>\n'+
+'        <a href="../life/index.html">Life</a>\n'+
+'        <a href="index.html">Notes</a>\n'+
+'        <a href="/contact/">Contact</a>\n'+
+'      </div>\n'+
+'    </div>\n'+
+'  </nav>\n'+
+'  <article class="post container">\n'+
+'    <header class="post-header">\n'+
+'      <a href="index.html" class="post-back">← All notes</a>\n'+
+'      <div class="post-meta">\n'+
+'        <span class="post-date">{{DATE_LABEL}}</span>\n'+
+'        <span class="post-dot">/</span>\n'+
+'        <span class="post-tag">{{TAG}}</span>\n'+
+'      </div>\n'+
+'      <h1 class="post-title">{{TITLE_HTML}}</h1>\n'+
+'      <p class="post-description">{{DESC}}</p>\n'+
+'    </header>\n'+
+'    <div class="post-body">\n'+
+'{{BODY}}\n'+
+'    </div>\n'+
+'    <nav class="post-footer">\n'+
+'      <a href="index.html">← All notes</a>\n'+
+'      <a href="../#contact">Get in touch →</a>\n'+
+'    </nav>\n'+
+'  </article>\n'+
+'  <footer>\n'+
+'    <div class="container">\n'+
+'      <span class="foot-left">© <span id="year"></span> Harsh Kumar Arya · <a class="foot-email" href="mailto:hi@harsharya.com">hi@harsharya.com</a></span>\n'+
+'      <span class="foot-socials"><a href="https://www.linkedin.com/in/harsharyaa/" target="_blank" rel="noopener">LinkedIn</a> <a href="https://github.com/harsharya7021" target="_blank" rel="noopener">GitHub</a></span>\n'+
+'    </div>\n'+
+'  </footer>\n'+
+'  <script>document.getElementById("year").textContent=new Date().getFullYear();var n=document.getElementById("nav");window.addEventListener("scroll",function(){if(window.scrollY>8)n.classList.add("scrolled");else n.classList.remove("scrolled");});<\/script>\n'+
+'</body>\n'+
+'</html>\n';
+
+})();
+</script>
+</body>
+</html>

@@ -46,14 +46,16 @@
     'void main(){',
     '  vUv = aPos;',
     '  vec2 p = uRect.xy + aPos * uRect.zw;',
-    '  float bowX = sin(aPos.y * 3.14159);',
-    '  float bowY = sin(aPos.x * 3.14159);',
-    /* horizontal drag: slats bow vertically + lean into motion */
-    '  p.y += (1.0 - uAxis) * sin(uSeed * 6.2831 + uTime * 2.2 + aPos.x * 2.0) * uVel * 0.22 * bowX;',
-    '  p.x += (1.0 - uAxis) * (aPos.y - 0.5) * uVel * 0.55;',
-    /* vertical scroll: jelly stretch + sideways lag */
-    '  p.x += uAxis * sin(uSeed * 6.2831 + uTime * 2.0 + aPos.y * 2.2) * uVel * 0.16 * bowY;',
-    '  p.y += uAxis * (aPos.y - 0.5) * uVel * 0.6;',
+    /* Deformation is driven by velocity alone, with spatial phase —
+       nothing oscillates over time. Still = perfectly crisp;
+       motion = the image bends into it like dragged cloth. */
+    '  float v = clamp(uVel, -34.0, 34.0);',
+    /* horizontal strip: slats lean + bow into the motion */
+    '  p.x += (1.0 - uAxis) * ((aPos.y - 0.5) * 0.42 + sin(3.14159 * aPos.y) * 0.30) * v;',
+    /* vertical column: the photo bows across its width (centre lags)
+       and breathes slightly along the scroll */
+    '  p.y += uAxis * sin(3.14159 * aPos.x) * v * 0.6;',
+    '  p.y += uAxis * (aPos.y - 0.5) * abs(v) * 0.22;',
     '  vec2 clip = (p / uRes) * 2.0 - 1.0;',
     '  gl_Position = vec4(clip.x, -clip.y, 0.0, 1.0);',
     '}'
@@ -79,9 +81,12 @@
     '  float ia = uImg.x / max(uImg.y, 1.0);',
     '  vec2 s = (ra < ia) ? vec2(ra / ia, 1.0) : vec2(1.0, ia / ra);',
     '  vec2 tuv = (uv - 0.5) * s + 0.5;',
-    '  tuv.y += (1.0 - uAxis) * sin(tuv.x * 9.0 + uTime * 2.6) * uVel * 0.00028;',
-    '  tuv.x += uAxis * sin(tuv.y * 9.0 + uTime * 2.6) * uVel * 0.00024;',
-    '  float sh = uVel * 0.00042;',
+    /* refraction ridges: silent at reading speed, blossom on hard flicks */
+    '  float cv = clamp(uVel, -34.0, 34.0);',
+    '  float g = smoothstep(4.0, 32.0, abs(cv));',
+    '  tuv.y += uAxis * sin(vUv.y * 15.7) * cv * 0.0007 * g;',
+    '  tuv.x += (1.0 - uAxis) * sin(vUv.x * 9.4) * cv * 0.0006 * g;',
+    '  float sh = cv * 0.00012 * g;',
     '  vec3 col;',
     '  col.r = texture2D(uTex, tuv + vec2(sh * (1.0 - uAxis), sh * uAxis)).r;',
     '  col.g = texture2D(uTex, tuv).g;',
@@ -272,7 +277,7 @@
     var mode = 'strip';                              /* strip | zoom (interaction state) */
     var cur = 0, busy = false, dead = false, leaving = false;
     var hot = -1, dragging = false, dragMoved = 0;
-    var wheelAcc = 0, wheelT = 0, userMoved = false;
+    var wheelAcc = 0, wheelT = 0, userMoved = false, lastInput = 0;
     var sizes = [];                                  /* scroll mode: per-item {w,h} */
     var introT = null, raf = 0, t0 = performance.now();
     var CANVAS_COL = [0.957, 0.953, 0.937];
@@ -548,7 +553,7 @@
       lastPX = e.clientX; lastPY = e.clientY;
       dragMoved = Math.max(dragMoved, Math.abs(e.clientX - downX), Math.abs(e.clientY - downY));
       if (dragging && mode === 'strip' && lockedP === null) {
-        userMoved = true;
+        userMoved = true; lastInput = performance.now();
         var d = (MODE === 'scroll') ? dy : dx;
         var over = (targetP > maxP || targetP < minP) ? 0.35 : 1;
         targetP += d * over;
@@ -610,9 +615,10 @@
       if (dead || leaving) return;
       if (mode === 'strip') {
         if (lockedP === null) {
-          userMoved = true;
+          userMoved = true; lastInput = performance.now();
           fling = 0;
-          targetP -= (e.deltaY + (MODE === 'slits' ? e.deltaX : 0)) * 0.9;
+          /* the column reads weightier — deliberately more resistant */
+          targetP -= (e.deltaY + (MODE === 'slits' ? e.deltaX : 0)) * (MODE === 'scroll' ? 0.55 : 0.9);
         }
       } else {
         var now = performance.now();
@@ -632,9 +638,22 @@
         if (e.key === 'ArrowRight' || e.key === 'ArrowDown') step(1);
         if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') step(-1);
       } else if (lockedP === null) {
-        var jump = (MODE === 'scroll') ? vh * 0.6 : (baseW + gap) * 3;
-        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') { userMoved = true; fling = 0; targetP -= jump; }
-        if (e.key === 'ArrowLeft' || e.key === 'ArrowUp') { userMoved = true; fling = 0; targetP += jump; }
+        var kDir = (e.key === 'ArrowRight' || e.key === 'ArrowDown') ? 1
+                 : (e.key === 'ArrowLeft' || e.key === 'ArrowUp') ? -1 : 0;
+        if (!kDir) return;
+        userMoved = true; lastInput = performance.now(); fling = 0;
+        if (MODE === 'scroll') {
+          /* step exactly one photograph */
+          var kBest = 0, kBd = 1e9;
+          for (var q = 0; q < n; q++) {
+            var qD = Math.abs((vh / 2 - itemCenter(q)) - targetP);
+            if (qD < kBd) { kBd = qD; kBest = q; }
+          }
+          var kNext = clamp(kBest + kDir, 0, n - 1);
+          targetP = clamp(vh / 2 - itemCenter(kNext), minP, maxP);
+        } else {
+          targetP -= kDir * (baseW + gap) * 3;
+        }
       }
     }
 
@@ -667,16 +686,26 @@
 
       if (mode === 'strip') {
         if (!dragging && lockedP === null) {
-          targetP += fling; fling *= 0.94;
+          targetP += fling; fling *= (MODE === 'scroll' ? 0.9 : 0.94);
           if (Math.abs(fling) < 0.08) fling = 0;
           if (targetP > maxP) targetP = lerp(targetP, maxP, 0.16);
           if (targetP < minP) targetP = lerp(targetP, minP, 0.16);
+          /* magnetic settle: when the scroll comes to rest, a photograph
+             should be sitting composed in the frame */
+          if (MODE === 'scroll' && fling === 0 && now - lastInput > 240) {
+            var sBest = 0, sBd = 1e9;
+            for (var s = 0; s < n; s++) {
+              var sD = Math.abs((vh / 2 - itemCenter(s)) - targetP);
+              if (sD < sBd) { sBd = sD; sBest = s; }
+            }
+            targetP = lerp(targetP, clamp(vh / 2 - itemCenter(sBest), minP, maxP), 0.09);
+          }
         }
         if (lockedP !== null) targetP = lockedP;
         pos = lerp(pos, targetP, dragging ? 0.42 : 0.1);
         applyTrack();
       }
-      vel = lerp(vel, pos - prevPos, 0.18); prevPos = pos;
+      vel = lerp(vel, pos - prevPos, 0.22); prevPos = pos;
 
       /* hud */
       if (lockedP === null && maxP > minP) {
