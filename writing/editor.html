@@ -127,10 +127,26 @@
     #body li::before{content:"→"; position:absolute; left:0; top:10px; font-family:var(--font-display); color:var(--accent); font-size:18px;}
     #body blockquote{margin:0; padding:14px 0 14px 24px; border-left:4px solid var(--accent); color:var(--muted); font-style:italic; font-family:var(--font-serif); font-size:22px; line-height:1.5;}
     #body .pull{font-family:var(--font-serif); font-style:italic; font-size:26px; line-height:1.4; color:var(--text); padding:8px 0; margin:40px 0; max-width:620px;}
-    #body figure{margin:40px 0;}
+    #body figure{margin:40px 0; clear:both;}
     #body img{display:block; max-width:100%; height:auto; border:2px solid var(--text);}
     #body figcaption{font-family:var(--font-mono); font-size:12px; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); margin-top:10px;}
+    #body figure.align-left{float:left; width:48%; margin:6px 26px 18px 0;}
+    #body figure.align-right{float:right; width:48%; margin:6px 0 18px 26px;}
+    #body figure.align-wide{width:118%; margin-left:-9%;}
+    #body figure.sel{outline:2px solid var(--accent-2); outline-offset:4px;}
     #body hr{border:0; border-top:3px solid var(--text); margin:48px 0;}
+
+    /* Image alignment toolbar (click a picture) */
+    .figbar{position:absolute; z-index:50; top:0; left:0; transform:translateY(-100%);
+      display:none; gap:2px; background:var(--text); padding:4px; border-radius:6px;
+      box-shadow:0 6px 20px rgba(0,0,0,.28);}
+    .figbar.on{display:flex;}
+    .figbar button{border:0; background:transparent; color:var(--bg); cursor:pointer;
+      font-family:var(--font-mono); font-size:10px; letter-spacing:0.06em; text-transform:uppercase;
+      padding:6px 8px; border-radius:4px;}
+    .figbar button:hover{background:rgba(255,255,255,.16);}
+    .figbar button.active{color:var(--accent-3);}
+    .figbar .divide{width:1px; background:rgba(255,255,255,.22); margin:2px 3px;}
 
     /* Placeholders */
     .is-empty::before{content:attr(data-ph); color:var(--muted); opacity:0.5; pointer-events:none;}
@@ -210,12 +226,15 @@
     .drawer .d-head{display:flex; align-items:center; justify-content:space-between; padding:18px 20px; border-bottom:2px solid var(--text);}
     .drawer .sec{padding:20px; border-bottom:1px solid var(--line);}
     .drawer .lab{font-family:var(--font-mono); font-size:10px; letter-spacing:0.14em; text-transform:uppercase; color:var(--muted); display:block; margin-bottom:8px;}
-    .drawer input[type=text], .drawer input[type=date], .drawer select{
+    .drawer input[type=text], .drawer input[type=date], .drawer select, .drawer textarea{
       width:100%; font-family:var(--font-body); font-size:14px; color:var(--text);
       background:transparent; border:2px solid var(--line); padding:9px 10px; outline:none;
     }
-    .drawer input:focus, .drawer select:focus{border-color:var(--text);}
-    .drawer .hint{font-family:var(--font-mono); font-size:11px; color:var(--muted); margin-top:8px; word-break:break-all;}
+    .drawer textarea{resize:vertical; line-height:1.4;}
+    .drawer input:focus, .drawer select:focus, .drawer textarea:focus{border-color:var(--text);}
+    .drawer .hint{font-family:var(--font-mono); font-size:11px; color:var(--muted); margin-top:8px; word-break:break-word;}
+    .lab-count{float:right; letter-spacing:0.06em;}
+    .lab-count.over{color:var(--accent);}
     .tagrow{display:flex; flex-wrap:wrap; gap:6px; margin-top:10px;}
     .tagrow button{font-family:var(--font-mono); font-size:10px; letter-spacing:0.1em; text-transform:uppercase; border:2px solid var(--text); background:transparent; padding:4px 8px; cursor:pointer; font-weight:700;}
     .tagrow button:hover{background:var(--accent);}
@@ -458,6 +477,16 @@
   </div>
   <input type="file" id="imgFile" accept="image/*" hidden />
 
+  <!-- ───────── Image alignment toolbar ───────── -->
+  <div class="figbar" id="figbar">
+    <button data-align="left" title="Float left">Left</button>
+    <button data-align="center" title="Center (default)">Center</button>
+    <button data-align="right" title="Float right">Right</button>
+    <button data-align="wide" title="Wide">Wide</button>
+    <span class="divide"></span>
+    <button data-align="del" title="Remove image">✕</button>
+  </div>
+
   <!-- ───────── Drawer ───────── -->
   <div class="overlay" id="overlay"></div>
   <div class="drawer-shell">
@@ -480,6 +509,13 @@
       <label class="lab" for="fSlug">Slug</label>
       <input type="text" id="fSlug" />
       <div class="hint" id="urlHint">/writing/…</div>
+    </div>
+    <div class="sec">
+      <label class="lab" for="fMetaDesc">SEO description <span class="lab-count" id="mdCount">0 / 160</span></label>
+      <textarea id="fMetaDesc" rows="3" placeholder="One sentence Google shows in results (~155 chars). Blank = your subtitle."></textarea>
+      <label class="lab" for="fKeywords" style="margin-top:14px;">Keywords</label>
+      <input type="text" id="fKeywords" placeholder="comma, separated — mix short + long-tail" />
+      <div class="hint">Feeds the meta description, keywords, and Article schema (rich results). Send me the copy and I'll research + fill these.</div>
     </div>
     <div class="sec">
       <label class="lab">Narration — listen in your voice</label>
@@ -530,6 +566,7 @@
   var drawer=$("#drawer"), overlay=$("#overlay");
   var toastEl=$("#toast");
   var fTag=$("#fTag"), fDate=$("#fDate"), fSlug=$("#fSlug"), urlHint=$("#urlHint");
+  var fMetaDesc=$("#fMetaDesc"), fKeywords=$("#fKeywords"), mdCount=$("#mdCount");
   var datePreview=$("#datePreview"), tagPreview=$("#tagPreview");
   var draftsList=$("#draftsList");
   var pubMenu=$("#pubMenu");
@@ -538,7 +575,7 @@
   var LS_DRAFTS="hka.editor.drafts.v1", LS_CURRENT="hka.editor.current.v1", LS_HELP="hka.editor.help.v1";
   function uid(){ return "n"+Date.now().toString(36)+Math.random().toString(36).slice(2,6); }
   function todayISO(){ var d=new Date(); return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,10); }
-  function blankDoc(){ return {id:uid(), title:"", subtitle:"", tag:"Musings", date:todayISO(), slug:"", body:"", updated:Date.now()}; }
+  function blankDoc(){ return {id:uid(), title:"", subtitle:"", tag:"Musings", date:todayISO(), slug:"", body:"", metaDesc:"", keywords:"", updated:Date.now()}; }
 
   var state=(function(){
     try{
@@ -569,7 +606,13 @@
     fTag.value=doc.tag||"Musings";
     fDate.value=doc.date||todayISO();
     fSlug.value=doc.slug||slugify(textOf(doc.title));
-    refreshMeta(); updatePlaceholders(); updateMetric(); renderDrafts(); renderAudioState();
+    fMetaDesc.value=doc.metaDesc||""; fKeywords.value=doc.keywords||"";
+    refreshMeta(); updatePlaceholders(); updateMetric(); renderDrafts(); renderAudioState(); updateMdCount();
+  }
+  function updateMdCount(){
+    var n=(fMetaDesc.value||"").length;
+    mdCount.textContent=n+" / 160";
+    mdCount.classList.toggle("over", n>160);
   }
   function refreshMeta(){
     datePreview.textContent=monthYear(fDate.value||todayISO());
@@ -587,6 +630,8 @@
     doc.tag=(fTag.value||"Musings").trim();
     doc.date=fDate.value||todayISO();
     doc.slug=(fSlug.value.trim()||slugify(textOf(doc.title)));
+    doc.metaDesc=(fMetaDesc.value||"").trim();
+    doc.keywords=(fKeywords.value||"").trim();
     doc.updated=Date.now();
   }
   function scheduleSave(){
@@ -883,6 +928,44 @@
     doc.audioName=""; doc.audioExt=""; collect(); Vault.save(doc); stamp(); renderAudioState(); toast("Narration removed");
   });
 
+  /* ─── Image alignment: click a picture → toolbar (left / center / right / wide) ─── */
+  var figbar=$("#figbar"), selFig=null;
+  function placeFigbar(){
+    if(!selFig) return;
+    var r=selFig.getBoundingClientRect();
+    figbar.style.left=(r.left+window.scrollX)+"px";
+    figbar.style.top=(r.top+window.scrollY-6)+"px";
+  }
+  function syncFigActive(){
+    if(!selFig) return;
+    var a=selFig.classList.contains("align-left")?"left":selFig.classList.contains("align-right")?"right":selFig.classList.contains("align-wide")?"wide":"center";
+    Array.prototype.forEach.call(figbar.querySelectorAll("button[data-align]"),function(b){ b.classList.toggle("active", b.getAttribute("data-align")===a); });
+  }
+  function showFigbar(fig){
+    if(selFig && selFig!==fig) selFig.classList.remove("sel");
+    selFig=fig; fig.classList.add("sel");
+    figbar.classList.add("on"); placeFigbar(); syncFigActive();
+  }
+  function hideFigbar(){ figbar.classList.remove("on"); if(selFig) selFig.classList.remove("sel"); selFig=null; }
+  document.addEventListener("click", function(e){
+    if(e.target.closest && e.target.closest(".figbar")) return;         // figbar has its own handler
+    var fig=e.target.closest ? e.target.closest("#body figure") : null;
+    if(fig) showFigbar(fig); else hideFigbar();
+  });
+  figbar.addEventListener("mousedown", function(e){ e.preventDefault(); });
+  figbar.addEventListener("click", function(e){
+    var b=e.target.closest("button[data-align]"); if(!b || !selFig) return;
+    var a=b.getAttribute("data-align");
+    if(a==="del"){ var f=selFig; hideFigbar(); f.remove(); scheduleSave(); updatePlaceholders(); updateMetric(); return; }
+    selFig.classList.remove("align-left","align-right","align-wide");
+    if(a==="left") selFig.classList.add("align-left");
+    else if(a==="right") selFig.classList.add("align-right");
+    else if(a==="wide") selFig.classList.add("align-wide");           // center = no class (default)
+    placeFigbar(); syncFigActive(); scheduleSave();
+  });
+  window.addEventListener("scroll", function(){ if(selFig) placeFigbar(); }, true);
+  window.addEventListener("resize", function(){ if(selFig) placeFigbar(); });
+
   /* ─── Markdown-style shortcuts ─── */
   bodyEl.addEventListener("keydown", function(e){
     if(e.key===" "){
@@ -933,6 +1016,8 @@
   datePreview.addEventListener("click",openDrawer);
   tagPreview.addEventListener("click",openDrawer);
   [fTag,fDate,fSlug].forEach(function(el){ el.addEventListener("input",function(){ if(el===fSlug) fSlug._auto=null; refreshMeta(); scheduleSave(); }); });
+  fMetaDesc.addEventListener("input",function(){ updateMdCount(); scheduleSave(); });
+  fKeywords.addEventListener("input",function(){ scheduleSave(); });
   (function(){ var tags=["Musings","Ideas","Agency","Talent","Sports","Strategy","Intro"]; var wrap=$("#tagQuick");
     tags.forEach(function(t){ var b=document.createElement("button"); b.textContent=t; b.onclick=function(){ fTag.value=t; refreshMeta(); scheduleSave(); }; wrap.appendChild(b); }); })();
 
@@ -981,6 +1066,7 @@
     var c=bodyEl.cloneNode(true);
     Array.prototype.forEach.call(c.querySelectorAll("[contenteditable]"),function(n){ n.removeAttribute("contenteditable"); });
     Array.prototype.forEach.call(c.querySelectorAll("[style]"),function(n){ n.removeAttribute("style"); });
+    Array.prototype.forEach.call(c.querySelectorAll("figure.sel"),function(n){ n.classList.remove("sel"); if(!n.getAttribute("class")) n.removeAttribute("class"); });
     Array.prototype.forEach.call(c.querySelectorAll("p"),function(p){ if(!p.textContent.trim() && !p.querySelector("img,br")) p.remove(); else if(p.innerHTML==="<br>"||p.innerHTML==="") p.remove(); });
     var html=c.innerHTML
       .replace(/<b>/g,"<strong>").replace(/<\/b>/g,"</strong>")
@@ -995,8 +1081,20 @@
   function buildNote(){
     var titlePlain=textOf(titleEl.innerHTML)||"Untitled";
     var desc=textOf(subtitleEl.innerHTML)||"";
+    var mdesc=((doc.metaDesc||"").trim())||desc;          // SEO description falls back to subtitle
+    var kw=(doc.keywords||"").trim();
+    var ld=JSON.stringify({
+      "@context":"https://schema.org","@type":"BlogPosting",
+      "headline":titlePlain, "description":mdesc,
+      "keywords":kw, "datePublished":doc.date, "dateModified":doc.date,
+      "author":{"@type":"Person","name":"Harsh Kumar Arya","url":"https://harsharya.com/"},
+      "publisher":{"@type":"Person","name":"Harsh Kumar Arya"},
+      "image":"https://harsharya.com/assets/portrait.jpg",
+      "mainEntityOfPage":{"@type":"WebPage","@id":"https://harsharya.com/writing/"+doc.slug+".html"}
+    }).replace(/</g,"\\u003c");                            // safe inside <script>
     return fill(NOTE_TPL,{
       TITLE_PLAIN:esc(titlePlain), TITLE_HTML:titleHTML(), DESC:esc(desc),
+      META_DESC:esc(mdesc), KEYWORDS:esc(kw), LD:ld,
       DATE_LABEL:monthYear(doc.date), TAG:esc(doc.tag), SLUG:doc.slug, BODY:cleanBodyHTML(),
       AUDIO:audioPlayerHTML()
     });
@@ -1298,7 +1396,9 @@
 '  <meta charset="UTF-8" />\n'+
 '  <meta name="viewport" content="width=device-width, initial-scale=1.0" />\n'+
 '  <title>{{TITLE_PLAIN}} — Harsh Kumar Arya</title>\n'+
-'  <meta name="description" content="{{DESC}}" />\n'+
+'  <meta name="description" content="{{META_DESC}}" />\n'+
+'  <meta name="keywords" content="{{KEYWORDS}}" />\n'+
+'  <meta name="author" content="Harsh Kumar Arya" />\n'+
 '  <link rel="preconnect" href="https://fonts.googleapis.com">\n'+
 '  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n'+
 '  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo+Black&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;1,6..96,400&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=Inter:wght@400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">\n'+
@@ -1325,9 +1425,13 @@
 '    .post-body li::before { content:"\\2192"; position:absolute; left:0; top:10px; font-family:var(--font-display); color:var(--accent); font-size:18px; }\n'+
 '    .post-body blockquote { padding:14px 0 14px 24px; border-left:4px solid var(--accent); color:var(--muted); font-style:italic; font-family:var(--font-serif); font-size:22px; line-height:1.5; }\n'+
 '    .post-body .pull { font-family:var(--font-serif); font-style:italic; font-size:26px; line-height:1.4; color:var(--text); padding:8px 0; margin:40px 0; max-width:620px; }\n'+
-'    .post-body figure { margin:40px 0; }\n'+
+'    .post-body figure { margin:40px 0; clear:both; }\n'+
 '    .post-body img { display:block; max-width:100%; height:auto; border:2px solid var(--text); }\n'+
 '    .post-body figcaption { font-family:var(--font-mono); font-size:12px; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); margin-top:10px; }\n'+
+'    .post-body figure.align-left { float:left; width:48%; margin:6px 30px 20px 0; }\n'+
+'    .post-body figure.align-right { float:right; width:48%; margin:6px 0 20px 30px; }\n'+
+'    .post-body figure.align-wide { width:116%; margin-left:-8%; }\n'+
+'    @media (max-width:720px){ .post-body figure.align-left, .post-body figure.align-right, .post-body figure.align-wide { float:none; width:100%; margin:32px 0; } }\n'+
 '    .post-body hr { border:0; border-top:3px solid var(--text); margin:48px 0; }\n'+
 '    .post-footer { margin-top:72px; padding-top:32px; border-top:2px solid var(--text); display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap; font-family:var(--font-mono); font-size:12px; letter-spacing:0.12em; text-transform:uppercase; }\n'+
 '    .post-footer a { color:var(--text); border-bottom:2px solid var(--text); padding-bottom:2px; font-weight:700; }\n'+
@@ -1354,10 +1458,14 @@
 '  <meta property="og:type" content="article">\n'+
 '  <meta property="og:site_name" content="Harsh Kumar Arya">\n'+
 '  <meta property="og:title" content="{{TITLE_PLAIN}} — Harsh Kumar Arya">\n'+
-'  <meta property="og:description" content="{{DESC}}">\n'+
+'  <meta property="og:description" content="{{META_DESC}}">\n'+
 '  <meta property="og:url" content="https://harsharya.com/writing/{{SLUG}}.html">\n'+
 '  <meta property="og:image" content="https://harsharya.com/assets/portrait.jpg">\n'+
 '  <meta name="twitter:card" content="summary_large_image">\n'+
+'  <meta name="twitter:title" content="{{TITLE_PLAIN}} — Harsh Kumar Arya">\n'+
+'  <meta name="twitter:description" content="{{META_DESC}}">\n'+
+'  <meta name="twitter:image" content="https://harsharya.com/assets/portrait.jpg">\n'+
+'  <script type="application/ld+json">{{LD}}<\/script>\n'+
 '</head>\n'+
 '<body data-mode="warhol" data-density="normal" class="post-page">\n'+
 '  <nav class="nav" id="nav">\n'+
