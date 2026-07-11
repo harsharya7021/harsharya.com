@@ -25,7 +25,7 @@ html { scroll-behavior: smooth; }
   --text: #1a1a1a;
   --muted: #6b6358;
   --line: #d6cfc1;
-  --accent: #ff2d87;
+  --accent: #ff5a00;
   --accent-2: #00b3ff;
   --accent-3: #ffc700;
   --accent-4: #00d68f;
@@ -1160,9 +1160,9 @@ body[data-fn-hint="bare"] .fn-hint::before { display: none; }
   cursor: default;
   white-space: nowrap;
 }
-.fn-hint-legend-item--namecard { color: #ff2d87; }   /* unified */
-.fn-hint-legend-item--image    { color: #ff2d87; }           /* unified */
-.fn-hint-legend-item--text     { color: #ff2d87; }   /* unified */
+.fn-hint-legend-item--namecard { color: #ff5a00; }   /* unified */
+.fn-hint-legend-item--image    { color: #ff5a00; }           /* unified */
+.fn-hint-legend-item--text     { color: #ff5a00; }   /* unified */
 
 .fn-hint-bracket {
   color: currentColor;
@@ -1358,7 +1358,7 @@ body[data-fn-affordance="plain"] .fn-ref { /* default styling only */ }
    alike. Replaces per-kind green/orange/cyan, which vanished against
    the matching card backgrounds. .fn-ref[data-fn-num] matches the
    per-number specificity (0,2,0) and, placed later, wins. */
-.fn-ref[data-fn-num] { color: #ff2d87; }
+.fn-ref[data-fn-num] { color: #ff5a00; }
 .fn-ref.is-open {
   background: var(--text);
   color: var(--bg);
@@ -3096,7 +3096,7 @@ body[data-mode="warhol"] .post-body h2 em {
   border: 2px solid var(--text);
   font-style: italic;
   font-family: var(--font-serif);
-  color: var(--accent);
+  color: var(--accent);            /* orange italic on the yellow box */
   font-weight: 700;
   text-transform: none;
 }
