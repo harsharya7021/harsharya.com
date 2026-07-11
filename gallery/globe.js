@@ -297,4 +297,7 @@
   }
   showPins(worldPins);
   requestAnimationFrame(tick);
+  /* globe is live → it's the navigation now; retire the series-card grid
+     (it stays as the fallback whenever the globe can't render) */
+  document.body.classList.add('gm-live');
 })();

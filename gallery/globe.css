@@ -8,7 +8,7 @@
 
 .gm-hero{
   position:relative;
-  height:min(78svh, 840px);
+  height:min(82svh, 880px);
   width:min(100%, 1200px);              /* body is a flex column — explicit
                                            width, or auto margins collapse it */
   align-self:center;
@@ -16,6 +16,11 @@
   padding:0 var(--container-pad,36px);
 }
 .gm-hero[data-off]{ display:none; }
+
+/* the globe is the navigation now — once it's live, the series-card grid
+   below is redundant. It stays visible as the fallback whenever the globe
+   can't render (no WebGL / no JS), so browsing never dead-ends. */
+body.gm-live .gx-grid{ display:none; }
 
 .gm-canvas{
   position:absolute; inset:0; width:100%; height:100%;
