@@ -535,10 +535,12 @@
       <input type="password" id="stuPass" placeholder="password (first time on this device)" autocomplete="off" style="margin-top:8px;" />
       <div class="tagrow" style="margin-top:10px;">
         <button type="button" id="stuPolish">✦ Polish draft</button>
-        <button type="button" id="stuNarrate">▸ Generate narration</button>
+        <button type="button" id="stuStitch">⇪ Import my voice (WAVs)</button>
+        <button type="button" id="stuNarrate" title="Quick machine voice — not your cloned voice">▸ Auto-narrate (stock)</button>
         <button type="button" id="stuIngest" title="Re-learn your voice from published notes">↻ Voice index</button>
       </div>
-      <div class="hint" id="stuStatus">Polish cleans the draft and writes captions, headings, pull-quotes + SEO in your voice. Narration turns the piece into your cloned-voice audio and attaches it. Publish live then ships both.</div>
+      <input type="file" id="stuWavs" accept="audio/wav,audio/x-wav,.wav,audio/*" multiple hidden />
+      <div class="hint" id="stuStatus">Polish cleans the draft and writes captions, headings, pull-quotes + SEO in your voice. For narration in <b>your</b> voice: generate the chunks in the Sarvam studio (your cloned voice lives there), then <b>Import my voice</b> — I stitch + normalise them into one Listen player. Auto-narrate uses a stock voice as a quick stand-in. Publish live ships whatever's attached.</div>
     </div>
     <div class="sec">
       <label class="lab">Notebook — local drafts</label>
@@ -1509,10 +1511,41 @@
       await audioPut(doc.id, { name:f.name, type:f.type, blob:f });
       doc.audioName=f.name; doc.audioExt="mp3"; collect(); Vault.save(doc); stamp(); renderAudioState();
       var mins=Math.floor((r.duration||0)/60), secs=Math.round((r.duration||0)%60);
-      stuSay("✓ Narration attached — "+mins+":"+String(secs).padStart(2,"0")+" from "+r.chunks+" chunks. Publish live ships it with the article.");
+      var vc = r.mode==="cloned" ? "your cloned voice" : "a stock voice (stand-in — use Import my voice for your own)";
+      stuSay("✓ Narration attached — "+mins+":"+String(secs).padStart(2,"0")+" from "+r.chunks+" chunks in "+vc+". Publish live ships it with the article.");
       toast("Narration attached ✓ "+mins+":"+String(secs).padStart(2,"0"));
     });
   });
+  /* Import my voice: the WAV chunks you export from the Sarvam studio (your cloned voice) →
+     one stitched, loudness-normalised mp3. This is the real-voice path until Sarvam opens the
+     cloned voice to the API. Files are read in the order you select them, then by filename. */
+  var stuStitchBtn=$("#stuStitch"), stuWavs=$("#stuWavs");
+  if(stuStitchBtn && stuWavs){
+    stuStitchBtn.addEventListener("click", function(){ if(stuBusy){ toast("Studio is busy…"); return; } stuWavs.value=""; stuWavs.click(); });
+    stuWavs.addEventListener("change", function(){
+      var files=Array.prototype.slice.call(stuWavs.files||[]);
+      stuWavs.value="";
+      if(!files.length) return;
+      files.sort(function(a,b){ return a.name.localeCompare(b.name, undefined, { numeric:true }); }); // 1,2,10 not 1,10,2
+      stuRun("Stitching…", async function(){
+        stuSay("Reading "+files.length+" clip"+(files.length>1?"s":"")+" in your voice…");
+        var clips=[];
+        for(var i=0;i<files.length;i++){
+          var buf=await files[i].arrayBuffer();
+          clips.push(arrayBufferToBase64(buf));
+        }
+        stuSay("Stitching + normalising "+files.length+" clip"+(files.length>1?"s":"")+" into one track…");
+        var r=await stuFetch("/api/stitch",{ clips:clips });
+        var bytes=Uint8Array.from(atob(r.audioBase64), function(c){ return c.charCodeAt(0); });
+        var f=new File([bytes], "narration.mp3", { type:"audio/mpeg" });
+        await audioPut(doc.id, { name:f.name, type:f.type, blob:f });
+        doc.audioName=f.name; doc.audioExt="mp3"; collect(); Vault.save(doc); stamp(); renderAudioState();
+        var mins=Math.floor((r.duration||0)/60), secs=Math.round((r.duration||0)%60);
+        stuSay("✓ Your voice attached — "+mins+":"+String(secs).padStart(2,"0")+" from "+r.clips+" clip"+(r.clips>1?"s":"")+". Publish live ships it with the article.");
+        toast("Your voice attached ✓ "+mins+":"+String(secs).padStart(2,"0"));
+      });
+    });
+  }
   function stripForAudio(el){
     var c=el.cloneNode(true);
     Array.prototype.forEach.call(c.querySelectorAll("figure, figcaption, .pull"), function(n){ n.remove(); }); // don't read captions/pulls twice
