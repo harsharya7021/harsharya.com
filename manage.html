@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>Media desk — Harsh Kumar Arya</title>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Fraunces:ital,opsz,wght@0,9..144,400;1,9..144,400&family=Inter:wght@400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700&display=swap" rel="stylesheet">
+  <link rel="icon" href="/favicon.ico" sizes="48x48">
+  <style>
+    :root{
+      --bg:#f6f3eb; --text:#1a1a1a; --muted:#6b6358; --line:#d6cfc1;
+      --accent:#ff5a00; --accent-2:#00b3ff; --accent-3:#ffc700; --accent-4:#00d68f;
+      --font-display:"Anton",sans-serif; --font-body:"Inter",-apple-system,sans-serif;
+      --font-serif:"Fraunces",serif; --font-mono:"Space Mono",ui-monospace,Menlo,monospace;
+    }
+    *{box-sizing:border-box;}
+    html,body{margin:0;padding:0;}
+    body{background:var(--bg); color:var(--text); font-family:var(--font-body); -webkit-font-smoothing:antialiased;}
+    a{color:inherit;}
+    .topbar{position:sticky; top:0; z-index:40; display:flex; align-items:center; gap:16px; padding:0 20px; height:56px;
+      background:color-mix(in srgb, var(--bg) 86%, transparent); backdrop-filter:saturate(1.4) blur(10px); border-bottom:1px solid var(--line);}
+    .brand{font-family:var(--font-mono); font-size:12px; font-weight:700; letter-spacing:.14em; text-transform:uppercase; text-decoration:none; white-space:nowrap;}
+    .brand sup{color:var(--accent);}
+    .status{font-family:var(--font-mono); font-size:11px; letter-spacing:.08em; color:var(--muted); text-transform:uppercase;}
+    .status .dot{color:var(--accent-4);}
+    .status.pub{color:var(--accent);}
+    .spacer{flex:1;}
+    .btn{font-family:var(--font-mono); font-size:11px; font-weight:700; letter-spacing:.12em; text-transform:uppercase;
+      border:2px solid var(--text); background:transparent; color:var(--text); padding:7px 12px; cursor:pointer; line-height:1;
+      transition:background .15s,color .15s;}
+    .btn:hover{background:var(--text); color:var(--bg);}
+    .btn.primary{background:var(--accent);}
+    .btn.primary:hover{background:var(--text); color:var(--bg);}
+    .btn.ghost{border-color:var(--line);}
+    .btn.ghost:hover{border-color:var(--text);}
+    .btn:disabled{opacity:.4; pointer-events:none;}
+
+    .wrap{max-width:1000px; margin:0 auto; padding:40px 22px 30vh;}
+    h1{font-family:var(--font-display); text-transform:uppercase; font-size:clamp(38px,6vw,72px); line-height:.95; letter-spacing:-.01em; margin:0 0 8px;}
+    h1 em{font-family:var(--font-serif); font-style:italic; color:var(--accent); text-transform:none;}
+    .lead{color:var(--muted); font-size:15px; max-width:640px; margin:0 0 26px;}
+
+    .tabs{display:flex; gap:0; border:2px solid var(--text); margin-bottom:28px; max-width:640px;}
+    .tab{flex:1; font-family:var(--font-mono); font-size:12px; font-weight:700; letter-spacing:.1em; text-transform:uppercase;
+      background:transparent; border:0; border-right:2px solid var(--text); color:var(--muted); padding:11px 8px; cursor:pointer;}
+    .tab:last-child{border-right:0;}
+    .tab.is-on{background:var(--text); color:var(--bg);}
+    .pane[hidden]{display:none;}
+
+    .lab{display:block; font-family:var(--font-mono); font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:var(--muted); margin:0 0 6px;}
+    input[type=text], input[type=url], select, textarea{width:100%; font-family:var(--font-body); font-size:14px; color:var(--text);
+      background:transparent; border:2px solid var(--line); padding:10px; outline:none;}
+    input:focus, select:focus, textarea:focus{border-color:var(--text);}
+    textarea{resize:vertical; line-height:1.45;}
+    .row{display:grid; gap:16px; margin-bottom:16px;}
+    .row.c2{grid-template-columns:1fr 1fr;}
+    @media(max-width:700px){ .row.c2{grid-template-columns:1fr;} }
+    .hint{font-family:var(--font-mono); font-size:11px; color:var(--muted); margin-top:6px; line-height:1.5;}
+    .card{border:2px solid var(--text); background:#fff; box-shadow:6px 6px 0 rgba(26,26,26,.08); padding:22px; margin-bottom:26px;}
+    .card h3{font-family:var(--font-display); text-transform:uppercase; font-size:20px; margin:0 0 16px; letter-spacing:.01em;}
+
+    /* photo grid */
+    .pgrid{display:grid; grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); gap:14px; margin-top:6px;}
+    .pcell{border:2px solid var(--text); background:var(--bg); position:relative;}
+    .pcell.is-new{outline:3px solid var(--accent-4); outline-offset:2px;}
+    .pcell.is-del{opacity:.35;}
+    .pcell.is-del::after{content:"REMOVING"; position:absolute; top:6px; left:6px; font-family:var(--font-mono); font-size:9px; letter-spacing:.1em; background:var(--accent); border:2px solid var(--text); padding:2px 6px;}
+    .pcell img{display:block; width:100%; aspect-ratio:1; object-fit:cover;}
+    .pcell .cap{width:100%; border:0; border-top:2px solid var(--text); font-family:var(--font-mono); font-size:11px; padding:8px; background:#fff; outline:none;}
+    .pcell .x{position:absolute; top:6px; right:6px; width:24px; height:24px; border:2px solid var(--text); background:var(--bg); cursor:pointer;
+      font-family:var(--font-mono); font-size:11px; line-height:1; display:flex; align-items:center; justify-content:center;}
+    .pcell .x:hover{background:var(--accent);}
+    .pcell .no{position:absolute; top:6px; left:6px; font-family:var(--font-mono); font-size:9px; letter-spacing:.08em; background:var(--text); color:var(--bg); padding:2px 6px;}
+    .addbox{border:2px dashed var(--line); display:flex; align-items:center; justify-content:center; min-height:150px;
+      font-family:var(--font-mono); font-size:11px; letter-spacing:.1em; text-transform:uppercase; color:var(--muted); cursor:pointer;}
+    .addbox:hover{border-color:var(--text); color:var(--text);}
+    .filebtn{display:inline-block;}
+
+    .toast{position:fixed; left:50%; bottom:28px; transform:translateX(-50%) translateY(20px); background:var(--text); color:var(--bg);
+      padding:11px 18px; font-family:var(--font-mono); font-size:12px; opacity:0; visibility:hidden; transition:all .2s; z-index:100;}
+    .toast.on{opacity:1; visibility:visible; transform:translateX(-50%);}
+
+    /* lock (same pattern as the editor) */
+    body.locked{overflow:hidden;}
+    .lock{position:fixed; inset:0; z-index:200; display:none; align-items:center; justify-content:center; padding:24px; background:var(--bg);}
+    .lock.on{display:flex;}
+    .lock-card{width:100%; max-width:430px; border:2px solid var(--text); background:var(--bg); box-shadow:10px 10px 0 rgba(26,26,26,.10); padding:28px 26px;}
+    .lock-badge{display:inline-block; font-family:var(--font-mono); font-size:10px; font-weight:700; letter-spacing:.16em; text-transform:uppercase;
+      border:2px solid var(--text); background:var(--accent-3); padding:4px 9px; margin-bottom:16px;}
+    .lock-card h2{font-family:var(--font-display); text-transform:uppercase; font-size:30px; line-height:.95; margin:0 0 10px;}
+    .lock-sub{font-size:13.5px; line-height:1.5; color:var(--muted); margin:0 0 18px;}
+    .lock-card input{margin-bottom:12px; font-family:var(--font-mono); font-size:13px; border-color:var(--text);}
+    .lock-err{font-family:var(--font-mono); font-size:11px; color:#c0392b; margin-top:12px; min-height:14px;}
+    .lock-err.ok{color:var(--accent-4);}
+
+    .done{position:fixed; inset:0; z-index:210; display:none; align-items:center; justify-content:center; padding:24px; background:rgba(26,26,26,.42);}
+    .done.on{display:flex;}
+    .done-card{width:100%; max-width:440px; border:2px solid var(--text); background:var(--bg); box-shadow:10px 10px 0 rgba(26,26,26,.16); padding:28px 26px;}
+    .done-card .k{font-family:var(--font-mono); font-size:10px; letter-spacing:.16em; text-transform:uppercase; color:var(--accent-4); font-weight:700;}
+    .done-card h3{font-family:var(--font-display); text-transform:uppercase; font-size:26px; margin:8px 0 12px;}
+    .done-card p{font-size:13.5px; color:var(--muted); margin:0 0 16px; line-height:1.5;}
+    .done-row{display:flex; gap:10px; flex-wrap:wrap;}
+    .done-row a{text-decoration:none;}
+  </style>
+</head>
+<body>
+
+  <div class="lock" id="lock">
+    <div class="lock-card">
+      <span class="lock-badge">Media · Desk</span>
+      <h2>Unlock the desk</h2>
+      <p class="lock-sub">Same key as the notes editor. Add photos to the gallery, ship a code project, a film, or a design piece — straight to <b>harsharya.com</b>.</p>
+      <label class="lab" for="lockKey">GitHub publish key</label>
+      <input type="password" id="lockKey" placeholder="github_pat_… / ghp_…" autocomplete="off" />
+      <button class="btn primary" id="lockGo" style="width:100%; padding:12px;">Unlock</button>
+      <div class="lock-err" id="lockErr"></div>
+    </div>
+  </div>
+
+  <div class="done" id="done">
+    <div class="done-card">
+      <div class="k">● Published</div>
+      <h3 id="doneTitle">It's live</h3>
+      <p>GitHub Pages is rebuilding — give it a minute, then hard-refresh.</p>
+      <div class="done-row">
+        <a class="btn primary" id="doneView" target="_blank" rel="noopener">View ↗</a>
+        <button class="btn ghost" id="doneClose" type="button">Close</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="topbar">
+    <a class="brand" href="/">← Harsh<sup>1</sup> · Media desk</a>
+    <span class="status" id="status"><span class="dot">●</span> Ready</span>
+    <span class="spacer"></span>
+    <button class="btn ghost" id="btnForget">Sign out</button>
+  </div>
+
+  <div class="wrap">
+    <h1>The <em>media</em> desk.</h1>
+    <p class="lead">One counter for everything visual: gallery photographs, code projects, films, design pieces. Changes commit to the site and go live in about a minute.</p>
+
+    <div class="tabs" id="tabs">
+      <button class="tab is-on" data-tab="photos">Photos</button>
+      <button class="tab" data-tab="code">Code</button>
+      <button class="tab" data-tab="film">Film</button>
+      <button class="tab" data-tab="design">Design</button>
+    </div>
+
+    <!-- ── PHOTOS ── -->
+    <section class="pane" data-pane="photos">
+      <div class="card">
+        <h3>Gallery — series</h3>
+        <div class="row c2">
+          <div>
+            <label class="lab" for="phSeries">Series</label>
+            <select id="phSeries"></select>
+            <div class="hint">Loads the live page. Edit captions inline, ✕ to remove, add new photos below. Publishing rewrites the series page and keeps every count in sync (nav, globe pins, gallery cards).</div>
+          </div>
+          <div style="align-self:end; text-align:right;">
+            <button class="btn primary" id="phPublish">Publish changes</button>
+          </div>
+        </div>
+        <div class="pgrid" id="phGrid"></div>
+        <input type="file" id="phFiles" accept="image/*" multiple hidden />
+      </div>
+    </section>
+
+    <!-- ── CODE ── -->
+    <section class="pane" data-pane="code" hidden>
+      <div class="card">
+        <h3>New code project</h3>
+        <div class="row c2">
+          <div><label class="lab">Title</label><input type="text" id="cdTitle" placeholder="Personal-OS" /></div>
+          <div><label class="lab">Kicker</label><input type="text" id="cdKick" placeholder="Product · personal operating system" /></div>
+        </div>
+        <div class="row"><div><label class="lab">One-liner</label><textarea id="cdSub" rows="2" placeholder="What it is, in a sentence."></textarea></div></div>
+        <div class="row c2">
+          <div>
+            <label class="lab">Product deck (PDF, optional)</label>
+            <input type="file" id="cdPdf" accept="application/pdf" />
+            <div class="hint">Committed to /portfolio/code/decks/. Keep it under ~25&nbsp;MB.</div>
+          </div>
+          <div>
+            <label class="lab">Launch film URL (optional)</label>
+            <input type="url" id="cdFilm" placeholder="/portfolio/code/films/… or https://…" />
+          </div>
+        </div>
+        <button class="btn primary" id="cdPublish">Publish project</button>
+      </div>
+    </section>
+
+    <!-- ── FILM ── -->
+    <section class="pane" data-pane="film" hidden>
+      <div class="card">
+        <h3>New film</h3>
+        <div class="row"><div><label class="lab">YouTube URL</label><input type="url" id="fmUrl" placeholder="https://www.youtube.com/watch?v=…" /><div class="hint">Thumbnail and inline player come from the video automatically.</div></div></div>
+        <div class="row c2">
+          <div><label class="lab">Title</label><input type="text" id="fmTitle" placeholder="Delhi Travel Vlog" /></div>
+          <div><label class="lab">Kicker</label><input type="text" id="fmKick" placeholder="Cinematic travel · 2026" /></div>
+        </div>
+        <div class="row"><div><label class="lab">One-liner</label><textarea id="fmSub" rows="2" placeholder="A sentence on the film."></textarea></div></div>
+        <button class="btn primary" id="fmPublish">Publish film</button>
+      </div>
+    </section>
+
+    <!-- ── DESIGN ── -->
+    <section class="pane" data-pane="design" hidden>
+      <div class="card">
+        <h3>New design piece</h3>
+        <div class="row c2">
+          <div><label class="lab">Title</label><input type="text" id="dsTitle" placeholder="A Personal Piece of Earth" /></div>
+          <div><label class="lab">Kicker</label><input type="text" id="dsKick" placeholder="Case study · 2026" /></div>
+        </div>
+        <div class="row"><div><label class="lab">One-liner</label><textarea id="dsSub" rows="2" placeholder="A sentence on the piece."></textarea></div></div>
+        <div class="row"><div><label class="lab">Image</label><input type="file" id="dsImg" accept="image/*" /><div class="hint">Committed to /portfolio/design/pieces/assets/ and shown as the card.</div></div></div>
+        <button class="btn primary" id="dsPublish">Publish piece</button>
+      </div>
+    </section>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+<script>
+(function(){
+"use strict";
+var $=function(s,r){return (r||document).querySelector(s);};
+var statusEl=$("#status"), toastEl=$("#toast");
+function toast(m){ toastEl.textContent=m; toastEl.classList.add("on"); clearTimeout(toast._t); toast._t=setTimeout(function(){toastEl.classList.remove("on");},2600); }
+function setPub(m){ if(m){statusEl.classList.add("pub"); statusEl.innerHTML='<span class="dot">●</span> '+m;} else {statusEl.classList.remove("pub"); statusEl.innerHTML='<span class="dot">●</span> Ready';} }
+function esc(s){ return (s||"").replace(/&/g,"&amp;").replace(/</g,"&lt;").replace(/>/g,"&gt;").replace(/"/g,"&quot;"); }
+function slugify(s){ return (s||"").toLowerCase().replace(/[^a-z0-9\s-]/g,"").trim().replace(/\s+/g,"-").replace(/-+/g,"-").slice(0,60)||"untitled"; }
+function pad(n){ return String(n).padStart(2,"0"); }
+function arrayBufferToBase64(buf){ var b=new Uint8Array(buf),CH=0x8000,s=""; for(var i=0;i<b.length;i+=CH){ s+=String.fromCharCode.apply(null,b.subarray(i,i+CH)); } return btoa(s); }
+
+/* ── connection: same storage as the editor ───────────────── */
+var CONFIG={ owner:"harsharya7021", repo:"harsharya.com", branch:"main", site:"https://harsharya.com", connKey:"hka.editor.conn.v1" };
+function getConn(){ try{ return JSON.parse(localStorage.getItem(CONFIG.connKey)||"null"); }catch(e){ return null; } }
+var conn=getConn()||{mode:null, ghToken:""};
+
+async function ghApi(path,opts){
+  opts=opts||{};
+  var h={ "Accept":opts.raw?"application/vnd.github.raw":"application/vnd.github+json",
+          "Authorization":"Bearer "+(conn.ghToken||""), "X-GitHub-Api-Version":"2022-11-28" };
+  var init={method:opts.method||"GET", headers:h};
+  if(opts.body){ h["Content-Type"]="application/json"; init.body=JSON.stringify(opts.body); }
+  var res=await fetch("https://api.github.com"+path, init);
+  if(res.status===401||res.status===403) throw new Error("auth");
+  if(!res.ok){ var m=""; try{ m=(await res.json()).message; }catch(e){} throw new Error(m||("GitHub "+res.status)); }
+  if(opts.raw) return res.text();
+  if(res.status===204) return null;
+  return res.json();
+}
+/* files: {path, content} | {path, contentBase64} | {path, remove:true} */
+async function ghCommit(message, files){
+  var base="/repos/"+CONFIG.owner+"/"+CONFIG.repo;
+  var ref=await ghApi(base+"/git/ref/heads/"+CONFIG.branch);
+  var baseSha=ref.object.sha;
+  var baseCommit=await ghApi(base+"/git/commits/"+baseSha);
+  var items=[];
+  for(var i=0;i<files.length;i++){ var f=files[i];
+    if(f.remove){ items.push({path:f.path, mode:"100644", type:"blob", sha:null}); }
+    else if(f.contentBase64!=null){
+      var blob=await ghApi(base+"/git/blobs",{method:"POST",body:{content:f.contentBase64,encoding:"base64"}});
+      items.push({path:f.path, mode:"100644", type:"blob", sha:blob.sha});
+    } else items.push({path:f.path, mode:"100644", type:"blob", content:f.content});
+  }
+  var tree=await ghApi(base+"/git/trees",{method:"POST",body:{base_tree:baseCommit.tree.sha, tree:items}});
+  var commit=await ghApi(base+"/git/commits",{method:"POST",body:{message:message, tree:tree.sha, parents:[baseSha]}});
+  await ghApi(base+"/git/refs/heads/"+CONFIG.branch,{method:"PATCH",body:{sha:commit.sha}});
+  return commit;
+}
+async function readRepoFile(path){ return ghApi("/repos/"+CONFIG.owner+"/"+CONFIG.repo+"/contents/"+path+"?ref="+CONFIG.branch,{raw:true}); }
+
+/* ── lock ─────────────────────────────────────────────────── */
+var lock=$("#lock"), lockErr=$("#lockErr");
+function showLock(){ document.body.classList.add("locked"); lock.classList.add("on"); setTimeout(function(){$("#lockKey").focus();},50); }
+function hideLock(){ document.body.classList.remove("locked"); lock.classList.remove("on"); }
+function lockSay(m,ok){ lockErr.textContent=m||""; lockErr.classList.toggle("ok",!!ok); }
+$("#lockGo").addEventListener("click", async function(){
+  var t=$("#lockKey").value.trim(); if(!t){ lockSay("Paste a key first."); return; }
+  lockSay("Checking…");
+  conn={mode:"github", ghToken:t};
+  try{
+    var r=await ghApi("/repos/"+CONFIG.owner+"/"+CONFIG.repo);
+    if(r&&r.permissions&&r.permissions.push===false) throw new Error("Key can read but not write — needs Contents: Read and write.");
+    try{ localStorage.setItem(CONFIG.connKey, JSON.stringify({mode:"github", ghToken:t, vps:{base:"",session:"",exp:0}})); }catch(e){}
+    lockSay("Unlocked ✓",true); $("#lockKey").value=""; setTimeout(hideLock,300); boot();
+  }catch(e){ conn.mode=null; lockSay(e.message==="auth"?"Key rejected.":e.message); }
+});
+$("#lockKey").addEventListener("keydown",function(e){ if(e.key==="Enter"){ e.preventDefault(); $("#lockGo").click(); } });
+$("#btnForget").addEventListener("click",function(){ try{localStorage.removeItem(CONFIG.connKey);}catch(e){} conn={mode:null,ghToken:""}; toast("Signed out"); showLock(); });
+
+/* ── done modal ───────────────────────────────────────────── */
+var done=$("#done");
+function showDone(title,url){ $("#doneTitle").textContent=title; $("#doneView").href=url; done.classList.add("on"); }
+$("#doneClose").addEventListener("click",function(){ done.classList.remove("on"); });
+done.addEventListener("click",function(e){ if(e.target===done) done.classList.remove("on"); });
+
+/* ── tabs ─────────────────────────────────────────────────── */
+$("#tabs").addEventListener("click",function(e){
+  var t=e.target.closest(".tab"); if(!t) return;
+  document.querySelectorAll(".tab").forEach(function(x){x.classList.toggle("is-on",x===t);});
+  document.querySelectorAll(".pane").forEach(function(p){p.hidden=(p.getAttribute("data-pane")!==t.getAttribute("data-tab"));});
+});
+
+/* ── images: scale to web ─────────────────────────────────── */
+function loadImg(url){ return new Promise(function(res,rej){ var im=new Image(); im.onload=function(){res(im);}; im.onerror=rej; im.src=url; }); }
+async function fileToJpegB64(file,MAX){
+  MAX=MAX||2560;
+  var url=URL.createObjectURL(file), img=await loadImg(url);
+  var w=img.naturalWidth,h=img.naturalHeight,s=Math.min(1,MAX/Math.max(w,h));
+  var c=document.createElement("canvas"); c.width=Math.round(w*s); c.height=Math.round(h*s);
+  c.getContext("2d").drawImage(img,0,0,c.width,c.height);
+  URL.revokeObjectURL(url);
+  var durl=c.toDataURL("image/jpeg",0.86);
+  return { b64:durl.split(",")[1], durl:durl, w:c.width, h:c.height };
+}
+function fileToB64(file){ return file.arrayBuffer().then(function(ab){ return arrayBufferToBase64(ab); }); }
+
+/* ═══ PHOTOS ═══════════════════════════════════════════════ */
+var SERIES=[
+  {id:"kerala",   name:"Kerala"},
+  {id:"jodhpur",  name:"Jodhpur"},
+  {id:"shimla",   name:"Shimla"},
+  {id:"malaysia", name:"Malaysia"}
+];
+var ph={ id:null, doc:null, items:[], raw:"" };   /* items: {kind:'old'|'new', el?, src, alt, cap, removed, b64?} */
+var phSeries=$("#phSeries"), phGrid=$("#phGrid"), phFiles=$("#phFiles");
+SERIES.forEach(function(s){ var o=document.createElement("option"); o.value=s.id; o.textContent=s.name; phSeries.appendChild(o); });
+
+async function phLoad(id){
+  ph.id=id; ph.items=[]; phGrid.innerHTML='<div class="hint">Loading '+esc(id)+'…</div>';
+  try{
+    ph.raw=await fetch("/gallery/"+id+".html",{cache:"reload"}).then(function(r){ if(!r.ok) throw new Error(r.status); return r.text(); });
+    ph.doc=new DOMParser().parseFromString(ph.raw,"text/html");
+    var figs=ph.doc.querySelectorAll(".series-list .frame");
+    figs.forEach(function(f){
+      var img=f.querySelector("img"), t=f.querySelector(".frame-text");
+      ph.items.push({kind:"old", src:img.getAttribute("src"), alt:img.getAttribute("alt")||"",
+                     cap:t?t.textContent.trim():"", removed:false});
+    });
+    phRender();
+  }catch(e){ phGrid.innerHTML='<div class="hint">Couldn’t load the series page ('+esc(String(e.message||e))+').</div>'; }
+}
+function phRender(){
+  phGrid.innerHTML="";
+  ph.items.forEach(function(it,i){
+    var cell=document.createElement("div");
+    cell.className="pcell"+(it.kind==="new"?" is-new":"")+(it.removed?" is-del":"");
+    var img=document.createElement("img");
+    img.src= it.kind==="new" ? it.durl : ("/"+String(it.src).replace(/^\.\.\//,""));
+    cell.appendChild(img);
+    var no=document.createElement("span"); no.className="no"; no.textContent=pad(i+1); cell.appendChild(no);
+    var x=document.createElement("button"); x.className="x"; x.textContent="✕"; x.title=it.kind==="new"?"Drop this upload":"Remove from series";
+    x.onclick=function(){ if(it.kind==="new"){ ph.items.splice(i,1); } else { it.removed=!it.removed; } phRender(); };
+    cell.appendChild(x);
+    var cap=document.createElement("input"); cap.className="cap"; cap.type="text"; cap.placeholder="Caption"; cap.value=it.cap;
+    cap.oninput=function(){ it.cap=cap.value; };
+    cell.appendChild(cap);
+    phGrid.appendChild(cell);
+  });
+  var add=document.createElement("div"); add.className="addbox"; add.textContent="+ add photos";
+  add.onclick=function(){ phFiles.value=""; phFiles.click(); };
+  phGrid.appendChild(add);
+}
+phFiles.addEventListener("change", async function(){
+  var files=Array.prototype.slice.call(phFiles.files||[]);
+  for(var i=0;i<files.length;i++){
+    if(!/^image\//.test(files[i].type)) continue;
+    toast("Reading "+files[i].name+"…");
+    var im=await fileToJpegB64(files[i]);
+    ph.items.push({kind:"new", b64:im.b64, durl:im.durl, cap:"", alt:"", removed:false});
+  }
+  phRender();
+});
+phSeries.addEventListener("change",function(){ phLoad(phSeries.value); });
+
+function phAssetPrefix(){
+  /* derive filename prefix + dir from an existing photo (kerala uses varkala-NN) */
+  var old=ph.items.filter(function(i){return i.kind==="old";});
+  if(old.length){
+    var m=String(old[0].src).match(/^(?:\.\.\/)?(assets\/life\/[^/]+)\/([a-z-]+?)-?\d+\.[a-z]+$/i);
+    if(m) return {dir:m[1], prefix:m[2]};
+  }
+  return {dir:"assets/life/"+ph.id, prefix:ph.id};
+}
+function phMaxNum(){
+  var mx=0;
+  ph.items.forEach(function(i){ if(i.kind!=="old") return;
+    var m=String(i.src).match(/-(\d+)\.[a-z]+$/i); if(m) mx=Math.max(mx,parseInt(m[1],10)); });
+  return mx;
+}
+$("#phPublish").addEventListener("click", async function(){
+  if(!conn.mode){ showLock(); return; }
+  var live=ph.items.filter(function(i){ return !(i.kind==="old"&&i.removed); });
+  if(!live.length){ toast("A series can't be empty"); return; }
+  var newOnes=ph.items.filter(function(i){return i.kind==="new";});
+  var removed=ph.items.filter(function(i){return i.kind==="old"&&i.removed;});
+  setPub("Building…");
+  try{
+    var meta=phAssetPrefix(), n=phMaxNum(), files=[];
+    /* assign asset paths to new photos */
+    newOnes.forEach(function(it){ n++; it.src="../"+meta.dir+"/"+meta.prefix+"-"+pad(n)+".jpg";
+      files.push({path:meta.dir+"/"+meta.prefix+"-"+pad(n)+".jpg", contentBase64:it.b64}); });
+    /* removals delete their asset too */
+    removed.forEach(function(it){ var p=String(it.src).replace(/^\.\.\//,""); if(/^assets\//.test(p)) files.push({path:p, remove:true}); });
+    /* rebuild the series list */
+    var list=ph.doc.querySelector(".series-list");
+    while(list.firstChild) list.removeChild(list.firstChild);
+    var name=SERIES.filter(function(s){return s.id===ph.id;})[0].name;
+    live.forEach(function(it,i){
+      var alt=it.alt&&it.kind==="old" ? it.alt : (name+" — "+(it.cap||("frame "+pad(i+1))));
+      var fig=ph.doc.createElement("figure"); fig.className="frame";
+      fig.innerHTML='\n        <div class="frame-media"><img src="'+esc(it.src)+'" alt="'+esc(alt)+'" loading="'+(i===0?"eager":"lazy")+'" /></div>\n'+
+        '        <figcaption class="frame-cap"><span class="frame-no">'+pad(i+1)+'</span><span class="frame-text">'+esc(it.cap||"")+'</span></figcaption>\n      ';
+      list.appendChild(ph.doc.createTextNode("\n\n      "));
+      list.appendChild(fig);
+    });
+    list.appendChild(ph.doc.createTextNode("\n\n    "));
+    var newSeriesHTML="<!DOCTYPE html>\n"+ph.doc.documentElement.outerHTML+"\n";
+    files.push({path:"gallery/"+ph.id+".html", content:newSeriesHTML});
+
+    var count=live.length;
+    setPub("Syncing counts…");
+    /* series.js — nav config */
+    var sjs=await readRepoFile("gallery/series.js");
+    var reS=new RegExp("(\\{\\s*id:\\s*'"+ph.id+"'[^}]*?count:\\s*)\\d+");
+    if(reS.test(sjs)) files.push({path:"gallery/series.js", content:sjs.replace(reS,"$1"+count)});
+    /* globe.js — pin badges */
+    var gjs=await readRepoFile("gallery/globe.js");
+    var reG=new RegExp("(href:\\s*'"+ph.id+"\\.html'[^}]*?count:\\s*)\\d+");
+    if(reG.test(gjs)) files.push({path:"gallery/globe.js", content:gjs.replace(reG,"$1"+count)});
+    /* gallery index card — trailing count in the meta line */
+    var gidx=await readRepoFile("gallery/index.html");
+    var reI=new RegExp('(href="'+ph.id+'\\.html">[\\s\\S]*?<p>[^<]*·\\s*)\\d+(</p>)');
+    if(reI.test(gidx)) files.push({path:"gallery/index.html", content:gidx.replace(reI,"$1"+pad(count)+"$2")});
+
+    setPub("Committing "+files.length+" file"+(files.length>1?"s":"")+"…");
+    await ghCommit("Gallery: update "+ph.id+" ("+count+" photos)", files);
+    setPub(""); toast("Published ✓");
+    showDone(name+" — "+count+" photos", CONFIG.site+"/gallery/"+ph.id+".html");
+    phLoad(ph.id);
+  }catch(e){
+    setPub("");
+    if(e.message==="auth"){ toast("Key rejected — unlock again"); showLock(); }
+    else toast("Publish failed: "+e.message);
+  }
+});
+
+/* ═══ CODE ═════════════════════════════════════════════════ */
+$("#cdPublish").addEventListener("click", async function(){
+  if(!conn.mode){ showLock(); return; }
+  var title=$("#cdTitle").value.trim(), kick=$("#cdKick").value.trim(), sub=$("#cdSub").value.trim();
+  var film=$("#cdFilm").value.trim(), pdf=$("#cdPdf").files[0];
+  if(!title){ toast("Give the project a title"); return; }
+  setPub("Building…");
+  try{
+    var slug=slugify(title), files=[], deckPath="";
+    if(pdf){ deckPath="portfolio/code/decks/"+slug+".pdf"; files.push({path:deckPath, contentBase64:await fileToB64(pdf)}); }
+    var page=await readRepoFile("portfolio/code/index.html");
+    var nameBr=esc(title).split(/\s+/).length>1 ? esc(title).replace(/\s+(?=[^\s]*$)/,"<br>") : esc(title);
+    var poster = film
+      ? '<a class="wk-card__poster wk-poster--type" href="'+esc(film)+'" data-embed="'+esc(film)+'" data-embed-label="'+esc(title)+' — Launch Film">'
+      : (deckPath ? '<a class="wk-card__poster wk-poster--type" href="/'+deckPath+'" data-embed="/'+deckPath+'" data-embed-label="'+esc(title)+' — Product Story">'
+                  : '<a class="wk-card__poster wk-poster--type" href="#">');
+    var card='\n        <div class="wk-card">\n          '+poster+'\n'+
+      '            <span class="pt-kind">'+(film?"Launch film":"Product story")+'</span>\n'+
+      '            <span class="pt-name">'+nameBr+'</span>\n'+
+      '            <span class="wk-card__play"><span></span></span>\n          </a>\n'+
+      '          <div class="wk-card__meta">\n'+
+      '            <div class="wk-card__k">'+esc(kick||"Product")+'</div>\n'+
+      '            <div class="wk-card__t">'+esc(title)+'</div>\n'+
+      '            <div class="wk-card__s">'+esc(sub||"")+'</div>\n'+
+      (deckPath?('            <div class="wk-card__links">\n              <a href="/'+deckPath+'" data-embed="/'+deckPath+'" data-embed-label="'+esc(title)+' — Product Story">Product story ↗</a>\n            </div>\n'):"")+
+      '          </div>\n        </div>\n';
+    var anchor=page.lastIndexOf("</section>");
+    if(anchor<0) throw new Error("couldn't find the project grid");
+    page=page.slice(0,anchor)+card+"\n      "+page.slice(anchor);
+    files.push({path:"portfolio/code/index.html", content:page});
+    /* bump "N projects" on the portfolio hub */
+    var hub=await readRepoFile("portfolio/index.html");
+    var m=hub.match(/(\d+)\s*projects</);
+    if(m) files.push({path:"portfolio/index.html", content:hub.replace(/\d+(\s*projects<)/, (parseInt(m[1],10)+1)+"$1")});
+    setPub("Committing…");
+    await ghCommit("Portfolio: add code project — "+title, files);
+    setPub(""); toast("Published ✓");
+    showDone(title, CONFIG.site+"/portfolio/code/index.html");
+    $("#cdTitle").value=$("#cdKick").value=$("#cdSub").value=$("#cdFilm").value=""; $("#cdPdf").value="";
+  }catch(e){ setPub(""); if(e.message==="auth"){toast("Key rejected");showLock();} else toast("Publish failed: "+e.message); }
+});
+
+/* ═══ FILM ═════════════════════════════════════════════════ */
+function ytId(u){
+  var m=String(u).match(/(?:youtube\.com\/(?:watch\?[^#]*v=|shorts\/|embed\/)|youtu\.be\/)([\w-]{6,})/);
+  return m?m[1]:null;
+}
+$("#fmPublish").addEventListener("click", async function(){
+  if(!conn.mode){ showLock(); return; }
+  var url=$("#fmUrl").value.trim(), title=$("#fmTitle").value.trim(), kick=$("#fmKick").value.trim(), sub=$("#fmSub").value.trim();
+  var id=ytId(url);
+  if(!id){ toast("That doesn't look like a YouTube URL"); return; }
+  if(!title){ toast("Give the film a title"); return; }
+  setPub("Building…");
+  try{
+    var page=await readRepoFile("portfolio/videos/index.html");
+    var card='\n        <div class="wk-card">\n'+
+      '          <a class="wk-card__poster" href="https://www.youtube.com/watch?v='+id+'" target="_blank" rel="noopener"\n'+
+      '             data-embed="https://www.youtube-nocookie.com/embed/'+id+'?autoplay=1&rel=0" data-embed-mode="video" data-embed-label="'+esc(title)+'">\n'+
+      '            <img src="https://i.ytimg.com/vi/'+id+'/hqdefault.jpg" alt="'+esc(title)+' thumbnail" loading="lazy" />\n'+
+      '            <span class="wk-card__play"><span></span></span>\n          </a>\n'+
+      '          <div class="wk-card__meta">\n'+
+      '            <div class="wk-card__k">'+esc(kick||"Film")+'</div>\n'+
+      '            <div class="wk-card__t">'+esc(title)+'</div>\n'+
+      '            <div class="wk-card__s">'+esc(sub||"")+'</div>\n'+
+      '          </div>\n        </div>\n';
+    var anchor=page.indexOf('<section class="wk-grid');
+    if(anchor<0) throw new Error("couldn't find the film grid");
+    anchor=page.indexOf(">",anchor)+1;
+    page=page.slice(0,anchor)+"\n"+card+page.slice(anchor);
+    setPub("Committing…");
+    await ghCommit("Portfolio: add film — "+title, [{path:"portfolio/videos/index.html", content:page}]);
+    setPub(""); toast("Published ✓");
+    showDone(title, CONFIG.site+"/portfolio/videos/index.html");
+    $("#fmUrl").value=$("#fmTitle").value=$("#fmKick").value=$("#fmSub").value="";
+  }catch(e){ setPub(""); if(e.message==="auth"){toast("Key rejected");showLock();} else toast("Publish failed: "+e.message); }
+});
+
+/* ═══ DESIGN ═══════════════════════════════════════════════ */
+$("#dsPublish").addEventListener("click", async function(){
+  if(!conn.mode){ showLock(); return; }
+  var title=$("#dsTitle").value.trim(), kick=$("#dsKick").value.trim(), sub=$("#dsSub").value.trim();
+  var f=$("#dsImg").files[0];
+  if(!title){ toast("Give the piece a title"); return; }
+  if(!f){ toast("Pick an image"); return; }
+  setPub("Building…");
+  try{
+    var slug=slugify(title);
+    var im=await fileToJpegB64(f,2000);
+    var imgPath="portfolio/design/pieces/assets/"+slug+".jpg";
+    var files=[{path:imgPath, contentBase64:im.b64}];
+    var page=await readRepoFile("portfolio/design/index.html");
+    var card='\n      <section class="wk-feature">\n        <div class="wk-card">\n'+
+      '          <a class="wk-card__poster" href="/'+imgPath+'"\n'+
+      '             data-embed="/'+imgPath+'"\n             data-embed-mode="page"\n             data-embed-label="'+esc(title)+'">\n'+
+      '            <img src="/'+imgPath+'" alt="'+esc(title)+'" loading="lazy" />\n'+
+      '            <span class="wk-card__play"><span></span></span>\n          </a>\n'+
+      '          <div class="wk-card__meta">\n'+
+      '            <div class="wk-card__k">'+esc(kick||"Piece")+'</div>\n'+
+      '            <div class="wk-card__t">'+esc(title)+'</div>\n'+
+      '            <div class="wk-card__s">'+esc(sub||"")+'</div>\n'+
+      '          </div>\n        </div>\n      </section>\n';
+    var anchor=page.indexOf('<p class="wk-tail"');
+    if(anchor<0) throw new Error("couldn't find the pieces list");
+    var lineStart=page.lastIndexOf("\n",anchor)+1;
+    page=page.slice(0,lineStart)+card+"\n"+page.slice(lineStart);
+    files.push({path:"portfolio/design/index.html", content:page});
+    setPub("Committing…");
+    await ghCommit("Portfolio: add design piece — "+title, files);
+    setPub(""); toast("Published ✓");
+    showDone(title, CONFIG.site+"/portfolio/design/index.html");
+    $("#dsTitle").value=$("#dsKick").value=$("#dsSub").value=""; $("#dsImg").value="";
+  }catch(e){ setPub(""); if(e.message==="auth"){toast("Key rejected");showLock();} else toast("Publish failed: "+e.message); }
+});
+
+/* ── boot ─────────────────────────────────────────────────── */
+function boot(){ phLoad(phSeries.value||SERIES[0].id); }
+if(conn && conn.mode==="github" && conn.ghToken){ boot(); }
+else showLock();
+})();
+</script>
+</body>
+</html>
