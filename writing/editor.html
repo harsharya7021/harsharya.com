@@ -527,7 +527,18 @@
         <span class="audio-name" id="audioName"></span>
         <button class="audio-del" id="audioDel" type="button" title="Remove narration">✕</button>
       </div>
-      <div class="hint">One MP3 (mono, ~80 kbps) — stitch the voice chunks first (see <b>_os/audio</b>). Adds a “Listen” player to the published note.</div>
+      <div class="hint">One MP3 (mono, ~80 kbps) — or let Studio below make it for you. Adds a “Listen” player to the published note.</div>
+    </div>
+    <div class="sec">
+      <label class="lab">Studio — polish &amp; narrate (your box)</label>
+      <input type="text" id="stuUrl" placeholder="https://os.harsharya.com/studio" autocapitalize="off" spellcheck="false" />
+      <input type="password" id="stuPass" placeholder="password (first time on this device)" autocomplete="off" style="margin-top:8px;" />
+      <div class="tagrow" style="margin-top:10px;">
+        <button type="button" id="stuPolish">✦ Polish draft</button>
+        <button type="button" id="stuNarrate">▸ Generate narration</button>
+        <button type="button" id="stuIngest" title="Re-learn your voice from published notes">↻ Voice index</button>
+      </div>
+      <div class="hint" id="stuStatus">Polish cleans the draft and writes captions, headings, pull-quotes + SEO in your voice. Narration turns the piece into your cloned-voice audio and attaches it. Publish live then ships both.</div>
     </div>
     <div class="sec">
       <label class="lab">Notebook — local drafts</label>
@@ -1427,6 +1438,95 @@
   $("#lockServerGo").addEventListener("click",unlockServer);
   lockKey.addEventListener("keydown",function(e){ if(e.key==="Enter"){ e.preventDefault(); unlockKey(); } });
   lockPass.addEventListener("keydown",function(e){ if(e.key==="Enter"){ e.preventDefault(); unlockServer(); } });
+
+  /* ─── Studio: polish + narrate on your own box ──────────────────
+     Talks to _os/studio (VPS). Sessions use the same secret family as
+     the publish server; sign in once per device with the password. */
+  var stuUrl=$("#stuUrl"), stuPass=$("#stuPass"), stuStatus=$("#stuStatus");
+  if(!conn.studio) conn.studio={ base:"https://os.harsharya.com/studio", session:"" };
+  if(stuUrl) stuUrl.value=conn.studio.base||"";
+  function stuSay(m){ if(stuStatus) stuStatus.textContent=m; }
+  async function stuLogin(){
+    var base=(stuUrl.value.trim()||"https://os.harsharya.com/studio").replace(/\/+$/,"");
+    var pw=stuPass.value;
+    if(!pw) throw new Error("Enter the studio password once for this device.");
+    var res=await fetch(base+"/api/login",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({password:pw})});
+    if(res.status===401) throw new Error("Wrong password.");
+    if(!res.ok) throw new Error("Studio "+res.status+" — is it deployed at that URL?");
+    var d=await res.json();
+    conn.studio={ base:base, session:d.token }; setConn(conn); stuPass.value="";
+    return true;
+  }
+  async function stuFetch(path, body, method){
+    var base=(conn.studio&&conn.studio.base)||"https://os.harsharya.com/studio";
+    if(stuUrl && stuUrl.value.trim() && stuUrl.value.trim().replace(/\/+$/,"")!==base){ base=stuUrl.value.trim().replace(/\/+$/,""); conn.studio.base=base; setConn(conn); }
+    async function go(){
+      var init={ method:method||(body?"POST":"GET"), headers:{ "Authorization":"Bearer "+((conn.studio&&conn.studio.session)||"") } };
+      if(body){ init.headers["Content-Type"]="application/json"; init.body=JSON.stringify(body); }
+      return fetch(base+path, init);
+    }
+    var res=await go();
+    if(res.status===401){ await stuLogin(); res=await go(); }
+    if(!res.ok){ var m=""; try{ m=(await res.json()).error; }catch(e){} throw new Error(m||("Studio "+res.status)); }
+    return res.json();
+  }
+  var stuBusy=false;
+  async function stuRun(label, fn){
+    if(stuBusy){ toast("Studio is busy…"); return; }
+    stuBusy=true; setPub(label);
+    try{ await fn(); }
+    catch(e){ toast("Studio: "+e.message); stuSay("✕ "+e.message); }
+    finally{ stuBusy=false; setPub(""); }
+  }
+  var stuPolishBtn=$("#stuPolish");
+  if(stuPolishBtn) stuPolishBtn.addEventListener("click", function(){
+    stuRun("Polishing…", async function(){
+      collect();
+      stuSay("Polishing — retrieving your voice, editing…");
+      var r=await stuFetch("/api/polish",{ title:textOf(titleEl.innerHTML)||"Untitled", subtitleHTML:doc.subtitle, bodyHTML:doc.body, tag:doc.tag });
+      if(r.title) titleEl.innerHTML=esc(r.title);
+      if(r.subtitleHTML!=null) subtitleEl.innerHTML=r.subtitleHTML;
+      if(r.bodyHTML) bodyEl.innerHTML=r.bodyHTML;
+      if(r.tag) fTag.value=r.tag;
+      if(r.metaDesc) fMetaDesc.value=r.metaDesc;
+      if(r.keywords) fKeywords.value=r.keywords;
+      updatePlaceholders(); updateMetric(); updateMdCount(); refreshMeta(); scheduleSave();
+      stuSay(r.brain==="claude" ? "✓ Polished with Claude + your voice index. Review, then narrate/publish."
+           : r.brain==="ollama" ? "✓ Polished with the local model (Claude unavailable"+(r.claudeError?": "+r.claudeError:"")+")."
+           : "△ Cleaned deterministically only — set ANTHROPIC_API_KEY on the box for full polish.");
+      toast(r.brain==="deterministic" ? "Cleaned (no model on box)" : "Draft polished ✓");
+    });
+  });
+  var stuNarrateBtn=$("#stuNarrate");
+  if(stuNarrateBtn) stuNarrateBtn.addEventListener("click", function(){
+    stuRun("Narrating…", async function(){
+      collect();
+      var text=[textOf(titleEl.innerHTML), textOf(subtitleEl.innerHTML), stripForAudio(bodyEl)].filter(Boolean).join(". ");
+      stuSay("Narrating in your voice — chunking, synthesizing, stitching… (a long piece takes a few minutes)");
+      var r=await stuFetch("/api/narrate",{ text:text });
+      var bytes=Uint8Array.from(atob(r.audioBase64), function(c){ return c.charCodeAt(0); });
+      var f=new File([bytes], "studio-narration.mp3", { type:"audio/mpeg" });
+      await audioPut(doc.id, { name:f.name, type:f.type, blob:f });
+      doc.audioName=f.name; doc.audioExt="mp3"; collect(); Vault.save(doc); stamp(); renderAudioState();
+      var mins=Math.floor((r.duration||0)/60), secs=Math.round((r.duration||0)%60);
+      stuSay("✓ Narration attached — "+mins+":"+String(secs).padStart(2,"0")+" from "+r.chunks+" chunks. Publish live ships it with the article.");
+      toast("Narration attached ✓ "+mins+":"+String(secs).padStart(2,"0"));
+    });
+  });
+  function stripForAudio(el){
+    var c=el.cloneNode(true);
+    Array.prototype.forEach.call(c.querySelectorAll("figure, figcaption, .pull"), function(n){ n.remove(); }); // don't read captions/pulls twice
+    return textOf(c.innerHTML);
+  }
+  var stuIngestBtn=$("#stuIngest");
+  if(stuIngestBtn) stuIngestBtn.addEventListener("click", function(){
+    stuRun("Indexing…", async function(){
+      stuSay("Re-reading your published notes and rebuilding the voice index…");
+      var r=await stuFetch("/api/ingest",{});
+      stuSay("✓ Voice index rebuilt — "+r.docs+" pieces, "+r.chunks+" passages ("+r.embedMode+" embeddings). It gets sharper every time you publish and re-run this.");
+      toast("Voice index rebuilt ✓");
+    });
+  });
 
   /* gate on load */
   if(!conn.mode) showLock();
