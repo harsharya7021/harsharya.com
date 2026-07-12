@@ -531,7 +531,7 @@
     </div>
     <div class="sec">
       <label class="lab">Studio — polish &amp; narrate (your box)</label>
-      <input type="text" id="stuUrl" placeholder="https://os.harsharya.com/studio" autocapitalize="off" spellcheck="false" />
+      <input type="text" id="stuUrl" placeholder="https://studio.os.harsharya.com" autocapitalize="off" spellcheck="false" />
       <input type="password" id="stuPass" placeholder="password (first time on this device)" autocomplete="off" style="margin-top:8px;" />
       <div class="tagrow" style="margin-top:10px;">
         <button type="button" id="stuPolish">✦ Polish draft</button>
@@ -1443,11 +1443,11 @@
      Talks to _os/studio (VPS). Sessions use the same secret family as
      the publish server; sign in once per device with the password. */
   var stuUrl=$("#stuUrl"), stuPass=$("#stuPass"), stuStatus=$("#stuStatus");
-  if(!conn.studio) conn.studio={ base:"https://os.harsharya.com/studio", session:"" };
+  if(!conn.studio) conn.studio={ base:"https://studio.os.harsharya.com", session:"" };
   if(stuUrl) stuUrl.value=conn.studio.base||"";
   function stuSay(m){ if(stuStatus) stuStatus.textContent=m; }
   async function stuLogin(){
-    var base=(stuUrl.value.trim()||"https://os.harsharya.com/studio").replace(/\/+$/,"");
+    var base=(stuUrl.value.trim()||"https://studio.os.harsharya.com").replace(/\/+$/,"");
     var pw=stuPass.value;
     if(!pw) throw new Error("Enter the studio password once for this device.");
     var res=await fetch(base+"/api/login",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({password:pw})});
@@ -1458,7 +1458,7 @@
     return true;
   }
   async function stuFetch(path, body, method){
-    var base=(conn.studio&&conn.studio.base)||"https://os.harsharya.com/studio";
+    var base=(conn.studio&&conn.studio.base)||"https://studio.os.harsharya.com";
     if(stuUrl && stuUrl.value.trim() && stuUrl.value.trim().replace(/\/+$/,"")!==base){ base=stuUrl.value.trim().replace(/\/+$/,""); conn.studio.base=base; setConn(conn); }
     async function go(){
       var init={ method:method||(body?"POST":"GET"), headers:{ "Authorization":"Bearer "+((conn.studio&&conn.studio.session)||"") } };
