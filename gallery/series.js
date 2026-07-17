@@ -229,6 +229,41 @@
     document.addEventListener('keydown', function (e) { if (e.key === 'Escape') setOpen(false); });
   }
 
+  /* subscriber perk: a quiet "save" chip on the plain layouts (grid /
+     vertical — i.e. mobile and no-GL). The slit engine's zoom view has
+     its own save button, so the two never show at once. Signed-out +
+     Firebase live → the email magic-link card; otherwise it downloads. */
+  if (seriesEl) {
+    var frameEls = seriesEl.querySelectorAll('.frame');
+    Array.prototype.forEach.call(frameEls, function (f, i) {
+      var cap = f.querySelector('.frame-cap'), img = f.querySelector('img');
+      if (!cap || !img) return;
+      var b = document.createElement('button');
+      b.type = 'button'; b.className = 'frame-save'; b.textContent = '↓ save';
+      b.setAttribute('aria-label', 'Save this frame');
+      b.addEventListener('click', function (e) {
+        e.preventDefault(); e.stopPropagation();
+        var G = window.HKAGate;
+        if (G && G.configured && !G.signedIn()) {
+          G.prompt({
+            title: 'Save this frame',
+            blurb: 'A subscriber perk — sign in with your email (one magic link, no password) to take any frame with you, and get new series in your inbox.'
+          });
+          return;
+        }
+        var src = img.getAttribute('src');
+        var ext = (src.match(/\.[a-z0-9]+(?=($|\?))/i) || ['.jpg'])[0];
+        var name = (current || 'frame') + '-' + pad(i + 1) + ext;
+        fetch(src).then(function (r) { if (!r.ok) throw 0; return r.blob(); }).then(function (bl) {
+          var u = URL.createObjectURL(bl), a = document.createElement('a');
+          a.href = u; a.download = name; document.body.appendChild(a); a.click();
+          setTimeout(function () { URL.revokeObjectURL(u); a.remove(); }, 1500);
+        }).catch(function () { window.open(src, '_blank', 'noopener'); });
+      });
+      cap.appendChild(b);
+    });
+  }
+
   /* soft reveal of each frame as it scrolls in */
   if (seriesEl && !reduced && 'IntersectionObserver' in window) {
     seriesEl.classList.add('reveal-on');

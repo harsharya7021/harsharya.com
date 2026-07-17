@@ -85,6 +85,9 @@
 }
 
 body.work-page{
+  /* the shared sticky nav paints from --bg; pin it to this page's canvas
+     so the header band matches the portfolio section (no warm/cool seam) */
+  --bg:var(--wk-canvas);
   background:var(--wk-canvas) !important;
   color:var(--wk-ink);
   min-height:100vh; display:flex; flex-direction:column;

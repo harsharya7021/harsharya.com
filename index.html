@@ -1380,12 +1380,18 @@
   (function(){
     if(!matchMedia('(max-width:820px)').matches) return;   /* desktop uses the takeover */
     if(!forbes) return;
+    /* the "— and the one list I did make —" line sets up the Forbes 30U30 FRONT.
+       Once the card flips to GO TO JAIL it must NOT sit over the jail face (that
+       mislabels the punchline), so it fades out with the flip. The dig below the
+       card carries the joke from there. */
+    var aside=document.querySelector('.m2-aside');
+    function hideAside(){ if(aside){ aside.style.transition='opacity .4s ease'; aside.style.opacity='0'; aside.setAttribute('aria-hidden','true'); } }
     forbes.style.opacity='1';
-    if(matchMedia('(prefers-reduced-motion:reduce)').matches){ forbes.classList.add('flipped'); return; }
+    if(matchMedia('(prefers-reduced-motion:reduce)').matches){ forbes.classList.add('flipped'); hideAside(); return; }
     if('IntersectionObserver' in window){
       new IntersectionObserver(function(es,ob){ es.forEach(function(e){ if(e.isIntersecting){ ob.disconnect();
-        setTimeout(function(){ forbes.classList.add('flipped'); }, 460); } }); }, { threshold:0.55 }).observe(forbes);
-    } else { forbes.classList.add('flipped'); }
+        setTimeout(function(){ forbes.classList.add('flipped'); hideAside(); }, 460); } }); }, { threshold:0.55 }).observe(forbes);
+    } else { forbes.classList.add('flipped'); hideAside(); }
   })();
 })();
 

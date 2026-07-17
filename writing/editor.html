@@ -1417,7 +1417,20 @@
     lockSay("Checking…");
     setConn({ mode:"github", ghToken:t, vps:conn.vps||{base:CONFIG.vpsBase,session:"",exp:0} });
     try{ await GH.validate(); lockSay("Unlocked ✓",true); lockKey.value=""; setTimeout(hideLock,350); toast("You're in"); }
-    catch(e){ conn.mode=null; lockSay(e.message==="auth"?"Key rejected. Check it has Contents access to this repo.":e.message); }
+    catch(e){
+      conn.mode=null;
+      if(e.message==="auth"){ lockSay("Key rejected. Check it has Contents access to this repo."); return; }
+      if(/Failed to fetch|NetworkError|Load failed/i.test(e.message||"")){
+        lockSay("Hmm — can't reach GitHub. Testing why…");
+        var up=false;
+        try{ await fetch("https://api.github.com/",{cache:"no-store"}); up=true; }catch(e2){}
+        lockSay(up
+          ? "GitHub is reachable, but the signed request was blocked — likely an ad-blocker or privacy extension on this page. Try an incognito window (extensions off)."
+          : "This network/browser is blocking api.github.com entirely. Try another network or DNS (1.1.1.1 / 8.8.8.8), or use the Server login tab instead.");
+        return;
+      }
+      lockSay(e.message);
+    }
   }
   async function unlockServer(){
     var base=(lockUrl.value.trim()||CONFIG.vpsBase).replace(/\/+$/,""); var pass=lockPass.value;
@@ -1595,7 +1608,7 @@
 '    .post-description { font-family:var(--font-serif); font-style:italic; font-size:22px; line-height:1.45; color:var(--muted); max-width:600px; margin-bottom:56px; }\n'+
 '    .post-body { font-size:18px; line-height:1.7; color:var(--text); }\n'+
 '    .post-body > * + * { margin-top:22px; }\n'+
-'    .post-body h2 { font-family:var(--font-display); font-size:38px; line-height:1.05; text-transform:uppercase; letter-spacing:-0.01em; margin-top:56px; margin-bottom:8px; }\n'+
+'    .post-body h2 { font-family:var(--font-display); font-size:38px; line-height:1.12; text-transform:uppercase; letter-spacing:0.005em; margin-top:56px; margin-bottom:8px; }\n'+
 '    .post-body p { color:var(--text); }\n'+
 '    .post-body strong { font-weight:600; } .post-body em { font-style:italic; }\n'+
 '    .post-body a { color:inherit; border-bottom:2px solid var(--line); padding-bottom:1px; transition:border-color .15s,color .15s; }\n'+
@@ -1617,11 +1630,11 @@
 '    .post-footer { margin-top:72px; padding-top:32px; border-top:2px solid var(--text); display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap; font-family:var(--font-mono); font-size:12px; letter-spacing:0.12em; text-transform:uppercase; }\n'+
 '    .post-footer a { color:var(--text); border-bottom:2px solid var(--text); padding-bottom:2px; font-weight:700; }\n'+
 '    .post-footer a:hover { color:var(--accent); border-bottom-color:var(--accent); }\n'+
-'    @media (max-width:720px){ .post{padding:32px 0 64px;} .post-body{font-size:16px;} .post-body h2{font-size:30px;margin-top:44px;} .post-body .pull{font-size:22px;} }\n'+
+'    @media (max-width:720px){ .post{padding:32px 0 64px;} .post-title{line-height:1.02;letter-spacing:0;} .post-body{font-size:16px;} .post-body h2{font-size:27px;margin-top:44px;line-height:1.18;letter-spacing:0.02em;} .post-body .pull{font-size:22px;} }\n'+
 '    .listen{ display:flex; align-items:center; gap:14px; border:2px solid var(--text); padding:12px 14px; margin:0 0 48px; max-width:600px; background:var(--bg); }\n'+
-'    .listen-play{ flex:none; width:44px; height:44px; border:2px solid var(--text); background:var(--accent); color:var(--text); cursor:pointer; display:flex; align-items:center; justify-content:center; transition:background .15s, color .15s; }\n'+
+'    .listen-play{ flex:none; width:58px; height:58px; border:2px solid var(--text); background:var(--accent); color:var(--text); cursor:pointer; display:flex; align-items:center; justify-content:center; transition:background .15s, color .15s; }\n'+
 '    .listen-play:hover{ background:var(--text); color:var(--bg); }\n'+
-'    .listen-play svg{ width:16px; height:16px; display:block; }\n'+
+'    .listen-play svg{ width:24px; height:24px; display:block; }\n'+
 '    .listen-play .ic-pause{ display:none; }\n'+
 '    .listen.is-playing .ic-play{ display:none; } .listen.is-playing .ic-pause{ display:block; }\n'+
 '    .listen-main{ flex:1; min-width:0; }\n'+

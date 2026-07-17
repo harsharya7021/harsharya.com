@@ -22,6 +22,7 @@
 body.series-page,
 body.gallery-page{
   --accent:#ff5a00;                       /* match the site orange */
+  --bg:var(--gx-canvas);                  /* header band == page canvas (no warm/cool seam) */
   background:var(--gx-canvas) !important;
   animation:gx-pin .5s ease both;
   /* sticky footer: on short pages (grid layout / tall windows) the footer used to
@@ -87,6 +88,16 @@ body.is-leaving{ animation:none; opacity:0; transition:opacity .24s ease; }
 .frame-cap{ display:flex; align-items:baseline; gap:11px; margin-top:12px; }
 .frame-no{ font-family:var(--font-mono); font-size:10px; letter-spacing:.12em; color:var(--gx-cap-no); }
 .frame-text{ font-family:var(--font-serif); font-style:italic; font-size:14px; color:var(--gx-cap); line-height:1.4; }
+/* subscriber perk chip — quiet until hovered/tapped */
+.frame-save{
+  margin-left:auto; flex:none; font-family:var(--font-mono); font-size:9.5px;
+  letter-spacing:.14em; text-transform:uppercase; color:var(--gx-cap-no);
+  background:none; border:1px solid var(--gx-frame); padding:3px 8px; cursor:pointer;
+  transition:color .15s, border-color .15s;
+}
+.frame-save:hover{ color:var(--accent,#ff5a00); border-color:var(--accent,#ff5a00); }
+/* strip layout overlays captions on the photo — keep it clean, no chip */
+.series[data-layout="strip"] .frame-save{ display:none; }
 
 /* soft reveal as each frame enters (enabled by JS) */
 .series.reveal-on .frame{ opacity:0; transform:translateY(26px); }

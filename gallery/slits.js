@@ -262,7 +262,9 @@
     var progressI = document.createElement('i'); progress.appendChild(progressI);
     var closeBtn = document.createElement('button');
     closeBtn.type = 'button'; closeBtn.className = 'sg-close'; closeBtn.textContent = '✕ close';
-    [title, count, hint, progress, closeBtn].forEach(function (e) { stage.appendChild(e); });
+    var saveBtn = document.createElement('button');
+    saveBtn.type = 'button'; saveBtn.className = 'sg-save'; saveBtn.textContent = '↓ save frame';
+    [title, count, hint, progress, closeBtn, saveBtn].forEach(function (e) { stage.appendChild(e); });
 
     var cursor = document.createElement('div'); cursor.className = 'sg-cursor';
     var cursorS = document.createElement('span'); cursor.appendChild(cursorS);
@@ -469,9 +471,7 @@
       });
       if (!useGL) gsap.to(track, { opacity: 0, duration: 0.5, ease: 'power2.in' });
 
-      gsap.fromTo(planes[i], { bulge: 0 }, {
-        bulge: 0.65, duration: 0.46, ease: 'sine.inOut', yoyo: true, repeat: 1
-      });
+      planes[i].bulge = 0;               /* crisp zoom — no lens ripple (brand: clean editorial) */
       fitGhost(ghostA, i);
       countB.textContent = data[i].no;
       gsap.delayedCall(0.95, function () { busy = false; });
@@ -492,7 +492,7 @@
 
       gsap.to(planes[j], { alpha: 1, duration: 0.5, ease: 'power2.out' });
       gsap.to(inn, { left: rIn.left, duration: 0.85, ease: 'expo.out' });
-      gsap.fromTo(planes[j], { bulge: 0.5 }, { bulge: 0, duration: 0.8, ease: 'power2.out' });
+      planes[j].bulge = 0;               /* crisp step — slide, no warp */
 
       var pOut = planes[cur];
       gsap.to(out, {
@@ -520,7 +520,7 @@
       }
       var r = items[i].getBoundingClientRect();
       gsap.to(g, { left: r.left, top: r.top, width: r.width, height: r.height, duration: 0.8, ease: 'expo.inOut' });
-      gsap.fromTo(planes[i], { bulge: 0 }, { bulge: 0.4, duration: 0.4, ease: 'sine.inOut', yoyo: true, repeat: 1 });
+      planes[i].bulge = 0;               /* crisp close — clean recede, no warp */
       planes.forEach(function (p, k) {
         if (k === i) return;
         gsap.to(p, { alpha: 1, duration: 0.55, ease: 'power2.out', delay: 0.25 + Math.abs(k - i) * 0.024 });
@@ -758,7 +758,30 @@
     on(stage, 'pointermove', onMove);
     on(stage, 'pointerup', onUp);
     on(stage, 'pointercancel', onUp);
+    /* ----- subscriber perk: save the zoomed frame ----- */
+    function slug(s) { return String(s || 'frame').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, ''); }
+    function saveFrame() {
+      if (mode !== 'zoom') return;
+      var G = window.HKAGate;
+      if (G && G.configured && !G.signedIn()) {
+        G.prompt({
+          title: 'Save this frame',
+          blurb: 'A subscriber perk — sign in with your email (one magic link, no password) to take any frame with you, and get new series in your inbox.'
+        });
+        return;
+      }
+      var src = data[cur].src;
+      var ext = (src.match(/\.[a-z0-9]+(?=($|\?))/i) || ['.jpg'])[0];
+      var name = slug(opts.title) + '-' + data[cur].no + ext;
+      fetch(src).then(function (r) { if (!r.ok) throw 0; return r.blob(); }).then(function (b) {
+        var u = URL.createObjectURL(b), a = document.createElement('a');
+        a.href = u; a.download = name; document.body.appendChild(a); a.click();
+        setTimeout(function () { URL.revokeObjectURL(u); a.remove(); }, 1500);
+      }).catch(function () { window.open(src, '_blank', 'noopener'); });
+    }
+
     on(stage, 'click', onClick);
+    on(saveBtn, 'click', function (e) { e.stopPropagation(); saveFrame(); });
     on(stage, 'wheel', onWheel, { passive: false });
     on(document, 'keydown', onKey);
     on(window, 'resize', queueMeasure);
