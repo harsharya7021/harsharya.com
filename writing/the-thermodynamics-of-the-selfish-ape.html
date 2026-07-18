@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Thermodynamics of the Selfish Ape — Harsh Kumar Arya</title>
+  <meta name="description" content="When you pull the thread of human behavior long enough, you do not just unravel a single life. You find yourself looking at the raw, unfiltered architecture of a four-billion-year-old planetary history. To make sense of who we are, you have to build it like a tree. You have to start at the roots." />
+  <meta name="keywords" content="" />
+  <meta name="author" content="Harsh Kumar Arya" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo+Black&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;1,6..96,400&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=Inter:wght@400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="../styles.css?v=11" />
+  <style>
+    .post { padding: 56px 0 88px; max-width: 760px; margin: 0 auto; }
+    .post-back { display:inline-block; font-family:var(--font-mono); font-size:12px; letter-spacing:0.14em; text-transform:uppercase; background:var(--text); color:var(--bg); padding:6px 12px; border:2px solid var(--text); margin-bottom:36px; }
+    .post-back:hover { background:var(--accent); color:var(--text); }
+    .post-meta { display:flex; gap:12px; align-items:center; flex-wrap:wrap; font-family:var(--font-mono); font-size:11px; letter-spacing:0.14em; color:var(--muted); text-transform:uppercase; margin-bottom:24px; }
+    .post-tag { background:var(--accent); color:var(--text); border:2px solid var(--text); padding:3px 10px; font-weight:700; }
+    .post-title { font-family:var(--font-display); font-size:clamp(44px,6.5vw,96px); line-height:0.92; letter-spacing:-0.02em; text-transform:uppercase; margin-bottom:24px; }
+    .post-title em { font-family:var(--font-serif); font-style:italic; font-weight:700; color:var(--accent); text-transform:none; }
+    .post-description { font-family:var(--font-serif); font-style:italic; font-size:22px; line-height:1.45; color:var(--muted); max-width:600px; margin-bottom:56px; }
+    .post-body { font-size:18px; line-height:1.7; color:var(--text); }
+    .post-body > * + * { margin-top:22px; }
+    .post-body h2 { font-family:var(--font-display); font-size:38px; line-height:1.12; text-transform:uppercase; letter-spacing:0.005em; margin-top:56px; margin-bottom:8px; }
+    .post-body p { color:var(--text); }
+    .post-body strong { font-weight:600; } .post-body em { font-style:italic; }
+    .post-body a { color:inherit; border-bottom:2px solid var(--line); padding-bottom:1px; transition:border-color .15s,color .15s; }
+    .post-body a:hover { background:var(--accent); color:var(--text); border-bottom-color:var(--text); padding:1px 4px; margin:-1px -4px; }
+    .post-body ul, .post-body ol { padding-left:0; list-style:none; }
+    .post-body li { padding:10px 0 10px 28px; position:relative; border-top:1px dashed var(--line); }
+    .post-body li:first-child { border-top:0; }
+    .post-body li::before { content:"\2192"; position:absolute; left:0; top:10px; font-family:var(--font-display); color:var(--accent); font-size:18px; }
+    .post-body blockquote { padding:14px 0 14px 24px; border-left:4px solid var(--accent); color:var(--muted); font-style:italic; font-family:var(--font-serif); font-size:22px; line-height:1.5; }
+    .post-body .pull { font-family:var(--font-serif); font-style:italic; font-size:26px; line-height:1.4; color:var(--text); padding:8px 0; margin:40px 0; max-width:620px; }
+    .post-body figure { margin:40px 0; clear:both; }
+    .post-body img { display:block; max-width:100%; height:auto; border:2px solid var(--text); }
+    .post-body figcaption { font-family:var(--font-mono); font-size:12px; letter-spacing:0.08em; text-transform:uppercase; color:var(--muted); margin-top:10px; }
+    .post-body figure.align-left { float:left; width:48%; margin:6px 30px 20px 0; }
+    .post-body figure.align-right { float:right; width:48%; margin:6px 0 20px 30px; }
+    .post-body figure.align-wide { width:116%; margin-left:-8%; }
+    @media (max-width:720px){ .post-body figure.align-left, .post-body figure.align-right, .post-body figure.align-wide { float:none; width:100%; margin:32px 0; } }
+    .post-body hr { border:0; border-top:3px solid var(--text); margin:48px 0; }
+    .post-footer { margin-top:72px; padding-top:32px; border-top:2px solid var(--text); display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap; font-family:var(--font-mono); font-size:12px; letter-spacing:0.12em; text-transform:uppercase; }
+    .post-footer a { color:var(--text); border-bottom:2px solid var(--text); padding-bottom:2px; font-weight:700; }
+    .post-footer a:hover { color:var(--accent); border-bottom-color:var(--accent); }
+    @media (max-width:720px){ .post{padding:32px 0 64px;} .post-title{line-height:1.02;letter-spacing:0;} .post-body{font-size:16px;} .post-body h2{font-size:27px;margin-top:44px;line-height:1.18;letter-spacing:0.02em;} .post-body .pull{font-size:22px;} }
+    .listen{ display:flex; align-items:center; gap:14px; border:2px solid var(--text); padding:12px 14px; margin:0 0 48px; max-width:600px; background:var(--bg); }
+    .listen-play{ flex:none; width:58px; height:58px; border:2px solid var(--text); background:var(--accent); color:var(--text); cursor:pointer; display:flex; align-items:center; justify-content:center; transition:background .15s, color .15s; }
+    .listen-play:hover{ background:var(--text); color:var(--bg); }
+    .listen-play svg{ width:24px; height:24px; display:block; }
+    .listen-play .ic-pause{ display:none; }
+    .listen.is-playing .ic-play{ display:none; } .listen.is-playing .ic-pause{ display:block; }
+    .listen-main{ flex:1; min-width:0; }
+    .listen-top{ display:flex; align-items:baseline; justify-content:space-between; gap:12px; margin-bottom:8px; }
+    .listen-kicker{ font-family:var(--font-mono); font-size:11px; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+    .listen-time{ font-family:var(--font-mono); font-size:11px; letter-spacing:0.04em; color:var(--muted); white-space:nowrap; }
+    .listen-time b{ color:var(--text); font-weight:700; }
+    .listen-track{ height:6px; background:color-mix(in srgb, var(--text) 12%, transparent); cursor:pointer; position:relative; }
+    .listen-fill{ position:absolute; left:0; top:0; bottom:0; width:0; background:var(--accent); }
+    @media (max-width:720px){ .listen{ margin-bottom:36px; } .listen-kicker{ font-size:10px; } }
+  </style>
+  <link rel="icon" href="../favicon.ico" sizes="48x48">
+  <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">
+  <link rel="canonical" href="https://harsharya.com/writing/the-thermodynamics-of-the-selfish-ape.html">
+  <meta property="og:type" content="article">
+  <meta property="og:site_name" content="Harsh Kumar Arya">
+  <meta property="og:title" content="The Thermodynamics of the Selfish Ape — Harsh Kumar Arya">
+  <meta property="og:description" content="When you pull the thread of human behavior long enough, you do not just unravel a single life. You find yourself looking at the raw, unfiltered architecture of a four-billion-year-old planetary history. To make sense of who we are, you have to build it like a tree. You have to start at the roots.">
+  <meta property="og:url" content="https://harsharya.com/writing/the-thermodynamics-of-the-selfish-ape.html">
+  <meta property="og:image" content="https://harsharya.com/assets/portrait.jpg">
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:title" content="The Thermodynamics of the Selfish Ape — Harsh Kumar Arya">
+  <meta name="twitter:description" content="When you pull the thread of human behavior long enough, you do not just unravel a single life. You find yourself looking at the raw, unfiltered architecture of a four-billion-year-old planetary history. To make sense of who we are, you have to build it like a tree. You have to start at the roots.">
+  <meta name="twitter:image" content="https://harsharya.com/assets/portrait.jpg">
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","headline":"The Thermodynamics of the Selfish Ape","description":"When you pull the thread of human behavior long enough, you do not just unravel a single life. You find yourself looking at the raw, unfiltered architecture of a four-billion-year-old planetary history. To make sense of who we are, you have to build it like a tree. You have to start at the roots.","keywords":"","datePublished":"2026-07-19","dateModified":"2026-07-19","author":{"@type":"Person","name":"Harsh Kumar Arya","url":"https://harsharya.com/"},"publisher":{"@type":"Person","name":"Harsh Kumar Arya"},"image":"https://harsharya.com/assets/portrait.jpg","mainEntityOfPage":{"@type":"WebPage","@id":"https://harsharya.com/writing/the-thermodynamics-of-the-selfish-ape.html"}}</script>
+</head>
+<body data-mode="warhol" data-density="normal" class="post-page">
+  <nav class="nav" id="nav">
+    <div class="container nav-inner">
+      <a href="../" class="logo">Harsh<sup>1</sup></a>
+      <div class="nav-links">
+        <a href="../#about">About</a>
+        <a href="/#work">Work</a>
+        <a href="/portfolio/">Portfolio</a>
+        <a href="../life/index.html">Life</a>
+        <a href="index.html">Notes</a>
+        <a href="/contact/">Contact</a>
+      </div>
+    </div>
+  </nav>
+  <article class="post container">
+    <header class="post-header">
+      <a href="index.html" class="post-back">← All notes</a>
+      <div class="post-meta">
+        <span class="post-date">July 2026</span>
+        <span class="post-dot">/</span>
+        <span class="post-tag">Musings</span>
+      </div>
+      <h1 class="post-title">The Thermodynamics of the Selfish Ape</h1>
+      <p class="post-description">When you pull the thread of human behavior long enough, you do not just unravel a single life. You find yourself looking at the raw, unfiltered architecture of a four-billion-year-old planetary history. To make sense of who we are, you have to build it like a tree. You have to start at the roots.</p>
+    </header>
+    
+    <div class="post-body">
+      <h2>Deep Time and the Desert</h2>
+      <p>Four billion years ago, through a chemical reaction and the dark, pressurised silence of an ancient Earth, life birthed itself. It was life in its very simple form—a single cell existing underwater. Over unfathomable stretches of time, it evolved into invertebrates, blindly navigating the oceans without a backbone, until it forged the architecture of vertebrates. And then came the limbs.</p>
+      <p>Organisms hauled their thick skins out of the water and traveled through ancient deserts. At times, I do feel exactly like that organism in the desert. I would get high; I would access those deepest, most primal parts of my brain just to survive the heat. Plants, butterflies, humans—everything has been in ceaseless competition.</p>
+      <p>Each organism has been evolving just to survive. Everything that we do, every instinct that flares from within us, is designed to test us and see what succeeds in the competition. It is a randomized control trial on a planetary scale: a competition between species and within our own species, and whoever survives, wins.</p>
+      <p>When you zoom out, you realize how astonishingly young this phenomenon of "us" actually is. We have only become a little less animalistic in the last 12,000 years. In the grand ledger of history, that is almost nothing. I would still say that we are fundamentally no better than other animals, but when we started to take over the planet, it was just 12,000 years ago.</p>
+      <p>And if an average person now lives to be 100 years old, that is a massive, mathematically significant fraction of experiencing this entire human condition. We are very young. Relatively very young. Realizing that we have a lot of time on this planet somehow made me a bit chill, relaxed, and hopeful. It made me feel not so doomed, not so irrelevant. I might be a speck of dust in the cosmos, but among humans at least, my life matters. We are judging ourselves against other humans in the systems that we have created. It is only fair if I judge myself within my own lineage of human civilization.</p>
+      <h2>The Trunk: Survival, Altruism, and Equilibrium</h2>
+      <p>If survival is the ultimate imperative, then selfishness is the evolutionary engine. But what about love? What about companionship, or the delight we find in another person's existence?</p>
+      <p>If everything is a randomised control trial for survival, it suggests to me that even things like love, companionship, or altruistic behaviours are coming as a defense to safeguard us from threats. When people tell each other how much they love them, care for them, find them talented, or just find delight in their company—how their existence makes things better—it is an evolutionary shield.</p>
+      <p>Take a person like Moksh. How is he trying to survive? Why is his mind telling him to be unconditionally detached, running away from the very things he has around him: friendships, good relationships, loving bonds, companionship? It is a defense. His mind is protecting him from isolation and loneliness. By being altruistic and unconditional, this is exactly what he is getting in return.</p>
+      <p>Society operates on a strict supply-demand equilibrium. Whatever we put out, we get that in return. If I want unconditional love, I extend that, and I get it in return. But there are many free riders. And generally, people who are free riders—those who feign altruism merely to extract resources—are pushed away by society. They lose their rank, and thus, they ultimately end up with nothing.</p>
+      <p>Human behavior, like economics, has a short run and a long run. At times you will have to take short-run decisions in times of crisis. While responding to a crisis, it is okay to take short-term, incentive-based decisions. But if you take enough of those, you find yourself severely constrained when you have to take a long-term decision. If one goes out and starts to behave altruistically with the aim of free riding, they will simply not be able to pull off that facade. The transformation can only happen if they genuinely start to believe it—if they tell their mind and change their psyche.</p>
+      <p>When a visionary leader or a philosopher attempts to step entirely outside this survival formula, society crushes them. Arthur Schopenhauer looked deeply into the abyss of human desire and realized we are driven by a blind, insatiable will to consume. Nikola Tesla embodied the ultimate long-run altruistic play, pushing the frontier of science to elevate the species, only to realize in his final days that his devotion to humanity brought him primarily humiliation, wishing only for the simple comfort of human connection. The frontier is a lonely place.</p>
+      <h2>The Branches: The Mosaic of the Self</h2>
+      <p>If love is a defense and history is a cycle of resource hoarding, then what is the self? In therapy speak, it is considered that one behaves according to their inner self—the identity one learns during childhood.</p>
+      <p>This makes parenting a brutal, high-stakes balancing act. Because is good parenting bad? What is the balance like? If you behave very softly with your younger ones, they are not battle-tested to handle challenges. They will not survive; they have to evolve. But if a person does the opposite and simply burdens someone with unending challenges, then too they will have a pessimistic view about the world, and that is also not fair. Balance, again, is the key.</p>
+      <p>We survive by evolving, and competition is what makes us much more evolved. Whatever one wants to become like or embody, they should find ways to seek an apprenticeship under them. The family is the immediate competitive environment. Then the school one goes to. Then there are genes and genetic dispositions.</p>
+      <p>It is layered and complex. When I look back, I am a mix of all the people that I have interacted with and met. I pick something from someone, the other things from someone else. Through Shivam R. Singh, I learned this excellence-seeking persona; he gets to where he wants simply because of how his operating system performs. Through Shivansh, I learned popular culture, watching movies with a critical lens, and sort of taking pleasure in art.</p>
+      <p>Then there is Moksh. Folks I met in college. Folks I met while running the agency. Then ISB happened, and a brief stint at a startup. I became close to Moksh around 2022, navigating the up-and-down movements of our bond. There are the people I met along the way while traveling, and the people who have been constants, whom I met and they just sort of stick. You are nothing more than a meticulously curated mosaic of everyone you have ever met.</p>
+      <h2>The Canopy: The Anomaly of Now</h2>
+      <p>Because we are swimming in it, we forget how staggering the present moment is. The future sort of seems to be doomed; it feels like it will just get worse. But the last 100 years have been incredibly good for humanity. Post-World War II, we did a lot to be stable.</p>
+      <p>Yes, things have started to again go to dogs and shit. But it has not become as bad as World War II. There are no nuclear bombs falling yet. Even if kidnappings are taking place, they are not nearly as violent as historical conquests. There are still courts and judiciaries in which trials are being conducted. Even with a guy like Trump, there is hope for humanity, at least in the present day. We will see what happens next.</p>
+      <p>The data points to how abundance and the riches we have enjoyed in the last 60 years are a profound anomaly. Inequality had reduced significantly. It was the only period in our 12,000-year takeover where so much economic growth happened, where economic abundance flourished, and millions came out of poverty. Inequality has now started to again increase, but the last 60 years were unarguably good.</p>
+      <p>If you read Charles Dickens' books, you will see an account of a person living no better than someone in the slums of modern Bombay. This modern-day phenomenon of economic abundance and advanced urban metropolises is very recent. Not long ago, London faced a crisis simply because it was drowning in horse shit. For most of history, most parts of the world looked like how the poorest parts of Africa look today, with only a few isolated centers of prosperity.</p>
+      <p>It is just 12,000 years of history. This is unequivocally the best time to be alive, and maybe this is the only time that we'll feel like we are having a good time.</p>
+      <p>The story of humanity is not a straight line reaching toward perfection. It is the thermodynamics of life. If you leave a room alone, it naturally degrades into chaos. Entropy is the resting state of the world. To build an advanced metropolis, to maintain an altruistic friendship, to pull millions out of poverty, or to walk through a city safely at night, you must apply energy. It requires an exhausting, magnificent expenditure of willpower to reduce the randomness, to see past the game of deception, and to forge a civilization—and a self—that can endure the long run.</p>
+    </div>
+    <nav class="post-footer">
+      <a href="index.html">← All notes</a>
+      <a href="../#contact">Get in touch →</a>
+    </nav>
+  </article>
+  <footer>
+    <div class="container">
+      <span class="foot-left">© <span id="year"></span> Harsh Kumar Arya · <a class="foot-email" href="mailto:hi@harsharya.com">hi@harsharya.com</a></span>
+      <span class="foot-socials"><a href="https://www.linkedin.com/in/harsharyaa/" target="_blank" rel="noopener">LinkedIn</a> <a href="https://github.com/harsharya7021" target="_blank" rel="noopener">GitHub</a></span>
+    </div>
+  </footer>
+  <script>document.getElementById("year").textContent=new Date().getFullYear();var n=document.getElementById("nav");window.addEventListener("scroll",function(){if(window.scrollY>8)n.classList.add("scrolled");else n.classList.remove("scrolled");});</script>
+  <script>(function(){
+    var L=document.querySelector("[data-listen]"); if(!L) return;
+    var a=L.querySelector(".listen-audio"),play=L.querySelector(".listen-play"),fill=L.querySelector(".listen-fill"),track=L.querySelector(".listen-track"),cur=L.querySelector(".listen-cur"),dur=L.querySelector(".listen-dur");
+    function fmt(s){ s=Math.max(0,Math.floor(s||0)); return Math.floor(s/60)+":"+("0"+(s%60)).slice(-2); }
+    a.addEventListener("loadedmetadata",function(){ if(isFinite(a.duration)) dur.textContent=fmt(a.duration); });
+    a.addEventListener("timeupdate",function(){ fill.style.width=((a.currentTime/(a.duration||1))*100)+"%"; cur.textContent=fmt(a.currentTime); });
+    a.addEventListener("play",function(){ L.classList.add("is-playing"); play.setAttribute("aria-pressed","true"); });
+    a.addEventListener("pause",function(){ L.classList.remove("is-playing"); play.setAttribute("aria-pressed","false"); });
+    a.addEventListener("ended",function(){ L.classList.remove("is-playing"); fill.style.width="0%"; cur.textContent="0:00"; });
+    play.addEventListener("click",function(){ if(a.paused) a.play(); else a.pause(); });
+    track.addEventListener("click",function(e){ var r=track.getBoundingClientRect(); if(a.duration) a.currentTime=Math.min(a.duration,Math.max(0,((e.clientX-r.left)/r.width)*a.duration)); });
+  })();</script>
+</body>
+</html>
