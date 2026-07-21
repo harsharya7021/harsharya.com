@@ -547,9 +547,20 @@
       <div class="drafts" id="draftsList"></div>
       <button class="btn ghost" id="newDraft" style="margin-top:14px;">+ New note</button>
     </div>
+    <div class="sec">
+      <label class="lab">Backup — keep drafts off this browser</label>
+      <div class="tagrow">
+        <button type="button" id="bkPick">⇩ Choose folder</button>
+        <button type="button" id="bkNow">⤓ Back up now</button>
+        <button type="button" id="bkExport">Export .json</button>
+        <button type="button" id="bkImport">Import .json</button>
+      </div>
+      <input type="file" id="bkFile" accept="application/json,.json" hidden />
+      <div class="hint" id="bkStatus">Drafts live only in this browser's storage — a privacy setting or a cleared cache deletes them with no warning and no undo. Pick a folder once and every save is mirrored there as <b>drafts.json</b> plus one file per note. On a phone, use Export / Import instead.</div>
+    </div>
     <div class="sec" style="border-bottom:0;">
       <label class="lab">How publishing works</label>
-      <div class="hint">Drafts autosave in this browser. <b>Publish live</b> commits the note + updates the index in one go — live on harsharya.com in ~1 min, from any device. Unlock with a GitHub key, or sign in to your own server (<b>os.harsharya.com</b>) to keep the key off the browser.</div>
+      <div class="hint">Drafts autosave in this browser — set a <b>backup folder</b> above so they survive it. <b>Publish live</b> commits the note + updates the index in one go — live on harsharya.com in ~1 min, from any device. Unlock with a GitHub key, or sign in to your own server (<b>os.harsharya.com</b>) to keep the key off the browser.</div>
     </div>
   </aside>
   </div>
@@ -603,7 +614,7 @@
   })();
   var doc=state.drafts[state.currentId];
 
-  function persist(){ try{ localStorage.setItem(LS_DRAFTS, JSON.stringify(state.drafts)); localStorage.setItem(LS_CURRENT, state.currentId);}catch(e){} }
+  function persist(){ try{ localStorage.setItem(LS_DRAFTS, JSON.stringify(state.drafts)); localStorage.setItem(LS_CURRENT, state.currentId);}catch(e){} bkSchedule(); }
 
   /* ─── Small helpers ─── */
   function textOf(html){ var d=document.createElement("div"); d.innerHTML=html||""; return (d.textContent||"").trim(); }
@@ -937,8 +948,10 @@
   var audioFile=$("#audioFile"), audioPick=$("#audioPick"), audioHas=$("#audioHas"),
       audioNameEl=$("#audioName"), audioDel=$("#audioDel");
   var AUDIO_DB="hka-editor", AUDIO_STORE="audio";
-  function audioDBopen(){ return new Promise(function(res,rej){ var r=indexedDB.open(AUDIO_DB,1);
-    r.onupgradeneeded=function(){ r.result.createObjectStore(AUDIO_STORE); };
+  function audioDBopen(){ return new Promise(function(res,rej){ var r=indexedDB.open(AUDIO_DB,2);
+    r.onupgradeneeded=function(){ var db=r.result;
+      if(!db.objectStoreNames.contains(AUDIO_STORE)) db.createObjectStore(AUDIO_STORE);
+      if(!db.objectStoreNames.contains("fs")) db.createObjectStore("fs"); };
     r.onsuccess=function(){ res(r.result); }; r.onerror=function(){ rej(r.error); }; }); }
   function audioTx(id, mode, fn){ return audioDBopen().then(function(db){ return new Promise(function(res,rej){
     var t=db.transaction(AUDIO_STORE, mode), s=t.objectStore(AUDIO_STORE), q=fn(s);
@@ -1105,6 +1118,159 @@
       draftsList.appendChild(row);
     });
   }
+
+  /* ─── Backup — mirror drafts outside this browser ──────────────────
+     localStorage is a single point of failure. Brave's "forget me when
+     I close this site", a cleared cache, or any privacy sweep deletes
+     every draft at once, silently, with no undo — this is exactly how
+     the July 2026 drafts were lost. If a folder handle is granted, each
+     save is mirrored to disk (drafts.json + one .html per note). The
+     handle lives in IndexedDB; Export / Import cover phones and any
+     browser without the File System Access API. */
+  var BK_KEY="backupDir";
+  var bkDir=null, bkTimer=null, bkBusy=false, bkDirty=false;
+  var bkStatusEl=$("#bkStatus");
+  function bkSay(m){ if(bkStatusEl) bkStatusEl.innerHTML=m; }
+  function fsTx(mode, fn){ return audioDBopen().then(function(db){ return new Promise(function(res,rej){
+    var t=db.transaction("fs", mode), s=t.objectStore("fs"), q=fn(s);
+    t.oncomplete=function(){ res(q&&q.result); }; t.onerror=function(){ rej(t.error); }; }); }); }
+  function bkSaveHandle(h){ return fsTx("readwrite", function(s){ return s.put(h, BK_KEY); }); }
+  function bkLoadHandle(){ return fsTx("readonly", function(s){ return s.get(BK_KEY); }); }
+  function bkPerm(h, ask){
+    if(!h || !h.queryPermission) return Promise.resolve("granted");
+    return h.queryPermission({mode:"readwrite"}).then(function(p){
+      if(p==="granted" || !ask) return p;
+      return h.requestPermission({mode:"readwrite"});
+    });
+  }
+  function bkPayload(){
+    return JSON.stringify({ savedAt:new Date().toISOString(), origin:location.origin,
+                            currentId:state.currentId, drafts:state.drafts }, null, 2);
+  }
+  function bkNoteHTML(d){
+    var t=textOf(d.title)||"Untitled";
+    return '<!doctype html><meta charset="utf-8">\n'+
+      "<!-- harsharya editor backup · id="+d.id+" · saved "+new Date().toISOString()+" -->\n"+
+      "<title>"+esc(t)+"</title>\n<h1>"+esc(t)+"</h1>\n"+
+      "<p><em>"+esc(d.date||"")+" · "+esc(d.tag||"")+"</em></p>\n"+(d.body||"")+"\n";
+  }
+  function bkWriteFile(dir, name, text){
+    return dir.getFileHandle(name, {create:true}).then(function(fh){
+      return fh.createWritable().then(function(w){
+        return Promise.resolve(w.write(text)).then(function(){ return w.close(); });
+      });
+    });
+  }
+  function bkRun(){
+    if(!bkDir || bkBusy) return Promise.resolve();
+    bkBusy=true; bkDirty=false;
+    return bkPerm(bkDir,false).then(function(p){
+      if(p!=="granted"){ bkSay("Backup folder needs permission again — click <b>Back up now</b>."); throw new Error("__perm"); }
+      return bkWriteFile(bkDir, "drafts.json", bkPayload());
+    }).then(function(){
+      return bkDir.getDirectoryHandle("notes", {create:true});
+    }).then(function(nd){
+      var ids=Object.keys(state.drafts), i=0;
+      function step(){
+        if(i>=ids.length) return Promise.resolve();
+        var d=state.drafts[ids[i++]];
+        if(!d) return step();
+        var nm=((d.slug||slugify(textOf(d.title))||"untitled")+"-"+d.id+".html").replace(/[\/\\:*?"<>|]/g,"-");
+        return bkWriteFile(nd, nm, bkNoteHTML(d)).then(step, step);
+      }
+      return step();
+    }).then(function(){
+      bkSay("Backed up to <b>"+esc(bkDir.name||"folder")+"</b> · "+new Date().toLocaleTimeString()+
+            " · "+Object.keys(state.drafts).length+" note(s)");
+    }).catch(function(e){
+      if(!e || e.message!=="__perm") bkSay("Backup failed: "+esc((e&&e.message)||String(e)));
+    }).then(function(){
+      bkBusy=false; if(bkDirty) bkSchedule();
+    });
+  }
+  function bkSchedule(){
+    if(!bkDir) return;
+    if(bkBusy){ bkDirty=true; return; }
+    clearTimeout(bkTimer); bkTimer=setTimeout(bkRun, 1500);
+  }
+  function bkApply(data){
+    var incoming=(data&&data.drafts)||{}, added=0;
+    Object.keys(incoming).forEach(function(id){
+      var d=incoming[id]; if(!d||!d.id) return;
+      if(!state.drafts[id] || (d.updated||0) > (state.drafts[id].updated||0)){ state.drafts[id]=d; added++; }
+    });
+    if(added){ // drop leftover blank placeholders
+      Object.keys(state.drafts).forEach(function(id){
+        var d=state.drafts[id];
+        if(Object.keys(state.drafts).length>1 && !textOf(d.title) && !textOf(d.body)) delete state.drafts[id];
+      });
+    }
+    if(!state.drafts[state.currentId]) state.currentId=(data.currentId && state.drafts[data.currentId]) ? data.currentId : Object.keys(state.drafts)[0];
+    doc=state.drafts[state.currentId];
+    persist(); renderDoc(); renderDrafts();
+    toast(added ? ("Restored "+added+" note"+(added===1?"":"s")) : "Backup had nothing newer");
+    return added;
+  }
+  function bkNotebookEmpty(){
+    var ids=Object.keys(state.drafts);
+    if(ids.length>1) return false;
+    var d=state.drafts[ids[0]];
+    return !d || (!textOf(d.title) && !textOf(d.body));
+  }
+  function bkMaybeRestore(){
+    if(!bkDir || !bkNotebookEmpty()) return;
+    bkDir.getFileHandle("drafts.json").then(function(fh){ return fh.getFile(); })
+      .then(function(f){ return f.text(); })
+      .then(function(txt){
+        var data=JSON.parse(txt), n=Object.keys(data.drafts||{}).length;
+        if(!n) return;
+        if(!confirm("This notebook is empty, but the backup folder holds "+n+" note"+(n===1?"":"s")+
+                    " saved "+(data.savedAt||"earlier")+".\n\nRestore them?")) return;
+        bkApply(data);
+      }).catch(function(){});
+  }
+  function bkChoose(){
+    if(!window.showDirectoryPicker){
+      bkSay("This browser can't pick a folder — use <b>Export .json</b> instead (works everywhere, including your phone).");
+      return;
+    }
+    window.showDirectoryPicker({mode:"readwrite"}).then(function(h){
+      bkDir=h; return bkSaveHandle(h);
+    }).then(function(){ return bkRun(); }).then(function(){ bkMaybeRestore(); })
+    .catch(function(e){ if(e && e.name!=="AbortError") bkSay("Couldn't set folder: "+esc(e.message||String(e))); });
+  }
+  (function bkWire(){
+    var pick=$("#bkPick"), now=$("#bkNow"), exp=$("#bkExport"), imp=$("#bkImport"), file=$("#bkFile");
+    if(pick) pick.addEventListener("click", bkChoose);
+    if(now) now.addEventListener("click", function(){
+      if(!bkDir){ bkChoose(); return; }
+      bkPerm(bkDir,true).then(function(){ clearTimeout(bkTimer); return bkRun(); });
+    });
+    if(exp) exp.addEventListener("click", function(){
+      var a=document.createElement("a");
+      a.href=URL.createObjectURL(new Blob([bkPayload()],{type:"application/json"}));
+      a.download="harsharya-drafts-"+todayISO()+".json";
+      document.body.appendChild(a); a.click();
+      setTimeout(function(){ URL.revokeObjectURL(a.href); a.remove(); }, 1000);
+      toast("Backup downloaded");
+    });
+    if(imp && file){
+      imp.addEventListener("click", function(){ file.value=""; file.click(); });
+      file.addEventListener("change", function(){
+        var f=file.files && file.files[0]; if(!f) return;
+        f.text().then(function(txt){ bkApply(JSON.parse(txt)); })
+         .catch(function(e){ bkSay("Import failed: "+esc(e.message||String(e))); });
+      });
+    }
+    bkLoadHandle().then(function(h){
+      if(!h) return;
+      bkDir=h;
+      return bkPerm(h,false).then(function(p){
+        if(p==="granted"){ bkSay("Backing up to <b>"+esc(h.name||"folder")+"</b>."); bkMaybeRestore(); }
+        else bkSay("Backup folder <b>"+esc(h.name||"")+"</b> is set but needs permission — click <b>Back up now</b> to re-grant.");
+      });
+    }).catch(function(){});
+  })();
 
   /* ─── Publish menu ─── */
   var btnPublish=$("#btnPublish");
