@@ -136,6 +136,44 @@
     #body figure.sel{outline:2px solid var(--accent-2); outline-offset:4px;}
     #body hr{border:0; border-top:3px solid var(--text); margin:48px 0;}
 
+    /* ───────── Footnotes (WYSIWYG — same numbering + margin position as published) ─────────
+       Numbers are pure CSS counters, so inserting or deleting a note renumbers everything
+       with zero bookkeeping. The marker is uneditable; the note itself you just type into. */
+    #body{counter-reset:sidenote;}
+    #body .sn-ref{counter-increment:sidenote; display:inline-block; font-family:var(--font-mono);
+      font-size:0.6em; font-weight:700; line-height:1; vertical-align:super; color:var(--accent-2);
+      padding:0 1px; cursor:pointer; user-select:none;
+      text-decoration:underline dotted currentColor; text-decoration-thickness:1px; text-underline-offset:2px;}
+    #body .sn-ref::before{content:"["; opacity:0.5; margin-right:1px;}
+    #body .sn-ref::after{content:counter(sidenote) "]";}
+    #body .sn-ref:hover{color:var(--text); background:color-mix(in oklab, var(--accent) 45%, transparent);}
+    /* Default (and every laptop width): the note sits inline under the line it belongs to. */
+    #body .sn-note{display:block; margin:12px 0; padding:11px 13px;
+      font-family:var(--font-mono); font-size:12.5px; line-height:1.6; color:var(--muted);
+      background:color-mix(in srgb, var(--accent) 10%, transparent); border-left:3px solid var(--accent-2);
+      min-height:1.6em;}
+    #body .sn-note::before{content:counter(sidenote); font-weight:700; color:var(--accent-2);
+      font-size:11px; margin-right:7px; vertical-align:1px; user-select:none;}
+    #body .sn-note:focus{outline:2px solid var(--accent-2); outline-offset:2px;}
+    #body .sn-note:empty::after{content:"Write the aside…"; color:var(--muted); opacity:0.55;}
+    #body .sn-note a{color:inherit; border-bottom:1px solid var(--line);}
+    /* Wide enough for the real thing: float the note into the right margin, exactly where
+       it lands on the published page. 1320px is the narrowest viewport where a 250px note
+       plus its gutter clears the 760px canvas without spilling off-screen. */
+    @media (min-width:1320px){
+      #body .sn-note{float:right; clear:right; width:250px; margin:4px -290px 20px 0; padding:0;
+        background:none; border-left:0; outline:1px dashed var(--line); outline-offset:6px;}
+      #body .sn-note:focus{outline:1px solid var(--accent-2); outline-offset:6px;}
+    }
+    /* Footnote toolbar (caret inside a note) */
+    .fnbar{position:absolute; z-index:50; display:none; gap:2px; background:var(--text); padding:4px;
+      border-radius:6px; box-shadow:0 6px 20px rgba(0,0,0,.28);}
+    .fnbar.on{display:flex;}
+    .fnbar button{border:0; background:transparent; color:var(--bg); cursor:pointer;
+      font-family:var(--font-mono); font-size:10px; letter-spacing:0.06em; text-transform:uppercase;
+      padding:6px 8px; border-radius:4px;}
+    .fnbar button:hover{background:rgba(255,255,255,.16);}
+
     /* Image alignment toolbar (click a picture) */
     .figbar{position:absolute; z-index:50; top:0; left:0; transform:translateY(-100%);
       display:none; gap:2px; background:var(--text); padding:4px; border-radius:6px;
@@ -459,6 +497,7 @@
       <button class="b-link" data-cmd="link" title="Link (⌘K)">
         <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M10 13a5 5 0 0 0 7.5.6l3-3a5 5 0 0 0-7-7l-1.7 1.6"/><path d="M14 11a5 5 0 0 0-7.5-.6l-3 3a5 5 0 0 0 7 7l1.7-1.6"/></svg>
       </button>
+      <button class="b-fn" data-cmd="footnote" title="Footnote (⌘⇧F)" style="font-family:var(--font-mono);font-size:11px;font-weight:700;">fn<sup>1</sup></button>
       <span class="divide"></span>
       <button class="b-clear" data-cmd="clear" title="Clear formatting (removes italics, bold, etc.)" style="font-family:var(--font-mono);font-size:11px;font-weight:700;">T⌫</button>
     </div>
@@ -476,6 +515,7 @@
     <button data-ins="divider"><span class="g">―</span>Divider</button>
     <button data-ins="h2"><span class="g">H</span>Heading</button>
     <button data-ins="quote"><span class="g">&#10077;</span>Quote</button>
+    <button data-ins="footnote"><span class="g">fn</span>Footnote</button>
   </div>
   <input type="file" id="imgFile" accept="image/*" hidden />
 
@@ -487,6 +527,12 @@
     <button data-align="wide" title="Wide">Wide</button>
     <span class="divide"></span>
     <button data-align="del" title="Remove image">✕</button>
+  </div>
+
+  <!-- ───────── Footnote toolbar ───────── -->
+  <div class="fnbar" id="fnbar">
+    <button data-fn="goto" title="Jump back to the marker in the text">↩ Text</button>
+    <button data-fn="del" title="Delete this footnote">✕ Delete note</button>
   </div>
 
   <!-- ───────── Drawer ───────── -->
@@ -540,7 +586,35 @@
         <button type="button" id="stuIngest" title="Re-learn your voice from published notes">↻ Voice index</button>
       </div>
       <input type="file" id="stuWavs" accept="audio/wav,audio/x-wav,.wav,audio/*" multiple hidden />
-      <div class="hint" id="stuStatus">Polish cleans the draft and writes captions, headings, pull-quotes + SEO in your voice. For narration in <b>your</b> voice: generate the chunks in the Sarvam studio (your cloned voice lives there), then <b>Import my voice</b> — I stitch + normalise them into one Listen player. Auto-narrate uses a stock voice as a quick stand-in. Publish live ships whatever's attached.</div>
+      <div class="hint" id="stuStatus">Polish cleans the draft and writes captions, headings, pull-quotes + SEO in your voice. Narrate synthesises the whole piece and stitches it into one Listen player. Publish live ships whatever's attached.</div>
+    </div>
+    <div class="sec">
+      <label class="lab">Cloned voice — narrate as you, automatically</label>
+      <div class="hint" id="clnState" style="margin:0 0 10px;">Checking…</div>
+      <input type="password" id="clnToken" placeholder="Sarvam studio token (see below)" autocomplete="off" spellcheck="false" />
+      <input type="text" id="clnVoice" placeholder="cloned voice_id" autocapitalize="off" spellcheck="false" style="margin-top:8px;" />
+      <div class="tagrow" style="margin-top:10px;">
+        <button type="button" id="clnSave">✓ Use my cloned voice</button>
+        <button type="button" id="clnProbe">◎ Test access</button>
+        <button type="button" id="clnClear">✕ Back to stock</button>
+      </div>
+      <details class="lock-help" style="margin-top:12px;">
+        <summary>Where do I get the token?</summary>
+        <ol>
+          <li>Sarvam has never opened cloned voices to API keys — the public TTS API only takes stock speakers, and the voice-library endpoint answers a key with <i>401 authentication required</i>. Checked again July 2026: unchanged.</li>
+          <li>Your logged-in browser <b>does</b> hold a credential that reaches it. Open <b>studio.sarvam.ai</b>, DevTools → Network, generate one line of speech with your cloned voice, click the <code>synthesize</code> request, and copy the <code>Authorization</code> header value.</li>
+          <li>Paste it above and hit <b>Use my cloned voice</b> — it's stored on your box only (<code>data/sarvam.json</code>, never in git, never in this browser) and tested immediately.</li>
+          <li>Browser tokens expire. When one does, narration quietly falls back to the stock speaker and says so — grab a fresh header and re-paste.</li>
+        </ol>
+      </details>
+    </div>
+    <div class="sec">
+      <label class="lab">Published — reopen &amp; edit</label>
+      <div class="drafts" id="liveList"></div>
+      <div class="tagrow" style="margin-top:10px;">
+        <button type="button" id="liveRefresh">↻ Load from site</button>
+      </div>
+      <div class="hint" id="liveStatus">Pull any live note back into the editor — fix a line, swap an image, add footnotes — then <b>Publish live</b> to overwrite it. Needs you signed in (Publish key or your server).</div>
     </div>
     <div class="sec">
       <label class="lab">Notebook — local drafts</label>
@@ -572,6 +646,7 @@
     <h4>Quick keys</h4>
     <ul>
       <li><kbd>⌘/Ctrl B</kbd> bold · <kbd>⌘ I</kbd> italic · <kbd>⌘ K</kbd> link</li>
+      <li><kbd>⌘ ⇧ F</kbd> footnote — lands in the margin, not the sentence</li>
       <li><kbd>## </kbd> heading · <kbd>&gt; </kbd> quote · <kbd>- </kbd> list</li>
       <li><kbd>---</kbd> + enter → divider</li>
       <li>Select text → formatting bar · <kbd>+</kbd> on empty line → insert</li>
@@ -775,7 +850,87 @@
     else if(cmd==="quote") toggleBlock("blockquote");
     else if(cmd==="pull") togglePull();
     else if(cmd==="link") startLink();
+    else if(cmd==="footnote") insertFootnote();
     else if(cmd==="clear") clearFormat();
+  });
+
+  /* ─── Footnotes ───────────────────────────────────────────────────
+     A footnote is two sibling nodes: an uneditable <sup class="sn-ref">
+     marker and the <span class="sn-note"> that holds the text. Numbers
+     come from CSS counters in both the editor and the published page, so
+     inserting or deleting one renumbers the rest for free — there is no
+     numbering state to keep in sync anywhere. */
+  var fnbar=$("#fnbar");
+  function insertFootnote(){
+    // Read the caret BEFORE touching focus — calling focus() first collapses the
+    // selection to the top of the field and the note lands in the wrong paragraph.
+    var s=sel(), r=null;
+    if(s.rangeCount){
+      var cand=s.getRangeAt(0);
+      if(bodyEl.contains(cand.startContainer)) r=cand;
+    }
+    if(!r){                                              // no caret in the body — park it at the end
+      var last=bodyEl.lastElementChild;
+      if(!last){ bodyEl.innerHTML="<p><br></p>"; last=bodyEl.lastElementChild; }
+      r=document.createRange(); r.selectNodeContents(last); r.collapse(false);
+    }
+    var host=(r.startContainer.nodeType===3?r.startContainer.parentNode:r.startContainer);
+    if(host && host.closest && host.closest(".sn-note")){ toast("You're already inside a note"); return; }
+    bodyEl.focus();
+    r.collapse(false);                                   // marker goes after the selection
+    var ref=document.createElement("sup");
+    ref.className="sn-ref"; ref.setAttribute("contenteditable","false");
+    var note=document.createElement("span");
+    note.className="sn-note";
+    var frag=document.createDocumentFragment();
+    frag.appendChild(ref); frag.appendChild(note);
+    r.insertNode(frag);
+    hideBubble(); placeCaret(note); scheduleSave(); updateMetric();
+    toast("Footnote added — type the aside");
+  }
+  function noteOf(ref){ var n=ref.nextElementSibling; return (n&&n.classList.contains("sn-note"))?n:null; }
+  function refOf(note){ var p=note.previousElementSibling; return (p&&p.classList.contains("sn-ref"))?p:null; }
+  function removeFootnote(node){
+    var ref = node.classList.contains("sn-ref") ? node : refOf(node);
+    var note= node.classList.contains("sn-note") ? node : noteOf(node);
+    var anchor=(ref&&ref.parentNode)||(note&&note.parentNode);
+    if(note) note.remove();
+    if(ref) ref.remove();
+    hideFnbar(); if(anchor) placeCaretEnd(anchor);
+    bodyEl.focus(); scheduleSave(); updateMetric(); toast("Footnote removed");
+  }
+  function placeCaretEnd(el){
+    try{ var r=document.createRange(); r.selectNodeContents(el); r.collapse(false);
+      var s=sel(); s.removeAllRanges(); s.addRange(r); }catch(e){}
+  }
+  function currentNote(){
+    var s=sel(); if(!s.rangeCount) return null;
+    var n=s.getRangeAt(0).startContainer;
+    n = (n.nodeType===3) ? n.parentNode : n;
+    return (n&&n.closest) ? n.closest(".sn-note") : null;
+  }
+  function showFnbar(){
+    var note=currentNote();
+    if(!note || document.activeElement!==bodyEl){ hideFnbar(); return; }
+    var r=note.getBoundingClientRect();
+    fnbar.classList.add("on");
+    fnbar.style.top=(r.top+window.scrollY-fnbar.offsetHeight-6)+"px";
+    fnbar.style.left=(r.left+window.scrollX)+"px";
+  }
+  function hideFnbar(){ fnbar.classList.remove("on"); }
+  fnbar.addEventListener("mousedown", function(e){ e.preventDefault(); });
+  fnbar.addEventListener("click", function(e){
+    var b=e.target.closest("button[data-fn]"); if(!b) return;
+    var note=currentNote(); if(!note) return;
+    if(b.getAttribute("data-fn")==="del") removeFootnote(note);
+    else { var ref=refOf(note); hideFnbar(); if(ref&&ref.parentNode){ var r=document.createRange();
+      r.setStartAfter(note); r.collapse(true); var s=sel(); s.removeAllRanges(); s.addRange(r); bodyEl.focus(); } }
+  });
+  // Clicking a marker drops the caret straight into its note.
+  bodyEl.addEventListener("click", function(e){
+    var ref=e.target.closest&&e.target.closest(".sn-ref"); if(!ref) return;
+    e.preventDefault(); var note=noteOf(ref);
+    if(note){ placeCaret(note); setTimeout(showFnbar,0); }
   });
   // Strip inline formatting (italic/bold/etc.) from the selection, and
   // demote a pull-quote / blockquote block back to a normal paragraph.
@@ -807,9 +962,10 @@
   linkInput.addEventListener("keydown", function(e){ if(e.key==="Enter"){ e.preventDefault(); applyLink(); } if(e.key==="Escape"){ bubble.classList.remove("linking"); hideBubble(); } });
   $("#linkApply").addEventListener("click", applyLink);
 
-  document.addEventListener("selectionchange", function(){ if(document.activeElement===bodyEl) { showBubble(); updatePlus(); } });
-  bodyEl.addEventListener("mouseup", showBubble);
-  bodyEl.addEventListener("keyup", function(){ showBubble(); updatePlus(); });
+  document.addEventListener("selectionchange", function(){ if(document.activeElement===bodyEl) { showBubble(); updatePlus(); showFnbar(); } });
+  bodyEl.addEventListener("mouseup", function(){ showBubble(); showFnbar(); });
+  bodyEl.addEventListener("keyup", function(){ showBubble(); updatePlus(); showFnbar(); });
+  bodyEl.addEventListener("blur", function(){ setTimeout(function(){ if(document.activeElement!==bodyEl) hideFnbar(); },120); });
   window.addEventListener("scroll", function(){ if(bubble.style.opacity==="1") showBubble(); if(plus.classList.contains("on")) {} else updatePlus(); });
 
   /* ─── Plus inserter ─── */
@@ -846,6 +1002,7 @@
     else if(kind==="divider"){ replaceBlock(plusBlock, '<hr><p><br></p>'); }
     else if(kind==="h2"){ convertBlock(plusBlock,"h2"); }
     else if(kind==="quote"){ convertBlock(plusBlock,"blockquote"); }
+    else if(kind==="footnote"){ placeCaret(plusBlock); insertFootnote(); }
     scheduleSave(); updatePlaceholders();
   });
   function replaceBlock(block, html){
@@ -925,6 +1082,13 @@
         if(n.nodeType===8){ node.removeChild(n); return; }            // comments
         if(n.nodeType!==1) return;                                    // keep text nodes
         walk(n);
+        // Footnotes survive a copy/paste between notes — keep the pair, drop everything else on them.
+        if(n.classList && (n.classList.contains("sn-ref")||n.classList.contains("sn-note"))){
+          var keep=n.classList.contains("sn-ref")?"sn-ref":"sn-note";
+          Array.prototype.slice.call(n.attributes).forEach(function(a){ n.removeAttribute(a.name); });
+          n.className=keep; if(keep==="sn-ref"){ n.setAttribute("contenteditable","false"); n.innerHTML=""; }
+          return;
+        }
         if(n.nodeName==="DIV"){ var p=document.createElement("p"); while(n.firstChild) p.appendChild(n.firstChild); node.replaceChild(p,n); return; }
         if(n.nodeName==="B"||n.nodeName==="STRONG"){ isBold(n)?toStrong(node,n):unwrap(node,n); return; }
         if(!ALLOW[n.nodeName]){ isBold(n)?toStrong(node,n):unwrap(node,n); return; }  // spans etc. → strong only if genuinely bold
@@ -969,11 +1133,14 @@
   function renderAudioState(){
     if(!audioHas) return;
     if(doc.audioName){ audioNameEl.textContent=doc.audioName; audioHas.hidden=false; if(audioPick) audioPick.textContent="Replace audio"; }
+    else if(doc.liveAudio){ audioNameEl.textContent="listen."+(doc.liveAudio.split(".").pop()||"mp3")+" (already live)"; audioHas.hidden=false; if(audioPick) audioPick.textContent="Replace audio"; }
     else{ audioHas.hidden=true; if(audioPick) audioPick.textContent="＋ Attach audio"; }
   }
   function audioPlayerHTML(){
-    if(!doc.audioName) return "";
-    var ext=doc.audioExt||extForAudio(doc.audioName,"");
+    // doc.liveAudio = narration already committed for a reopened note. Keep the player
+    // on the page even when nothing new is attached, so re-publishing doesn't drop it.
+    if(!doc.audioName && !doc.liveAudio) return "";
+    var ext=doc.audioName ? (doc.audioExt||extForAudio(doc.audioName,"")) : (doc.liveAudio.split(".").pop()||"mp3");
     var src="../assets/writing/"+(doc.slug||slugify(textOf(titleEl.innerHTML)))+"/listen."+ext;
     return '<div class="listen" data-listen>'+
       '<button class="listen-play" type="button" aria-label="Play narration" aria-pressed="false">'+
@@ -999,7 +1166,7 @@
   });
   if(audioDel) audioDel.addEventListener("click", function(){
     audioDelete(doc.id).catch(function(){});
-    doc.audioName=""; doc.audioExt=""; collect(); Vault.save(doc); stamp(); renderAudioState(); toast("Narration removed");
+    doc.audioName=""; doc.audioExt=""; doc.liveAudio=""; collect(); Vault.save(doc); stamp(); renderAudioState(); toast("Narration removed");
   });
 
   /* ─── Image alignment: click a picture → toolbar (left / center / right / wide) ─── */
@@ -1051,9 +1218,30 @@
       if(t==="1."){ e.preventDefault(); emptyBlock(b); document.execCommand("insertOrderedList"); scheduleSave(); return; }
     }
     if(e.key==="Enter"){
+      // Inside a footnote, Enter is a soft break — a note is one aside, not a new block.
+      var inNote=currentNote();
+      if(inNote){ e.preventDefault(); document.execCommand("insertLineBreak"); scheduleSave(); return; }
       var bb=currentBlock();
       if(bb && bb.nodeName==="P"){ var tt=bb.textContent.trim();
         if(tt==="---"||tt==="***"){ e.preventDefault(); emptyBlock(bb); replaceBlock(bb,'<hr><p><br></p>'); scheduleSave(); return; }
+      }
+    }
+    // Backspacing onto a marker takes the whole footnote — never leaves an orphan half.
+    if(e.key==="Backspace"){
+      var s=sel(); if(!s.rangeCount || !s.isCollapsed) return;
+      var r=s.getRangeAt(0), node=r.startContainer, off=r.startOffset;
+      var here=(node.nodeType===3?node.parentNode:node);
+      var note=here&&here.closest?here.closest(".sn-note"):null;
+      if(note){                                    // at the very start of an empty-ish note → drop it
+        if(!note.textContent.trim()){ e.preventDefault(); removeFootnote(note); }
+        return;
+      }
+      var prev=null;
+      if(node.nodeType===3 && off===0) prev=node.previousSibling;
+      else if(node.nodeType===1 && off>0) prev=node.childNodes[off-1];
+      if(prev && prev.nodeType===1 && prev.classList){
+        if(prev.classList.contains("sn-note")){ e.preventDefault(); removeFootnote(prev); }
+        else if(prev.classList.contains("sn-ref")){ e.preventDefault(); removeFootnote(prev); }
       }
     }
   });
@@ -1064,7 +1252,8 @@
     var k=e.key.toLowerCase();
     if(k==="s"){ e.preventDefault(); collect(); Vault.save(doc); stamp(); toast("Saved locally"); }
     else if(document.activeElement===bodyEl){
-      if(k==="b"){ e.preventDefault(); exec("bold"); }
+      if(k==="f" && e.shiftKey){ e.preventDefault(); insertFootnote(); }
+      else if(k==="b"){ e.preventDefault(); exec("bold"); }
       else if(k==="i"){ e.preventDefault(); exec("italic"); }
       else if(k==="k"){ e.preventDefault(); startLink(); }
     }
@@ -1082,7 +1271,7 @@
   function ensureBodyStart(){ if(!bodyEl.textContent.trim() && !bodyEl.querySelector("p")){ bodyEl.innerHTML="<p><br></p>"; placeCaret(bodyEl.querySelector("p")); } }
 
   /* ─── Drawer (details + notebook) ─── */
-  function openDrawer(){ drawer.classList.add("on"); overlay.classList.add("on"); renderDrafts(); }
+  function openDrawer(){ drawer.classList.add("on"); overlay.classList.add("on"); renderDrafts(); if(liveCache) renderLive(); clnLoad(); }
   function closeDrawer(){ drawer.classList.remove("on"); overlay.classList.remove("on"); }
   $("#btnMeta").addEventListener("click",openDrawer);
   $("#drawerClose").addEventListener("click",closeDrawer);
@@ -1294,7 +1483,14 @@
     Array.prototype.forEach.call(c.querySelectorAll("[contenteditable]"),function(n){ n.removeAttribute("contenteditable"); });
     Array.prototype.forEach.call(c.querySelectorAll("[style]"),function(n){ n.removeAttribute("style"); });
     Array.prototype.forEach.call(c.querySelectorAll("figure.sel"),function(n){ n.classList.remove("sel"); if(!n.getAttribute("class")) n.removeAttribute("class"); });
-    Array.prototype.forEach.call(c.querySelectorAll("p"),function(p){ if(!p.textContent.trim() && !p.querySelector("img,br")) p.remove(); else if(p.innerHTML==="<br>"||p.innerHTML==="") p.remove(); });
+    Array.prototype.forEach.call(c.querySelectorAll(".sn-ref.sel"),function(n){ n.classList.remove("sel"); });
+    // Drop footnotes that were inserted but never written — marker and all.
+    Array.prototype.forEach.call(c.querySelectorAll(".sn-note"),function(sn){
+      if(sn.textContent.trim()) return;
+      var ref=sn.previousElementSibling; sn.remove();
+      if(ref && ref.classList && ref.classList.contains("sn-ref")) ref.remove();
+    });
+    Array.prototype.forEach.call(c.querySelectorAll("p"),function(p){ if(!p.textContent.trim() && !p.querySelector("img,br,.sn-note")) p.remove(); else if(p.innerHTML==="<br>"||p.innerHTML==="") p.remove(); });
     var html=c.innerHTML
       .replace(/<b>/g,"<strong>").replace(/<\/b>/g,"</strong>")
       .replace(/<i>/g,"<em>").replace(/<\/i>/g,"</em>")
@@ -1302,10 +1498,14 @@
       .replace(/&nbsp;/g," ");
     // one block per line, indented for the template
     html=html.replace(/></g,">\n<").split("\n").map(function(l){ return l.trim()?("      "+l):""; }).filter(Boolean).join("\n");
+    // …but a marker and its note must stay glued. The one-tag-per-line pass breaks both
+    // <sup …></sup> and the gap before the note; either newline renders as a stray space.
+    html=html.replace(/<sup class="sn-ref">\s*<\/sup>\s*<span class="sn-note">/g,
+                      '<sup class="sn-ref"></sup><span class="sn-note">');
     return html;
   }
   function titleHTML(){ var h=titleEl.innerHTML.trim(); return h|| "Untitled"; }
-  function buildNote(){
+  function buildNote(bodyOverride){
     var titlePlain=textOf(titleEl.innerHTML)||"Untitled";
     var desc=textOf(subtitleEl.innerHTML)||"";
     var mdesc=((doc.metaDesc||"").trim())||desc;          // SEO description falls back to subtitle
@@ -1322,7 +1522,8 @@
     return fill(NOTE_TPL,{
       TITLE_PLAIN:esc(titlePlain), TITLE_HTML:titleHTML(), DESC:esc(desc),
       META_DESC:esc(mdesc), KEYWORDS:esc(kw), LD:ld,
-      DATE_LABEL:monthYear(doc.date), TAG:esc(doc.tag), SLUG:doc.slug, BODY:cleanBodyHTML(),
+      DATE_LABEL:monthYear(doc.date), TAG:esc(doc.tag), SLUG:doc.slug,
+      BODY:(bodyOverride!=null?bodyOverride:cleanBodyHTML()),
       AUDIO:audioPlayerHTML()
     });
   }
@@ -1343,11 +1544,17 @@
     return fm+htmlToMD(bodyEl);
   }
   function htmlToMD(root){
+    var fnotes=[];                                    // collected as we walk; emitted at the end
     function inline(node){
       var out="";
       node.childNodes.forEach(function(n){
         if(n.nodeType===3){ out+=n.nodeValue; return; }
         var t=n.nodeName;
+        if(n.classList && n.classList.contains("sn-ref")) return;              // number comes from the note
+        if(n.classList && n.classList.contains("sn-note")){
+          var txt=inline(n).trim(); if(!txt) return;
+          fnotes.push(txt); out+="[^"+fnotes.length+"]"; return;               // Pandoc/Obsidian syntax
+        }
         if(t==="STRONG"||t==="B") out+="**"+inline(n)+"**";
         else if(t==="EM"||t==="I") out+="_"+inline(n)+"_";
         else if(t==="A") out+="["+inline(n)+"]("+(n.getAttribute("href")||"")+")";
@@ -1369,6 +1576,7 @@
       else if(t==="P"){ var s=inline(n).trim(); if(s){ md.push(n.classList.contains("pull")?("> "+s):s); } }
       else { var x=inline(n).trim(); if(x) md.push(x); }
     });
+    if(fnotes.length) md.push(fnotes.map(function(t,i){ return "[^"+(i+1)+"]: "+t; }).join("\n"));
     return md.join("\n\n")+"\n";
   }
 
@@ -1515,16 +1723,17 @@
     var slug=doc.slug||slugify(title); doc.slug=slug;   // lock slug so note + asset paths agree
     publishing=true; var T=transport(); setPub("Publishing…");
     try{
-      var noteHTML=buildNote();
       // Lift inline (device/pasted) images out into committed asset files,
-      // rewriting each src to ../assets/writing/<slug>/NN.ext
+      // rewriting each src to ../assets/writing/<slug>/NN.ext. Done on the body
+      // once, so the page and the reopenable source agree on every path.
       var assets=[], ai=0;
-      noteHTML=noteHTML.replace(/src="data:image\/([a-z0-9.+-]+);base64,([^"]+)"/gi, function(_m, mime, b64){
+      var bodyHTML=cleanBodyHTML().replace(/src="data:image\/([a-z0-9.+-]+);base64,([^"]+)"/gi, function(_m, mime, b64){
         ai++; var ext=mime.toLowerCase().replace("jpeg","jpg").replace(/[^a-z0-9]/g,"")||"jpg";
         var apath="assets/writing/"+slug+"/"+String(ai).padStart(2,"0")+"."+ext;
         assets.push({ path:apath, contentBase64:b64 });
         return 'src="../'+apath+'"';
       });
+      var noteHTML=buildNote(bodyHTML);
       // Narration audio → committed alongside as listen.<ext>
       if(doc.audioName){
         setPub("Reading narration…");
@@ -1540,9 +1749,13 @@
       setPub(assets.length ? ("Committing "+assets.length+" file"+(assets.length>1?"s":"")+"…") : "Committing…");
       await T.commit([
         { path:"writing/"+slug+".html", content:noteHTML },
-        { path:"writing/index.html", content:newIndex }
+        { path:"writing/index.html", content:newIndex },
+        // the editable source, so this note can be reopened byte-for-byte later
+        { path:sourcePath(slug), content:docToSource(bodyHTML) }
       ].concat(assets), "Publish note: "+title);
-      doc.published=true; doc.slug=slug; persist();
+      doc.published=true; doc.slug=slug;
+      if(doc.audioName) doc.liveAudio="../assets/writing/"+slug+"/listen."+(doc.audioExt||"mp3");
+      liveCache=null; persist();
       setPub(""); toast("Published ✓"); showDone(slug, title);
     }catch(e){
       setPub("");
@@ -1550,6 +1763,130 @@
       else toast("Publish failed: "+e.message);
     }finally{ publishing=false; }
   }
+
+  /* ─── Reopen a published note ─────────────────────────────────────
+     Two ways in, tried in order:
+       1. assets/writing/<slug>/source.json — written by every publish from
+          now on. A byte-exact round-trip: what you wrote is what you get.
+       2. the published writing/<slug>.html itself — parsed back into a
+          draft. Slightly lossy at the edges but it means the notes that
+          went live before source.json existed are still editable today.
+     Either way the draft keeps id "pub:<slug>", so reopening the same note
+     twice lands in the same notebook entry instead of piling up copies. */
+  var liveList=$("#liveList"), liveStatus=$("#liveStatus"), liveRefresh=$("#liveRefresh");
+  var liveCache=null;
+  function liveSay(msg){ if(liveStatus) liveStatus.innerHTML=msg; }
+  function sourcePath(slug){ return "assets/writing/"+slug+"/source.json"; }
+
+  function docToSource(bodyHTML){
+    return JSON.stringify({
+      v:1, slug:doc.slug, title:titleEl.innerHTML, subtitle:subtitleEl.innerHTML,
+      body:(bodyHTML!=null?bodyHTML:cleanBodyHTML()).replace(/^ {6}/gm,""), tag:doc.tag, date:doc.date,
+      metaDesc:doc.metaDesc||"", keywords:doc.keywords||"",
+      audio: doc.audioName ? { name:doc.audioName, ext:doc.audioExt||"" }
+           : (doc.liveAudio ? { name:"listen", ext:(doc.liveAudio.split(".").pop()||"mp3") } : null),
+      savedAt:new Date().toISOString()
+    }, null, 2)+"\n";
+  }
+
+  async function fetchLiveIndex(){
+    var raw=await transport().readFile("writing/index.html");
+    var pdoc=new DOMParser().parseFromString(raw,"text/html");
+    return Array.prototype.map.call(pdoc.querySelectorAll(".notes-list a.note-item"),function(a){
+      var g=function(c){ var el=a.querySelector(c); return el?el.textContent.trim():""; };
+      return { slug:(a.getAttribute("href")||"").replace(/\.html$/,""), title:g(".note-title"),
+               date:g(".note-date"), tag:g(".note-tag") };
+    }).filter(function(p){ return p.slug; });
+  }
+
+  /* Parse a published note back into the draft shape. */
+  function parsePublished(html, slug){
+    var p=new DOMParser().parseFromString(html,"text/html");
+    var pick=function(s){ return p.querySelector(s); };
+    var body=pick(".post-body"); if(!body) throw new Error("that page doesn't look like a note");
+    var ld={}; var s=pick('script[type="application/ld+json"]');
+    if(s){ try{ ld=JSON.parse(s.textContent); }catch(e){} }
+    var t=pick(".post-title"), d=pick(".post-description"), tag=pick(".post-tag");
+    var meta=p.querySelector('meta[name="description"]'), kw=p.querySelector('meta[name="keywords"]');
+    // the end-of-article Notes list is generated at runtime, but be defensive
+    Array.prototype.forEach.call(body.querySelectorAll(".post-notes"),function(n){ n.remove(); });
+    var audio=p.querySelector("[data-listen] .listen-audio");
+    var asrc=audio?(audio.getAttribute("src")||""):"";
+    return {
+      id:"pub:"+slug, slug:slug,
+      title:t?t.innerHTML.trim():"", subtitle:d?d.innerHTML.trim():"",
+      tag:tag?tag.textContent.trim():"Musings",
+      date:(ld.datePublished||"").slice(0,10)||todayISO(),
+      body:body.innerHTML.trim(),
+      metaDesc:meta?(meta.getAttribute("content")||""):"",
+      keywords:kw?(kw.getAttribute("content")||""):"",
+      liveAudio: asrc || "",
+      published:true, updated:Date.now()
+    };
+  }
+
+  async function reopen(slug, title){
+    var T=transport();
+    liveSay("Opening <b>"+esc(title||slug)+"</b>…");
+    var d=null, how="";
+    try{                                                        // 1 — exact source
+      var raw=await T.readFile(sourcePath(slug));
+      var j=JSON.parse(raw);
+      d={ id:"pub:"+slug, slug:j.slug||slug, title:j.title||"", subtitle:j.subtitle||"",
+          tag:j.tag||"Musings", date:j.date||todayISO(), body:j.body||"",
+          metaDesc:j.metaDesc||"", keywords:j.keywords||"",
+          liveAudio:j.audio?("../assets/writing/"+slug+"/listen."+(j.audio.ext||"mp3")):"",
+          published:true, updated:Date.now() };
+      how="from its saved source";
+    }catch(e){
+      if(e.message==="auth") throw e;
+      try{                                                      // 2 — parse the live page
+        var html=await T.readFile("writing/"+slug+".html");
+        d=parsePublished(html, slug);
+        how="rebuilt from the live page";
+      }catch(e2){
+        if(e2.message==="auth") throw e2;
+        liveSay("Couldn't open <b>"+esc(slug)+"</b>: "+esc(e2.message)); return;
+      }
+    }
+    collect(); persist();                                       // don't lose the current draft
+    state.drafts[d.id]=d; state.currentId=d.id; doc=d; persist();
+    renderDoc(); renderDrafts(); closeDrawer();
+    toast("Opened “"+(textOf(d.title)||slug)+"” — "+how);
+    if(d.liveAudio) setTimeout(function(){ toast("Narration already live — attach a new file to replace it"); }, 2200);
+  }
+
+  function renderLive(){
+    liveList.innerHTML="";
+    if(!liveCache) return;
+    if(!liveCache.length){ liveSay("No published notes found in the index."); return; }
+    liveCache.forEach(function(p){
+      var row=document.createElement("div");
+      row.className="draft"+(doc && doc.slug===p.slug?" active":"");
+      row.innerHTML='<div style="min-width:0;"><div class="t">'+esc(p.title||p.slug)+'</div>'+
+                    '<div class="m">'+esc(p.date)+' · '+esc(p.tag)+'</div></div>'+
+                    '<span class="m" style="flex:none;opacity:.6;">edit →</span>';
+      row.addEventListener("click",function(){
+        reopen(p.slug,p.title).catch(function(e){
+          if(e.message==="auth"){ toast("Session expired — sign in again"); showLock(); }
+          else liveSay("Couldn't open it: "+esc(e.message));
+        });
+      });
+      liveList.appendChild(row);
+    });
+    liveSay("Tap a note to pull it back in. <b>Publish live</b> overwrites it and keeps the same URL.");
+  }
+
+  async function loadLive(){
+    if(!conn || !conn.mode){ liveSay("Sign in first — Publish ▾ → the lock screen — then load."); showLock(); return; }
+    liveSay("Reading the notes index…");
+    try{ liveCache=await fetchLiveIndex(); renderLive(); }
+    catch(e){
+      if(e.message==="auth"){ liveSay("Session expired — sign in again."); showLock(); }
+      else liveSay("Couldn't read the index: "+esc(e.message));
+    }
+  }
+  if(liveRefresh) liveRefresh.addEventListener("click", loadLive);
 
   /* ─── Done modal ─── */
   var pubdone=$("#pubdone");
@@ -1688,11 +2025,14 @@
       var bytes=Uint8Array.from(atob(r.audioBase64), function(c){ return c.charCodeAt(0); });
       var f=new File([bytes], "studio-narration.mp3", { type:"audio/mpeg" });
       await audioPut(doc.id, { name:f.name, type:f.type, blob:f });
-      doc.audioName=f.name; doc.audioExt="mp3"; collect(); Vault.save(doc); stamp(); renderAudioState();
+      doc.audioName=f.name; doc.audioExt="mp3"; doc.liveAudio=""; collect(); Vault.save(doc); stamp(); renderAudioState();
       var mins=Math.floor((r.duration||0)/60), secs=Math.round((r.duration||0)%60);
-      var vc = r.mode==="cloned" ? "your cloned voice" : "a stock voice (stand-in — use Import my voice for your own)";
+      var vc = r.voice==="cloned" ? "<b>your cloned voice</b>"
+             : (r.fellBack ? "a stock voice — the cloned one failed: "+esc(r.fellBack)
+                           : "a stock voice (set up Cloned voice below to narrate as you)");
       stuSay("✓ Narration attached — "+mins+":"+String(secs).padStart(2,"0")+" from "+r.chunks+" chunks in "+vc+". Publish live ships it with the article.");
       toast("Narration attached ✓ "+mins+":"+String(secs).padStart(2,"0"));
+      clnLoad();
     });
   });
   /* Import my voice: the WAV chunks you export from the Sarvam studio (your cloned voice) →
@@ -1718,7 +2058,7 @@
         var bytes=Uint8Array.from(atob(r.audioBase64), function(c){ return c.charCodeAt(0); });
         var f=new File([bytes], "narration.mp3", { type:"audio/mpeg" });
         await audioPut(doc.id, { name:f.name, type:f.type, blob:f });
-        doc.audioName=f.name; doc.audioExt="mp3"; collect(); Vault.save(doc); stamp(); renderAudioState();
+        doc.audioName=f.name; doc.audioExt="mp3"; doc.liveAudio=""; collect(); Vault.save(doc); stamp(); renderAudioState();
         var mins=Math.floor((r.duration||0)/60), secs=Math.round((r.duration||0)%60);
         stuSay("✓ Your voice attached — "+mins+":"+String(secs).padStart(2,"0")+" from "+r.clips+" clip"+(r.clips>1?"s":"")+". Publish live ships it with the article.");
         toast("Your voice attached ✓ "+mins+":"+String(secs).padStart(2,"0"));
@@ -1727,7 +2067,8 @@
   }
   function stripForAudio(el){
     var c=el.cloneNode(true);
-    Array.prototype.forEach.call(c.querySelectorAll("figure, figcaption, .pull"), function(n){ n.remove(); }); // don't read captions/pulls twice
+    // don't read captions/pulls twice — and never interrupt a sentence with an aside
+    Array.prototype.forEach.call(c.querySelectorAll("figure, figcaption, .pull, .sn-ref, .sn-note"), function(n){ n.remove(); });
     return textOf(c.innerHTML);
   }
   var stuIngestBtn=$("#stuIngest");
@@ -1737,6 +2078,68 @@
       var r=await stuFetch("/api/ingest",{});
       stuSay("✓ Voice index rebuilt — "+r.docs+" pieces, "+r.chunks+" passages ("+r.embedMode+" embeddings). It gets sharper every time you publish and re-run this.");
       toast("Voice index rebuilt ✓");
+    });
+  });
+
+  /* ─── Cloned voice ────────────────────────────────────────────────
+     Sarvam has no server credential for cloned voices, so the studio borrows
+     the bearer token from your logged-in browser session instead. It's stored
+     on your box, tested the moment you save it, and re-testable any time —
+     because a browser token will expire and you want to find out here rather
+     than three paragraphs into a narration. */
+  var clnState=$("#clnState"), clnToken=$("#clnToken"), clnVoice=$("#clnVoice");
+  function clnSay(html){ if(clnState) clnState.innerHTML=html; }
+  function clnRender(s){
+    if(!s){ clnSay("Sign in to the studio above to manage the cloned voice."); return; }
+    if(clnVoice && !clnVoice.value) clnVoice.value=s.voiceId||"";
+    if(s.mode==="cloned" && s.hasToken){
+      clnSay("● <b>Cloned voice is live.</b> Narrate now speaks as you"+
+             (s.lastOk?" — last confirmed "+esc(new Date(s.lastOk).toLocaleString()):"")+"."+
+             (s.lastError?" Last failure: "+esc(s.lastError):""));
+    } else if(s.hasToken){
+      clnSay("○ Token saved but not in use"+(s.lastError?" — "+esc(s.lastError):"")+". Hit <b>Test access</b>.");
+    } else {
+      clnSay("○ Narrating with the stock speaker <b>"+esc(s.stockSpeaker)+"</b>. No cloned credential saved yet.");
+    }
+  }
+  function clnProbeReport(pr){
+    if(pr.ok) return "✓ Reached your cloned voice via <b>"+esc(pr.route)+"</b>"+(pr.auth?" ("+esc(pr.auth)+" auth)":"")+". Narration will use it from now on.";
+    var lines=(pr.tried||[]).map(function(t){
+      return "· "+esc(t.route)+(t.auth?" ["+esc(t.auth)+"]":"")+" → "+(t.status||"—")+" "+esc(String(t.detail||"").slice(0,110));
+    }).join("<br>");
+    return "✕ Still no route to the cloned voice.<br>"+lines;
+  }
+  async function clnLoad(){
+    if(!conn.studio || !conn.studio.session){ clnSay("Sign in to the studio above, then reopen this panel."); return; }
+    try{ clnRender(await stuFetch("/api/sarvam")); }
+    catch(e){ clnSay("Couldn't read studio voice status: "+esc(e.message)); }
+  }
+  var clnSaveBtn=$("#clnSave"), clnProbeBtn=$("#clnProbe"), clnClearBtn=$("#clnClear");
+  if(clnSaveBtn) clnSaveBtn.addEventListener("click", function(){
+    stuRun("Testing cloned voice…", async function(){
+      var tok=(clnToken.value||"").trim(), vid=(clnVoice.value||"").trim();
+      if(!tok){ clnSay("Paste the Authorization header value from the studio request first."); return; }
+      clnSay("Saving and testing…");
+      var r=await stuFetch("/api/sarvam",{ token:tok, voiceId:vid, mode:"cloned" });
+      clnToken.value="";
+      clnSay(clnProbeReport(r.probe||{ok:false,tried:[]}));
+      clnRender(r.status);
+      toast(r.probe&&r.probe.ok ? "Cloned voice live ✓" : "Cloned voice still blocked");
+    });
+  });
+  if(clnProbeBtn) clnProbeBtn.addEventListener("click", function(){
+    stuRun("Probing Sarvam…", async function(){
+      clnSay("Trying every route to your cloned voice…");
+      var body={}; if((clnToken.value||"").trim()) body.token=clnToken.value.trim();
+      if((clnVoice.value||"").trim()) body.voiceId=clnVoice.value.trim();
+      var r=await stuFetch("/api/sarvam/probe", body);
+      clnSay(clnProbeReport(r)); clnRender(r.status);
+    });
+  });
+  if(clnClearBtn) clnClearBtn.addEventListener("click", function(){
+    stuRun("Switching to stock…", async function(){
+      var r=await stuFetch("/api/sarvam",{ clear:true, probe:false });
+      clnToken.value=""; clnRender(r.status); toast("Back to the stock speaker");
     });
   });
 
@@ -1811,6 +2214,44 @@
 '    .listen-track{ height:6px; background:color-mix(in srgb, var(--text) 12%, transparent); cursor:pointer; position:relative; }\n'+
 '    .listen-fill{ position:absolute; left:0; top:0; bottom:0; width:0; background:var(--accent); }\n'+
 '    @media (max-width:720px){ .listen{ margin-bottom:36px; } .listen-kicker{ font-size:10px; } }\n'+
+'    /* ── Footnotes: sidenotes in the right margin on wide screens, tap-to-open inline\n'+
+'       on narrow. Echoes the site-wide .fn-ref language (accent superscript digit,\n'+
+'       dotted printed-citation underline) without reusing that class — the homepage\n'+
+'       system is keyed to fixed exhibit numbers; these are per-article and counted. ── */\n'+
+'    .post-body { counter-reset: sidenote; }\n'+
+'    .sn-ref { counter-increment: sidenote; display:inline-block; font-family:var(--font-mono); font-size:0.6em; font-weight:700; line-height:1; vertical-align:super; color:var(--accent-2); cursor:pointer; user-select:none; padding:0 1px; text-decoration:underline dotted currentColor; text-decoration-thickness:1px; text-underline-offset:2px; transition:color .18s, background .18s, transform .18s; }\n'+
+'    .sn-ref::before { content:"["; opacity:0.5; margin-right:1px; }\n'+
+'    .sn-ref::after  { content: counter(sidenote) "]"; }\n'+
+'    .sn-ref:hover, .sn-ref[aria-expanded="true"] { color:var(--text); background:color-mix(in oklab, var(--accent) 45%, transparent); transform:translateY(-1px); }\n'+
+'    .sn-ref:focus-visible { outline:2px solid currentColor; outline-offset:2px; }\n'+
+'    .sn-note { display:none; font-family:var(--font-mono); font-size:12.5px; line-height:1.6; color:var(--muted); }\n'+
+'    .sn-note::before { content: counter(sidenote); font-weight:700; color:var(--accent-2); font-size:11px; margin-right:7px; vertical-align:1px; }\n'+
+'    .sn-note a { color:inherit; border-bottom:1px solid var(--line); }\n'+
+'    .sn-note em { font-style:italic; } .sn-note strong { font-weight:700; color:var(--text); }\n'+
+'    /* narrow / default: the marker toggles the note open right under the line */\n'+
+'    .sn-note.is-open { display:block; float:none; width:auto; margin:14px 0; padding:12px 14px; background:color-mix(in srgb, var(--accent) 10%, transparent); border-left:3px solid var(--accent-2); }\n'+
+'    /* wide: notes live permanently in the right margin, no clicking */\n'+
+'    @media (min-width:1200px){\n'+
+'      .post.has-sidenotes { max-width:1100px; }\n'+
+'      .post.has-sidenotes .post-header, .post.has-sidenotes .listen, .post.has-sidenotes .post-footer, .post.has-sidenotes .post-body > * { max-width:760px; }\n'+
+'      .post.has-sidenotes .post-body figure.align-wide { max-width:none; width:100%; margin-left:0; }\n'+
+'      /* the note floats OUTSIDE the 760px text column — the negative margin is what keeps\n'+
+'         it from stealing line width from the paragraph it belongs to */\n'+
+'      .post.has-sidenotes .sn-note { display:block; float:right; clear:right; width:280px; margin:4px -320px 22px 0; padding:0; background:none; border-left:0; }\n'+
+'      /* the note is already visible — hovering the marker just links the two */\n'+
+'      .post.has-sidenotes .sn-ref { cursor:default; }\n'+
+'      .post.has-sidenotes .sn-ref:hover { transform:none; }\n'+
+'      .post.has-sidenotes .post-notes { display:none; }\n'+
+'    }\n'+
+'    /* end-of-article list — the fallback index, and what prints */\n'+
+'    .post-notes { margin-top:64px; padding-top:26px; border-top:2px solid var(--text); }\n'+
+'    .post-notes h2 { font-family:var(--font-mono); font-size:12px; letter-spacing:0.16em; text-transform:uppercase; color:var(--muted); margin:0 0 18px; }\n'+
+'    .post-notes ol { list-style:none; padding:0; margin:0; counter-reset:pn; }\n'+
+'    .post-notes li { counter-increment:pn; position:relative; padding:10px 0 10px 34px; border-top:1px dashed var(--line); font-family:var(--font-mono); font-size:13px; line-height:1.55; color:var(--muted); }\n'+
+'    .post-notes li:first-child { border-top:0; }\n'+
+'    .post-notes li::before { content:counter(pn); position:absolute; left:0; top:11px; font-weight:700; font-size:10px; color:var(--text); background:var(--accent); border:1.5px solid var(--text); border-radius:2px; padding:1px 4px; }\n'+
+'    .post-notes .fn-back { margin-left:6px; color:var(--text); border-bottom:1px solid var(--line); }\n'+
+'    @media print { .sn-note { display:none !important; } .post-notes { display:block !important; } .sn-ref { background:none; border:0; padding:0; } }\n'+
 '  </style>\n'+
 '  <link rel="icon" href="../favicon.ico" sizes="48x48">\n'+
 '  <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">\n'+
@@ -1879,6 +2320,57 @@
 '    a.addEventListener("ended",function(){ L.classList.remove("is-playing"); fill.style.width="0%"; cur.textContent="0:00"; });\n'+
 '    play.addEventListener("click",function(){ if(a.paused) a.play(); else a.pause(); });\n'+
 '    track.addEventListener("click",function(e){ var r=track.getBoundingClientRect(); if(a.duration) a.currentTime=Math.min(a.duration,Math.max(0,((e.clientX-r.left)/r.width)*a.duration)); });\n'+
+'  })();<\/script>\n'+
+'  <script>(function(){\n'+
+'    /* Footnotes. The <span class="sn-note"> right after each marker is the only copy of\n'+
+'       the text — on wide screens CSS floats it into the right margin, on narrow the marker\n'+
+'       toggles it open inline. The end-of-article list is built from those same nodes, so\n'+
+'       nothing is duplicated in the source and numbering is pure CSS counters. */\n'+
+'    var post=document.querySelector(".post"), body=document.querySelector(".post-body");\n'+
+'    if(!post||!body) return;\n'+
+'    var notes=body.querySelectorAll(".sn-note");\n'+
+'    if(!notes.length) return;\n'+
+'    post.classList.add("has-sidenotes");\n'+
+'    Array.prototype.forEach.call(notes,function(sn,i){\n'+
+'      var n=i+1;\n'+
+'      sn.id="sn-"+n; sn.setAttribute("role","note");\n'+
+'      var ref=sn.previousElementSibling;\n'+
+'      if(ref&&ref.classList.contains("sn-ref")){\n'+
+'        ref.id="fnref-"+n;\n'+
+'        ref.setAttribute("role","button"); ref.setAttribute("tabindex","0");\n'+
+'        ref.setAttribute("aria-controls","sn-"+n); ref.setAttribute("aria-expanded","false");\n'+
+'        ref.setAttribute("aria-label","Footnote "+n);\n'+
+'      }\n'+
+'    });\n'+
+'    function toggle(ref){\n'+
+'      var sn=ref.nextElementSibling; if(!sn||!sn.classList.contains("sn-note")) return;\n'+
+'      var open=sn.classList.toggle("is-open");\n'+
+'      ref.setAttribute("aria-expanded",open?"true":"false");\n'+
+'    }\n'+
+'    body.addEventListener("click",function(e){\n'+
+'      var ref=e.target.closest(".sn-ref"); if(!ref) return;\n'+
+'      if(window.matchMedia("(min-width:1200px)").matches) return;   /* margin notes already visible */\n'+
+'      e.preventDefault(); toggle(ref);\n'+
+'    });\n'+
+'    body.addEventListener("keydown",function(e){\n'+
+'      var ref=e.target.closest&&e.target.closest(".sn-ref"); if(!ref) return;\n'+
+'      if(e.key===" "||e.key==="Enter"){ e.preventDefault(); toggle(ref); }\n'+
+'    });\n'+
+'    /* End-of-article index, cloned from the sn-notes */\n'+
+'    var sec=document.createElement("section"); sec.className="post-notes";\n'+
+'    var h=document.createElement("h2"); h.textContent="Notes"; sec.appendChild(h);\n'+
+'    var ol=document.createElement("ol");\n'+
+'    Array.prototype.forEach.call(notes,function(sn,i){\n'+
+'      var li=document.createElement("li");\n'+
+'      li.innerHTML=sn.innerHTML;\n'+
+'      var back=document.createElement("a");\n'+
+'      back.className="fn-back"; back.href="#fnref-"+(i+1); back.textContent="\\u21a9";\n'+
+'      back.setAttribute("aria-label","Back to reference "+(i+1));\n'+
+'      li.appendChild(back); ol.appendChild(li);\n'+
+'    });\n'+
+'    sec.appendChild(ol);\n'+
+'    var ft=post.querySelector(".post-footer");\n'+
+'    if(ft) post.insertBefore(sec,ft); else post.appendChild(sec);\n'+
 '  })();<\/script>\n'+
 '</body>\n'+
 '</html>\n';
