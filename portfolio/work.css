@@ -210,3 +210,46 @@ body.work-page footer{ margin-top:auto; }
   .wk-grid, .wk-grid--wide{ grid-template-columns:1fr; }
   .wk-lb__frame{ height:82vh; }
 }
+
+/* ── "the zines" — the Design folder keeps losing to autocorrect.
+   work.js types "designs", spellcheck squiggles it, a suggestion chip
+   pops, the word gets selected and swapped for "the zines" — forever. ── */
+.ds-type{ position:relative; display:inline-block; min-height:1.1em; }
+.ds-word{ white-space:pre; }
+.ds-word.is-misspelled{
+  text-decoration:underline; text-decoration-style:wavy;
+  text-decoration-color:#ff3b30; text-decoration-thickness:2px;
+  text-underline-offset:5px;
+}
+.ds-word.is-selected{ background:#b4d5fe; }
+.ds-word.is-swapped{ display:inline-block; animation:ds-pop .28s cubic-bezier(.34,1.56,.64,1); }
+@keyframes ds-pop{ 0%{transform:scale(.9)} 60%{transform:scale(1.05)} 100%{transform:scale(1)} }
+
+.ds-caret{
+  display:inline-block; width:2px; height:.86em; margin-left:2px;
+  background:var(--wk-orange); vertical-align:-.06em;
+}
+.ds-caret.is-idle{ animation:ds-blink 1.06s steps(1,end) infinite; }
+@keyframes ds-blink{ 0%,55%{opacity:1} 56%,100%{opacity:0} }
+
+.ds-chip{
+  position:absolute; z-index:5; left:50%; bottom:calc(100% + 9px);
+  transform:translateX(-50%) scale(.6); transform-origin:50% 100%;
+  opacity:0; pointer-events:none;
+  font-family:var(--font-mono); font-style:normal; font-weight:400;
+  font-size:11px; letter-spacing:.08em; white-space:nowrap;
+  background:#fff; color:var(--wk-ink); border:2px solid var(--wk-ink);
+  box-shadow:3px 3px 0 var(--wk-ink); padding:5px 9px;
+  transition:transform .18s cubic-bezier(.34,1.56,.64,1), opacity .15s;
+}
+.ds-chip b{ font-weight:700; color:var(--wk-orange); }
+.ds-chip::after{
+  content:""; position:absolute; left:50%; top:100%;
+  transform:translateX(-50%); border:5px solid transparent;
+  border-top-color:var(--wk-ink);
+}
+.ds-chip.is-on{ opacity:1; transform:translateX(-50%) scale(1); }
+
+@media (prefers-reduced-motion:reduce){
+  .ds-caret,.ds-chip{ display:none !important; }
+}
