@@ -649,6 +649,7 @@
       <li><kbd>⌘ ⇧ F</kbd> footnote — lands in the margin, not the sentence</li>
       <li><kbd>## </kbd> heading · <kbd>&gt; </kbd> quote · <kbd>- </kbd> list</li>
       <li><kbd>---</kbd> + enter → divider</li>
+      <li>Paste raw markdown — <kbd>**bold**</kbd>, <kbd>&gt;</kbd> quotes and <kbd>[^1]</kbd> footnotes convert on the way in</li>
       <li>Select text → formatting bar · <kbd>+</kbd> on empty line → insert</li>
       <li><kbd>⌘ S</kbd> save · everything autosaves</li>
     </ul>
@@ -1060,7 +1061,11 @@
     // doesn't leak in. Keep structure + bold + links; drop the rest.
     var cd=e.clipboardData; if(!cd) return;
     var html=cd.getData("text/html"), text=cd.getData("text/plain");
-    if(html){ e.preventDefault(); document.execCommand("insertHTML", false, sanitizePaste(html)); scheduleSave(); updatePlaceholders(); updateMetric(); }
+    // Raw markdown (a pasted .md file, a source-view copy) beats whatever HTML shell
+    // rode along with it — convert it properly instead of letting each hard-wrapped
+    // line become its own paragraph and footnote definitions vanish.
+    if(text && looksLikeMarkdown(text)){ e.preventDefault(); document.execCommand("insertHTML", false, mdToHTML(text)); scheduleSave(); updatePlaceholders(); updateMetric(); }
+    else if(html){ e.preventDefault(); document.execCommand("insertHTML", false, sanitizePaste(html)); scheduleSave(); updatePlaceholders(); updateMetric(); }
     else if(text){ e.preventDefault(); document.execCommand("insertText", false, text); scheduleSave(); }
   });
   // Keep structure + genuine bold + links; drop italics, spans, fonts and
@@ -1096,6 +1101,93 @@
       });
     })(tmp);
     return tmp.innerHTML.replace(/<p>\s*<\/p>/g,"");
+  }
+  /* ─── Markdown paste ───────────────────────────────────────────────
+     The failure this guards against: pasting a .md draft used to leave every
+     hard-wrapped line as its own <p>, every "> " line as its own blockquote,
+     and [^n] footnotes as bare markers whose definitions were lost — which
+     then published broken. Convert properly: soft wraps join, quotes merge,
+     [^n] + "[^n]: text" become the site's <sup class="sn-ref"> + <span
+     class="sn-note"> pair. House style: bold and links survive; italics and
+     backticks are dropped, same as sanitizePaste. */
+  function looksLikeMarkdown(t){
+    t=String(t||"");
+    return /\[\^[^\]\s]+\]/.test(t)                                   // footnote ref or definition
+        || /^\s{0,3}#{1,6}\s+\S/m.test(t)                             // heading
+        || /^\s{0,3}>\s?\S/m.test(t)                                  // quote
+        || /\*\*[^*\n]+\*\*/.test(t)                                  // bold
+        || /!?\[[^\]\n]+\]\([^)\n]+\)/.test(t)                        // link / image
+        || /^\s{0,3}([-*+]|\d+[.)])\s+\S/m.test(t) && /\n/.test(t);   // list (multiline only)
+  }
+  function mdToHTML(md){
+    md=String(md).replace(/\r\n?/g,"\n");
+    // 1. Lift footnote definitions ("[^id]: text", indented lines continue it).
+    var defs={}, order=[], curDef=null, kept=[];
+    md.split("\n").forEach(function(L){
+      var m=L.match(/^\s{0,3}\[\^([^\]\s]+)\]:\s?(.*)$/);
+      if(m){ curDef=m[1]; if(!(curDef in defs)) order.push(curDef); defs[curDef]=(m[2]||"").trim(); return; }
+      if(curDef!=null && /^\s+\S/.test(L)){ defs[curDef]+=" "+L.trim(); return; }
+      curDef=null; kept.push(L);
+    });
+    var used={};
+    function inlineBase(s){
+      s=esc(s);
+      s=s.replace(/\[([^\]\n]+)\]\(([^)\s]+)(?:\s+"[^"]*")?\)/g,'<a href="$2">$1</a>');
+      s=s.replace(/\*\*([^*\n]+)\*\*/g,"<strong>$1</strong>").replace(/__([^_\n]+)__/g,"<strong>$1</strong>");
+      s=s.replace(/(^|[^*])\*([^*\n]+)\*(?!\*)/g,"$1$2").replace(/(^|[^_\w])_([^_\n]+)_(?!\w)/g,"$1$2"); // italics → plain
+      s=s.replace(/`([^`\n]+)`/g,"$1");
+      return s;
+    }
+    function inline(s){
+      var fig="";
+      s=s.replace(/!\[([^\]\n]*)\]\(([^)\s]+)(?:\s+"[^"]*")?\)/g,function(_m,alt,src){
+        fig+='<figure><img src="'+esc(src)+'" alt="'+esc(alt)+'"><figcaption>'+(esc(alt)||"Caption")+"</figcaption></figure>"; return "";
+      });
+      s=inlineBase(s);
+      s=s.replace(/\[\^([^\]\s]+)\]/g,function(_m,id){
+        used[id]=1;
+        return '<sup class="sn-ref" contenteditable="false"></sup><span class="sn-note">'+(defs[id]!=null?inlineBase(defs[id]):"")+"</span>";
+      });
+      return fig+s;
+    }
+    // 2. Blocks split on blank lines; soft-wrapped lines inside a block join with a space.
+    var out=[];
+    kept.join("\n").split(/\n[ \t]*\n+/).forEach(function(b){
+      if(!b.trim()) return;
+      var ls=b.split("\n").filter(function(l){ return l.trim(); });
+      if(/^\s{0,3}(-{3,}|\*{3,}|_{3,})\s*$/.test(b.trim())){ out.push("<hr>"); return; }
+      var hm=ls[0].match(/^\s{0,3}#{1,6}\s+(.+?)\s*#*\s*$/);
+      if(hm){ out.push("<h2>"+inline(hm[1])+"</h2>"); ls=ls.slice(1); if(!ls.length) return; }
+      if(ls.every(function(l){ return /^\s{0,3}>/.test(l); })){
+        var inner=ls.map(function(l){ return l.replace(/^\s{0,3}>\s?/,""); });
+        var paras=[], run=[];
+        inner.forEach(function(l){ if(!l.trim()){ if(run.length){ paras.push(run.join(" ")); run=[]; } } else run.push(l.trim()); });
+        if(run.length) paras.push(run.join(" "));
+        out.push("<blockquote>"+paras.map(function(p){ return "<p>"+inline(p)+"</p>"; }).join("")+"</blockquote>");
+        return;
+      }
+      if(ls.every(function(l){ return /^\s{0,3}[-*+]\s+\S/.test(l); })){
+        out.push("<ul>"+ls.map(function(l){ return "<li>"+inline(l.replace(/^\s{0,3}[-*+]\s+/,""))+"</li>"; }).join("")+"</ul>"); return;
+      }
+      if(ls.every(function(l){ return /^\s{0,3}\d+[.)]\s+\S/.test(l); })){
+        out.push("<ol>"+ls.map(function(l){ return "<li>"+inline(l.replace(/^\s{0,3}\d+[.)]\s+/,""))+"</li>"; }).join("")+"</ol>"); return;
+      }
+      out.push("<p>"+inline(ls.map(function(l){ return l.trim(); }).join(" "))+"</p>");
+    });
+    // 3. Quotes the writer separated with real blank lines are one thought — merge neighbours.
+    var merged=[];
+    out.forEach(function(h){
+      var last=merged[merged.length-1];
+      if(last && /^<blockquote>/.test(last) && /^<blockquote>/.test(h))
+        merged[merged.length-1]=last.slice(0,-"</blockquote>".length)+h.slice("<blockquote>".length);
+      else merged.push(h);
+    });
+    // 4. A definition nobody referenced is still his writing — keep it, visibly.
+    order.forEach(function(id){
+      if(used[id]) return;
+      merged.push('<p><sup class="sn-ref" contenteditable="false"></sup><span class="sn-note">'+inlineBase(defs[id])+"</span></p>");
+    });
+    return merged.join("").replace(/<p>\s*<\/p>/g,"");
   }
   bodyEl.addEventListener("dragover", function(e){ if(e.dataTransfer && Array.prototype.some.call(e.dataTransfer.items||[], function(it){ return it.kind==="file"; })) e.preventDefault(); });
   bodyEl.addEventListener("drop", function(e){
@@ -1268,6 +1360,16 @@
   // keep title/subtitle single-ish: block Enter making new blocks in title
   titleEl.addEventListener("keydown",function(e){ if(e.key==="Enter"){ e.preventDefault(); subtitleEl.focus(); } });
   subtitleEl.addEventListener("keydown",function(e){ if(e.key==="Enter"){ e.preventDefault(); bodyEl.focus(); ensureBodyStart(); } });
+  // Title and subtitle are single inline lines — paste lands as plain text, never blocks.
+  [titleEl,subtitleEl].forEach(function(el){
+    el.addEventListener("paste",function(e){
+      var cd=e.clipboardData; if(!cd) return;
+      e.preventDefault();
+      var t=(cd.getData("text/plain")||textOf(cd.getData("text/html"))||"").replace(/\s+/g," ").trim();
+      if(t) document.execCommand("insertText",false,t);
+      scheduleSave();
+    });
+  });
   function ensureBodyStart(){ if(!bodyEl.textContent.trim() && !bodyEl.querySelector("p")){ bodyEl.innerHTML="<p><br></p>"; placeCaret(bodyEl.querySelector("p")); } }
 
   /* ─── Drawer (details + notebook) ─── */
@@ -1490,6 +1592,12 @@
       var ref=sn.previousElementSibling; sn.remove();
       if(ref && ref.classList && ref.classList.contains("sn-ref")) ref.remove();
     });
+    // …and orphan markers whose note is gone (deleted note, half-pasted pair).
+    // A bare ref publishes as a numbered marker pointing at nothing.
+    Array.prototype.forEach.call(c.querySelectorAll(".sn-ref"),function(ref){
+      var n=ref.nextElementSibling;
+      if(!(n && n.classList && n.classList.contains("sn-note"))) ref.remove();
+    });
     Array.prototype.forEach.call(c.querySelectorAll("p"),function(p){ if(!p.textContent.trim() && !p.querySelector("img,br,.sn-note")) p.remove(); else if(p.innerHTML==="<br>"||p.innerHTML==="") p.remove(); });
     var html=c.innerHTML
       .replace(/<b>/g,"<strong>").replace(/<\/b>/g,"</strong>")
@@ -1504,7 +1612,12 @@
                       '<sup class="sn-ref"></sup><span class="sn-note">');
     return html;
   }
-  function titleHTML(){ var h=titleEl.innerHTML.trim(); return h|| "Untitled"; }
+  function titleHTML(){
+    // The title is an <h1> in the template — block tags pasted into the field
+    // (a stray <p> from rich paste) must never nest inside it.
+    var h=titleEl.innerHTML.replace(/<\/?(p|div|h[1-6]|blockquote|br)[^>]*>/gi," ").replace(/\s+/g," ").trim();
+    return h|| "Untitled";
+  }
   function buildNote(bodyOverride){
     var titlePlain=textOf(titleEl.innerHTML)||"Untitled";
     var desc=textOf(subtitleEl.innerHTML)||"";
