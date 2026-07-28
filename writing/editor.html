@@ -2113,8 +2113,20 @@
   if(stuPolishBtn) stuPolishBtn.addEventListener("click", function(){
     stuRun("Polishing…", async function(){
       collect();
+      // Inline data-URL images are megabytes of base64. Shipping them to the model
+      // melts its context, the echoed body truncates, and polish silently degrades
+      // to the deterministic cleaner (placeholder captions, no pull-quotes, junk
+      // keywords). Ride them through as [[IMGn]] tokens, same trick as footnotes.
+      var pimgs=[];
+      var liftedBody=doc.body.replace(/src="data:image\/[^"]+"/gi,function(m){ pimgs.push(m); return 'src="[[IMG'+pimgs.length+']]"'; });
       stuSay("Polishing — retrieving your voice, editing…");
-      var r=await stuFetch("/api/polish",{ title:textOf(titleEl.innerHTML)||"Untitled", subtitleHTML:doc.subtitle, bodyHTML:doc.body, tag:doc.tag });
+      var r=await stuFetch("/api/polish",{ title:textOf(titleEl.innerHTML)||"Untitled", subtitleHTML:doc.subtitle, bodyHTML:liftedBody, tag:doc.tag });
+      if(r.bodyHTML && pimgs.length){
+        var pseen={};
+        r.bodyHTML=String(r.bodyHTML).replace(/src="\[\[IMG(\d+)\]\]"/g,function(_m,n){ var i=parseInt(n,10)-1; if(pimgs[i]){ pseen[i]=1; return pimgs[i]; } return 'src=""'; });
+        // an image the model dropped is still his image — re-append, never lose it
+        pimgs.forEach(function(m,i){ if(!pseen[i]) r.bodyHTML+='<figure><img '+m+' alt=""><figcaption>Caption</figcaption></figure>'; });
+      }
       if(r.title) titleEl.innerHTML=esc(r.title);
       if(r.subtitleHTML!=null) subtitleEl.innerHTML=r.subtitleHTML;
       if(r.bodyHTML) bodyEl.innerHTML=r.bodyHTML;
