@@ -1598,6 +1598,20 @@
       var n=ref.nextElementSibling;
       if(!(n && n.classList && n.classList.contains("sn-note"))) ref.remove();
     });
+    // The mirror case: a note that lost its marker (blockquote converted by hand,
+    // ref deleted while editing). A bare note is invisible on phones and numbers
+    // itself wrongly — repair with a fresh marker, never delete the writing.
+    Array.prototype.forEach.call(c.querySelectorAll(".sn-note"),function(sn){
+      var p=sn.previousElementSibling;
+      if(!(p && p.classList && p.classList.contains("sn-ref"))){
+        var ref=document.createElement("sup"); ref.className="sn-ref";
+        sn.parentNode.insertBefore(ref,sn);
+      }
+    });
+    // Notes hold plain inline prose: unwrap stray inner spans from pasted content.
+    Array.prototype.forEach.call(c.querySelectorAll(".sn-note span:not([class])"),function(s){
+      while(s.firstChild) s.parentNode.insertBefore(s.firstChild,s); s.remove();
+    });
     Array.prototype.forEach.call(c.querySelectorAll("p"),function(p){ if(!p.textContent.trim() && !p.querySelector("img,br,.sn-note")) p.remove(); else if(p.innerHTML==="<br>"||p.innerHTML==="") p.remove(); });
     var html=c.innerHTML
       .replace(/<b>/g,"<strong>").replace(/<\/b>/g,"</strong>")
