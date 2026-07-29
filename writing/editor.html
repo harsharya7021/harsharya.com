@@ -617,6 +617,14 @@
       <div class="hint" id="liveStatus">Pull any live note back into the editor — fix a line, swap an image, add footnotes — then <b>Publish live</b> to overwrite it. Needs you signed in (Publish key or your server).</div>
     </div>
     <div class="sec">
+      <label class="lab">Time machine — previous versions</label>
+      <div class="drafts" id="vhList"></div>
+      <div class="tagrow" style="margin-top:10px;">
+        <button type="button" id="vhLoad">↻ Versions of this note</button>
+      </div>
+      <div class="hint" id="vhStatus">Every publish is kept in git forever. Load the trail for the note you're editing, <b>view</b> any version exactly as it looked, or <b>restore</b> one as a draft — the site doesn't change until you Publish live. No sign-in needed.</div>
+    </div>
+    <div class="sec">
       <label class="lab">Notebook — local drafts</label>
       <div class="drafts" id="draftsList"></div>
       <button class="btn ghost" id="newDraft" style="margin-top:14px;">+ New note</button>
@@ -2014,6 +2022,85 @@
     }
   }
   if(liveRefresh) liveRefresh.addEventListener("click", loadLive);
+
+  /* ─── Time machine: every publish is a git commit — list, view, restore ───
+     Reads straight from the public GitHub API (no sign-in): commit trail for
+     writing/<slug>.html, raw file at any sha. Viewing injects a <base> to the
+     live site so the old page renders with real styles; restoring feeds the
+     old HTML through the same parsePublished() the reopen flow uses, into a
+     separate draft — the live page changes only on the next Publish live. */
+  var vhList=$("#vhList"), vhStatus=$("#vhStatus"), vhLoad=$("#vhLoad");
+  function vhSay(m){ if(vhStatus) vhStatus.innerHTML=m; }
+  function vhWhen(iso){ var d=new Date(iso);
+    return d.toLocaleDateString(undefined,{day:"numeric",month:"short"})+" · "+d.toLocaleTimeString(undefined,{hour:"2-digit",minute:"2-digit"}); }
+  async function vhFetchVersions(slug){
+    var h={ "Accept":"application/vnd.github+json" };
+    if(conn && conn.ghToken) h["Authorization"]="Bearer "+conn.ghToken;
+    var r=await fetch("https://api.github.com/repos/"+CONFIG.owner+"/"+CONFIG.repo+
+      "/commits?path="+encodeURIComponent("writing/"+slug+".html")+"&sha="+CONFIG.branch+"&per_page=50",{ headers:h });
+    if(r.status===403) throw new Error("GitHub rate limit — connect your GitHub token (Publish ▾) or try again in a bit");
+    if(!r.ok) throw new Error("GitHub said "+r.status);
+    return r.json();
+  }
+  async function vhFileAt(sha, slug){
+    var r=await fetch("https://raw.githubusercontent.com/"+CONFIG.owner+"/"+CONFIG.repo+"/"+sha+"/writing/"+slug+".html");
+    if(!r.ok) throw new Error("couldn't read that version (HTTP "+r.status+")");
+    return r.text();
+  }
+  async function vhRestore(sha, when, slug){
+    var html=await vhFileAt(sha, slug);
+    var d=parsePublished(html, slug);
+    d.id="ver:"+slug+":"+sha.slice(0,7);
+    d.published=false;                                  // a draft until published again
+    collect(); persist();                               // never lose the current draft
+    state.drafts[d.id]=d; state.currentId=d.id; doc=d; persist();
+    renderDoc(); renderDrafts();
+    toast("Restored the "+when+" version — review, then Publish live");
+    vhSay("Restored <b>"+esc(when)+"</b> as a draft. The live page is untouched until you <b>Publish live</b>.");
+  }
+  async function vhRender(){
+    var slug=(doc && doc.slug)||slugify(textOf(titleEl.innerHTML));
+    if(!slug || slug==="untitled"){ vhSay("Open or title a note first — versions are per note."); return; }
+    vhSay("Reading the git trail for <b>"+esc(slug)+"</b>…");
+    vhList.innerHTML="";
+    var commits=await vhFetchVersions(slug);
+    if(!commits.length){ vhSay("No published versions of <b>"+esc(slug)+"</b> yet — publish once and the trail starts."); return; }
+    commits.forEach(function(c,i){
+      var when=vhWhen((c.commit.author&&c.commit.author.date)||(c.commit.committer&&c.commit.committer.date));
+      var msg=(c.commit.message||"").split("\n")[0].replace(/^Publish note:\s*/i,"").slice(0,80);
+      var row=document.createElement("div");
+      row.className="draft"; row.style.cursor="default";
+      row.innerHTML='<div style="min-width:0;"><div class="t">'+(i===0?'<span style="color:var(--accent-2);">●</span> ':'')+esc(when)+(i===0?' — live now':'')+'</div>'+
+        '<div class="m">'+esc(msg)+' · '+c.sha.slice(0,7)+'</div></div>'+
+        '<span style="flex:none;display:flex;gap:12px;">'+
+        '<button type="button" class="vh-view" data-sha="'+c.sha+'" style="border:0;background:transparent;color:var(--muted);cursor:pointer;font-family:var(--font-mono);font-size:11px;letter-spacing:0.08em;">view ↗</button>'+
+        (i===0?'':'<button type="button" class="vh-restore" data-sha="'+c.sha+'" data-when="'+esc(when)+'" style="border:0;background:transparent;color:var(--text);cursor:pointer;font-family:var(--font-mono);font-size:11px;letter-spacing:0.08em;text-decoration:underline;">restore</button>')+
+        '</span>';
+      vhList.appendChild(row);
+    });
+    vhSay("<b>view</b> opens a version exactly as it looked · <b>restore</b> loads it as a draft — live only changes when you Publish.");
+  }
+  if(vhList) vhList.addEventListener("click", async function(e){
+    var v=e.target.closest(".vh-view"), rb=e.target.closest(".vh-restore");
+    if(!v && !rb) return;
+    var slug=(doc && doc.slug)||"";
+    try{
+      if(v){
+        var w=window.open("about:blank","_blank");     // open in the click gesture, fill after fetch
+        vhSay("Fetching that version…");
+        var html=await vhFileAt(v.dataset.sha, slug);
+        html=html.replace(/<head([^>]*)>/i,'<head$1><base href="'+CONFIG.site+'/writing/">');
+        var u=URL.createObjectURL(new Blob([html],{type:"text/html"}));
+        if(w) w.location=u; else window.open(u,"_blank");
+        setTimeout(function(){ URL.revokeObjectURL(u); },60000);
+        vhSay("Opened in a new tab — that's exactly how it looked.");
+      } else {
+        vhSay("Restoring…");
+        await vhRestore(rb.dataset.sha, rb.dataset.when, slug);
+      }
+    }catch(err){ vhSay("✕ "+esc(err.message)); }
+  });
+  if(vhLoad) vhLoad.addEventListener("click", function(){ vhRender().catch(function(e){ vhSay("✕ "+esc(e.message)); }); });
 
   /* ─── Done modal ─── */
   var pubdone=$("#pubdone");
