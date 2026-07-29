@@ -2106,7 +2106,13 @@
     if(stuBusy){ toast("Studio is busy…"); return; }
     stuBusy=true; setPub(label);
     try{ await fn(); }
-    catch(e){ toast("Studio: "+e.message); stuSay("✕ "+e.message); }
+    catch(e){
+      var m=(e&&e.message)||String(e);
+      // A dropped connection surfaces as a bare "Failed to fetch" — translate it.
+      if(/failed to fetch|networkerror|load failed/i.test(m))
+        m="The connection to the studio dropped mid-request — usually the upload was bigger than the box accepts (redeploy the studio for the 400 MB cap), or the box/network is down.";
+      toast("Studio: "+m); stuSay("✕ "+m);
+    }
     finally{ stuBusy=false; setPub(""); }
   }
   var stuPolishBtn=$("#stuPolish");
@@ -2178,7 +2184,9 @@
           var buf=await files[i].arrayBuffer();
           clips.push(arrayBufferToBase64(buf));
         }
-        stuSay("Stitching + normalising "+files.length+" clip"+(files.length>1?"s":"")+" into one track…");
+        var stitchMB=Math.round(clips.reduce(function(s,c){ return s+c.length; },0)/1048576);
+        if(stitchMB>380) throw new Error("That's ~"+stitchMB+" MB of audio — over the studio's 400 MB upload cap. Stitch in two batches, then stitch the two results together.");
+        stuSay("Stitching + normalising "+files.length+" clip"+(files.length>1?"s":"")+" (~"+stitchMB+" MB) into one track…");
         var r=await stuFetch("/api/stitch",{ clips:clips });
         var bytes=Uint8Array.from(atob(r.audioBase64), function(c){ return c.charCodeAt(0); });
         var f=new File([bytes], "narration.mp3", { type:"audio/mpeg" });
