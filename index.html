@@ -118,19 +118,94 @@
     ]
   }
   </script>
-  <!-- return-visit: collapse the cinematic to a settled hero -->
+  <!-- ─── SETTLED STATE (html.intro-seen — every return within the session) ────
+       Not a reduced hero. The SAME page, standing still: same masthead, same
+       headline and roles, the passport portrait and the whole pen-trading
+       story, the real press clippings, the Forbes card. The only things the
+       settled render drops are the first-view gags that only make sense while
+       moving — the GO TO JAIL flip, the busted veil, the escape pill.
+       Everything below is un-pinning and un-scrubbing; no content is cloned. -->
   <style>
-    .hero-quick{ display:none; }
-    html.intro-seen #cine, html.intro-seen #cine2{ display:none !important; }
-    html.intro-seen .hero-quick{ display:block; padding:clamp(88px,15vh,150px) 0 clamp(36px,6vh,64px); }
-    .hero-quick .hq-mast{ display:flex; justify-content:space-between; font-family:var(--font-mono); font-size:12px; letter-spacing:.24em; text-transform:uppercase; color:var(--muted); border-bottom:2px solid var(--text); padding-bottom:12px; margin-bottom:30px; }
-    .hero-quick .hq-h1{ font-family:var(--font-display); font-size:clamp(46px,8vw,108px); line-height:.9; letter-spacing:-.02em; text-transform:uppercase; margin:0 0 26px; }
-    .hero-quick .hq-h1 em{ font-family:var(--font-serif); font-style:italic; font-weight:700; color:var(--accent); text-transform:none; }
-    .hero-quick .hq-roles{ list-style:none; padding:0; margin:0 0 24px; max-width:640px; }
-    .hero-quick .hq-roles li{ font-size:16px; line-height:1.5; padding:10px 0; border-bottom:1px solid var(--line); color:#3a362f; }
-    .hero-quick .hq-synth{ font-family:var(--font-serif); font-style:italic; font-size:19px; line-height:1.55; max-width:600px; margin:0 0 24px; color:var(--text); }
-    .hero-quick .hq-replay{ font-family:var(--font-mono); font-size:11px; letter-spacing:.14em; text-transform:uppercase; background:none; border:1.5px solid var(--text); padding:9px 15px; cursor:pointer; color:var(--text); transition:background .15s; }
-    .hero-quick .hq-replay:hover{ background:var(--accent); }
+    /* 1 ── UN-PIN THE TWO CINEMATIC STAGES ─────────────────────────────── */
+    html.intro-seen .cine,
+    html.intro-seen .cine2{ height:auto !important; }
+    html.intro-seen .cine-pin,
+    html.intro-seen .cine2-pin{ position:static !important; height:auto !important; overflow:visible !important; }
+    html.intro-seen .cine-pin{ display:block !important; }
+
+    /* 2 ── HERO — intro and story both read; nothing stacked or faded ───── */
+    html.intro-seen .cine .hero-wrap{ padding:clamp(104px,15vh,158px) 0 clamp(34px,6vh,66px) !important; }
+    html.intro-seen .cine .hero{ align-items:start; }
+    html.intro-seen #hc-intro,
+    html.intro-seen #hc-story{ position:static !important; opacity:1 !important; transform:none !important; }
+    html.intro-seen #hc-story{ padding-top:clamp(20px,2.6vh,34px) !important; }
+    html.intro-seen .cine .hero-text,
+    html.intro-seen #hc-photo,
+    html.intro-seen #hc-bridge{ opacity:1 !important; transform:none !important; }
+    html.intro-seen .cine .hero-roles li{ opacity:1 !important; transform:none !important; }
+    html.intro-seen .cine .hero-roles{ border-top-color:var(--line) !important; border-bottom-color:var(--line) !important; }
+    /* the Harry footnote was floated to survive a 100vh pin — let it flow now */
+    html.intro-seen #fn-mount-harry:not(:empty){ position:static; transform:none; max-height:none; }
+
+    /* 3 ── PRESS — gradient panel, eyebrow, clippings, flat Forbes, the dig ─ */
+    /* overflow stays HIDDEN: the stage's ::before/::after texture layers sit at
+       inset:-18%, which the 100vh pin used to clip. Unpinned they'd bleed ~260px
+       past the viewport and add a horizontal scrollbar. */
+    html.intro-seen .m2-stage{
+      height:auto !important; overflow:hidden !important;
+      display:flex; flex-direction:column; align-items:center;
+      gap:clamp(24px,3.4vw,40px);
+      padding:clamp(58px,9vh,104px) 20px clamp(54px,8vh,92px);
+    }
+    html.intro-seen .m2grad{ opacity:1 !important; }
+    html.intro-seen .m2-eyebrow{ position:static !important; opacity:1 !important; transform:none !important; }
+    html.intro-seen .m2-eyebrow .m2not{
+      display:inline-block !important; max-width:none !important;
+      opacity:1 !important; transform:none !important; padding:0 12px;
+    }
+    html.intro-seen .m2-clips{ position:static !important; transform:none !important; height:auto !important; }
+    html.intro-seen .leaflet{ position:static !important; opacity:1 !important; }
+    html.intro-seen .m2-aside{ display:block !important; opacity:1 !important;
+      font-family:var(--font-mono); font-size:10.5px; letter-spacing:.16em;
+      text-transform:uppercase; color:var(--muted); text-align:center; margin:0; }
+    html.intro-seen .forbes,
+    html.intro-seen .dig{ position:static !important; transform:none !important; opacity:1 !important; }
+    html.intro-seen .dig{ width:min(560px,88vw); margin:0; }
+
+    @media (min-width:821px){
+      /* clippings settle into the same neat row the cinematic lands them in */
+      html.intro-seen .m2-clips{
+        width:min(1180px,94vw);
+        display:flex; justify-content:center; align-items:flex-start;
+        gap:clamp(20px,2.6vw,40px);
+      }
+      html.intro-seen .leaflet{ width:auto; flex:1 1 0; max-width:33%; }
+      /* a hair of rotation each — cut out and laid down, not animated */
+      html.intro-seen #lf1{ left:auto !important; transform:rotate(-1.8deg) !important; }
+      html.intro-seen #lf2{ left:auto !important; transform:rotate(1.1deg) !important; }
+      html.intro-seen #lf3{ left:auto !important; transform:rotate(-.7deg) !important; }
+      html.intro-seen .m2-aside{ margin-top:8px; }
+    }
+    @media (max-width:820px){
+      html.intro-seen .m2-clips{ display:flex; flex-direction:column; align-items:center; gap:26px; width:auto; }
+      html.intro-seen .leaflet{ transform:none !important; width:min(340px,86vw); }
+    }
+
+    /* 4 ── THE JAIL GAG IS FIRST-VIEW ONLY ─────────────────────────────── */
+    html.intro-seen .forbes .fb-back{ display:none !important; }
+    html.intro-seen .forbes .card3d,
+    html.intro-seen .forbes.flipped .card3d{ transform:none !important; transition:none !important; }
+    html.intro-seen #busted,
+    html.intro-seen #jail-panel{ display:none !important; }
+
+    /* 5 ── REPLAY — the cinematic is still one click away ───────────────── */
+    .settled-replay{ display:none; }
+    html.intro-seen .settled-replay{
+      display:flex; justify-content:center;
+      padding:clamp(30px,5vh,56px) 20px clamp(6px,1vh,14px);
+    }
+    .settled-replay .hq-replay{ font-family:var(--font-mono); font-size:11px; letter-spacing:.14em; text-transform:uppercase; background:none; border:1.5px solid var(--text); padding:9px 15px; cursor:pointer; color:var(--text); transition:background .15s; }
+    .settled-replay .hq-replay:hover{ background:var(--accent); }
   </style>
   <script>
     /* First homepage view in a browser session plays the full cinematic; every
@@ -165,22 +240,6 @@
       </div>
     </div>
   </nav>
-
-  <!-- SETTLED HERO — shown on return visits (html.intro-seen); the full cinematic below plays on first view of the session -->
-  <header class="hero-quick" aria-label="Harsh Kumar Arya">
-    <div class="container">
-      <div class="hq-mast" aria-hidden="true"><span>N°01</span><span>HARSH</span><span>'26</span></div>
-      <h1 class="hq-h1">I like <em>big</em> businesses, &amp; I can't lie.</h1>
-      <ul class="hq-roles">
-        <li>Computer-science engineer who taught himself filmmaking.</li>
-        <li>GPU researcher at Georgia Tech who became a marketer.</li>
-        <li>Sports talent-management founder who closed at the top.</li>
-        <li>ISB MBA grad running a state-board school in NCR.</li>
-      </ul>
-      <p class="hq-synth">Still that kid who traded pens at nine — the pretend employees just became real. Have a look around.</p>
-      <button type="button" class="hq-replay" id="hq-replay">▶ Replay the intro</button>
-    </div>
-  </header>
 
   <!-- ─── HERO — Movement 1 cinematic ───────────────────── -->
   <div class="cine" id="cine">
@@ -350,6 +409,12 @@
         <p class="dig" id="dig">Not on it. <em>Have you seen the alumni? I'm filing that as a feature, not a bug.</em></p>
       </div>
     </div>
+  </div>
+
+  <!-- Settled state only: the intro already played this session, so offer it back
+       rather than forcing it. Hidden while the cinematic itself is live. -->
+  <div class="settled-replay">
+    <button type="button" class="hq-replay" id="hq-replay">▶ Replay the intro</button>
   </div>
 
   <!-- ─── ABOUT ─────────────────────────────────────────── -->
@@ -1067,7 +1132,7 @@
     var cine  = document.getElementById('cine');
     var cine2 = document.getElementById('cine2');
     if(!cine || !cine2) return;
-    if(document.documentElement.classList.contains('intro-seen')) return;   // return visit → cinematic collapsed to the settled hero
+    if(document.documentElement.classList.contains('intro-seen')) return;   // return visit → same markup renders statically (see the settled-state CSS in <head>)
     if(window.matchMedia('(max-width:820px)').matches) return;
     if(window.matchMedia('(prefers-reduced-motion:reduce)').matches) return;
 
@@ -1379,6 +1444,7 @@
      sitting in the same stack as the real clippings. */
   (function(){
     if(!matchMedia('(max-width:820px)').matches) return;   /* desktop uses the takeover */
+    if(document.documentElement.classList.contains('intro-seen')) return;  /* settled render: card stays on its Forbes face */
     if(!forbes) return;
     /* the "— and the one list I did make —" line sets up the Forbes 30U30 FRONT.
        Once the card flips to GO TO JAIL it must NOT sit over the jail face (that
