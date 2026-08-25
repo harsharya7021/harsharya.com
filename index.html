@@ -452,9 +452,22 @@
           <p>Off the clock you'll find me on a golf course (12 handicap, swing still inconsistent), in a notebook designing something, or two books deep — one history, one operator memoir. I keep a watchlist of films from places most people skip past on the festival map. Born in Ratlam (population ~270K, on the Mumbai–Delhi line, on no one's map) and still mildly surprised when people don't know it.</p>
         </div>
         <div class="about-photo">
-          <div class="about-photo-frame">
-            <img src="assets/about.jpg" alt="Harsh Kumar Arya" loading="lazy" />
-            <div class="about-photo-label">FIG. 01 · OPERATOR / IN PROFILE</div>
+          <div class="about-photo-frame" id="aboutStrip"
+               role="group" aria-roledescription="slideshow" aria-label="Portraits of Harsh Kumar Arya">
+            <div class="about-strip">
+              <div class="about-strip-track" id="aboutTrack">
+                <figure class="about-frame"><img src="assets/about/about-01.jpg" alt="Harsh Kumar Arya" loading="eager" /></figure>
+                <figure class="about-frame"><img src="assets/about/about-02.jpg" alt="Harsh with a camera, against a studio wall" loading="lazy" /></figure>
+                <figure class="about-frame"><img src="assets/about/about-03.jpg" alt="Harsh in a navy suit, seated" loading="lazy" /></figure>
+                <figure class="about-frame"><img src="assets/about/about-04.jpg" alt="Harsh on a seamless studio backdrop" loading="lazy" /></figure>
+                <figure class="about-frame"><img src="assets/about/about-05.jpg" alt="Harsh in a curved concrete gallery" loading="lazy" /></figure>
+                <figure class="about-frame"><img src="assets/about/about-06.jpg" alt="Harsh on a golf course at dusk, face painted over" loading="lazy" /></figure>
+              </div>
+              <div class="about-strip-gate" aria-hidden="true"></div>
+              <div class="about-strip-grain" aria-hidden="true"></div>
+            </div>
+            <div class="about-photo-label">FIG. <span id="aboutFigNum">01</span>/06 · OPERATOR / IN PROFILE</div>
+            <div class="about-strip-dots" id="aboutDots" aria-hidden="true"></div>
           </div>
         </div>
       </div>
@@ -1703,6 +1716,97 @@
         if(mid && mid.parentNode === prose) prose.insertBefore(photo, mid.nextSibling);
       }
     }
+  })();
+  </script>
+
+  <!-- ─── ABOUT PHOTO · film-strip slideshow ─────────────── -->
+  <script>
+  (function(){
+    var root  = document.getElementById('aboutStrip');
+    var track = document.getElementById('aboutTrack');
+    if(!root || !track) return;
+
+    var strip  = root.querySelector('.about-strip');
+    var frames = Array.prototype.slice.call(track.querySelectorAll('.about-frame'));
+    var num    = document.getElementById('aboutFigNum');
+    var dotBox = document.getElementById('aboutDots');
+    if(frames.length < 2) { if(dotBox) dotBox.remove(); return; }
+
+    var reduce = matchMedia('(prefers-reduced-motion:reduce)').matches;
+    var HOLD   = 4800;
+    var i = 0, timer = null, visible = true, hovered = false;
+
+    // frame markers
+    var dots = frames.map(function(_, n){
+      var b = document.createElement('button');
+      b.type = 'button';
+      b.setAttribute('aria-label', 'Photo ' + (n + 1) + ' of ' + frames.length);
+      b.addEventListener('click', function(){ go(n); restart(); });
+      dotBox.appendChild(b);
+      return b;
+    });
+    dotBox.removeAttribute('aria-hidden');
+    dotBox.setAttribute('role', 'group');
+    dotBox.setAttribute('aria-label', 'Choose a photo');
+
+    function paint(){
+      if(reduce){
+        frames.forEach(function(f, n){ f.classList.toggle('is-current', n === i); });
+      } else {
+        track.style.transform = 'translateX(' + (-i * 100) + '%)';
+        strip.classList.remove('is-advancing');
+        void strip.offsetWidth;              // reflow so the gate flash can replay
+        strip.classList.add('is-advancing');
+      }
+      dots.forEach(function(d, n){ d.classList.toggle('active', n === i); });
+      if(num) num.textContent = ('0' + (i + 1)).slice(-2);
+    }
+    function go(n){ i = (n + frames.length) % frames.length; paint(); warm(i + 1); }
+    function next(){ go(i + 1); }
+
+    // Frames past the first sit translated outside the strip's overflow box, so
+    // the browser never considers them in-viewport and lazy-loading never fires —
+    // they'd arrive blank on advance. Warm the next one ahead of time instead.
+    function warm(n){
+      var img = frames[(n + frames.length) % frames.length].querySelector('img');
+      if(!img || img.dataset.warm) return;
+      img.dataset.warm = '1';
+      img.loading = 'eager';
+      if(!img.complete && img.decode) img.decode().catch(function(){});
+    }
+
+    function tick(){
+      if(reduce || hovered || !visible) return;
+      timer = setTimeout(function(){ next(); tick(); }, HOLD);
+    }
+    function stop(){ if(timer){ clearTimeout(timer); timer = null; } }
+    function restart(){ stop(); tick(); }
+
+    // hold while the reader is looking at it on purpose
+    root.addEventListener('mouseenter', function(){ hovered = true;  stop(); });
+    root.addEventListener('mouseleave', function(){ hovered = false; restart(); });
+    root.addEventListener('focusin',    function(){ hovered = true;  stop(); });
+    root.addEventListener('focusout',   function(){ hovered = false; restart(); });
+
+    // arrows when the strip has focus
+    root.addEventListener('keydown', function(e){
+      if(e.key === 'ArrowRight'){ e.preventDefault(); next(); restart(); }
+      else if(e.key === 'ArrowLeft'){ e.preventDefault(); go(i - 1); restart(); }
+    });
+
+    // don't burn a timer while it's off screen
+    if('IntersectionObserver' in window){
+      new IntersectionObserver(function(es){
+        es.forEach(function(e){
+          visible = e.isIntersecting;
+          if(visible){ warm(i + 1); restart(); } else { stop(); }
+        });
+      }, { threshold: 0.15 }).observe(root);
+    }
+
+    paint();
+    warm(1);
+    tick();
   })();
   </script>
 </body>

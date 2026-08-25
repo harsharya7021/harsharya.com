@@ -1642,6 +1642,114 @@ section { padding: var(--section-pad-y) 0; }
   text-align: right;
 }
 
+/* ─── ABOUT PHOTO · film-strip slideshow ─────────────────────
+   The portrait frame advances like film through a gate. Each .about-frame
+   carries its own wash background: the track is transformed, which opens a
+   stacking context, so an img set to mix-blend-mode:multiply would otherwise
+   have nothing to multiply against and the Warhol wash would vanish. */
+.about-strip {
+  position: relative;
+  overflow: hidden;
+  aspect-ratio: 2 / 3;
+}
+.about-strip-track {
+  display: flex;
+  height: 100%;
+  will-change: transform;
+  transition: transform 640ms cubic-bezier(0.66, 0, 0.2, 1);
+}
+.about-frame {
+  flex: 0 0 100%;
+  position: relative;
+  height: 100%;
+  margin: 0;
+  background: #fff;
+}
+/* the frame line you glimpse at the seam as the strip advances */
+.about-frame + .about-frame::before {
+  content: "";
+  position: absolute; left: 0; top: 0; bottom: 0;
+  width: 3px; background: rgba(0, 0, 0, 0.55);
+  z-index: 2; pointer-events: none;
+}
+.about-photo-frame .about-frame img {
+  display: block;
+  width: 100%; height: 100%;
+  object-fit: cover;
+}
+/* shutter — a short bloom across the gate on each advance */
+.about-strip-gate {
+  position: absolute; inset: 0;
+  background: #fff;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 3;
+}
+.about-strip.is-advancing .about-strip-gate {
+  animation: aboutGate 640ms cubic-bezier(0.66, 0, 0.2, 1);
+}
+@keyframes aboutGate {
+  0%   { opacity: 0; }
+  18%  { opacity: 0.34; }
+  100% { opacity: 0; }
+}
+/* emulsion grain, always on, very light */
+.about-strip-grain {
+  position: absolute; inset: 0;
+  pointer-events: none;
+  z-index: 4;
+  opacity: 0.4;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .05 0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23g)'/%3E%3C/svg%3E");
+}
+/* frame markers — squares, not dots, to read as sprocket counts */
+.about-strip-dots {
+  display: flex; gap: 5px;
+  margin-top: 10px;
+}
+.about-strip-dots button {
+  flex: 1 1 auto;
+  height: 4px; padding: 0;
+  border: 0; border-radius: 0;
+  background: var(--muted);
+  opacity: 0.28;
+  cursor: pointer;
+  transition: opacity 0.3s ease, background 0.3s ease;
+}
+.about-strip-dots button:hover { opacity: 0.6; }
+.about-strip-dots button.active { opacity: 1; background: var(--text); }
+.about-strip-dots button:focus-visible {
+  outline: 2px solid var(--accent); outline-offset: 2px;
+}
+
+/* Warhol · each frame carries the wash so multiply has a backdrop */
+body[data-mode="warhol"][data-about-photo="wash"] .about-frame {
+  background: var(--about-wash, var(--accent));
+}
+body[data-mode="warhol"][data-about-photo="bw"] .about-frame,
+body[data-mode="warhol"][data-about-photo="halftone"] .about-frame,
+body[data-mode="warhol"][data-about-photo="plain"] .about-frame {
+  background: #fff;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* no travel — cross-dissolve in place, and the timer stays off */
+  .about-strip-track {
+    display: block; position: relative;
+    transform: none !important;
+    transition: none;
+  }
+  .about-frame {
+    position: absolute; inset: 0;
+    height: 100%;
+    opacity: 0;
+    transition: opacity 400ms ease;
+  }
+  .about-frame.is-current { opacity: 1; }
+  .about-frame + .about-frame::before { display: none; }
+  .about-strip.is-advancing .about-strip-gate { animation: none; }
+}
+
 /* ─── WORK ──────────────────────────────────────────────── */
 #work {
   position: relative;
@@ -2038,9 +2146,12 @@ body[data-creds-logo="combo"] .cred::before {
   transition: opacity 0.5s ease, filter 0.55s ease;
 }
 .off-photos .photo.active { opacity: 1; }
-.off-cell:hover .off-photos .photo {
+.off-cell:hover .off-photos .photo,
+.off-cell.is-playing .off-photos .photo {
   filter: contrast(1.05) saturate(1) brightness(1);
 }
+/* touch has no hover — the cell plays when it scrolls into view instead */
+.off-cell.is-playing .off-photos::after { opacity: 0; }
 .off-tag {
   position: absolute; bottom: 8px; left: 10px;
   font-family: var(--font-mono); font-size: 10px;
