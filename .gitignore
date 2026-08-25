@@ -12,6 +12,12 @@ _archive/
 _deck-media/
 # workshop: working notes, prototypes, draft markdown — local only
 _workshop/
+# speaker deck: the PDF, its HTML source and the cut-out assets — the image
+# folder holds GT and ISB ID scans, and .nojekyll publishes every committed
+# file, so tracking this would put them at a guessable public URL
+_speaker-deck/
+# editor backups — superseded snapshots of files that moved on without them
+*.bak
 # AI working notes — .nojekyll publishes every committed file, so these must
 # never be tracked or they become readable on the live site
 CLAUDE.md
