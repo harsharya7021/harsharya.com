@@ -1,0 +1,12 @@
+{
+  "_readme": "Stills folded into the MapFX deck. Drop files in /assets/maps/, list the filenames here, done — they get cut in alongside the procedural plates. Empty arrays are fine; the loader falls back to procedural only. Prompts: /_workshop/prototypes/mapfx/PROMPTS.md",
+  "base": "/assets/maps/",
+  "sets": {
+    "_base": [],
+    "kochi": [],
+    "kerala": [],
+    "jodhpur": [],
+    "shimla": [],
+    "malaysia": []
+  }
+}

@@ -10,7 +10,8 @@
     { id: 'kerala',   name: 'Kerala',   count: 6,  cover: '../assets/life/kerala/varkala-01.jpg' },
     { id: 'jodhpur',  name: 'Jodhpur',  count: 7,  cover: '../assets/life/jodhpur/jodhpur-01.jpg' },
     { id: 'shimla',   name: 'Shimla',   count: 10, cover: '../assets/life/shimla/shimla-01.jpg' },
-    { id: 'malaysia', name: 'Malaysia', count: 3,  cover: '../assets/life/malaysia/malaysia-01.jpg' }
+    { id: 'malaysia', name: 'Malaysia', count: 3,  cover: '../assets/life/malaysia/malaysia-01.jpg' },
+    { id: 'lakshadweep', name: 'Lakshadweep', count: 6, cover: '../assets/life/lakshadweep/lakshadweep-01.jpg' }
   ];
   function pad(n){ return String(n).padStart(2, '0'); }
   function find(id){ for (var i=0;i<SERIES.length;i++){ if (SERIES[i].id===id) return i; } return -1; }
@@ -30,6 +31,11 @@
   /* arrival hand-off from the globe: the same photograph that expanded
      over the globe covers this page too, then recedes into the gallery */
   (function () {
+    /* MAPFX: the descent that began on the globe finishes here — it pushes
+       into the deepest tile and this page rises out of it. */
+    if (window.MapFX && MapFX.arrive && MapFX.arrive({})) return;
+
+    /* otherwise the original hand-off: the photograph that travelled here */
     var cov = null;
     try { cov = sessionStorage.getItem('gm-cover'); sessionStorage.removeItem('gm-cover'); } catch (e) {}
     if (!cov || !seriesEl) return;

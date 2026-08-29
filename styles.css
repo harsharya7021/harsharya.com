@@ -4172,3 +4172,11 @@ body[data-mode="warhol"] #work .section-title em { transform: rotate(-1.5deg); }
   28%  { box-shadow: 0 0 0 4px var(--accent), 7px 7px 0 var(--text); transform: translateY(-2px); }
   100% { box-shadow: 7px 7px 0 var(--text); transform: none; }
 }
+
+/* ── inertia grid ────────────────────────────────────────────────────────
+   Cards in the photo grids get knocked along the cursor's direction and
+   spring back (assets/inertia-grid.js). They only need a stacking context
+   so the moving card rides above its neighbours; will-change is applied
+   per-card in JS for the duration of the throw. */
+.series[data-layout="grid"] .frame,
+.gx-grid .gx-card { position: relative; }

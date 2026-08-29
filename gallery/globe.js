@@ -26,14 +26,15 @@
     {
       id: 'india', name: 'India', lat: 22.6, lon: 79.3,
       states: [
-        { name: 'Himachal',  href: 'shimla.html',   lat: 31.10, lon: 77.17, count: 10, cover: '../assets/life/shimla/shimla-01.jpg' },
-        { name: 'Rajasthan', href: 'jodhpur.html',  lat: 26.24, lon: 73.02, count: 7,  cover: '../assets/life/jodhpur/jodhpur-01.jpg' },
-        { name: 'Kerala',    href: 'kerala.html',   lat: 8.74,  lon: 76.72, count: 6,  cover: '../assets/life/kerala/varkala-01.jpg' }
+        { name: 'Himachal',  href: 'shimla.html',   set: 'shimla',   lat: 31.10, lon: 77.17, count: 10, cover: '../assets/life/shimla/shimla-01.jpg' },
+        { name: 'Rajasthan', href: 'jodhpur.html',  set: 'jodhpur',  lat: 26.24, lon: 73.02, count: 7,  cover: '../assets/life/jodhpur/jodhpur-01.jpg' },
+        { name: 'Kerala',    href: 'kerala.html',   set: 'kerala',   lat: 8.74,  lon: 76.72, count: 6,  cover: '../assets/life/kerala/varkala-01.jpg' },
+        { name: 'Lakshadweep', href: 'lakshadweep.html', set: 'lakshadweep', lat: 10.5593, lon: 72.1925, count: 6, cover: '../assets/life/lakshadweep/lakshadweep-01.jpg' }
       ]
     },
     {
       id: 'malaysia', name: 'Malaysia', lat: 4.2, lon: 102.0,
-      href: 'malaysia.html', count: 3, cover: '../assets/life/malaysia/malaysia-01.jpg',
+      href: 'malaysia.html', set: 'malaysia', count: 3, cover: '../assets/life/malaysia/malaysia-01.jpg',
       states: []
     }
   ];
@@ -166,6 +167,19 @@
      (series.js reads the sessionStorage key and takes it from there) */
   function travel(pinEl, data) {
     if (navving) return; navving = true;
+    var useFx = !reduced && window.MapFX && MapFX.depart && data.set;
+
+    if (useFx) {
+      /* MAPFX: the globe has already pushed in on the place — the map picks
+         the move up from there and keeps descending. No photograph in
+         between; the whole thing is one continuous zoom from orbit to the
+         gallery, so nothing flashes up before the descent starts. */
+      gsap.to([pinsEl, hint, label, back], { opacity: 0, duration: 0.22, ease: 'power1.in' });
+      MapFX.depart({ setId: data.set, href: data.href, hold: 620 });
+      return;
+    }
+
+    /* the original hand-off: the pin's photograph expands and carries across */
     var card = pinEl.querySelector('.gm-pin__card');
     var r = card.getBoundingClientRect();
     var ov = document.createElement('div');
@@ -198,19 +212,29 @@
     idleT = performance.now();
   }
 
+  /* start pulling the imagery as soon as a pin is even considered */
+  function warmPin(p) {
+    if (!window.MapFX || !MapFX.warm || !p.data.set) return;
+    var go = function () { MapFX.warm(p.data.set); };
+    p.el.addEventListener('pointerenter', go, { once: true });
+    p.el.addEventListener('touchstart', go, { once: true, passive: true });
+  }
+  worldPins.forEach(warmPin);
+  WORLD.forEach(function (c) { (statePins[c.id] || []).forEach(warmPin); });
+
   worldPins.forEach(function (p) {
     p.el.addEventListener('click', function () {
       if (dragMoved > 6 || navving) return;
       var c = p.data;
       if (c.states.length) enterCountry(c);
-      else flyTo(c.lat, c.lon, 2.6, 0.7, function () { travel(p.el, c); });
+      else flyTo(c.lat, c.lon, 2.15, 0.6, function () { travel(p.el, c); });
     });
   });
   WORLD.forEach(function (c) {
     statePins[c.id].forEach(function (p) {
       p.el.addEventListener('click', function () {
         if (dragMoved > 6 || navving) return;
-        flyTo(p.data.lat, p.data.lon, 2.35, 0.55, function () { travel(p.el, p.data); });
+        flyTo(p.data.lat, p.data.lon, 1.95, 0.5, function () { travel(p.el, p.data); });
       });
     });
   });
