@@ -109,11 +109,43 @@ strong { font-weight: 600; }
 }
 .nav-links { display: flex; gap: 24px; font-size: 13px; }
 .nav-links a {
+  position: relative;                /* anchor for the drawn underline */
   color: var(--muted); transition: color 0.15s;
   font-family: var(--font-mono);
   letter-spacing: 0.08em; text-transform: uppercase;
 }
 .nav-links a:hover { color: var(--text); }
+
+/* ─── HAND-DRAWN NAV UNDERLINE ──────────────────────────────
+   A pencil stroke gets drawn under the nav link on hover and
+   retracts on leave — six traced variants, mounted by
+   assets/draw-underline.js (adapted from Osmo's Draw Random
+   Underline, minus the paid DrawSVG plugin).
+
+   The box is a fixed 9px-tall strip under the link; the 310x40
+   viewBox squashes into it with preserveAspectRatio:none, so the
+   paths keep their wiggle but the stroke opts out of the scaling
+   (vector-effect:non-scaling-stroke in the JS) and stays a clean
+   2px line. overflow:visible lets the taller loops in variants 2
+   and 6 spill past the strip instead of being clipped flat.
+
+   Nothing here sits in flow, so the nav's layout is untouched and
+   hover-less / reduced-motion visitors just keep the colour fade.
+   ──────────────────────────────────────────────────────────── */
+.draw-line-box {
+  position: absolute;
+  left: 0; right: 0;
+  top: calc(100% - 2px);
+  height: 9px;
+  pointer-events: none;
+  color: var(--accent);
+}
+.draw-line-box svg {
+  position: absolute;
+  inset: 0;
+  width: 100%; height: 100%;
+  overflow: visible !important;
+}
 
 /* ─── COMMON: HERO WRAPPER ──────────────────────────────── */
 .hero-wrap { padding: var(--hero-pad-top) 0 var(--hero-pad-bot); }
@@ -4180,3 +4212,40 @@ body[data-mode="warhol"] #work .section-title em { transform: rotate(-1.5deg); }
    per-card in JS for the duration of the throw. */
 .series[data-layout="grid"] .frame,
 .gx-grid .gx-card { position: relative; }
+
+/* ═══════════════════════════════════════════════════════════════════════
+   SCROLL EFFECTS — below the cinematic only
+   The contact-line mask is adapted from Made With Gsap 015, re-skinned to
+   the Warhol pass. The stat counters are not from the collection. The JS
+   that drives both lives in the last <script> block of index.html.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* ─── contact line: per-word mask (MWG 015) ──────────────────────────────
+   The clip box is the word box itself. The duplicate copy is parked exactly
+   one height above and cropped away until the scrub brings it down. Slight
+   horizontal overshoot (-2% / 102%) so italic side-bearings never shave. */
+.contact-line .cl-word {
+  position: relative; display: inline-block;
+  clip-path: polygon(-2% 0%, -2% 100%, 102% 100%, 102% 0%);
+}
+.contact-line .cl-hidden {
+  position: absolute; top: 0; left: 0;
+  transform: translate(0, -100%);
+}
+.contact-line .cl-visible { display: inline-block; }
+/* An <em> stamp followed by punctuation must never split across lines — the
+   comma would start the next line on its own. */
+.contact-line .cl-glue { white-space: nowrap; }
+
+/* Counting digits change width every frame; tabular figures stop the
+   surrounding label from jittering as they tick. */
+.wk-stat-n { font-variant-numeric: tabular-nums; }
+
+/* ─── reduced motion ─────────────────────────────────────────────────────
+   The JS returns before any of the above is wired, so the markup has to read
+   correctly untouched: no mask, no parked duplicate. */
+@media (prefers-reduced-motion: reduce) {
+  .contact-line .cl-word { clip-path: none; }
+  .contact-line .cl-hidden { display: none; }
+}
+

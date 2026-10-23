@@ -10,7 +10,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo+Black&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,700;0,6..96,900;1,6..96,400&family=Inter:wght@300;400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
 
-  <link rel="stylesheet" href="styles.css?v=16">
+  <link rel="stylesheet" href="styles.css?v=21">
   <style id="warhol-fx">
   /* The cinematic (hero + "as featured in" + jail) is scroll-scrubbed and sits
      above the content, so a SMOOTH anchor jump would replay the whole charade
@@ -1493,7 +1493,8 @@
        ScrollTrigger's position math. IO fires on real visual intersection.
        Lenis smooth-scroll was removed — its inertia stutters against the page's
        live WebGL + cinematic load and read as lag; native scroll is crisp. ── -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js"></script>
   <script>
   (function(){
     if(!window.gsap) return;
@@ -1521,7 +1522,9 @@
 
     /* labels + titles — gentle fade-rise (no letter-split, no clip-wipe, no <em> pop) */
     gsap.utils.toArray('#about .section-label, #work .section-label, #credentials .section-label, #contact .section-label').forEach(function(el){ reveal(el, 10); });
-    gsap.utils.toArray('#about .section-title, #work .section-title, #credentials .section-title, #contact .contact-line').forEach(function(el){ reveal(el, 16); });
+    /* .contact-line is deliberately absent: it gets the per-word clip-path mask
+       reveal in the scroll-effects block below. Revealing it twice would fight. */
+    gsap.utils.toArray('#about .section-title, #work .section-title, #credentials .section-title').forEach(function(el){ reveal(el, 16); });
 
     /* card groups — gentle staggered fade-rise */
     revealGroup('.wk-stats', '.wk-stat', 20, 0.06);
@@ -1530,7 +1533,8 @@
 
     reveal(document.querySelector('.about-photo-frame'), 22);
     reveal(document.querySelector('.contact-form'),  18);
-    reveal(document.querySelector('.contact-stamp'), 14);
+    /* .contact-stamp tween removed — the element is display:none in every mode
+       (styles.css), so this was spending a tween on something never painted. */
 
     /* ── magnetic cursor pull: nav links + primary CTA (desktop fine-pointer only) ── */
     if(matchMedia('(pointer:fine)').matches){
@@ -1540,6 +1544,151 @@
         el.addEventListener('pointerleave',function(){ xT(0); yT(0); });
       });
     }
+  })();
+  </script>
+
+  <!-- ─── scroll effects, below the cinematic only ─────────────────────────
+       ScrollTrigger is safe from #about downward: those sections sit in normal
+       flow and the cinematic never transforms them. Nothing in here may target
+       anything inside .cine / .cine2 — the hand-rolled ~19k-px choreography
+       still owns that range, and ScrollTrigger's position math can't see it.
+
+       The per-word clip-path mask on the contact line is adapted from Made
+       With Gsap 015, with no Lenis — that was removed from this site on
+       purpose, since it stuttered against the live WebGL. The stat counters
+       are not from the collection. ───────────────────────────────────────── -->
+  <script>
+  (function(){
+    if(!window.gsap || !window.ScrollTrigger) return;
+    if(matchMedia('(prefers-reduced-motion:reduce)').matches) return;
+
+    gsap.registerPlugin(ScrollTrigger);
+
+    /* ── 1. CONTACT LINE — per-word mask reveal (MWG 015) ──────────────────
+       Each word is duplicated: a hidden copy parked one line-height above, and
+       the visible copy in flow. A clip-path box crops both. Scrubbing them
+       +100% swaps one for the other, so the sentence re-types itself as you
+       arrive. The <em>build</em> stamp is deliberately NOT masked — it's a
+       rotated box, and clipping it would square off the rotation. It gets its
+       own pop instead. */
+    (function(){
+      var line = document.querySelector('.contact-line');
+      if(!line) return;
+
+      var nodes = Array.prototype.slice.call(line.childNodes);
+      var frag  = document.createDocumentFragment();
+
+      nodes.forEach(function(node){
+        if(node.nodeType === 3){                      /* text → split to words */
+          node.nodeValue.split(/(\s+)/).forEach(function(chunk){
+            if(!chunk) return;
+            if(/^\s+$/.test(chunk)){ frag.appendChild(document.createTextNode(chunk)); return; }
+            /* Bare punctuation never becomes a masked word — the comma after
+               </em> would slide in by itself, detached from the stamp. And if
+               it simply trails the stamp as loose text the line can break
+               between them, orphaning ", hire, or chat about?" onto the next
+               line. Glue it to whatever it follows with a nowrap wrapper. */
+            if(/^[.,;:!?)\]}…—–-]+$/.test(chunk)){
+              var prevEl = frag.lastChild;
+              if(prevEl && prevEl.nodeType === 1){
+                var glue = document.createElement('span');
+                glue.className = 'cl-glue';
+                frag.removeChild(prevEl);
+                glue.appendChild(prevEl);
+                glue.appendChild(document.createTextNode(chunk));
+                frag.appendChild(glue);
+              } else {
+                frag.appendChild(document.createTextNode(chunk));
+              }
+              return;
+            }
+            var w = document.createElement('span'); w.className = 'cl-word';
+            var h = document.createElement('span'); h.className = 'cl-hidden';  h.textContent = chunk;
+            var v = document.createElement('span'); v.className = 'cl-visible'; v.textContent = chunk;
+            /* The duplicate exists only to slide into the mask. Without this a
+               screen reader reads the whole sentence twice — "Got Got something
+               something to to…" — and so does anything scraping the page. */
+            h.setAttribute('aria-hidden', 'true');
+            w.appendChild(h); w.appendChild(v);
+            frag.appendChild(w);
+          });
+        } else {
+          frag.appendChild(node.cloneNode(true));     /* <em> and friends: as-is */
+        }
+      });
+      line.innerHTML = ''; line.appendChild(frag);
+
+      gsap.utils.toArray('.contact-line .cl-word').forEach(function(word){
+        gsap.to(word.children, {
+          yPercent: '+=100', ease: 'power2.inOut',
+          scrollTrigger: { trigger: word, start: 'bottom bottom', end: 'top 62%', scrub: 0.4 }
+        });
+      });
+
+      var stamp = line.querySelector('em');
+      if(stamp){
+        gsap.from(stamp, {
+          scale: 0.7, rotate: -14, autoAlpha: 0, ease: 'back.out(2.2)', duration: 0.55,
+          scrollTrigger: { trigger: line, start: 'top 72%', once: true }
+        });
+      }
+    })();
+
+    /* ── 2. WORK STATS — count the numbers up ──────────────────────────────
+       Not from the collection; the collection has no counter and this doesn't
+       need one. Every digit run in the label is animated independently, so
+       "57·12·500+" ticks as three numbers and "₹15 Cr+" keeps its currency
+       mark and its suffix. */
+    (function(){
+      var stats = gsap.utils.toArray('.wk-stat-num');
+      if(!stats.length) return;
+
+      stats.forEach(function(el){
+        var parts = el.textContent.split(/(\d+)/);
+        if(parts.length < 2) return;
+
+        /* The real figures stay in the DOM until the row is actually about to
+           be seen. Splitting them into zeros up front means any later failure —
+           ScrollTrigger never firing, a refresh landing mid-page — leaves a
+           visitor reading "₹0 Cr+" as if it were the number. A dead animation
+           is a small loss; a wrong figure on a page whose whole argument is
+           "receipts, not résumés" is not. */
+        ScrollTrigger.create({
+          trigger: el, start: 'top 92%', once: true,
+          onEnter: function(){
+            el.textContent = '';
+            var targets = [];
+            parts.forEach(function(p){
+              if(/^\d+$/.test(p)){
+                var n = parseInt(p, 10);
+                /* Anything under 5 isn't worth counting — "$1M ARR" would spend
+                   most of the tween reading "$0M ARR", which is both duller and
+                   briefly untrue. Small figures land already correct. */
+                if(n < 5){ el.appendChild(document.createTextNode(p)); return; }
+                var s = document.createElement('span');
+                s.className = 'wk-stat-n'; s.textContent = '0';
+                el.appendChild(s); targets.push({ node: s, to: n });
+              } else if(p){
+                el.appendChild(document.createTextNode(p));
+              }
+            });
+            targets.forEach(function(t){
+              var o = { v: 0 };
+              gsap.to(o, {
+                v: t.to, duration: 1.1, ease: 'power2.out',
+                onUpdate: function(){ t.node.textContent = Math.round(o.v); },
+                onComplete: function(){ t.node.textContent = t.to; }
+              });
+            });
+          }
+        });
+      });
+    })();
+
+    /* Fonts land after first layout and change every measurement above. */
+    (document.fonts ? document.fonts.ready : Promise.resolve()).then(function(){
+      ScrollTrigger.refresh();
+    });
   })();
   </script>
 
@@ -1809,5 +1958,7 @@
     tick();
   })();
   </script>
+  <!-- hand-drawn nav underline (see assets/draw-underline.js) -->
+  <script src="/assets/draw-underline.js?v=1" defer></script>
 </body>
 </html>

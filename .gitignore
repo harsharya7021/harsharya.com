@@ -33,6 +33,8 @@ _os/
 test-harness.html
 test-reveal.html
 test-credrev.html
-# Made With GSAP originals, kept locally for reference — licensed to use on
-# the site, not to republish, and .nojekyll publishes every committed file
+# Made With GSAP reference library. Their licence forbids putting this code in
+# any repository that enables redistribution, and .nojekyll publishes every
+# committed file at a guessable URL. Reference only — adapted implementations
+# live in the real site files, this folder never ships.
 _mwg/

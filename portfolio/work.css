@@ -255,6 +255,180 @@ body.work-page footer{ margin-top:auto; }
 }
 
 /* ═══════════════════════════════════════════════════════════════════════
+   PORTFOLIO HUB — folder fan + reorderable tiles
+   Adapted from Made With Gsap 075 (angular spread) and 063 (long-press
+   reorder). Driven by /portfolio/creative.js.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* The peeks fan out past the folder mouth on hover, so the stack can no
+   longer be clipped by its own tile. z-index lifts the hovered folder above
+   its neighbours or the spread cards slide underneath them. */
+.creative-tile { position: relative; }
+.creative-tile:hover,
+.creative-tile:focus-within { z-index: 3; }
+
+/* GSAP owns .peek transforms once creative.js runs. The CSS resting
+   rotations stay put as the no-JS fallback — do not add transitions here or
+   they will fight the tweens. */
+.creative-grid .peek { will-change: transform; }
+
+/* ─── reorder ────────────────────────────────────────────────────────── */
+.creative-tile.is-lifted {
+  z-index: 20;
+  cursor: grabbing;
+  filter: drop-shadow(6px 10px 0 rgba(0, 0, 0, 0.18));
+}
+/* While a tile is in the air the others must not answer the pointer — a
+   hover fan firing under the dragged tile reads as a glitch. */
+.creative-grid.is-reordering .creative-tile:not(.is-lifted) { pointer-events: none; }
+.creative-grid.is-reordering { cursor: grabbing; }
+
+/* The long press is invisible until you try it, so say so once. Sits under
+   the grid, quiet, and only where the gesture actually works. */
+@media (hover: hover) and (pointer: fine) {
+  .creative-grid::after {
+    content: "Long-press a folder to drag it into a new order · ⌘ + arrows to move by keyboard";
+    grid-column: 1 / -1;
+    font-family: var(--font-mono);
+    font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: var(--muted); opacity: 0.62;
+    margin-top: 4px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .creative-tile.is-lifted { filter: none; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   SUBPAGE HEADER SPOTLIGHT (MWG 044) + CARD DRIFT (MWG 001)
+   Driven by /portfolio/subpage-fx.js. The duplicate header is created in
+   JS so the three subpages need no markup changes.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+/* The pair has to stack, so the original keeps flow and the duplicate is
+   lifted out of it and pinned exactly on top. The wrapper is built in JS and
+   is what the duplicate anchors to — anchoring to .wk-wrap would resolve
+   left/right against its padding box and shift the copy out of register. */
+.wk-head-stack{ position:relative; }
+.wk-head--masked{ position:relative; z-index:1; }
+
+.wk-head--dup{
+  --wk-mx:50;
+  --wk-my:-40;
+
+  position:absolute; top:0; left:0; right:0;
+  z-index:2; pointer-events:none;
+
+  /* The spotlight. The vars are unitless so GSAP can tween them as numbers —
+     calc() puts the percent back on. Prefixed twice: Safari still needs
+     -webkit-mask-image. A browser with neither never paints the duplicate at
+     all, which is the correct fallback: the real header is untouched. */
+  -webkit-mask-image:radial-gradient(circle at calc(var(--wk-mx) * 1%) calc(var(--wk-my) * 1%), #000 11%, transparent 24%);
+          mask-image:radial-gradient(circle at calc(var(--wk-mx) * 1%) calc(var(--wk-my) * 1%), #000 11%, transparent 24%);
+}
+@supports not (mask-image: radial-gradient(circle, #000 10%, transparent 20%)) {
+  .wk-head--dup{ display:none; }
+}
+
+/* Recoloured, not merely tinted: the reveal should read as a second pass of
+   ink slightly out of register, which is the print logic the rest of the
+   site already runs on. */
+.wk-head--dup .wk-h1{ color:var(--wk-orange); }
+.wk-head--dup .wk-h1 em{ color:#00b3ff; }
+.wk-head--dup .wk-eyebrow{ background:#ffc700; border-color:var(--wk-orange); color:var(--wk-ink); }
+.wk-head--dup .wk-back{ background:var(--wk-orange); color:#ffc700; border-color:var(--wk-orange); }
+.wk-head--dup .wk-lead{ color:var(--wk-orange); }
+
+/* Cards are scrubbed on the transform, so hand the compositor a hint —
+   these are the only continuously-transforming elements on the page. */
+.wk-grid .wk-card,
+.wk-feature .wk-card{ will-change:transform; }
+
+@media (prefers-reduced-motion: reduce) {
+  .wk-head--dup{ display:none; }
+  .wk-grid .wk-card,
+  .wk-feature .wk-card{ will-change:auto; }
+}
+@media (hover: none), (pointer: coarse) {
+  .wk-head--dup{ display:none; }
+}
+
+/* ═══════════════════════════════════════════════════════════════════════
+   VIDEO SHOWCASE — 3D tilt wheel (MWG 106) · /portfolio/videos
+   Built entirely in /portfolio/wheel-showcase.js from the .wk-card grid,
+   so there is no markup for it in the page. Desktop only; the grid below
+   is the complete, accessible list and never goes away.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+.vw-stage {
+  position: relative;
+  height: min(78vh, 720px);
+  margin: 0 0 clamp(40px, 7vh, 76px);
+  overflow: hidden;
+  /* Its own containing block for perspective; the JS writes the value so
+     the 3D read flattens as the ring spreads. */
+  perspective: 100vw;
+  border-top: 2px solid var(--wk-ink);
+  border-bottom: 2px solid var(--wk-ink);
+  background:
+    radial-gradient(120% 90% at 50% 42%, rgba(255,90,0,.07) 0%, transparent 62%),
+    var(--wk-canvas);
+}
+
+/* Both wrappers must preserve 3D or the tilt and the counter-rotation
+   collapse back to a flat plane. */
+.vw-ring {
+  position: absolute; inset: 0;
+  transform-style: preserve-3d;
+  will-change: transform;
+}
+
+.vw-tile {
+  position: absolute;
+  /* Anchored at the stage centre; GSAP's xPercent/yPercent does the centring,
+     because the tile's height is no longer a number this stylesheet knows. */
+  top: 50%;
+  left: 50%;
+  width: 13vw;
+  /* 16:9 until the image reports its real shape, then --vw-ar is written per
+     tile in JS. Without a default the box has no height while loading and the
+     ring collapses to a row of hairlines. */
+  aspect-ratio: var(--vw-ar, 16 / 9);
+  transform-style: preserve-3d;
+  will-change: transform;
+  border: 2px solid var(--wk-ink);
+  box-shadow: 5px 5px 0 rgba(0,0,0,.16);
+  line-height: 0;               /* no inline-descender gap under the image */
+  cursor: pointer;
+}
+/* No aspect-ratio, no object-fit, no crop: the thumbnail's own proportions
+   set the tile's shape. Every film here is 16:9, so today they all match —
+   but drop a vertical Short into the grid and its tile simply comes out
+   tall, with nothing to change here. */
+.vw-tile img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  /* The box already matches the image's ratio, so cover crops nothing — it
+     just guarantees full bleed while the default ratio is still in force. */
+  object-fit: cover;
+}
+.vw-tile:hover { box-shadow: 5px 5px 0 var(--wk-orange); }
+
+.vw-hint {
+  position: absolute; left: 0; right: 0; bottom: 18px;
+  margin: 0; text-align: center;
+  font-family: var(--font-mono);
+  font-size: 11px; letter-spacing: .14em; text-transform: uppercase;
+  color: var(--wk-quiet);
+  pointer-events: none;
+}
+
+@media (max-width: 820px) { .vw-stage { display: none; } }
+@media (prefers-reduced-motion: reduce) { .vw-stage { display: none; } }
+
+/* ═══════════════════════════════════════════════════════════════════════
    DESIGN SHOWCASE — word & scatter (MWG 117) · /portfolio/design
    Built up by /portfolio/design-showcase.js from the <template> in the
    page: one big word per series and the one artifact that stands for it,

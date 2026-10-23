@@ -1719,7 +1719,7 @@
     // Downloaded note uses relative ../styles.css (correct in /writing/). For a blob preview that path
     // can't resolve, so point at the live stylesheet + assets so the preview matches the published look.
     var html=buildNote()
-      .split('href="../styles.css?v=16"').join('href="https://harsharya.com/styles.css?v=16"')
+      .split('href="../styles.css?v=21"').join('href="https://harsharya.com/styles.css?v=21"')
       .split('href="../favicon.ico"').join('href="https://harsharya.com/favicon.ico"')
       .split('href="../assets/apple-touch-icon.png"').join('href="https://harsharya.com/assets/apple-touch-icon.png"');
     var blob=new Blob([html],{type:"text/html"}); var url=URL.createObjectURL(blob);
@@ -2399,7 +2399,7 @@
 '  <link rel="preconnect" href="https://fonts.googleapis.com">\n'+
 '  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n'+
 '  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo+Black&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;1,6..96,400&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=Inter:wght@400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">\n'+
-'  <link rel="stylesheet" href="../styles.css?v=16" />\n'+
+'  <link rel="stylesheet" href="../styles.css?v=21" />\n'+
 '  <style>\n'+
 '    .post { padding: 56px 0 88px; max-width: 760px; margin: 0 auto; }\n'+
 '    .post-back { display:inline-block; font-family:var(--font-mono); font-size:12px; letter-spacing:0.14em; text-transform:uppercase; background:var(--text); color:var(--bg); padding:6px 12px; border:2px solid var(--text); margin-bottom:36px; }\n'+
@@ -2611,5 +2611,7 @@
 
 })();
 </script>
+  <!-- hand-drawn nav underline (see assets/draw-underline.js) -->
+  <script src="/assets/draw-underline.js?v=1" defer></script>
 </body>
 </html>

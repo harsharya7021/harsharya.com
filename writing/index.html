@@ -7,7 +7,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
   <link href="https://fonts.googleapis.com/css2?family=Anton&amp;family=Archivo+Black&amp;family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,700;0,6..96,900;1,6..96,400&amp;family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&amp;family=Inter:wght@400;500;600;700&amp;family=Space+Mono:ital,wght@0,400;0,700;1,400&amp;display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="../styles.css?v=16">
+  <link rel="stylesheet" href="../styles.css?v=21">
   <style>
     /* Page header */
     .page-wrap { padding: 64px 0 32px; max-width: 1100px; margin: 0 auto; }
@@ -92,6 +92,28 @@
       .note-item { grid-template-columns: 90px 1fr; gap: 12px; padding: 18px 0; }
       .note-num, .note-tag { display: none; }
     }
+  
+    /* ─── notes list: hover preview (MWG 030) ─────────────────────────
+       Fixed to the viewport and driven by quickTo on y, so it tracks the
+       cursor down the list without any scroll arithmetic. Hard border and
+       offset shadow so it reads as a pinned print, not a tooltip. */
+    .nt-preview {
+      position: fixed; top: 0; right: 6vw; z-index: 60;
+      width: min(300px, 23vw); aspect-ratio: 4 / 3;
+      overflow: hidden; pointer-events: none;
+      opacity: 0; transition: opacity .28s ease;
+      border: 3px solid var(--text);
+      box-shadow: 6px 6px 0 var(--accent);
+      background: var(--bg);
+    }
+    .nt-preview.on { opacity: 1; }
+    /* Each arrival is its own masked frame stacked over the last, so the
+       incoming picture covers the outgoing one instead of replacing it. */
+    .nt-preview > div { position: absolute; inset: 0; overflow: hidden; }
+    .nt-preview img { display: block; width: 100%; height: 100%; object-fit: cover; }
+
+    @media (prefers-reduced-motion: reduce) { .nt-preview { display: none; } }
+    @media (hover: none), (pointer: coarse) { .nt-preview { display: none; } }
   </style>
 
   <!-- icons / share cards / canonical -->
@@ -138,10 +160,10 @@
 
   <main class="container">
     <div class="notes-list">
-      <a class="note-item" href="freedom-love-and-the-human-animal.html"><span class="note-num">N°01</span><span class="note-date">July 2026</span><span class="note-title">Freedom, Love, and the Human Animal</span><span class="note-tag">Ideas</span></a>
-      <a class="note-item" href="the-thermodynamics-of-the-selfish-ape.html"><span class="note-num">N°02</span><span class="note-date">July 2026</span><span class="note-title">The Thermodynamics of the Selfish Ape</span><span class="note-tag">Musings</span></a>
-      <a class="note-item" href="the-error-term.html"><span class="note-num">N°03</span><span class="note-date">July 2026</span><span class="note-title">The Error Term</span><span class="note-tag">Musings</span></a>
-      <a class="note-item" href="the-architecture-of-walls.html"><span class="note-num">N°04</span><span class="note-date">July 2026</span><span class="note-title">The Architecture of Walls</span><span class="note-tag">Musings</span></a><a class="note-item" href="#" data-pending="">
+      <a class="note-item" href="freedom-love-and-the-human-animal.html" data-note-img="/assets/writing/freedom-love-and-the-human-animal/01.jpg"><span class="note-num">N°01</span><span class="note-date">July 2026</span><span class="note-title">Freedom, Love, and the Human Animal</span><span class="note-tag">Ideas</span></a>
+      <a class="note-item" href="the-thermodynamics-of-the-selfish-ape.html" data-note-img="/assets/writing/the-thermodynamics-of-the-selfish-ape/01.png"><span class="note-num">N°02</span><span class="note-date">July 2026</span><span class="note-title">The Thermodynamics of the Selfish Ape</span><span class="note-tag">Musings</span></a>
+      <a class="note-item" href="the-error-term.html" data-note-img="/assets/writing/the-error-term/01.png"><span class="note-num">N°03</span><span class="note-date">July 2026</span><span class="note-title">The Error Term</span><span class="note-tag">Musings</span></a>
+      <a class="note-item" href="the-architecture-of-walls.html" data-note-img="/assets/writing/the-architecture-of-walls/01.png"><span class="note-num">N°04</span><span class="note-date">July 2026</span><span class="note-title">The Architecture of Walls</span><span class="note-tag">Musings</span></a><a class="note-item" href="#" data-pending="">
         <span class="note-num">N°05</span>
         <span class="note-date">Coming soon</span>
         <span class="note-title">Bootstrapping in an emerging market — what actually mattered, and what didn't</span>
@@ -200,6 +222,8 @@
       if (window.scrollY > 8) nav.classList.add("scrolled"); else nav.classList.remove("scrolled");
     });
   </script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>
+  <script src="/writing/notes-fx.js?v=1"></script>
   <script defer="" src="../assets/site.js?v=1"></script>
   <script type="module" src="../assets/gate.js?v=1"></script>
 
@@ -213,4 +237,6 @@
 
 
 
+  <!-- hand-drawn nav underline (see assets/draw-underline.js) -->
+  <script src="/assets/draw-underline.js?v=1" defer></script>
 </body></html>
