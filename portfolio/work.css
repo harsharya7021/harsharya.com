@@ -253,3 +253,176 @@ body.work-page footer{ margin-top:auto; }
 @media (prefers-reduced-motion:reduce){
   .ds-caret,.ds-chip{ display:none !important; }
 }
+
+/* ═══════════════════════════════════════════════════════════════════════
+   DESIGN SHOWCASE — word & scatter (MWG 117) · /portfolio/design
+   Built up by /portfolio/design-showcase.js from the <template> in the
+   page: one big word per series and the one artifact that stands for it,
+   on the near depth layer, following the pointer. A series not made yet
+   shows an empty frame. (Give a slot several images and the full 117
+   scatter comes back — three layers, cluster, parallax by depth.) The
+   images come from pieces/assets/scatter/ (keyed cut-outs and downsized
+   photographs, WebP); the case-study originals are left alone. The block
+   stays hidden until the script has filled it; the case-study card below
+   is the complete content and never goes away.
+   ═══════════════════════════════════════════════════════════════════════ */
+
+.ws-stage{
+  position:relative;
+  height:min(72vh, 680px);
+  margin:0 0 clamp(40px,7vh,76px);
+  overflow:hidden;
+  /* Same block as the video wheel's stage: the canvas, two rules, a
+     faint warm glow behind the word. */
+  border-top:2px solid var(--wk-ink);
+  border-bottom:2px solid var(--wk-ink);
+  background:
+    radial-gradient(120% 90% at 50% 42%, rgba(255,90,0,.07) 0%, transparent 62%),
+    var(--wk-canvas);
+  cursor:pointer;
+  user-select:none; -webkit-user-select:none;
+  -webkit-tap-highlight-color:transparent;
+}
+.ws-stage[hidden]{ display:none; }
+
+/* The perspective sits on the scene, not the stage (117 puts it on the
+   root), and the scene itself preserves 3D. That makes the scene the root
+   of the one 3D context the words and the layers share — so the near
+   layer passes in front of the word, as in 117 — while the stage, which
+   is flat (overflow:hidden), paints the whole scene as one group at
+   z-index 1 under the label, pager and hint. With the perspective on the
+   stage instead, Chrome pulled the stage's flat children into the
+   sorting too and the near layer covered the pager; with the scene flat,
+   the words and the layers each rooted a context of their own and the
+   word could never be overlapped. */
+.ws-scene{ position:absolute; inset:0; z-index:1; perspective:1200px; transform-style:preserve-3d; }
+.ws-medias{ position:absolute; inset:0; z-index:1; pointer-events:none; transform-style:preserve-3d; }
+.ws-layer{ position:absolute; inset:0; transform-style:preserve-3d; }
+.ws-layer--0{ transform:translateZ(-160px); }
+.ws-layer--1{ transform:translateZ(0); }
+.ws-layer--2{ transform:translateZ(140px); }
+
+.ws-media{
+  position:absolute; top:50%; left:50%;
+  /* No aspect-ratio, no crop: the mat shots stay 4:3, the magazine pages
+     stay 3:4, each cut-out keeps its own outline. */
+  width:min(18vw,170px); height:auto;
+  display:block; margin:0;
+  will-change:transform,opacity;
+}
+/* Two kinds of image, drawn two ways. A cut-out (no data-framed in the
+   template) is a finished collage keyed to real transparency, so it lies
+   on the canvas as loose paper with no edge at all; it is boxed by both
+   axes because its outline can be wide or tall. A framed image is a
+   photograph — the cutting mat, a magazine page — and gets the site's
+   ink border and hard shadow, like a print pinned over the sheet. */
+.ws-media--cut{ width:auto; height:auto; max-width:min(24vw,250px); max-height:min(24vh,200px); }
+.ws-media--framed{
+  border:2px solid var(--wk-ink);
+  box-shadow:5px 5px 0 rgba(0,0,0,.16);
+  background:#fff;
+}
+/* A slot whose series is not made yet: the frame is there, the print is
+   not. Dashed, quiet, and sized like a magazine page so it reads as a
+   space held open rather than a broken image. */
+.ws-media--blank{
+  width:min(18vw,170px); aspect-ratio:3 / 4;
+  box-sizing:border-box; border:2px dashed rgba(26,23,18,.45);
+  display:grid; place-items:center;
+  font-family:var(--font-mono); font-size:12px; letter-spacing:.2em;
+  color:var(--wk-quiet);
+}
+/* One artifact standing for a whole series carries the slot alone, so it
+   runs larger than a piece in a cluster — and the slot is laid out as a
+   poster rather than a scatter: the word takes the left two-thirds and
+   stacks (a long series name breaks over three lines), the artifact owns
+   the right third, and the two only touch when the parallax leans them
+   together. A cluster of several still centres the word under it as 117
+   does. (On a phone the artifact sits above a centred word instead; see
+   the narrow rules below.) */
+.ws-stage.is-solo .ws-media--cut{ max-width:min(30vw,320px); max-height:min(40vh,300px); }
+.ws-stage.is-solo .ws-media--framed,
+.ws-stage.is-solo .ws-media--blank{ width:min(24vw,250px); }
+.ws-stage.is-solo .ws-words{ padding-right:34%; }
+.ws-stage.is-solo .ws-word{ font-size:clamp(44px,8.6vw,116px); padding:0 24px 0 56px; }
+
+/* The word sits between the middle and the near layer (z 0 → 40 → 140),
+   so some of the pieces drift in front of it — as in 117. */
+.ws-words{
+  position:absolute; inset:0; z-index:2;
+  display:grid; place-items:center;
+  pointer-events:none;
+  transform:translateZ(40px);
+  transform-style:preserve-3d;
+}
+.ws-word{
+  grid-area:1 / 1; margin:0; padding:0 clamp(16px,8vw,120px);
+  font-family:var(--font-display);
+  font-size:clamp(44px,10vw,132px); line-height:.9; letter-spacing:-.02em;
+  text-transform:uppercase; text-align:center; color:var(--wk-ink);
+  will-change:transform,opacity;
+  visibility:hidden;
+}
+.ws-word.is-active{ visibility:visible; }
+
+/* chrome: series label, pager, hint — above the scene, outside the 3D */
+.ws-label{
+  position:absolute; top:16px; left:18px; z-index:3; margin:0;
+  font-family:var(--font-mono); font-size:11px; letter-spacing:.18em; text-transform:uppercase;
+  color:var(--wk-ink); pointer-events:none;
+}
+.ws-pager{
+  position:absolute; left:18px; top:50%; transform:translateY(-50%); z-index:3;
+  display:flex; flex-direction:column; gap:4px;
+  margin:0; padding:0; list-style:none;
+}
+.ws-mark{
+  display:block; background:none; border:0; padding:5px 0; cursor:pointer;
+  font-family:var(--font-mono); font-size:13px; letter-spacing:.14em;
+  color:var(--wk-ink); opacity:.32; line-height:1;
+  border-bottom:2px solid transparent;
+  transition:opacity .3s, border-color .3s;
+}
+.ws-mark:hover,
+.ws-mark.is-active{ opacity:1; }
+.ws-mark.is-active{ border-bottom-color:var(--wk-orange); }
+.ws-mark:focus-visible{ outline:2px solid var(--wk-orange); outline-offset:4px; opacity:1; }
+.ws-hint{
+  position:absolute; left:0; right:0; bottom:16px; z-index:3;
+  margin:0; padding:0 56px; text-align:center;
+  font-family:var(--font-mono); font-size:11px; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--wk-quiet); pointer-events:none;
+}
+.ws-hint__coarse{ display:none; }
+@media (hover:none){
+  .ws-hint__fine{ display:none; }
+  .ws-hint__coarse{ display:inline; }
+}
+
+@media (max-width:767px){
+  .ws-stage{ height:min(62vh,520px); }
+  .ws-media{ width:min(26vw,120px); }
+  /* width:auto again: the .ws-media rule just above would otherwise win
+     on source order, and every cut-out would come out 26vw wide. */
+  .ws-media--cut{ width:auto; height:auto; max-width:min(36vw,150px); max-height:min(16vh,120px); }
+  .ws-media--blank{ width:min(30vw,120px); font-size:11px; }
+  .ws-stage.is-solo .ws-media--cut{ max-width:min(66vw,260px); max-height:min(22vh,190px); }
+  .ws-stage.is-solo .ws-media--framed,
+  .ws-stage.is-solo .ws-media--blank{ width:min(34vw,140px); }
+  .ws-stage.is-solo .ws-words{ padding-right:0; }
+  .ws-stage.is-solo .ws-word{ font-size:clamp(38px,11vw,56px); padding:0 44px; }
+  /* Shallower stack on a narrow screen, as 117 does, so the near layer
+     does not blow up past the edges of a block this small. */
+  .ws-layer--0{ transform:translateZ(-80px); }
+  .ws-layer--1{ transform:translateZ(-40px); }
+  .ws-layer--2{ transform:translateZ(0); }
+  .ws-word{ font-size:clamp(38px,11vw,56px); padding:0 44px; }
+  .ws-label{ left:14px; top:14px; font-size:10px; }
+  .ws-pager{ left:14px; }
+  .ws-hint{ bottom:12px; padding:0 20px; font-size:10px; }
+}
+
+@media (prefers-reduced-motion:reduce){
+  .ws-media, .ws-word{ will-change:auto; }
+  .ws-mark{ transition:none; }
+}
