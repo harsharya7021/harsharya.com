@@ -149,10 +149,14 @@
     var rx = stage.clientWidth  * 0.36;
     var ry = stage.clientHeight * 0.32;
     if (item.solo) {
-      /* Due right, level with the word, on a wide block — the word has
+      /* Due right, level with the word, on a wide viewport — the word has
          moved over to leave it the right third (work.css); straight above
-         the word on a narrow one, where there is no room beside it. */
-      item.angle = stage.clientWidth > 767 ? 0 : -Math.PI / 2;
+         the word on a narrow one, where there is no room beside it. Keyed
+         off the viewport, not the block: the stylesheet's breakpoint is a
+         viewport query, and the block is 72px narrower than the viewport,
+         so between 768 and 840px the two would disagree and the artifact
+         would land above a word that had already moved aside for it. */
+      item.angle = matchMedia('(min-width: 768px)').matches ? 0 : -Math.PI / 2;
     }
     item.baseX = Math.cos(item.angle) * rx * item.dist;
     item.baseY = Math.sin(item.angle) * ry * item.dist;
