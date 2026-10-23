@@ -2,14 +2,13 @@
    PORTFOLIO SUBPAGES — /design, /code, /videos
    ═══════════════════════════════════════════════════════════════════════
    Shared by all three pages; each one has the same .wk-head + .wk-card
-   structure, so one file covers them.
+   structure, so one file covers them. (/code now shows its films through
+   the MWG 121 showcase instead of cards, so there the drift finds nothing
+   to move — by design.)
 
-   044 "Mask effect" — a duplicate of the block sits on top under a radial
-   mask, and the cursor punches a spotlight through to a recoloured version
-   underneath. Core GSAP only: two quickTo calls driving two CSS variables.
-   Used here on the page header, where the duplicate is set in the pop
-   palette so the reveal reads as print misregistration rather than a
-   generic spotlight — which is the language the rest of the site is in.
+   044 "Mask effect" — the cursor spotlight that recoloured the header —
+   used to live here too. It was taken out: on the page it read as a stain
+   following the cursor, not as print misregistration.
 
    001 "Card stack" — the original pins a stage and parades cards across it
    horizontally via containerAnimation. Not adopted in that form: these
@@ -32,63 +31,7 @@
   if (!window.gsap) return;
   if (matchMedia('(prefers-reduced-motion:reduce)').matches) return;
 
-  /* ─── 1. HEADER SPOTLIGHT (MWG 044) ──────────────────────────────────
-     Desktop fine-pointer only — there is no cursor to follow on touch, and
-     the duplicate would just be dead weight in the DOM. */
-  (function () {
-    var head = document.querySelector('.wk-head');
-    if (!head || !matchMedia('(pointer:fine)').matches) return;
-
-    var dup = head.cloneNode(true);
-    dup.classList.add('wk-head--dup');
-    dup.setAttribute('aria-hidden', 'true');
-
-    /* The clone contains a real "← Portfolio" link. aria-hidden hides it
-       from screen readers but does NOT remove it from the tab order, which
-       would leave a keyboard user landing on an invisible duplicate link.
-       inert handles that where supported; the tabindex pass is the floor. */
-    dup.setAttribute('inert', '');
-    dup.querySelectorAll('a, button, input, [tabindex]').forEach(function (el) {
-      el.setAttribute('tabindex', '-1');
-      el.removeAttribute('href');
-    });
-
-    /* Both copies go into a wrapper of their own rather than being pinned to
-       .wk-wrap. An absolutely positioned element resolves left/right against
-       its container's PADDING box, so anchoring to .wk-wrap put the duplicate
-       36px left of the original — outside the page's horizontal padding. A
-       bare wrapper in normal flow has the same content box the header already
-       had, so top/left/right:0 lands exactly on top. */
-    var stack = document.createElement('div');
-    stack.className = 'wk-head-stack';
-    head.parentNode.insertBefore(stack, head);
-    stack.appendChild(head);
-    stack.appendChild(dup);
-    head.classList.add('wk-head--masked');
-
-    /* These carry UNITLESS numbers; the CSS multiplies by 1%. quickTo tweens
-       a numeric property — hand it "50%" and it parses to NaN, the gradient
-       becomes invalid, mask-image computes to none, and the duplicate paints
-       in full over the real header. The unit has to live in the stylesheet. */
-    var xTo = gsap.quickTo(dup, '--wk-mx', { duration: 0.42, ease: 'power3' });
-    var yTo = gsap.quickTo(dup, '--wk-my', { duration: 0.42, ease: 'power3' });
-
-    /* Parked off the top of the block, so nothing shows until a pointer
-       actually arrives. */
-    gsap.set(dup, { '--wk-mx': 50, '--wk-my': -40 });
-
-    var wrap = head.parentNode;
-    wrap.addEventListener('pointermove', function (e) {
-      var b = dup.getBoundingClientRect();
-      xTo(gsap.utils.mapRange(b.left, b.left + b.width, 0, 100, e.clientX));
-      yTo(gsap.utils.mapRange(b.top,  b.top  + b.height, 0, 100, e.clientY));
-    });
-    wrap.addEventListener('pointerleave', function () {
-      yTo(-40);
-    });
-  })();
-
-  /* ─── 2. CARD DRIFT (MWG 001, un-pinned) ─────────────────────────────── */
+  /* ─── CARD DRIFT (MWG 001, un-pinned) ─────────────────────────────── */
   (function () {
     if (!window.ScrollTrigger) return;
     gsap.registerPlugin(ScrollTrigger);

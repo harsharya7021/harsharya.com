@@ -9,7 +9,7 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo+Black&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,700;0,6..96,900;1,6..96,400&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=Inter:wght@400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/styles.css?v=21" />
-  <link rel="stylesheet" href="/portfolio/work.css?v=14" />
+  <link rel="stylesheet" href="/portfolio/work.css?v=16" />
   <link rel="icon" href="/favicon.ico" sizes="48x48">
   <link rel="icon" href="/assets/favicon-32.png" type="image/png" sizes="32x32">
   <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
@@ -47,62 +47,78 @@
         <p class="wk-lead">Things I built — designed and shipped with Claude — each with a short animated launch film. Press play; the story runs right here. The product deck is one tap further.</p>
       </header>
 
-      <section class="wk-grid">
-
-        <div class="wk-card">
-          <a class="wk-card__poster wk-poster--type wk-poster--os"
-             href="/portfolio/code/films/personal-os.html"
-             data-embed="/portfolio/code/films/personal-os.html" data-embed-label="Personal-OS — Launch Film">
-            <span class="pt-kind">Launch film</span>
-            <span class="pt-name">Personal<br>OS</span>
-            <span class="wk-card__play"><span></span></span>
-          </a>
-          <div class="wk-card__meta">
-            <div class="wk-card__k">Product · personal operating system</div>
-            <div class="wk-card__t">Personal-OS</div>
-            <div class="wk-card__s">A system for running your own life like a company — goals, rituals, and receipts in one place.</div>
-            <div class="wk-card__links">
-              <a href="/portfolio/code/decks/Personal-OS-Product-Story.pdf" data-embed="/portfolio/code/decks/Personal-OS-Product-Story.pdf" data-embed-label="Personal-OS — Product Story">Product story ↗</a>
+      <!-- ── LAUNCH FILMS — MWG 121 ──
+           One article per film. On a wide screen each one's title and notes
+           are position:fixed at the middle of the viewport, and the article's
+           clip-path (inset(0)) clips them to the article — so the words stay
+           put while the film frame scrolls past, and hand over to the next
+           film at the rule between them. Below 901px it is a plain stack.
+           The frame holds a still; /portfolio/films-showcase.js swaps in the
+           muted preview loop from films/previews/ and plays it only while it
+           is on screen. The text links are the accessible path; the frame is
+           a mouse/touch duplicate of "Watch the film". ── -->
+      <section class="lf" aria-label="Launch films">
+        <p class="lf-hint">Scroll — each film previews as it passes. Open one to watch it whole.</p>
+        <article class="lf-item" aria-labelledby="lf-personal-os">
+          <div class="lf-content">
+            <div class="lf-row">
+              <h2 class="lf-title" id="lf-personal-os"><span class="lf-num">01</span> <span class="lf-name">Personal-OS</span></h2>
+              <div class="lf-desc">
+                <p class="lf-kind">Product · personal operating system</p>
+                <p class="lf-text">A system for running your own life like a company — goals, rituals, and receipts in one place.</p>
+                <p class="lf-links">
+                  <a href="/portfolio/code/films/personal-os.html" data-embed="/portfolio/code/films/personal-os.html" data-embed-label="Personal-OS — Launch Film">Watch the film · 1:45</a>
+                  <a href="/portfolio/code/decks/Personal-OS-Product-Story.pdf" data-embed="/portfolio/code/decks/Personal-OS-Product-Story.pdf" data-embed-label="Personal-OS — Product Story">Product story ↗</a>
+                </p>
+              </div>
             </div>
           </div>
-        </div>
-
-        <div class="wk-card">
-          <a class="wk-card__poster wk-poster--type wk-poster--genz"
-             href="/portfolio/code/films/genz-economics.html"
-             data-embed="/portfolio/code/films/genz-economics.html" data-embed-label="Gen Z Economics — Launch Film">
-            <span class="pt-kind">Launch film</span>
-            <span class="pt-name">Gen Z<br>Economics</span>
-            <span class="wk-card__play"><span></span></span>
+          <a class="lf-media" href="/portfolio/code/films/personal-os.html" data-embed="/portfolio/code/films/personal-os.html" data-embed-label="Personal-OS — Launch Film"
+             data-preview="/portfolio/code/films/previews/personal-os" tabindex="-1" aria-hidden="true">
+            <img class="lf-pic" src="/portfolio/code/films/previews/personal-os.webp" alt="" width="1280" height="720" decoding="async">
+            <span class="lf-badge"><i></i>Play · 1:45</span>
           </a>
-          <div class="wk-card__meta">
-            <div class="wk-card__k">IP · media brand</div>
-            <div class="wk-card__t">Gen Z Economics</div>
-            <div class="wk-card__s">Making the economy legible to the generation living through it — an IP built to explain money in their language.</div>
-            <div class="wk-card__links">
-              <a href="/portfolio/code/decks/GenZ-Economics-IP-Story.pdf" data-embed="/portfolio/code/decks/GenZ-Economics-IP-Story.pdf" data-embed-label="Gen Z Economics — IP Story">IP story ↗</a>
+        </article>
+        <article class="lf-item" aria-labelledby="lf-genz-economics">
+          <div class="lf-content">
+            <div class="lf-row">
+              <h2 class="lf-title" id="lf-genz-economics"><span class="lf-num">02</span> <span class="lf-name">Gen Z Economics</span></h2>
+              <div class="lf-desc">
+                <p class="lf-kind">IP · media brand</p>
+                <p class="lf-text">Making the economy legible to the generation living through it — an IP built to explain money in their language.</p>
+                <p class="lf-links">
+                  <a href="/portfolio/code/films/genz-economics.html" data-embed="/portfolio/code/films/genz-economics.html" data-embed-label="Gen Z Economics — Launch Film">Watch the film · 1:50</a>
+                  <a href="/portfolio/code/decks/GenZ-Economics-IP-Story.pdf" data-embed="/portfolio/code/decks/GenZ-Economics-IP-Story.pdf" data-embed-label="Gen Z Economics — IP Story">IP story ↗</a>
+                </p>
+              </div>
             </div>
           </div>
-        </div>
-
-        <div class="wk-card">
-          <a class="wk-card__poster wk-poster--type wk-poster--diksha"
-             href="/portfolio/code/films/diksha-erp.html"
-             data-embed="/portfolio/code/films/diksha-erp.html" data-embed-label="The Diksha ERP — Launch Film">
-            <span class="pt-kind">Launch film</span>
-            <span class="pt-name">Diksha<br>ERP</span>
-            <span class="wk-card__play"><span></span></span>
+          <a class="lf-media" href="/portfolio/code/films/genz-economics.html" data-embed="/portfolio/code/films/genz-economics.html" data-embed-label="Gen Z Economics — Launch Film"
+             data-preview="/portfolio/code/films/previews/genz-economics" tabindex="-1" aria-hidden="true">
+            <img class="lf-pic" src="/portfolio/code/films/previews/genz-economics.webp" alt="" width="1280" height="720" decoding="async">
+            <span class="lf-badge"><i></i>Play · 1:50</span>
           </a>
-          <div class="wk-card__meta">
-            <div class="wk-card__k">Product · school operations</div>
-            <div class="wk-card__t">The Diksha ERP</div>
-            <div class="wk-card__s">The operating system for the family school — admissions, fees, attendance and reports, built to actually get used.</div>
-            <div class="wk-card__links">
-              <a href="/portfolio/code/decks/Diksha-ERP-Product-Story.pdf" data-embed="/portfolio/code/decks/Diksha-ERP-Product-Story.pdf" data-embed-label="The Diksha ERP — Product Story">Product story ↗</a>
+        </article>
+        <article class="lf-item" aria-labelledby="lf-diksha-erp">
+          <div class="lf-content">
+            <div class="lf-row">
+              <h2 class="lf-title" id="lf-diksha-erp"><span class="lf-num">03</span> <span class="lf-name">The Diksha ERP</span></h2>
+              <div class="lf-desc">
+                <p class="lf-kind">Product · school operations</p>
+                <p class="lf-text">The operating system for the family school — admissions, fees, attendance and reports, built to actually get used.</p>
+                <p class="lf-links">
+                  <a href="/portfolio/code/films/diksha-erp.html" data-embed="/portfolio/code/films/diksha-erp.html" data-embed-label="The Diksha ERP — Launch Film">Watch the film · 1:50</a>
+                  <a href="/portfolio/code/decks/Diksha-ERP-Product-Story.pdf" data-embed="/portfolio/code/decks/Diksha-ERP-Product-Story.pdf" data-embed-label="The Diksha ERP — Product Story">Product story ↗</a>
+                </p>
+              </div>
             </div>
           </div>
-        </div>
-
+          <a class="lf-media" href="/portfolio/code/films/diksha-erp.html" data-embed="/portfolio/code/films/diksha-erp.html" data-embed-label="The Diksha ERP — Launch Film"
+             data-preview="/portfolio/code/films/previews/diksha-erp" tabindex="-1" aria-hidden="true">
+            <img class="lf-pic" src="/portfolio/code/films/previews/diksha-erp.webp" alt="" width="1280" height="720" decoding="async">
+            <span class="lf-badge"><i></i>Play · 1:50</span>
+          </a>
+        </article>
       </section>
     </div>
   </main>
@@ -120,7 +136,8 @@
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js"></script>
-  <script src="/portfolio/subpage-fx.js?v=3"></script>
+  <script src="/portfolio/subpage-fx.js?v=4"></script>
+  <script src="/portfolio/films-showcase.js?v=1"></script>
   <script src="/portfolio/work.js?v=3"></script>
   <script defer src="/assets/site.js?v=1"></script>
   <!-- hand-drawn nav underline (see assets/draw-underline.js) -->
