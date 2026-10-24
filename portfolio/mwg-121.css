@@ -1,8 +1,9 @@
 /* MWG 121 — the template's assets/style.css, as delivered.
    Two edits only, so it cannot restyle the rest of the site: the template's
    '* {…}' normalize and its 'body {…}' rule are scoped to .mwg_effect121.
-   Everything else below is byte-for-byte the template, plus one rule from
-   Lenis's own required CSS at the end (see there). */
+   Below that, byte-for-byte the template except the colours marked 'site
+   theme' (asked for: cream, carbon ink, light lines, muted grey), plus one
+   rule from Lenis's own required CSS at the end (see there). */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@500;800&display=swap');
 
 /* NORMALIZE */
@@ -17,8 +18,8 @@
 /* NORMALIZE */
 
 .mwg_effect121 {
-    background: #121212;
-    color: #F1F1F1;
+    background: var(--wk-canvas, #f4f3ef); /* site theme; template: #121212 */
+    color: var(--wk-ink, #1a1712);          /* site theme; template: #F1F1F1 */
     font: 500 normal 16px/1 'Inter';
     letter-spacing: -0.06em;
 }
@@ -33,7 +34,7 @@
     font-size: 22px;
 }
 .mwg_effect121 .hero .grey {
-    color: #999;
+    color: var(--muted, #6b6358); /* site theme; template: #999 */
 }
 .mwg_effect121 .section {
     padding: 25px 0;
@@ -42,7 +43,7 @@
     clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
     width: calc(100% - 50px);
     margin: 0 auto;
-    border-top: 1px solid #323232;
+    border-top: 1px solid var(--wk-line, #dcd8cf); /* site theme; template: #323232 */
 }
 .mwg_effect121 .content {
     position: fixed;
@@ -61,7 +62,7 @@
     padding: 0 25px 0 0;
 }
 .mwg_effect121 .number {
-    color: #999;
+    color: var(--muted, #6b6358); /* site theme; template: #999 */
 }
 .mwg_effect121 .text-right {
     width: 28%;
