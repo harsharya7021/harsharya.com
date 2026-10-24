@@ -73,14 +73,23 @@ jobs:
           body = json.dumps({"host": host, "key": key,
                              "keyLocation": f"https://{host}/{key}.txt",
                              "urlList": urls}).encode()
+          accepted = 0
           for endpoint in ("https://api.indexnow.org/indexnow", "https://www.bing.com/indexnow"):
               req = urllib.request.Request(endpoint, data=body, method="POST",
                                            headers={"Content-Type": "application/json; charset=utf-8"})
               try:
                   with urllib.request.urlopen(req, timeout=30) as r:
-                      print(endpoint, "->", r.status, f"({len(urls)} URLs)")
+                      code, detail = r.status, ""
               except urllib.error.HTTPError as e:
-                  print(endpoint, "->", e.code, e.read()[:300])
+                  code, detail = e.code, e.read()[:200].decode("utf-8", "replace")
               except Exception as e:
-                  print(endpoint, "-> error:", e)
+                  code, detail = 0, str(e)[:200]
+              # 200 = submitted, 202 = received (key check pending). Shown as an
+              # annotation on the run so it's visible without opening the logs.
+              ok = code in (200, 202)
+              accepted += ok
+              level = "notice" if ok else "warning"
+              print(f"::{level} title=IndexNow::{endpoint} -> HTTP {code} for {len(urls)} URLs {detail}".strip())
+          if not accepted:
+              raise SystemExit("No IndexNow endpoint accepted the submission")
           PY
