@@ -2,8 +2,10 @@
    Two edits only, so it cannot restyle the rest of the site: the template's
    '* {…}' normalize and its 'body {…}' rule are scoped to .mwg_effect121.
    Below that, byte-for-byte the template except the colours marked 'site
-   theme' (asked for: cream, carbon ink, light lines, muted grey), plus one
-   rule from Lenis's own required CSS at the end (see there). */
+   theme' (asked for: cream, carbon ink, light lines, muted grey), plus, at
+   the end: one rule from Lenis's own required CSS, one that keeps the site's
+   home-page '.hero' rule out of the template's hero, and the 98 scroll cue
+   (see there). */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@500;800&display=swap');
 
 /* NORMALIZE */
@@ -112,4 +114,44 @@
    which would smooth every frame Lenis scrolls a second time. */
 html.lenis.lenis-smooth {
     scroll-behavior: auto !important;
+}
+
+/* The site's own home-page '.hero' rule (styles.css: two columns, 1.35fr 1fr,
+   and a gap) also matches the template's .hero and pushed the heading into the
+   left column on wide screens. Back to the template's one centred column. */
+.mwg_effect121 .hero {
+    grid-template-columns: none;
+    gap: 0;
+}
+
+/* The scroll cue from ninety-eight.in's hero (.nudge-l), in place of the
+   hero's 'Scroll to explore' line (asked for). 98's rules as they are, except
+   where marked: it sits under the heading, where the words were (98 pins it
+   to the hero's bottom-left corner), and it takes this page's ink — the track
+   is the ink at 20%, as 98's is. */
+.mwg_effect121 .nudge-l {
+    position: relative;        /* 98: absolute; left: 1.4rem; bottom: 1.7rem */
+    display: block;            /* site: its own line under the heading */
+    margin: 1em auto 0;        /* site: one line below the heading, centred */
+    width: 1px;
+    height: 46px;
+    background: rgba(26, 23, 18, .2); /* site ink #1a1712 at .2; 98: rgba(244,244,242,.2) */
+    overflow: hidden;
+}
+.mwg_effect121 .nudge-l::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: -100%;
+    width: 100%;
+    height: 100%;
+    background: var(--wk-ink, #1a1712); /* 98: var(--ink) */
+    animation: drip 2.1s cubic-bezier(.16, 1, .3, 1) infinite; /* 98's --ease */
+}
+@keyframes drip {
+    to { top: 100%; }
+}
+/* 98 stills its animations under reduced motion, which leaves the bare track. */
+@media (prefers-reduced-motion: reduce) {
+    .mwg_effect121 .nudge-l::after { animation: none; }
 }
