@@ -2,8 +2,8 @@
 # about pages the moment they change, instead of waiting for a crawl.
 # ChatGPT search leans on Bing's index, so this is how new pages reach it fast.
 #
-# On each push to main: waits for GitHub Pages to finish deploying, then
-# submits the URLs of the pages that changed. If the sitemap or this file
+# On each push to main: waits until GitHub Pages is serving the new files,
+# then submits the URLs of the pages that changed. If the sitemap or this file
 # changed (or you run it by hand from the Actions tab), it submits every URL
 # in sitemap.xml. The key is public by design: it is the file at
 # https://harsharya.com/a8b71d60bbde4aa723b32d3e4ade0b25.txt
@@ -52,16 +52,35 @@ jobs:
           echo "count=$(wc -l < submit.txt | tr -d ' ')" >> "$GITHUB_OUTPUT"
           echo "URLs to submit:"; cat submit.txt
 
-      - name: Wait for GitHub Pages to publish
+      - name: Wait until the live site serves this commit
         if: steps.urls.outputs.count != '0'
         run: |
-          # poll the key file until the live site answers, then give the CDN a moment
-          for i in $(seq 1 30); do
-            code=$(curl -s -o /dev/null -w '%{http_code}' "https://$HOST/$KEY.txt")
-            [ "$code" = "200" ] && break
-            sleep 10
-          done
-          sleep 75
+          # Fetch each URL (cache-busted) until its bytes match the file in this
+          # commit, so search engines are only pinged once the new page is live.
+          python3 - <<'PY'
+          import hashlib, os, time, urllib.request
+          host = os.environ["HOST"]
+          urls = [u.strip() for u in open("submit.txt") if u.strip()]
+          def path_for(u):
+              p = u.split(host, 1)[1].lstrip("/")
+              return p + "index.html" if (p == "" or p.endswith("/")) else p
+          pending = {u: path_for(u) for u in urls}
+          deadline = time.time() + 480
+          while pending and time.time() < deadline:
+              for u, p in list(pending.items()):
+                  try:
+                      req = urllib.request.Request(f"{u}?cb={int(time.time())}", headers={"Cache-Control": "no-cache"})
+                      live = urllib.request.urlopen(req, timeout=20).read()
+                      if hashlib.sha256(live).digest() == hashlib.sha256(open(p, "rb").read()).digest():
+                          del pending[u]
+                  except Exception:
+                      pass
+              if pending:
+                  time.sleep(15)
+          ok = len(urls) - len(pending)
+          stale = f"; still stale: {', '.join(list(pending)[:5])}" if pending else ""
+          print(f"::notice title=Live check::{ok}/{len(urls)} pages serve this commit{stale}")
+          PY
 
       - name: Submit to IndexNow
         if: steps.urls.outputs.count != '0'
