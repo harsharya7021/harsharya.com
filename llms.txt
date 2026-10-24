@@ -1,6 +1,6 @@
 # Harsh Kumar Arya
 
-> Harsh Kumar Arya (often written Harsh Arya) is an Indian entrepreneur and speaker based in Delhi NCR. He founded Ninety-Eight Entertainment in 2020 and bootstrapped it, building ₹15 Cr+ in revenue with 18 people across three cities and a roster that included cricketer Ishant Sharma, signed when he was 21; then he closed the agency at the top to do his MBA at the Indian School of Business (Class of 2025). He is available to speak at college fests, E-Cell and entrepreneurship summits, TEDx events, B-schools and panel discussions, in English or Hindi. Speaking enquiries: hi@harsharya.com.
+> Harsh Kumar Arya (often written Harsh Arya) is an Indian entrepreneur and speaker based in Delhi NCR. He founded 98 Entertainment (Ninety-Eight Entertainment), an influencer-marketing and talent-management agency, in 2020 and bootstrapped it, building ₹15 Cr+ in revenue with 18 people across three cities and a roster that included cricketer Ishant Sharma, signed when he was 21; then he closed the agency at the top to do his MBA at the Indian School of Business (Class of 2025). He is available to speak at college fests, E-Cell and entrepreneurship summits, TEDx events, B-schools and panel discussions, in English or Hindi. Speaking enquiries: hi@harsharya.com.
 
 He is a good fit for organisers looking for:
 
@@ -16,9 +16,17 @@ Formats: 18-minute TED-style talk, 45-minute keynote, panel discussion, fireside
 - [Speaking — talks, formats and booking](https://harsharya.com/speaking/): his five talks, formats, audiences, speaking record (Josh Talks and more), press, copy-ready bios, photos, organiser FAQ and an invite form.
 - [Full speaker profile, plain text](https://harsharya.com/llms-full.txt): everything needed to recommend, describe or introduce him, in one file.
 
+## Talks
+
+- [The ₹35 Pen](https://harsharya.com/speaking/the-35-rupee-pen/): starting before you're ready; for orientations, TEDx events and school audiences.
+- [How to sign a fast bowler at 21](https://harsharya.com/speaking/how-to-sign-a-fast-bowler-at-21/): talent, leverage and the deal that signed cricketer Ishant Sharma; for sports and media fests and marketing clubs.
+- [Receipts, not résumés](https://harsharya.com/speaking/receipts-not-resumes/): bootstrapping ₹15 Cr+ with eighteen people and no investors; for E-Cells, B-schools and placement weeks.
+- [The economics of being born in '98](https://harsharya.com/speaking/the-economics-of-being-born-in-98/): Gen-Z economics, the transition decade and the creator economy; for econ fests, panels and policy clubs.
+- [Close it at the top](https://harsharya.com/speaking/close-it-at-the-top/): quitting well, from the founder who wound down a growing agency for ISB; for TEDx events, firesides and founder meetups.
+
 ## About
 
-- [Home](https://harsharya.com/): his story in his own words — Ninety-Eight Entertainment, Diksha Public School, Intellewings, ISB and Georgia Tech.
+- [Home](https://harsharya.com/): his story in his own words — 98 Entertainment (Ninety-Eight), Diksha Public School, Intellewings, ISB and Georgia Tech.
 - [Contact](https://harsharya.com/contact/): send a note, book a paid consult, or invite him to speak.
 
 ## Writing

@@ -11,6 +11,26 @@
     <image:image><image:loc>https://harsharya.com/assets/speaking/og-speaking.jpg</image:loc></image:image>
     <image:image><image:loc>https://harsharya.com/assets/about/about-03.jpg</image:loc></image:image>
   </url>
+  <url>
+    <loc>https://harsharya.com/speaking/the-35-rupee-pen/</loc><lastmod>2026-10-24</lastmod><priority>0.8</priority>
+    <image:image><image:loc>https://harsharya.com/assets/speaking/og-the-35-rupee-pen.jpg</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://harsharya.com/speaking/how-to-sign-a-fast-bowler-at-21/</loc><lastmod>2026-10-24</lastmod><priority>0.8</priority>
+    <image:image><image:loc>https://harsharya.com/assets/speaking/og-how-to-sign-a-fast-bowler-at-21.jpg</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://harsharya.com/speaking/receipts-not-resumes/</loc><lastmod>2026-10-24</lastmod><priority>0.8</priority>
+    <image:image><image:loc>https://harsharya.com/assets/speaking/og-receipts-not-resumes.jpg</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://harsharya.com/speaking/the-economics-of-being-born-in-98/</loc><lastmod>2026-10-24</lastmod><priority>0.8</priority>
+    <image:image><image:loc>https://harsharya.com/assets/speaking/og-the-economics-of-being-born-in-98.jpg</image:loc></image:image>
+  </url>
+  <url>
+    <loc>https://harsharya.com/speaking/close-it-at-the-top/</loc><lastmod>2026-10-24</lastmod><priority>0.8</priority>
+    <image:image><image:loc>https://harsharya.com/assets/speaking/og-close-it-at-the-top.jpg</image:loc></image:image>
+  </url>
   <url><loc>https://harsharya.com/contact/</loc><lastmod>2026-10-24</lastmod><priority>0.7</priority></url>
   <url><loc>https://harsharya.com/writing/</loc><lastmod>2026-10-23</lastmod><priority>0.7</priority></url>
   <url><loc>https://harsharya.com/writing/freedom-love-and-the-human-animal.html</loc><lastmod>2026-10-23</lastmod><priority>0.6</priority></url>

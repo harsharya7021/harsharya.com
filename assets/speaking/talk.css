@@ -1,0 +1,211 @@
+/* ───────────────────────────────────────────────────────────
+   TALK PAGES — /speaking/<talk>/. One page per talk, in the same
+   Warhol building as /speaking/ (tokens from styles.css). Each
+   page wears its talk's colour as --mark.
+   ─────────────────────────────────────────────────────────── */
+.tp main { overflow-x: clip; }
+.tp :focus-visible { outline: 3px solid var(--accent-2); outline-offset: 3px; }
+.tp section { padding: 80px 0; }
+.tp .section-title { margin-bottom: 28px; }
+
+/* ── breadcrumbs ──────────────────────────────────────── */
+.tp-crumbs {
+  display: flex; flex-wrap: wrap; gap: 4px 10px; align-items: baseline;
+  font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--muted); margin: 0 0 22px;
+}
+.tp-crumbs a { border-bottom: 2px solid transparent; }
+.tp-crumbs a:hover { color: var(--accent); border-bottom-color: var(--accent); }
+.tp-crumbs span[aria-hidden] { color: var(--text); }
+.tp-crumbs [aria-current] { color: var(--text); font-weight: 700; }
+
+/* ── hero ─────────────────────────────────────────────── */
+.tp .tp-hero { padding: 36px 0 72px; }
+.tp-hero-grid { display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 60px; align-items: start; }
+.tp-mark {
+  position: relative; isolation: isolate; overflow: hidden;
+  width: 240px; height: 240px;
+  display: flex; align-items: center; justify-content: center;
+  border: 3px solid var(--text);
+  box-shadow: 14px 14px 0 var(--text);
+  background: var(--mark, var(--accent));
+  font-family: var(--font-display); font-size: 84px; line-height: 1; letter-spacing: -0.01em;
+  margin-top: 8px;
+}
+.tp-mark::before {
+  content: ""; position: absolute; inset: 0; z-index: -1;
+  background: radial-gradient(circle at center, rgba(10,10,10,0.16) 1.1px, transparent 1.4px) 0 0 / 9px 9px;
+}
+.tp-mark--long { font-size: 62px; }
+.tp-h1 { margin: 0 0 24px; }
+.tp-h1-kicker {
+  display: block;
+  font-family: var(--font-mono); font-size: 13px; font-weight: 700;
+  letter-spacing: 0.16em; text-transform: uppercase;
+  margin-bottom: 16px;
+}
+.tp-h1-main {
+  display: block;
+  font-family: var(--font-display); font-weight: 400; text-transform: uppercase;
+  font-size: clamp(46px, 6.2vw, 104px); line-height: 0.9; letter-spacing: -0.01em;
+}
+body[data-mode="warhol"] .tp-h1.page-title em { padding: 0 12px; margin: 0 -2px; }
+.tp-synopsis {
+  font-family: var(--font-serif); font-size: clamp(21px, 2vw, 27px); line-height: 1.38;
+  max-width: 34em; margin: 0 0 6px;
+}
+.tp-facts {
+  display: grid; grid-template-columns: max-content minmax(0, 1fr);
+  margin: 30px 0 0; border-top: 3px solid var(--text); max-width: 760px;
+}
+.tp-facts dt, .tp-facts dd { border-bottom: 1px solid var(--text); padding: 12px 0; }
+.tp-facts dt {
+  font-family: var(--font-mono); font-size: 11px; font-weight: 700;
+  letter-spacing: 0.14em; text-transform: uppercase;
+  padding-right: 22px; padding-top: 14px;
+}
+.tp-facts dd { margin: 0; font-size: 15.5px; line-height: 1.5; }
+.tp-facts a { border-bottom: 2px solid var(--accent); font-weight: 600; }
+.tp-facts a:hover { color: var(--accent); }
+.tp-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.tp-chips li {
+  font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.04em;
+  padding: 4px 9px; border: 2px solid var(--text); background: #fff;
+}
+.tp-ctas { display: flex; flex-wrap: wrap; gap: 14px; margin-top: 30px; }
+.tp-btn {
+  display: inline-block;
+  font-family: var(--font-display); font-size: 21px; letter-spacing: 0.03em;
+  text-transform: uppercase; line-height: 1;
+  padding: 15px 22px 14px;
+  background: var(--text); color: var(--bg);
+  border: 3px solid var(--text);
+  box-shadow: 6px 6px 0 var(--accent);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.tp-btn:hover { transform: translate(3px, 3px); box-shadow: 3px 3px 0 var(--accent); }
+.tp-btn--light { background: var(--bg); color: var(--text); box-shadow: 6px 6px 0 var(--text); }
+.tp-btn--light:hover { box-shadow: 3px 3px 0 var(--text); }
+
+/* ── the story ────────────────────────────────────────── */
+.tp-story-grid { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: 64px; align-items: start; }
+.tp-prose p { font-size: 18px; line-height: 1.7; margin: 0 0 18px; max-width: 64ch; }
+.tp-prose p:last-child { margin-bottom: 0; }
+.tp-quote {
+  margin: 8px 0 0;
+  border: 3px solid var(--text); background: #fff;
+  box-shadow: 12px 12px 0 var(--mark, var(--accent));
+  padding: 26px 26px 22px;
+}
+.tp-quote p { font-family: var(--font-serif); font-style: italic; font-size: clamp(21px, 1.9vw, 27px); line-height: 1.38; }
+.tp-quote cite {
+  display: block; margin-top: 16px;
+  font-family: var(--font-mono); font-style: normal; font-size: 11.5px;
+  letter-spacing: 0.1em; text-transform: uppercase;
+}
+
+/* ── receipts ─────────────────────────────────────────── */
+.tp-receipts { border-top: 3px solid var(--text); max-width: 940px; counter-reset: r; }
+.tp-receipts li {
+  display: grid; grid-template-columns: 44px minmax(0, 1fr); gap: 14px;
+  padding: 16px 0 17px; border-bottom: 1px solid var(--text);
+}
+.tp-receipts li::before {
+  counter-increment: r; content: counter(r, decimal-leading-zero);
+  font-family: var(--font-mono); font-weight: 700; font-size: 13px; padding-top: 4px;
+}
+.tp-receipt-text { font-size: 17px; line-height: 1.55; }
+.tp-receipt-src { display: inline-block; margin-top: 6px; font-family: var(--font-mono); font-size: 11.5px; letter-spacing: 0.06em; }
+.tp-receipt-src a { border-bottom: 2px solid var(--accent); }
+.tp-receipt-src a:hover { color: var(--accent); }
+
+/* ── FAQ (same shape as /speaking/) ──────────────────── */
+.tp-faq { border-top: 3px solid var(--text); max-width: 900px; }
+.tp-faq details { border-bottom: 1px solid var(--text); }
+.tp-faq summary {
+  list-style: none; cursor: pointer;
+  display: flex; justify-content: space-between; align-items: baseline; gap: 18px;
+  padding: 18px 0;
+  font-family: var(--font-display); font-weight: 400; text-transform: uppercase;
+  font-size: clamp(20px, 2.1vw, 26px); line-height: 1.1;
+}
+.tp-faq summary::-webkit-details-marker { display: none; }
+.tp-faq summary::after { content: "+"; font-family: var(--font-mono); font-size: 22px; font-weight: 700; color: var(--accent); flex: 0 0 auto; }
+.tp-faq details[open] summary::after { content: "–"; }
+.tp-faq summary:hover { color: var(--accent); }
+.tp-faq .tp-answer { padding: 0 0 22px; max-width: 70ch; font-size: 17px; line-height: 1.6; }
+.tp-faq .tp-answer a { border-bottom: 2px solid var(--accent); }
+
+/* ── the other four talks ─────────────────────────────── */
+.tp-more { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px; }
+.tp-more a {
+  display: flex; flex-direction: column; gap: 14px; height: 100%;
+  border: 3px solid var(--text); background: #fff;
+  padding: 16px 16px 18px;
+  box-shadow: 6px 6px 0 var(--text);
+  transition: transform 0.15s ease, box-shadow 0.15s ease;
+}
+.tp-more a:hover { transform: translate(3px, 3px); box-shadow: 3px 3px 0 var(--text); }
+.tp-more-mark {
+  width: 60px; height: 60px; display: flex; align-items: center; justify-content: center;
+  border: 3px solid var(--text); background: var(--mark, var(--accent));
+  font-family: var(--font-display); font-size: 20px; line-height: 1;
+}
+.tp-more-title { font-family: var(--font-display); font-weight: 400; text-transform: uppercase; font-size: 23px; line-height: 1; }
+.tp-more-title em { font-family: var(--font-serif); font-style: italic; font-weight: 700; text-transform: none; color: var(--accent); }
+.tp-more-for { margin-top: auto; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.08em; text-transform: uppercase; color: var(--muted); }
+.tp-back { margin-top: 30px; font-family: var(--font-mono); font-size: 12.5px; letter-spacing: 0.06em; }
+.tp-back a { border-bottom: 2px solid var(--accent); font-weight: 700; }
+
+/* ── invite strip (the site's orange contact block) ───── */
+.tp .contact-block { padding: 88px 0 72px; }
+.tp-invite .contact-line, .tp-invite .section-label { opacity: 1 !important; transform: none !important; }
+.tp-invite-text { max-width: 60ch; font-size: 18px; line-height: 1.6; margin: -12px 0 28px; }
+.tp-invite-text a { border-bottom: 2px solid var(--text); font-weight: 700; }
+.tp-invite .tp-btn { background: var(--text); color: var(--bg); box-shadow: 6px 6px 0 var(--bg); }
+.tp-invite .tp-btn:hover { box-shadow: 3px 3px 0 var(--bg); }
+.tp-invite .tp-btn--light { background: var(--bg); color: var(--text); box-shadow: 6px 6px 0 var(--text); }
+.tp-invite .tp-btn--light:hover { box-shadow: 3px 3px 0 var(--text); }
+.tp-updated { margin-top: 28px; font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase; }
+
+/* ── responsive ───────────────────────────────────────── */
+@media (max-width: 1100px) {
+  .tp-more { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 960px) {
+  .tp-hero-grid { grid-template-columns: minmax(0, 1fr); gap: 34px; }
+  .tp-mark { width: 150px; height: 150px; font-size: 54px; box-shadow: 10px 10px 0 var(--text); }
+  .tp-mark--long { font-size: 40px; }
+  .tp-story-grid { grid-template-columns: minmax(0, 1fr); gap: 40px; }
+}
+@media (max-width: 760px) {
+  .tp section { padding: 56px 0; }
+  .tp .tp-hero { padding: 22px 0 48px; }
+  .tp .contact-block { padding: 56px 0; }
+}
+@media (max-width: 560px) {
+  .tp-mark { width: 112px; height: 112px; font-size: 40px; box-shadow: 7px 7px 0 var(--text); }
+  .tp-mark--long { font-size: 30px; }
+  .tp-h1-main { font-size: clamp(40px, 12.5vw, 64px); }
+  .tp-facts { grid-template-columns: minmax(0, 1fr); }
+  .tp-facts dt { border-bottom: 0; padding: 12px 0 0; }
+  .tp-facts dd { padding-top: 4px; }
+  .tp-btn { font-size: 19px; padding: 13px 18px 12px; }
+  .tp-more { grid-template-columns: minmax(0, 1fr); }
+  .tp-prose p { font-size: 17px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tp-btn, .tp-more a { transition: none; }
+}
+@media print {
+  @page { size: A4; margin: 12mm 13mm; }
+  html, body { background: #fff !important; }
+  .nav, .tp-ctas, footer, #back-to-top, .tp-invite .tp-ctas { display: none !important; }
+  .tp section, .tp .tp-hero { padding: 14px 0 !important; }
+  .tp-mark, .tp-quote, .tp-more a { box-shadow: none !important; }
+  .tp-faq details { break-inside: avoid; }
+  .tp-faq summary::after { content: none !important; }
+  .tp .contact-block { background: #fff !important; border: 0 !important; }
+  .tp .contact-block::before { display: none !important; }
+  a { color: inherit !important; }
+}
