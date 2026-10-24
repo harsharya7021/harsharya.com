@@ -1,0 +1,159 @@
+/* MWG 117 — the template's assets/style.css, as delivered.
+   Two edits only, so it cannot restyle the rest of the site: the template's
+   '* {…}' normalize and its 'body {…}' rule are scoped to .mwg_effect117.
+   Everything else below is byte-for-byte the template. */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@500;800&display=swap');
+
+/* NORMALIZE */
+.mwg_effect117, .mwg_effect117 * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    appearance: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+/* NORMALIZE */
+
+.mwg_effect117 {
+    background: #121212;
+    color: #F1F1F1;
+}
+.mwg_effect117 {
+    height: 100vh;
+    display: grid;
+    place-items: center;
+    cursor: pointer;
+    overflow: hidden;
+    user-select: none;
+    -webkit-tap-highlight-color: transparent;
+    perspective: 1200px;
+    font: 500 30px / 1 'Inter';
+    letter-spacing: -0.04em;
+}
+.mwg_effect117 .title {
+    position: absolute;
+    top: 20px;
+    left: 20px;
+    color: #fff;
+}
+.mwg_effect117 .stage {
+    position: relative;
+    width: 100%;
+    height: 100%;
+    display: grid;
+    place-items: center;
+    transform-style: preserve-3d;
+}
+.mwg_effect117 .words {
+    position: relative;
+    z-index: 2;
+    display: grid;
+    place-items: center;
+    width: 90vw;
+    pointer-events: none;
+    transform: translateZ(40px);
+    transform-style: preserve-3d;
+}
+.mwg_effect117 .word {
+    grid-area: 1 / 1;
+    margin: 0;
+    font: 500 normal min(12vw, 140px) / 0.9 'Inter';
+    text-align: center;
+    will-change: transform, opacity;
+    visibility: hidden;
+}
+.mwg_effect117 .word.is-active {
+    visibility: visible;
+}
+.mwg_effect117 .medias {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    pointer-events: none;
+    transform-style: preserve-3d;
+}
+.mwg_effect117 .layer {
+    position: absolute;
+    inset: 0;
+    transform-style: preserve-3d;
+}
+.mwg_effect117 .layer--0 {
+    transform: translateZ(-160px);
+}
+.mwg_effect117 .layer--1 {
+    transform: translateZ(0);
+}
+.mwg_effect117 .layer--2 {
+    transform: translateZ(140px);
+}
+.mwg_effect117 .media {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: min(18vw, 160px);
+    height: auto;
+    aspect-ratio: 1;
+    object-fit: cover;
+    margin: 0;
+    display: block;
+    border-radius: 0.4em;
+    will-change: transform, opacity;
+}
+.mwg_effect117 .media-pool {
+    position: absolute;
+    width: 0;
+    height: 0;
+    overflow: hidden;
+    visibility: hidden;
+    pointer-events: none;
+}
+.mwg_effect117 .pager {
+    position: absolute;
+    left: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+    z-index: 3;
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    pointer-events: none;
+}
+.mwg_effect117 .pager li {
+    text-align: center;
+    opacity: 0.3;
+    pointer-events: auto;
+    cursor: pointer;
+    transition: opacity 0.3s;
+    line-height: 1.2;
+}
+.mwg_effect117 .pager li:hover,
+.mwg_effect117 .pager li.is-active {
+    opacity: 1;
+}
+
+@media (max-width: 767px) {
+    .mwg_effect117 {
+        font-size: 20px;
+    }
+    .mwg_effect117 .media {
+        width: min(28vw, 120px);
+    }
+    .mwg_effect117 .layer--0 {
+        transform: translateZ(-80px);
+    }
+    .mwg_effect117 .layer--1 {
+        transform: translateZ(-40px);
+    }
+    .mwg_effect117 .layer--2 {
+        transform: translateZ(0);
+    }
+    .mwg_effect117 .pager {
+        left: 16px;
+    }
+    .mwg_effect117 .word {
+        font-size: 40px;
+    }
+}

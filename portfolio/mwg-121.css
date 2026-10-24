@@ -1,0 +1,114 @@
+/* MWG 121 — the template's assets/style.css, as delivered.
+   Two edits only, so it cannot restyle the rest of the site: the template's
+   '* {…}' normalize and its 'body {…}' rule are scoped to .mwg_effect121.
+   Everything else below is byte-for-byte the template, plus one rule from
+   Lenis's own required CSS at the end (see there). */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@500;800&display=swap');
+
+/* NORMALIZE */
+.mwg_effect121, .mwg_effect121 * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    appearance: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+/* NORMALIZE */
+
+.mwg_effect121 {
+    background: #121212;
+    color: #F1F1F1;
+    font: 500 normal 16px/1 'Inter';
+    letter-spacing: -0.06em;
+}
+.mwg_effect121 {
+    padding: 0 0 100vh;
+}
+.mwg_effect121 .hero {
+    height: 100vh;
+    display: grid;
+    place-items: center;
+    text-align: center;
+    font-size: 22px;
+}
+.mwg_effect121 .hero .grey {
+    color: #999;
+}
+.mwg_effect121 .section {
+    padding: 25px 0;
+    display: flex;
+    justify-content: center;
+    clip-path: polygon(0 0, 100% 0, 100% 100%, 0 100%);
+    width: calc(100% - 50px);
+    margin: 0 auto;
+    border-top: 1px solid #323232;
+}
+.mwg_effect121 .content {
+    position: fixed;
+    top: 50%;
+    left: 0;
+    padding: 0 25px;
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    transform: translateY(-50%);
+}
+.mwg_effect121 .text-left {
+    width: 32.5%;
+    font-size: 3.2vw;
+    line-height: 1;
+    padding: 0 25px 0 0;
+}
+.mwg_effect121 .number {
+    color: #999;
+}
+.mwg_effect121 .text-right {
+    width: 28%;
+    font-size: 14px;
+    line-height: 1.4;
+    padding: 0 4%;
+}
+.mwg_effect121 .media {
+    aspect-ratio: 0.8;
+    width: 34vw;
+    overflow: hidden;
+    clip-path: inset(0% 15% 0% 15% round 1vw);
+}
+.mwg_effect121 .media img {
+    width: 100%;
+    height: calc(100% + 200px);
+    object-fit: cover;
+    display: block;
+    opacity: 1;
+}
+
+@media (max-width: 767px) {
+    .mwg_effect121 .section {
+        flex-direction: column;
+    }
+    .mwg_effect121 .content {
+        padding: 25px 0 0;
+        order: 2;
+        flex-direction: column;
+        position: relative;
+        transform: none;
+        gap: 12px;
+    }
+    .mwg_effect121 .text-left {
+        font-size: 26px;
+    }
+    .mwg_effect121 .text-right {
+        padding: 0;
+    }
+    .mwg_effect121 .text-left, 
+    .mwg_effect121 .text-right, 
+    .mwg_effect121 .media {
+        width: 100%;
+    }
+}
+/* Lenis's required CSS (lenis.css): the site sets html{scroll-behavior:smooth},
+   which would smooth every frame Lenis scrolls a second time. */
+html.lenis.lenis-smooth {
+    scroll-behavior: auto !important;
+}

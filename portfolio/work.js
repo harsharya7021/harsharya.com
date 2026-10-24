@@ -31,12 +31,16 @@
     iframe.src = src;
     box.classList.add('is-open');
     document.documentElement.style.overflow = 'hidden';
+    /* a page running Lenis (the MWG 121 template on /code) would keep
+       scrolling underneath the open lightbox */
+    if (window.lenis && window.lenis.stop) window.lenis.stop();
   }
   function close() {
     if (!box) return;
     box.classList.remove('is-open');
     iframe.src = 'about:blank';
     document.documentElement.style.overflow = '';
+    if (window.lenis && window.lenis.start) window.lenis.start();
   }
 
   document.addEventListener('click', function (e) {

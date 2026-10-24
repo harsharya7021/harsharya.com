@@ -9,7 +9,8 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo+Black&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,700;0,6..96,900;1,6..96,400&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=Inter:wght@400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="/styles.css?v=22" />
-  <link rel="stylesheet" href="/portfolio/work.css?v=16" />
+  <link rel="stylesheet" href="/portfolio/work.css?v=17" />
+  <link rel="stylesheet" href="/portfolio/mwg-117.css?v=1" />
   <link rel="icon" href="/favicon.ico" sizes="48x48">
   <link rel="icon" href="/assets/favicon-32.png" type="image/png" sizes="32x32">
   <link rel="apple-touch-icon" href="/assets/apple-touch-icon.png">
@@ -48,43 +49,39 @@
         <p class="wk-lead">Where I cut things apart and put them back together. Tap a piece to read it in full, right here.</p>
       </header>
 
-      <!-- ── DESIGN SHOWCASE — word & scatter (MWG 117) ──
-           One slot per series, one artifact per series — the piece that
-           stands for it everywhere else on the site. A series that is not
-           made yet holds an empty frame ([data-blank]) so the pager already
-           counts it. /portfolio/design-showcase.js builds the words, the
-           pager and the artifact from the <template> below; the block stays
-           hidden until it has. To finish series 02: replace its [data-blank]
-           with one <img> (a keyed cut-out, or a photo with data-framed) and
-           set its data-word / data-label. The scatter/ files are derived
-           from the case-study originals (cut-outs keyed to transparency,
-           photos downsized, WebP) — add a new series' artifact there. ── -->
-      <section class="ws-stage" id="design-showcase" aria-label="Design series, one at a time" hidden>
-        <p class="ws-label"></p>
-        <div class="ws-scene">
-          <div class="ws-medias" aria-hidden="true">
-            <div class="ws-layer ws-layer--0"></div>
-            <div class="ws-layer ws-layer--1"></div>
-            <div class="ws-layer ws-layer--2"></div>
-          </div>
-          <div class="ws-words"></div>
+    </div>
+
+    <!-- MWG 117 — the template's markup as delivered; content swapped in.
+         Styles: /portfolio/mwg-117.css · script: /portfolio/mwg-117.js -->
+    <section class="mwg_effect117">
+        <div class="stage">
+            <div class="medias" aria-hidden="true">
+                <div class="layer layer--0"></div>
+                <div class="layer layer--1"></div>
+                <div class="layer layer--2"></div>
+            </div>
+            <div class="words">
+                <p class="word">A Personal Piece of Earth</p>
+                <p class="word">Surreal</p>
+                <p class="word">Psychological Value</p>
+            </div>
+            <ul class="pager">
+                <li>1</li>
+                <li>2</li>
+                <li>3</li>
+            </ul>
         </div>
-        <ol class="ws-pager" aria-label="Series"></ol>
-        <p class="ws-hint"><span class="ws-hint__fine">Click</span><span class="ws-hint__coarse">Tap</span> anywhere for the next series — the case studies live below.</p>
 
-        <template class="ws-pool">
-          <div data-word="A Personal Piece of Earth" data-label="Series 01 · Hand-cut collage · 2020–2021">
-            <img src="/portfolio/design/pieces/assets/scatter/01-irony.webp" alt="Collage: a male portrait split with a silver classical statue head, a teal eye, red skylines, snowy mountains and grazing yaks">
-          </div>
-          <div data-word="Yet to come" data-label="Series 02 · In the works">
-            <span data-blank>02</span>
-          </div>
-          <div data-word="Yet to come" data-label="Series 03 · In the works">
-            <span data-blank>03</span>
-          </div>
-        </template>
-      </section>
+        <div class="media-pool" aria-hidden="true">
+            <div>
+                <img src="/portfolio/design/pieces/assets/01-irony.jpg" alt="">
+            </div>
+            <div></div>
+            <div></div>
+        </div>
+    </section>
 
+    <div class="wk-wrap wk-wrap--after">
       <section class="wk-feature">
         <div class="wk-card">
           <a class="wk-card__poster" href="/portfolio/design/pieces/a-personal-piece-of-earth.html"
@@ -121,8 +118,8 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/ScrollTrigger.min.js"></script>
   <script src="/portfolio/subpage-fx.js?v=4"></script>
-  <script src="/portfolio/design-showcase.js?v=1"></script>
-  <script src="/portfolio/work.js?v=3"></script>
+  <script src="/portfolio/mwg-117.js?v=1"></script>
+  <script src="/portfolio/work.js?v=4"></script>
   <script defer src="/assets/site.js?v=1"></script>
   <!-- hand-drawn nav underline (see assets/draw-underline.js) -->
   <script src="/assets/draw-underline.js?v=1" defer></script>
