@@ -1,0 +1,165 @@
+/* ──────────────────────────────────────────────────────────
+   THE SHELF — every book read, after Time & Space's Book Corner
+   (timeand-space.co/bookcorner — asked for). A shelf of spines; a book
+   opens where it stands: the spine slides away, the cover swings open on
+   its hinge and the details come in beside it. Their timings and easings.
+
+   Two differences, both forced: their spines are photographs, ours are
+   made from each cover (its main colour, the title and author, thickness
+   from the page count, height from the cover's shape); and their shelves
+   scroll sideways, ours hold what fits, and when a book near the end opens
+   the shelf slides left to make room (shelf.js).
+
+   Phones (and any touch screen): the shelf wraps into rows of shorter
+   spines and a tapped book opens full width — cover, then details —
+   "tap to return", as theirs does.
+   ────────────────────────────────────────────────────────── */
+
+.bk-shelf{
+  --bk-gap:3px;            /* between spines */
+  --bk-info:320px;         /* details panel */
+  --bk-room:44px;          /* breathing room after an open book */
+  --bk-open:cubic-bezier(.22,1,.36,1);
+  --bk-close:cubic-bezier(.65,0,.35,1);
+  --bk-panel:var(--stk-canvas,#f6f3eb);
+  --bk-line:rgba(26,23,18,.12);
+  --bk-muted:rgba(26,23,18,.58);
+  position:relative;
+}
+
+/* one shelf = one row of books standing on a line */
+.bk-row{
+  position:relative; overflow:hidden;
+  padding:0 0 20px; margin:0 0 28px;
+  border-bottom:1px solid var(--bk-line);
+}
+.bk-row:last-child{ margin-bottom:0; }
+.bk-track{
+  display:flex; align-items:flex-end; flex-wrap:wrap; row-gap:14px; /* until shelf.js lays the rows */
+  transition:transform 760ms var(--bk-close) 90ms;
+}
+.bk-shelf.is-laid:not(.is-touch) .bk-track{ flex-wrap:nowrap; will-change:transform; }
+.bk-row.is-active .bk-track{ transition:transform 650ms var(--bk-open); }
+
+/* ── a book: closed it is only as wide as its spine ──
+   sizes come per book from the build: d = desktop, m = phone */
+.bk-book{
+  --sw:var(--swd); --bh:var(--bhd); --sz:var(--szd); --sa:var(--sad);
+  position:relative; z-index:1;
+  flex:0 0 var(--sw); width:var(--sw); height:var(--bh);
+  margin:0 var(--bk-gap) 0 0;
+  overflow:hidden; outline:none; cursor:pointer;
+  transition:flex-basis 760ms var(--bk-close) 90ms, width 760ms var(--bk-close) 90ms;
+}
+.bk-book:last-child{ margin-right:0; }
+.bk-book.is-open{
+  z-index:20;
+  flex-basis:calc(var(--cw) + var(--bk-info) + var(--bk-room));
+  width:calc(var(--cw) + var(--bk-info) + var(--bk-room));
+  transition:flex-basis 650ms var(--bk-open), width 650ms var(--bk-open);
+}
+.bk-book:focus-visible .bk-spine{ outline:2px solid var(--stk-orange,#ff5a00); outline-offset:-2px; }
+
+.bk-inner{
+  display:flex; align-items:stretch; height:100%;
+  transition:transform 720ms var(--bk-close);
+}
+.bk-book.is-open .bk-inner{ transform:translateX(calc(-1 * var(--sw))); }
+
+/* ── the spine, made from the cover ── */
+.bk-spine{
+  position:relative; z-index:3; flex:0 0 var(--sw);
+  width:var(--sw); height:100%; overflow:hidden;
+  background:var(--sb); color:var(--sf);
+  border-right:1px solid rgba(0,0,0,.1);
+  background-image:linear-gradient(90deg, rgba(255,255,255,.10), rgba(255,255,255,0) 30%, rgba(0,0,0,0) 70%, rgba(0,0,0,.10));
+  writing-mode:vertical-rl;
+  display:flex; flex-direction:row; justify-content:space-between; align-items:center;
+  padding:14px 0 12px; gap:10px;
+  opacity:1; visibility:visible;
+  transition:opacity 260ms ease 330ms, visibility 0s linear 330ms;
+}
+.bk-book.is-open .bk-spine{ opacity:0; visibility:hidden; pointer-events:none; transition:opacity 160ms ease, visibility 0s linear 160ms; }
+.bk-st, .bk-sa{ display:block; min-width:0; min-height:0; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+.bk-st{ flex:0 1 auto; font-size:var(--sz); line-height:1.02; }
+.bk-sa{ flex:0 0 auto; max-height:42%; font-size:var(--sa); line-height:1; opacity:.82; }
+/* three spine types, so the shelf reads like a shelf */
+.bk-spine--a .bk-st{ font-family:var(--font-display); text-transform:uppercase; letter-spacing:.02em; }
+.bk-spine--a .bk-sa{ font-family:var(--font-mono); text-transform:uppercase; letter-spacing:.12em; }
+.bk-spine--b .bk-st{ font-family:var(--font-serif); font-weight:500; letter-spacing:-.005em; }
+.bk-spine--b .bk-sa{ font-family:var(--font-serif); font-style:italic; }
+.bk-spine--c .bk-st{ font-family:var(--font-mono); font-weight:700; text-transform:uppercase; letter-spacing:.06em; }
+.bk-spine--c .bk-sa{ font-family:var(--font-body); font-weight:500; letter-spacing:.02em; }
+
+/* ── the cover swings open on its hinge ── */
+.bk-cover{
+  position:relative; z-index:2; flex:0 0 var(--cw);
+  width:var(--cw); height:100%; overflow:hidden; background:#fff;
+  transform:perspective(1100px) rotateY(-92deg); transform-origin:left center;
+  transition:transform 650ms var(--bk-open);
+  box-shadow:0 1px 2px rgba(26,23,18,.12);
+}
+.bk-book.is-open .bk-cover{ transform:perspective(1100px) rotateY(0deg); }
+.bk-cover img{ display:block; width:100%; height:100%; object-fit:fill; }
+.bk-return{ display:none; }
+
+/* ── the details ── */
+.bk-info{
+  position:relative; z-index:5; flex:0 0 var(--bk-info);
+  width:var(--bk-info); height:100%; overflow:hidden auto;
+  display:flex; flex-direction:column; justify-content:space-between;
+  padding:clamp(22px,2.6vw,36px); border-left:1px solid var(--bk-line);
+  background:var(--bk-panel); color:var(--stk-ink,#1a1712);
+  opacity:0; transform:translateX(-25px);
+  transition:opacity 190ms ease, transform 420ms var(--bk-close);
+  overflow-wrap:break-word; scrollbar-width:thin;
+}
+.bk-book.is-open .bk-info{ opacity:1; transform:translateX(0); transition:opacity 350ms ease 230ms, transform 550ms var(--bk-open) 120ms; }
+.bk-title{ margin:0; font-family:var(--font-serif); font-style:italic; font-weight:400; font-size:24px; line-height:1.12; letter-spacing:-.01em; }
+.bk-desc{ margin:14px 0 0; font-size:13px; line-height:1.5; color:var(--bk-muted); }
+.bk-desc .bk-note-meta{ display:block; font-family:var(--font-mono); font-size:10px; letter-spacing:.14em; text-transform:uppercase; color:var(--stk-orange,#ff5a00); margin-bottom:6px; }
+.bk-meta{ margin:24px 0 0; }
+.bk-meta > div{ display:grid; grid-template-columns:minmax(78px,.8fr) minmax(0,1.2fr); gap:14px; padding:9px 0; border-top:1px solid var(--bk-line); font-size:11.5px; line-height:1.35; }
+.bk-meta > div:last-child{ border-bottom:1px solid var(--bk-line); }
+.bk-meta dt{ font-family:var(--font-mono); font-size:10px; letter-spacing:.1em; text-transform:uppercase; color:var(--bk-muted); }
+.bk-meta dd{ margin:0; }
+.bk-stars{ letter-spacing:.12em; color:var(--stk-orange,#ff5a00); }
+.bk-link{
+  align-self:flex-start; margin-top:18px;
+  font-family:var(--font-mono); font-size:10.5px; letter-spacing:.14em; text-transform:uppercase;
+  color:var(--stk-ink,#1a1712); text-decoration:none;
+  border:1px solid var(--bk-line); padding:7px 11px; background:rgba(255,255,255,.5);
+}
+.bk-link:hover, .bk-link:focus-visible{ border-color:var(--stk-ink,#1a1712); }
+
+/* ── phones and touch screens: wrap, smaller spines, open full width ── */
+.bk-shelf.is-touch .bk-row{ overflow:visible; }
+.bk-shelf.is-touch .bk-track{ flex-wrap:wrap; row-gap:14px; transform:none !important; transition:none; }
+.bk-shelf.is-touch .bk-book{ --sw:var(--swm); --bh:var(--bhm); --sz:var(--szm); --sa:var(--sam); transition:none; }
+.bk-shelf.is-touch .bk-book.is-open{
+  flex:0 0 100%; width:100%; height:auto; margin:6px 0 10px; cursor:pointer;
+}
+.bk-shelf.is-touch .bk-book.is-open .bk-inner{ transform:none; flex-direction:column; height:auto; }
+.bk-shelf.is-touch .bk-book.is-open .bk-spine{ display:none; }
+.bk-shelf.is-touch .bk-book.is-open .bk-cover{
+  flex:none; width:100%; height:auto; aspect-ratio:var(--ca);
+  transform:none; animation:bk-in 420ms var(--bk-open) both;
+}
+.bk-shelf.is-touch .bk-book.is-open .bk-return{
+  display:block; position:absolute; top:-1px; right:0; z-index:2;
+  font-family:var(--font-mono); font-size:10px; letter-spacing:.16em; text-transform:uppercase;
+  background:var(--bk-panel); color:var(--bk-muted); padding:6px 0 8px 10px;
+}
+.bk-shelf.is-touch .bk-book.is-open .bk-info{
+  flex:none; width:100%; height:auto; overflow:visible;
+  border-left:0; padding:22px 4px 6px; opacity:1; transform:none;
+  animation:bk-in 480ms var(--bk-open) 80ms both;
+}
+.bk-shelf.is-touch .bk-book:not(.is-open) .bk-cover,
+.bk-shelf.is-touch .bk-book:not(.is-open) .bk-info{ visibility:hidden; }
+@keyframes bk-in{ from{ opacity:0; transform:translateY(10px); } to{ opacity:1; transform:none; } }
+
+@media (prefers-reduced-motion: reduce){
+  .bk-track, .bk-book, .bk-inner, .bk-spine, .bk-cover, .bk-info{ transition-duration:1ms !important; transition-delay:0s !important; }
+  .bk-shelf.is-touch .bk-book.is-open .bk-cover, .bk-shelf.is-touch .bk-book.is-open .bk-info{ animation:none; }
+}

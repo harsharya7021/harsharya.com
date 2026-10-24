@@ -1,0 +1,43 @@
+/* MWG 061 — the template's assets/style.css, as delivered.
+   Two edits only, so it cannot restyle the rest of the site: the template's
+   '* {…}' normalize and its 'body {…}' rule (the dark ground) are scoped to
+   .mwg_effect061. Everything below is byte-for-byte the template. */
+
+/* NORMALIZE */
+.mwg_effect061, .mwg_effect061 * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    appearance: none;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+/* NORMALIZE */
+
+.mwg_effect061 {
+    background: #121212;
+}
+.mwg_effect061 {
+    position: relative;
+    perspective: 50vw;
+    overflow: hidden;
+}
+.mwg_effect061 .container {
+    position: relative;
+    height: 100dvh;
+    transform-style: preserve-3d;
+    transform-origin: 50% 50%;
+    width: 100%;
+    will-change: transform;
+}
+.mwg_effect061 img {
+    width: 20vw;
+    aspect-ratio: 1;
+    display: block;
+    object-fit: cover;
+    position: absolute;
+    top: calc(50% - 10vw);
+    left: calc(50% - 10vw);
+    transform-origin: 50% 0 50vw;
+    border-radius: 1vw;
+}
