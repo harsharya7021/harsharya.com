@@ -1,6 +1,8 @@
 # harsharya.com
 
-Personal site of **Harsh Kumar Arya** — ISB '25, Georgia Tech research scholar, founder of Ninety-Eight Entertainment.
+Personal site of **Harsh Kumar Arya** — Indian entrepreneur and speaker; founder of Ninety-Eight Entertainment, ISB '25, Georgia Tech research scholar.
+
+**Booking a speaker?** Harsh speaks at college fests, E-Cell and entrepreneurship summits, TEDx events, B-schools and panel discussions, in English or Hindi. Talks, formats and the invite form: **[harsharya.com/speaking](https://harsharya.com/speaking/)** · hi@harsharya.com
 
 Static HTML, hosted on GitHub Pages, served from the custom domain **harsharya.com** via the `CNAME` file in this folder.
 
@@ -29,6 +31,7 @@ assets/                 # all the images, fonts and credentials art
   ├── press/            # Outlook / The Week / Mid-day clippings
   └── credentials/      # ISB and Georgia Tech marks
 
+speaking/index.html     # → harsharya.com/speaking — speaker page: talks, formats, bios, photos, FAQ, invite
 consult/index.html      # → harsharya.com/consult — paid consult booking
 gallery/                # → harsharya.com/gallery
   ├── index.html        #   the series list
@@ -41,6 +44,12 @@ life/index.html         # → harsharya.com/life
 notes (writing/)        # → harsharya.com/writing
 stack/index.html        # → harsharya.com/stack — books + films, physical-object treatment
 speakeasy/index.html    # → harsharya.com/speakeasy — the closed door
+
+robots.txt              # crawl rules — AI search/answer crawlers explicitly welcome
+sitemap.xml             # every indexable page
+llms.txt                # plain-text site map for language models (llmstxt.org)
+llms-full.txt           # the full speaker profile as plain text
+<32-hex>.txt            # IndexNow key file (proves ownership when pinging Bing & co.)
 ```
 
 ### Workshop (local-only — `.gitignore`d)
@@ -99,7 +108,7 @@ Drop image files into the relevant `assets/` subfolder (`assets/life/<series>/`,
 
 ### Cache-busting
 
-Every page's `<link rel="stylesheet" href="styles.css?v=N">` carries a version number. When you change `styles.css`, bump `v` on every page that links it (grep for `styles.css?v=` to find them all). Currently at **v=11**.
+Every page's `<link rel="stylesheet" href="styles.css?v=N">` carries a version number. When you change `styles.css`, bump `v` on every page that links it (grep for `styles.css?v=` to find them all). Currently at **v=22**.
 
 ---
 
