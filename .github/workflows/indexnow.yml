@@ -1,0 +1,86 @@
+# Tell Bing (and every other IndexNow engine — Yandex, Seznam, Naver, Yep)
+# about pages the moment they change, instead of waiting for a crawl.
+# ChatGPT search leans on Bing's index, so this is how new pages reach it fast.
+#
+# On each push to main: waits for GitHub Pages to finish deploying, then
+# submits the URLs of the pages that changed. If the sitemap or this file
+# changed (or you run it by hand from the Actions tab), it submits every URL
+# in sitemap.xml. The key is public by design: it is the file at
+# https://harsharya.com/a8b71d60bbde4aa723b32d3e4ade0b25.txt
+name: IndexNow
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    env:
+      HOST: harsharya.com
+      KEY: a8b71d60bbde4aa723b32d3e4ade0b25
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 2
+
+      - name: Work out which URLs changed
+        id: urls
+        run: |
+          all_urls() { grep -o '<loc>[^<]*</loc>' sitemap.xml | sed -e 's#<loc>##' -e 's#</loc>##'; }
+          if [ "${{ github.event_name }}" = "workflow_dispatch" ] || ! git rev-parse -q --verify HEAD~1 >/dev/null; then
+            all_urls > urls.txt
+          else
+            changed=$(git diff --name-only HEAD~1 HEAD)
+            if echo "$changed" | grep -qE '^(sitemap\.xml|\.github/workflows/indexnow\.yml)$'; then
+              all_urls > urls.txt
+            else
+              echo "$changed" \
+                | grep -E '\.html$' \
+                | grep -vE '^(writing/editor\.html|manage\.html|speakeasy/|onlyfans/|stack/|consult/|_)' \
+                | sed -e 's#index\.html$##' -e "s#^#https://$HOST/#" > urls.txt || true
+            fi
+          fi
+          # only ever submit URLs that are in the sitemap (i.e. meant to be indexed)
+          all_urls > sitemap-urls.txt
+          grep -Fxf sitemap-urls.txt urls.txt > submit.txt || true
+          echo "count=$(wc -l < submit.txt | tr -d ' ')" >> "$GITHUB_OUTPUT"
+          echo "URLs to submit:"; cat submit.txt
+
+      - name: Wait for GitHub Pages to publish
+        if: steps.urls.outputs.count != '0'
+        run: |
+          # poll the key file until the live site answers, then give the CDN a moment
+          for i in $(seq 1 30); do
+            code=$(curl -s -o /dev/null -w '%{http_code}' "https://$HOST/$KEY.txt")
+            [ "$code" = "200" ] && break
+            sleep 10
+          done
+          sleep 75
+
+      - name: Submit to IndexNow
+        if: steps.urls.outputs.count != '0'
+        run: |
+          python3 - <<'PY'
+          import json, os, urllib.request
+          host, key = os.environ["HOST"], os.environ["KEY"]
+          urls = [u.strip() for u in open("submit.txt") if u.strip()]
+          body = json.dumps({"host": host, "key": key,
+                             "keyLocation": f"https://{host}/{key}.txt",
+                             "urlList": urls}).encode()
+          for endpoint in ("https://api.indexnow.org/indexnow", "https://www.bing.com/indexnow"):
+              req = urllib.request.Request(endpoint, data=body, method="POST",
+                                           headers={"Content-Type": "application/json; charset=utf-8"})
+              try:
+                  with urllib.request.urlopen(req, timeout=30) as r:
+                      print(endpoint, "->", r.status, f"({len(urls)} URLs)")
+              except urllib.error.HTTPError as e:
+                  print(endpoint, "->", e.code, e.read()[:300])
+              except Exception as e:
+                  print(endpoint, "-> error:", e)
+          PY

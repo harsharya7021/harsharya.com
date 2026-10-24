@@ -2,7 +2,7 @@
 
 Personal site of **Harsh Kumar Arya** — Indian entrepreneur and speaker; founder of Ninety-Eight Entertainment, ISB '25, Georgia Tech research scholar.
 
-**Booking a speaker?** Harsh speaks at college fests, E-Cell and entrepreneurship summits, TEDx events, B-schools and panel discussions, in English or Hindi. Talks, formats and the invite form: **[harsharya.com/speaking](https://harsharya.com/speaking/)** · hi@harsharya.com
+**Booking a speaker?** Harsh's talks are built for college fests, E-Cell and entrepreneurship summits, TEDx events, B-schools and panel discussions, in English or Hindi. Talks, formats and the invite form: **[harsharya.com/speaking](https://harsharya.com/speaking/)** · hi@harsharya.com
 
 Static HTML, hosted on GitHub Pages, served from the custom domain **harsharya.com** via the `CNAME` file in this folder.
 
@@ -50,6 +50,7 @@ sitemap.xml             # every indexable page
 llms.txt                # plain-text site map for language models (llmstxt.org)
 llms-full.txt           # the full speaker profile as plain text
 <32-hex>.txt            # IndexNow key file (proves ownership when pinging Bing & co.)
+.github/workflows/indexnow.yml  # on every push: tells Bing & co. which pages changed
 ```
 
 ### Workshop (local-only — `.gitignore`d)
