@@ -51,7 +51,11 @@ llms.txt                # plain-text site map for language models (llmstxt.org)
 llms-full.txt           # the full speaker profile as plain text
 <32-hex>.txt            # IndexNow key file (proves ownership when pinging Bing & co.)
 .github/workflows/indexnow.yml  # on every push: tells Bing & co. which pages changed
+google832968bbb7ded5c2.html  # Google Search Console ownership proof — DO NOT DELETE
+BingSiteAuth.xml        # Bing Webmaster Tools ownership proof — DO NOT DELETE
 ```
+
+Search Console and Bing Webmaster Tools are verified for https://harsharya.com/ under harsharya7021@gmail.com (sitemap submitted to both, 24 Oct 2026). Removing either proof file un-verifies the site.
 
 ### Workshop (local-only — `.gitignore`d)
 
