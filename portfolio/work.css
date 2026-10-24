@@ -390,10 +390,16 @@ body.work-page footer{ margin-top:auto; }
 @media (max-width: 820px) { .vw-stage { display: none; } }
 @media (prefers-reduced-motion: reduce) { .vw-stage { display: none; } }
 
-/* ═══════════════════════════════════════════════════════════════════════
-   /portfolio/design — the MWG 117 template now sits full-width between the
-   header and the case-study card (its own styles: /portfolio/mwg-117.css).
-   The card's column reopens below it with the same top spacing the header
-   uses, so the card doesn't butt against the template's dark edge.
-   ═══════════════════════════════════════════════════════════════════════ */
-.wk-wrap--after{ padding-top:clamp(52px,10vh,104px); }
+/* Visually hidden until focused: a keyboard path to something the page
+   otherwise only offers to the mouse (on /design: the case study). */
+.wk-sr{
+  position:absolute; width:1px; height:1px; overflow:hidden;
+  clip:rect(0 0 0 0); clip-path:inset(50%); white-space:nowrap;
+}
+.wk-sr:focus-visible{
+  position:fixed; left:16px; bottom:16px; z-index:50;
+  width:auto; height:auto; clip:auto; clip-path:none;
+  font-family:var(--font-mono); font-size:11px; letter-spacing:.12em; text-transform:uppercase;
+  background:var(--wk-ink); color:var(--wk-canvas); padding:8px 12px;
+  outline:2px solid var(--wk-orange); outline-offset:2px;
+}

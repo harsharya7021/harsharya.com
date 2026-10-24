@@ -1,7 +1,8 @@
 /* MWG 117 — the template's assets/style.css, as delivered.
    Two edits only, so it cannot restyle the rest of the site: the template's
    '* {…}' normalize and its 'body {…}' rule are scoped to .mwg_effect117.
-   Everything else below is byte-for-byte the template. */
+   Below that, byte-for-byte the template except where marked 'site theme',
+   plus the site edits at the end (each one asked for). */
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@500;800&display=swap');
 
 /* NORMALIZE */
@@ -16,8 +17,8 @@
 /* NORMALIZE */
 
 .mwg_effect117 {
-    background: #121212;
-    color: #F1F1F1;
+    background: var(--wk-canvas, #f4f3ef); /* site theme; template: #121212 */
+    color: var(--wk-ink, #1a1712);          /* site theme; template: #F1F1F1 */
 }
 .mwg_effect117 {
     height: 100vh;
@@ -155,5 +156,38 @@
     }
     .mwg_effect117 .word {
         font-size: 40px;
+    }
+}
+
+/* ── Site edits (asked for on /portfolio/design) ───────────────────────── */
+
+/* The pictures are the X-Acto cut-outs on transparent backgrounds: shown
+   whole inside the template's square box instead of cropped to fill it. */
+.mwg_effect117 .media {
+    object-fit: contain;
+    border-radius: 0;
+}
+
+/* A click on a collage opens the case study (mwg-117-site.js), so the
+   collages have to take the pointer; the template sets none on .medias.
+   The stage passes clicks through: its own plane sits in front of the back
+   depth layer and would otherwise catch clicks meant for those collages.
+   Empty space still lands on the section itself, so the template's own
+   click (next word) is unchanged; the numbers keep their own pointer. */
+.mwg_effect117 .stage {
+    pointer-events: none;
+}
+.mwg_effect117 .media {
+    pointer-events: auto;
+}
+
+/* Keep the word clear of the 1/2/3 numbers on narrow screens. The template's
+   90vw box runs under the numbers below ~1000px; this only bites there. */
+.mwg_effect117 .words {
+    max-width: calc(100% - 104px);
+}
+@media (max-width: 767px) {
+    .mwg_effect117 .words {
+        max-width: calc(100% - 88px);
     }
 }

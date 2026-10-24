@@ -43,6 +43,9 @@
     if (window.lenis && window.lenis.start) window.lenis.start();
   }
 
+  /* other page scripts (e.g. mwg-117-site.js) open pieces through this */
+  window.wkLightbox = { open: open, close: close };
+
   document.addEventListener('click', function (e) {
     var t = e.target.closest('[data-embed]');
     if (!t) return;
