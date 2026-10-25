@@ -202,6 +202,7 @@ body {
 
 .container { max-width: var(--container-max); margin: 0 auto; padding: 0 var(--container-pad); }
 .break { display: block; }
+.glue { white-space: nowrap; }   /* keeps a stamped word and its punctuation on one line */
 em { font-style: italic; }
 strong { font-weight: 600; }
 

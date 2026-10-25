@@ -9,9 +9,9 @@
   <link rel="preload" href="../assets/fonts/bodoni-moda-latin-standard-italic.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="../assets/fonts/inter-latin-standard-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="../assets/fonts/space-mono-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="../styles.css?v=23" />
+  <link rel="stylesheet" href="../styles.css?v=24" />
   <style>
-    .series-page header { padding: 56px 0 24px; max-width: 900px; margin: 0 auto; }
+    .series-page header { padding: 56px var(--container-pad) 24px; max-width: calc(900px + 2 * var(--container-pad)); margin: 0 auto; }
     .series-back {
       display: inline-block;
       font-family: var(--font-mono);
@@ -155,7 +155,7 @@
       padding: 32px 0 64px;
     }
     @media (max-width: 720px) {
-      .series-page header { padding: 40px 0 16px; }
+      .series-page header { padding: 40px var(--container-pad) 16px; }
       .viewer-stage { aspect-ratio: 4 / 3; box-shadow: 6px 6px 0 var(--accent); }
       .viewer-thumbs button { min-width: 60px; }
       .viewer-caption { font-size: 16px; }
