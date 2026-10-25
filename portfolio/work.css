@@ -93,6 +93,11 @@ body.work-page{
   min-height:100vh; display:flex; flex-direction:column;
 }
 .work-page main{ flex:1 0 auto; }
+/* The tilted polaroids and the papers peeking out of the folders are meant to
+   break the column; on a phone they also broke the viewport (horizontal
+   scroll). `clip` crops them at the page edge without making <main> a scroll
+   container, so sticky elements and anchor jumps are unaffected. */
+.work-page main{ overflow-x:clip; }
 body.work-page footer{ margin-top:auto; }
 .wk-wrap{ max-width:1180px; margin:0 auto; padding:0 var(--container-pad); }
 

@@ -139,7 +139,7 @@ function signupCard(host, opts){
          <input type="email" placeholder="you@email.com" autocomplete="email" aria-label="Email address" required />
          <button class="nlbtn" type="submit">${READY ? "Sign me up" : "Notify me"}</button>
        </form>
-       <div class="nlnote">${READY ? "" : "The newsletter is opening soon — configure Firebase to go live."}</div>
+       <div class="nlnote">${READY ? "" : "No mailing list yet — this opens an email to Harsh, who keeps the list by hand."}</div>
      </div>`;
   const form = host.querySelector("form"), input = host.querySelector("input"),
         btn = host.querySelector("button"), note = host.querySelector(".nlnote");
@@ -147,7 +147,15 @@ function signupCard(host, opts){
     e.preventDefault();
     const email = input.value.trim();
     if (!validEmail(email)){ note.className="nlnote err"; note.textContent="That email doesn't look right."; return; }
-    if (!READY){ note.className="nlnote"; note.textContent="Saved for when we launch — thanks!"; input.value=""; return; }
+    if (!READY){
+      /* preview mode has no backend: be honest and hand the address to the
+         visitor's mail client instead of pretending to save it */
+      const subject = encodeURIComponent("Add me to the notes list");
+      const body = encodeURIComponent("Please add " + email + " to the list for new notes and photo series.");
+      window.location.href = "mailto:hi@harsharya.com?subject=" + subject + "&body=" + body;
+      note.className="nlnote ok"; note.textContent="Opening your mail app — send it and you're on.";
+      return;
+    }
     btn.disabled = true; note.className="nlnote"; note.textContent="Sending your magic link…";
     try {
       await sendLink(email);

@@ -7,7 +7,7 @@
   <title>Editor — Harsh Kumar Arya</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo+Black&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;1,6..96,400&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400;1,9..144,500&family=Inter:wght@400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo+Black&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,700;0,6..96,900;1,6..96,400;1,6..96,500&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400;1,9..144,500&family=Inter:wght@300;400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
   <link rel="icon" href="../favicon.ico" sizes="48x48">
   <style>
     :root{
@@ -1719,7 +1719,7 @@
     // Downloaded note uses relative ../styles.css (correct in /writing/). For a blob preview that path
     // can't resolve, so point at the live stylesheet + assets so the preview matches the published look.
     var html=buildNote()
-      .split('href="../styles.css?v=22"').join('href="https://harsharya.com/styles.css?v=22"')
+      .split('href="../styles.css?v=23"').join('href="https://harsharya.com/styles.css?v=23"')
       .split('href="../favicon.ico"').join('href="https://harsharya.com/favicon.ico"')
       .split('href="../assets/apple-touch-icon.png"').join('href="https://harsharya.com/assets/apple-touch-icon.png"');
     var blob=new Blob([html],{type:"text/html"}); var url=URL.createObjectURL(blob);
@@ -2398,8 +2398,8 @@
 '  <meta name="author" content="Harsh Kumar Arya" />\n'+
 '  <link rel="preconnect" href="https://fonts.googleapis.com">\n'+
 '  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n'+
-'  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo+Black&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,700;1,6..96,400&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400&family=Inter:wght@400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">\n'+
-'  <link rel="stylesheet" href="../styles.css?v=22" />\n'+
+'  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo+Black&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,700;0,6..96,900;1,6..96,400;1,6..96,500&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400;1,9..144,500&family=Inter:wght@300;400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">\n'+
+'  <link rel="stylesheet" href="../styles.css?v=23" />\n'+
 '  <style>\n'+
 '    .post { padding: 56px 0 88px; max-width: 760px; margin: 0 auto; }\n'+
 '    .post-back { display:inline-block; font-family:var(--font-mono); font-size:12px; letter-spacing:0.14em; text-transform:uppercase; background:var(--text); color:var(--bg); padding:6px 12px; border:2px solid var(--text); margin-bottom:36px; }\n'+
@@ -2540,7 +2540,8 @@
 '  <footer>\n'+
 '    <div class="container">\n'+
 '      <span class="foot-left">© <span id="year"></span> Harsh Kumar Arya · <a class="foot-email" href="mailto:hi@harsharya.com">hi@harsharya.com</a></span>\n'+
-'      <span class="foot-socials"><a href="https://www.linkedin.com/in/harsharyaa/" target="_blank" rel="me noopener">LinkedIn</a> <a href="https://www.youtube.com/@HarshAryaa" target="_blank" rel="me noopener">YouTube</a> <a href="https://github.com/harsharya7021" target="_blank" rel="me noopener">GitHub</a></span>\n'+
+'      <span class="foot-socials"><a href="https://www.linkedin.com/in/harsharyaa/" target="_blank" rel="me noopener">LinkedIn</a> <a href="https://www.youtube.com/@HarshAryaa" target="_blank" rel="me noopener">YouTube</a> <a href="https://github.com/harsharya7021" target="_blank" rel="me noopener">GitHub</a> <a href="/speaking/">Speaking</a></span>\n'+
+'      <span class="foot-right">Built for the <a class="foot-secret" href="/speakeasy/">few people</a> who\'ll actually read this far.</span>\n'+
 '    </div>\n'+
 '  </footer>\n'+
 '  <script>document.getElementById("year").textContent=new Date().getFullYear();var n=document.getElementById("nav");window.addEventListener("scroll",function(){if(window.scrollY>8)n.classList.add("scrolled");else n.classList.remove("scrolled");});<\/script>\n'+
