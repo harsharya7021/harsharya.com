@@ -2,51 +2,51 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
-    <loc>https://harsharya.com/</loc><lastmod>2026-10-24</lastmod><priority>1.0</priority>
+    <loc>https://harsharya.com/</loc><lastmod>2026-10-25</lastmod><priority>1.0</priority>
     <image:image><image:loc>https://harsharya.com/assets/portrait.jpg</image:loc></image:image>
   </url>
   <url>
-    <loc>https://harsharya.com/speaking/</loc><lastmod>2026-10-24</lastmod><priority>0.9</priority>
+    <loc>https://harsharya.com/speaking/</loc><lastmod>2026-10-25</lastmod><priority>0.9</priority>
     <image:image><image:loc>https://harsharya.com/assets/speaking/josh-talks-stage.jpg</image:loc></image:image>
     <image:image><image:loc>https://harsharya.com/assets/speaking/og-speaking.jpg</image:loc></image:image>
     <image:image><image:loc>https://harsharya.com/assets/about/about-03.jpg</image:loc></image:image>
   </url>
   <url>
-    <loc>https://harsharya.com/speaking/the-35-rupee-pen/</loc><lastmod>2026-10-24</lastmod><priority>0.8</priority>
+    <loc>https://harsharya.com/speaking/the-35-rupee-pen/</loc><lastmod>2026-10-25</lastmod><priority>0.8</priority>
     <image:image><image:loc>https://harsharya.com/assets/speaking/og-the-35-rupee-pen.jpg</image:loc></image:image>
   </url>
   <url>
-    <loc>https://harsharya.com/speaking/how-to-sign-a-fast-bowler-at-21/</loc><lastmod>2026-10-24</lastmod><priority>0.8</priority>
+    <loc>https://harsharya.com/speaking/how-to-sign-a-fast-bowler-at-21/</loc><lastmod>2026-10-25</lastmod><priority>0.8</priority>
     <image:image><image:loc>https://harsharya.com/assets/speaking/og-how-to-sign-a-fast-bowler-at-21.jpg</image:loc></image:image>
   </url>
   <url>
-    <loc>https://harsharya.com/speaking/receipts-not-resumes/</loc><lastmod>2026-10-24</lastmod><priority>0.8</priority>
+    <loc>https://harsharya.com/speaking/receipts-not-resumes/</loc><lastmod>2026-10-25</lastmod><priority>0.8</priority>
     <image:image><image:loc>https://harsharya.com/assets/speaking/og-receipts-not-resumes.jpg</image:loc></image:image>
   </url>
   <url>
-    <loc>https://harsharya.com/speaking/the-economics-of-being-born-in-98/</loc><lastmod>2026-10-24</lastmod><priority>0.8</priority>
+    <loc>https://harsharya.com/speaking/the-economics-of-being-born-in-98/</loc><lastmod>2026-10-25</lastmod><priority>0.8</priority>
     <image:image><image:loc>https://harsharya.com/assets/speaking/og-the-economics-of-being-born-in-98.jpg</image:loc></image:image>
   </url>
   <url>
-    <loc>https://harsharya.com/speaking/close-it-at-the-top/</loc><lastmod>2026-10-24</lastmod><priority>0.8</priority>
+    <loc>https://harsharya.com/speaking/close-it-at-the-top/</loc><lastmod>2026-10-25</lastmod><priority>0.8</priority>
     <image:image><image:loc>https://harsharya.com/assets/speaking/og-close-it-at-the-top.jpg</image:loc></image:image>
   </url>
-  <url><loc>https://harsharya.com/contact/</loc><lastmod>2026-10-24</lastmod><priority>0.7</priority></url>
-  <url><loc>https://harsharya.com/writing/</loc><lastmod>2026-10-23</lastmod><priority>0.7</priority></url>
-  <url><loc>https://harsharya.com/writing/freedom-love-and-the-human-animal.html</loc><lastmod>2026-10-23</lastmod><priority>0.6</priority></url>
-  <url><loc>https://harsharya.com/writing/the-thermodynamics-of-the-selfish-ape.html</loc><lastmod>2026-10-23</lastmod><priority>0.6</priority></url>
-  <url><loc>https://harsharya.com/writing/the-error-term.html</loc><lastmod>2026-10-23</lastmod><priority>0.6</priority></url>
-  <url><loc>https://harsharya.com/writing/the-architecture-of-walls.html</loc><lastmod>2026-10-23</lastmod><priority>0.6</priority></url>
-  <url><loc>https://harsharya.com/portfolio/</loc><lastmod>2026-10-23</lastmod><priority>0.6</priority></url>
-  <url><loc>https://harsharya.com/portfolio/code/</loc><lastmod>2026-10-23</lastmod><priority>0.5</priority></url>
-  <url><loc>https://harsharya.com/portfolio/design/</loc><lastmod>2026-10-23</lastmod><priority>0.5</priority></url>
-  <url><loc>https://harsharya.com/portfolio/videos/</loc><lastmod>2026-10-23</lastmod><priority>0.5</priority></url>
-  <url><loc>https://harsharya.com/life/</loc><lastmod>2026-10-23</lastmod><priority>0.6</priority></url>
-  <url><loc>https://harsharya.com/gallery/</loc><lastmod>2026-10-23</lastmod><priority>0.5</priority></url>
-  <url><loc>https://harsharya.com/gallery/jodhpur.html</loc><lastmod>2026-10-23</lastmod><priority>0.4</priority></url>
-  <url><loc>https://harsharya.com/gallery/kerala.html</loc><lastmod>2026-10-23</lastmod><priority>0.4</priority></url>
-  <url><loc>https://harsharya.com/gallery/kochi.html</loc><lastmod>2026-10-23</lastmod><priority>0.4</priority></url>
-  <url><loc>https://harsharya.com/gallery/lakshadweep.html</loc><lastmod>2026-10-23</lastmod><priority>0.4</priority></url>
-  <url><loc>https://harsharya.com/gallery/malaysia.html</loc><lastmod>2026-10-23</lastmod><priority>0.4</priority></url>
-  <url><loc>https://harsharya.com/gallery/shimla.html</loc><lastmod>2026-10-23</lastmod><priority>0.4</priority></url>
+  <url><loc>https://harsharya.com/contact/</loc><lastmod>2026-10-25</lastmod><priority>0.7</priority></url>
+  <url><loc>https://harsharya.com/writing/</loc><lastmod>2026-10-25</lastmod><priority>0.7</priority></url>
+  <url><loc>https://harsharya.com/writing/freedom-love-and-the-human-animal.html</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority></url>
+  <url><loc>https://harsharya.com/writing/the-thermodynamics-of-the-selfish-ape.html</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority></url>
+  <url><loc>https://harsharya.com/writing/the-error-term.html</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority></url>
+  <url><loc>https://harsharya.com/writing/the-architecture-of-walls.html</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority></url>
+  <url><loc>https://harsharya.com/portfolio/</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority></url>
+  <url><loc>https://harsharya.com/portfolio/code/</loc><lastmod>2026-10-25</lastmod><priority>0.5</priority></url>
+  <url><loc>https://harsharya.com/portfolio/design/</loc><lastmod>2026-10-25</lastmod><priority>0.5</priority></url>
+  <url><loc>https://harsharya.com/portfolio/videos/</loc><lastmod>2026-10-25</lastmod><priority>0.5</priority></url>
+  <url><loc>https://harsharya.com/life/</loc><lastmod>2026-10-25</lastmod><priority>0.6</priority></url>
+  <url><loc>https://harsharya.com/gallery/</loc><lastmod>2026-10-25</lastmod><priority>0.5</priority></url>
+  <url><loc>https://harsharya.com/gallery/jodhpur.html</loc><lastmod>2026-10-25</lastmod><priority>0.4</priority></url>
+  <url><loc>https://harsharya.com/gallery/kerala.html</loc><lastmod>2026-10-25</lastmod><priority>0.4</priority></url>
+  <url><loc>https://harsharya.com/gallery/kochi.html</loc><lastmod>2026-10-25</lastmod><priority>0.4</priority></url>
+  <url><loc>https://harsharya.com/gallery/lakshadweep.html</loc><lastmod>2026-10-25</lastmod><priority>0.4</priority></url>
+  <url><loc>https://harsharya.com/gallery/malaysia.html</loc><lastmod>2026-10-25</lastmod><priority>0.4</priority></url>
+  <url><loc>https://harsharya.com/gallery/shimla.html</loc><lastmod>2026-10-25</lastmod><priority>0.4</priority></url>
 </urlset>
