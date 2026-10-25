@@ -16,11 +16,13 @@ The folder is split into two halves. The **top half** is the deployed site — e
 
 ```
 index.html              # the home page (harsharya.com)
-styles.css              # shared stylesheet for every page
+404.html                # branded not-found page (GitHub Pages serves it for any unknown URL)
+styles.css              # shared stylesheet for every page; starts with the @font-face block
 CNAME                   # custom domain anchor
 .nojekyll               # GitHub Pages: skip Jekyll
 
 assets/                 # all the images, fonts and credentials art
+  ├── fonts/            # self-hosted Anton, Archivo Black, Bodoni Moda, Inter, Space Mono (OFL) + fonts.css for the tools
   ├── about.jpg, portrait.jpg
   ├── creative/         # Kochi photo series
   ├── life/             # off-the-clock grid + gallery series
@@ -48,6 +50,7 @@ life/index.html         # → harsharya.com/life
 notes (writing/)        # → harsharya.com/writing
 stack/index.html        # → harsharya.com/stack — books + films, physical-object treatment
 speakeasy/index.html    # → harsharya.com/speakeasy — the closed door
+preview/                # noindex previews of branches awaiting a decision (robots-disallowed) — delete once decided
 
 robots.txt              # crawl rules — AI search/answer crawlers explicitly welcome
 sitemap.xml             # every indexable page
@@ -115,9 +118,13 @@ Drop image files into the relevant `assets/` subfolder (`assets/life/<series>/`,
 
 3. Commit and push.
 
+### Fonts
+
+The five web fonts are self-hosted from `assets/fonts/` (see the top of `styles.css`); nothing loads from Google Fonts on the Warhol pages. A new page needs the four `<link rel="preload" … as="font">` lines from any existing page's `<head>` so headlines paint without a shift.
+
 ### Cache-busting
 
-Every page's `<link rel="stylesheet" href="styles.css?v=N">` carries a version number. When you change `styles.css`, bump `v` on every page that links it (grep for `styles.css?v=` to find them all). Currently at **v=26**.
+Every page's `<link rel="stylesheet" href="styles.css?v=N">` carries a version number. When you change `styles.css`, bump `v` on every page that links it (grep for `styles.css?v=` to find them all). Currently at **v=27**.
 
 ---
 

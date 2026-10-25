@@ -282,6 +282,11 @@
     renderer.setSize(W, H);
     renderer.setPixelRatio(Math.min(window.devicePixelRatio || 1, 2));
     camera.aspect = W / H;
+    /* 38° is the vertical field: on a landscape canvas the sphere fills the
+       height. On a portrait phone that same field is wider than the canvas
+       and the globe spills off both edges — so open the vertical field until
+       the sphere sits inside the width with room for the limb pins. */
+    camera.fov = camera.aspect < 1 ? 2 * Math.atan(Math.tan(19 * Math.PI / 180) * 1.25 / camera.aspect) * 180 / Math.PI : 38;
     camera.updateProjectionMatrix();
   }
   resize();

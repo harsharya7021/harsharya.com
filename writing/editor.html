@@ -450,7 +450,7 @@
 
   <!-- ───────── Top bar ───────── -->
   <div class="topbar">
-    <a class="brand" href="index.html">← <span class="long">Notes ·</span> Harsh<sup>1</sup></a>
+    <a class="brand" href="/writing/">← <span class="long">Notes ·</span> Harsh<sup>1</sup></a>
     <span class="status" id="status"><span class="dot">●</span> Ready</span>
     <span class="spacer"></span>
     <span class="metric" id="metric">0 words · 0 min</span>
@@ -1721,7 +1721,7 @@
     // Downloaded note uses relative ../styles.css (correct in /writing/). For a blob preview that path
     // can't resolve, so point at the live stylesheet + assets so the preview matches the published look.
     var html=buildNote()
-      .split('href="../styles.css?v=26"').join('href="https://harsharya.com/styles.css?v=26"')
+      .split('href="../styles.css?v=27"').join('href="https://harsharya.com/styles.css?v=27"')
       .split('href="../favicon.ico"').join('href="https://harsharya.com/favicon.ico"')
       .split('href="../assets/apple-touch-icon.png"').join('href="https://harsharya.com/assets/apple-touch-icon.png"');
     var blob=new Blob([html],{type:"text/html"}); var url=URL.createObjectURL(blob);
@@ -2404,7 +2404,7 @@
 '  <link rel="preload" href="../assets/fonts/bodoni-moda-latin-standard-italic.woff2" as="font" type="font/woff2" crossorigin>\n'+
 '  <link rel="preload" href="../assets/fonts/inter-latin-standard-normal.woff2" as="font" type="font/woff2" crossorigin>\n'+
 '  <link rel="preload" href="../assets/fonts/space-mono-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>\n'+
-'  <link rel="stylesheet" href="../styles.css?v=26" />\n'+
+'  <link rel="stylesheet" href="../styles.css?v=27" />\n'+
 '  <style>\n'+
 '    .post { padding: 56px var(--container-pad) 88px; max-width: calc(760px + 2 * var(--container-pad)); margin: 0 auto; }\n'+
 '    .post-back { display:inline-block; font-family:var(--font-mono); font-size:12px; letter-spacing:0.14em; text-transform:uppercase; background:var(--text); color:var(--bg); padding:6px 12px; border:2px solid var(--text); margin-bottom:36px; }\n'+
@@ -2512,13 +2512,13 @@
 '  <a class="skip-link" href="#main">Skip to content</a>\n'+
 '  <nav class="nav" id="nav">\n'+
 '    <div class="container nav-inner">\n'+
-'      <a href="../" class="logo">Harsh<sup>1</sup></a>\n'+
+'      <a href="/" class="logo">Harsh<sup>1</sup></a>\n'+
 '      <div class="nav-links">\n'+
-'        <a href="../#about">About</a>\n'+
+'        <a href="/#about">About</a>\n'+
 '        <a href="/#work">Work</a>\n'+
 '        <a href="/portfolio/">Portfolio</a>\n'+
-'        <a href="../life/index.html">Life</a>\n'+
-'        <a href="index.html">Notes</a>\n'+
+'        <a href="/life/">Life</a>\n'+
+'        <a href="/writing/" aria-current="page">Notes</a>\n'+
 '        <a href="/speaking/">Speaking</a>\n'+
 '        <a href="/contact/">Contact</a>\n'+
 '      </div>\n'+
@@ -2526,7 +2526,7 @@
 '  </nav>\n'+
 '  <article class="post container" id="main">\n'+
 '    <header class="post-header">\n'+
-'      <a href="index.html" class="post-back">← All notes</a>\n'+
+'      <a href="/writing/" class="post-back">← All notes</a>\n'+
 '      <div class="post-meta">\n'+
 '        <span class="post-date">{{DATE_LABEL}}</span>\n'+
 '        <span class="post-dot">/</span>\n'+
@@ -2540,8 +2540,8 @@
 '{{BODY}}\n'+
 '    </div>\n'+
 '    <nav class="post-footer">\n'+
-'      <a href="index.html">← All notes</a>\n'+
-'      <a href="../#contact">Get in touch →</a>\n'+
+'      <a href="/writing/">← All notes</a>\n'+
+'      <a href="/#contact">Get in touch →</a>\n'+
 '    </nav>\n'+
 '  </article>\n'+
 '  <footer>\n'+

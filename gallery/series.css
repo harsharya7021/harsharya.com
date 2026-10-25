@@ -259,6 +259,7 @@ body[data-gallery-layout="grid"] .gnav .i-scroll{ opacity:1; transform:none; }
 @media (max-width:520px){
   .gnav__prev,.gnav__next{ display:none; }
   .gnav__name{ font-size:14px; }
+  .strip-count{ bottom:96px; } /* clear of the dock on phones */
 }
 
 /* ---- INDEX (gallery landing) ------------------------------ */
@@ -283,7 +284,9 @@ body[data-gallery-layout="grid"] .gnav .i-scroll{ opacity:1; transform:none; }
 @media (max-width:720px){
   .gx-grid{ grid-template-columns:1fr; gap:36px; }
   .series[data-layout="grid"] .series-list{ grid-template-columns:repeat(auto-fill,minmax(150px,1fr)); }
+  body.series-page footer, body.gallery-page footer{ padding-bottom:112px; } /* the dock sits higher on phones */
 }
+@media (max-width:345px){ .series-title{ font-size:48px; } } /* "Lakshadweep." no longer runs past a 320px screen */
 
 @media (prefers-reduced-motion:reduce){
   body.series-page, body.gallery-page{ animation:none; }

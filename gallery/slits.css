@@ -177,6 +177,7 @@ body[data-gallery-layout="scroll"]{ overflow:hidden; }
 @media (max-width:560px){
   .sg-title{ top:78px; }
   .sg-close{ top:78px; }
+  .sg-count{ bottom:96px; } /* above the floating dock, which used to cover "/ 07" */
   .sg-count b{ font-size:20px; }
   .sg-hint{ display:none; }
 }

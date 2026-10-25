@@ -104,6 +104,12 @@ body.gm-live .gx-grid{ display:none; }
   .gm-pin__card{ width:46px; height:46px; }
   .gm-pin--state .gm-pin__card{ width:42px; height:42px; }
   .gm-hint{ display:none; }
+  /* the hero spans the whole phone width: keep the caption and the back
+     button inside the page gutter, on a paper chip so the dots don't print
+     through them */
+  .gm-label{ left:var(--container-pad,20px); top:0; background:var(--gx-canvas,#f4f3ef); padding:3px 8px 3px 0; }
+  .gm-label em{ display:block; margin:2px 0 0; }
+  .gm-back{ left:var(--container-pad,20px); top:40px; }
 }
 @media (prefers-reduced-motion:reduce){
   .gm-pin__card{ transition:none; }
