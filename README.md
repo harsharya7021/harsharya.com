@@ -117,7 +117,7 @@ Drop image files into the relevant `assets/` subfolder (`assets/life/<series>/`,
 
 ### Cache-busting
 
-Every page's `<link rel="stylesheet" href="styles.css?v=N">` carries a version number. When you change `styles.css`, bump `v` on every page that links it (grep for `styles.css?v=` to find them all). Currently at **v=24**.
+Every page's `<link rel="stylesheet" href="styles.css?v=N">` carries a version number. When you change `styles.css`, bump `v` on every page that links it (grep for `styles.css?v=` to find them all). Currently at **v=25**.
 
 ---
 

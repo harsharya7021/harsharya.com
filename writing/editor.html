@@ -9,6 +9,7 @@
   <link rel="preload" href="../assets/fonts/anton-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="../assets/fonts/inter-latin-standard-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="../assets/fonts/space-mono-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">
   <link rel="icon" href="../favicon.ico" sizes="48x48">
   <style>
     :root{
@@ -1720,7 +1721,7 @@
     // Downloaded note uses relative ../styles.css (correct in /writing/). For a blob preview that path
     // can't resolve, so point at the live stylesheet + assets so the preview matches the published look.
     var html=buildNote()
-      .split('href="../styles.css?v=24"').join('href="https://harsharya.com/styles.css?v=24"')
+      .split('href="../styles.css?v=25"').join('href="https://harsharya.com/styles.css?v=25"')
       .split('href="../favicon.ico"').join('href="https://harsharya.com/favicon.ico"')
       .split('href="../assets/apple-touch-icon.png"').join('href="https://harsharya.com/assets/apple-touch-icon.png"');
     var blob=new Blob([html],{type:"text/html"}); var url=URL.createObjectURL(blob);
@@ -2393,6 +2394,8 @@
 '<head>\n'+
 '  <meta charset="UTF-8" />\n'+
 '  <meta name="viewport" content="width=device-width, initial-scale=1.0" />\n'+
+'  <meta name="theme-color" content="#fff8e7">\n'+
+'  <meta name="color-scheme" content="light">\n'+
 '  <title>{{TITLE_PLAIN}} — Harsh Kumar Arya</title>\n'+
 '  <meta name="description" content="{{META_DESC}}" />\n'+
 '  <meta name="keywords" content="{{KEYWORDS}}" />\n'+
@@ -2401,7 +2404,7 @@
 '  <link rel="preload" href="../assets/fonts/bodoni-moda-latin-standard-italic.woff2" as="font" type="font/woff2" crossorigin>\n'+
 '  <link rel="preload" href="../assets/fonts/inter-latin-standard-normal.woff2" as="font" type="font/woff2" crossorigin>\n'+
 '  <link rel="preload" href="../assets/fonts/space-mono-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>\n'+
-'  <link rel="stylesheet" href="../styles.css?v=24" />\n'+
+'  <link rel="stylesheet" href="../styles.css?v=25" />\n'+
 '  <style>\n'+
 '    .post { padding: 56px var(--container-pad) 88px; max-width: calc(760px + 2 * var(--container-pad)); margin: 0 auto; }\n'+
 '    .post-back { display:inline-block; font-family:var(--font-mono); font-size:12px; letter-spacing:0.14em; text-transform:uppercase; background:var(--text); color:var(--bg); padding:6px 12px; border:2px solid var(--text); margin-bottom:36px; }\n'+
@@ -2489,6 +2492,7 @@
 '    .post-notes .fn-back { margin-left:6px; color:var(--text); border-bottom:1px solid var(--line); }\n'+
 '    @media print { .sn-note { display:none !important; } .post-notes { display:block !important; } .sn-ref { background:none; border:0; padding:0; } }\n'+
 '  </style>\n'+
+'  <link rel="icon" href="../assets/favicon.svg" type="image/svg+xml">\n'+
 '  <link rel="icon" href="../favicon.ico" sizes="48x48">\n'+
 '  <link rel="apple-touch-icon" href="../assets/apple-touch-icon.png">\n'+
 '  <link rel="canonical" href="https://harsharya.com/writing/{{SLUG}}.html">\n'+
