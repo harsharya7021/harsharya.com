@@ -9,6 +9,7 @@ User-agent: *
 Allow: /
 Disallow: /writing/editor.html
 Disallow: /manage.html
+Disallow: /preview/
 
 # AI search, answer and assistant crawlers — named so the welcome is explicit.
 # (A crawler that matches a named group ignores the * group, so the two
@@ -33,5 +34,6 @@ User-agent: MistralAI-User
 Allow: /
 Disallow: /writing/editor.html
 Disallow: /manage.html
+Disallow: /preview/
 
 Sitemap: https://harsharya.com/sitemap.xml
