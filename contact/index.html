@@ -11,7 +11,7 @@
   <link rel="preload" href="/assets/fonts/bodoni-moda-latin-standard-italic.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/assets/fonts/inter-latin-standard-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="/assets/fonts/space-mono-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="/styles.css?v=26" />
+  <link rel="stylesheet" href="/styles.css?v=27" />
   <style>
     .consult-page main { max-width: 880px; margin: 0 auto; padding: 56px 0 64px; }
     .consult-back {
@@ -243,11 +243,10 @@
         <div class="form-prose">
           <span class="form-text">Hi Harsh, I'm</span>
           <input type="text" name="name" placeholder="your name" class="form-blank form-blank--name" required autocomplete="name" />
-          <span class="form-text">from</span>
-          <input type="text" name="org" placeholder="company / context" class="form-blank form-blank--org" autocomplete="organization" />
-          <span class="form-text">. Reach me at</span>
-          <input type="email" name="email" placeholder="email@yours.com" class="form-blank form-blank--email" required autocomplete="email" />
-          <span class="form-text">.</span>
+          <span class="glue"><span class="form-text">from</span>
+          <input type="text" name="org" placeholder="company / context" class="form-blank form-blank--org" autocomplete="organization" /><span class="form-text">.</span></span>
+          <span class="form-text">Reach me at</span>
+          <span class="glue"><input type="email" name="email" placeholder="email@yours.com" class="form-blank form-blank--email" required autocomplete="email" /><span class="form-text">.</span></span>
         </div>
 
         <div class="form-gist-row">
@@ -292,7 +291,7 @@
           <p class="package-note">One specific question, one direction. I read your brief beforehand and we cut straight to the call.</p>
         </div>
         <div class="package">
-          <div class="package-name">Working<br>session</div>
+          <div class="package-name">Working session</div>
           <div class="package-duration">60 min · recorded</div>
           <div class="package-fee">₹6,000</div>
           <p class="package-note">A proper session — context, options, decisions. I send a 2–3 paragraph follow-up the next day with what we landed on.</p>

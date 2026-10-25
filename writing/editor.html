@@ -1721,7 +1721,7 @@
     // Downloaded note uses relative ../styles.css (correct in /writing/). For a blob preview that path
     // can't resolve, so point at the live stylesheet + assets so the preview matches the published look.
     var html=buildNote()
-      .split('href="../styles.css?v=26"').join('href="https://harsharya.com/styles.css?v=26"')
+      .split('href="../styles.css?v=27"').join('href="https://harsharya.com/styles.css?v=27"')
       .split('href="../favicon.ico"').join('href="https://harsharya.com/favicon.ico"')
       .split('href="../assets/apple-touch-icon.png"').join('href="https://harsharya.com/assets/apple-touch-icon.png"');
     var blob=new Blob([html],{type:"text/html"}); var url=URL.createObjectURL(blob);
@@ -2404,7 +2404,7 @@
 '  <link rel="preload" href="../assets/fonts/bodoni-moda-latin-standard-italic.woff2" as="font" type="font/woff2" crossorigin>\n'+
 '  <link rel="preload" href="../assets/fonts/inter-latin-standard-normal.woff2" as="font" type="font/woff2" crossorigin>\n'+
 '  <link rel="preload" href="../assets/fonts/space-mono-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>\n'+
-'  <link rel="stylesheet" href="../styles.css?v=26" />\n'+
+'  <link rel="stylesheet" href="../styles.css?v=27" />\n'+
 '  <style>\n'+
 '    .post { padding: 56px var(--container-pad) 88px; max-width: calc(760px + 2 * var(--container-pad)); margin: 0 auto; }\n'+
 '    .post-back { display:inline-block; font-family:var(--font-mono); font-size:12px; letter-spacing:0.14em; text-transform:uppercase; background:var(--text); color:var(--bg); padding:6px 12px; border:2px solid var(--text); margin-bottom:36px; }\n'+

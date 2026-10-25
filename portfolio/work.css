@@ -214,6 +214,7 @@ body.work-page footer{ margin-top:auto; }
   .wk-hub{ grid-template-columns:1fr; }
   .wk-grid, .wk-grid--wide{ grid-template-columns:1fr; }
   .wk-lb__frame{ height:82vh; }
+  .pf-title{ line-height:1; } /* the "occasional" stamp was cutting into the line above on phones */
 }
 /* 360px phones: keeps "filmmaker FIRST." on one line, so the italic's tail hangs clear instead of crossing the caps */
 @media (max-width:374px){ .wk-h1{ font-size:48px; } }

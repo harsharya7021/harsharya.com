@@ -124,7 +124,7 @@ The five web fonts are self-hosted from `assets/fonts/` (see the top of `styles.
 
 ### Cache-busting
 
-Every page's `<link rel="stylesheet" href="styles.css?v=N">` carries a version number. When you change `styles.css`, bump `v` on every page that links it (grep for `styles.css?v=` to find them all). Currently at **v=26**.
+Every page's `<link rel="stylesheet" href="styles.css?v=N">` carries a version number. When you change `styles.css`, bump `v` on every page that links it (grep for `styles.css?v=` to find them all). Currently at **v=27**.
 
 ---
 

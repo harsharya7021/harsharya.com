@@ -139,7 +139,7 @@ function signupCard(host, opts){
          <input type="email" placeholder="you@email.com" autocomplete="email" aria-label="Email address" required />
          <button class="nlbtn" type="submit">${READY ? "Sign me up" : "Notify me"}</button>
        </form>
-       <div class="nlnote">${READY ? "" : "No mailing list yet — this opens an email to Harsh, who keeps the list by hand."}</div>
+       <div class="nlnote">${READY ? "" : "Opens an email to Harsh — he adds you by hand and sends each new note himself."}</div>
      </div>`;
   const form = host.querySelector("form"), input = host.querySelector("input"),
         btn = host.querySelector("button"), note = host.querySelector(".nlnote");

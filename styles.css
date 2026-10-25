@@ -2884,7 +2884,7 @@ footer .container {
 }
 .foot-left { justify-self: start; }
 .foot-socials { justify-self: center; display: flex; gap: 18px; }
-.foot-right { justify-self: end; }
+.foot-right { justify-self: end; text-wrap: balance; } /* two even lines at 1280–1500px instead of an orphaned "FAR." */
 .foot-email {
   color: var(--muted);
   text-decoration: none;
@@ -3416,7 +3416,7 @@ body[data-mode="warhol"] #about       .section-title em { transform: rotate(-2de
 body[data-mode="warhol"] #credentials .section-title em { transform: rotate(1deg); box-shadow: -3px 3px 0 var(--text); }
 body[data-mode="warhol"] #off         .section-title em { transform: rotate(-1.5deg); }
 body[data-mode="warhol"] #creative    .section-title em { transform: rotate(2deg);  box-shadow: -3px 3px 0 var(--text); }
-body[data-mode="warhol"] .contact-line em { transform: rotate(-1deg); padding: 2px 12px; }
+body[data-mode="warhol"] .contact-line em { transform: rotate(-1deg); padding: 2px 12px; margin: 0 8px 0 0; } /* air on both sides: the comma / ? after the stamp used to hide under its shadow on phones */
 body[data-mode="warhol"] .consult-title em { transform: rotate(2deg); box-shadow: -3px 3px 0 var(--text); }
 body[data-mode="warhol"] .stack-title em { transform: rotate(-1.5deg); }
 body[data-mode="warhol"] .page-title em { transform: rotate(1.5deg); box-shadow: -3px 3px 0 var(--text); }
@@ -4200,7 +4200,8 @@ body[data-mode="warhol"] #work .section-title em { transform: rotate(-1.5deg); }
 @media (max-width: 760px) {
   .wk-stats { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
   .wk-stat { min-width: 0; }
-  .wk-stat-num { overflow-wrap: anywhere; }
+  /* the longest figure (57·12·500+) sets the size: it must never break mid-number */
+  .wk-stat-num { font-size: min(38px, calc(12vw - 16px)); white-space: nowrap; }
   .wk-co { font-size: 19px; }
   .wk-detail ul { padding-left: 18px; }
 }

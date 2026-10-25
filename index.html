@@ -13,7 +13,7 @@
   <link rel="preload" href="assets/fonts/bodoni-moda-latin-standard-italic.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/inter-latin-standard-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="preload" href="assets/fonts/space-mono-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="styles.css?v=26">
+  <link rel="stylesheet" href="styles.css?v=27">
   <style id="warhol-fx">
   /* The cinematic (hero + "as featured in" + jail) is scroll-scrubbed and sits
      above the content, so a SMOOTH anchor jump would replay the whole charade
@@ -631,7 +631,7 @@
   <section id="about">
     <div class="container">
       <div class="section-label"><span>01 / About</span><span class="section-side">A LONG VERSION</span></div>
-      <h2 class="section-title">Started from a 300-sq-ft office. Now we're <em>here</em>.</h2>
+      <h2 class="section-title">Started from a <span class="glue">300-sq-ft</span> office. Now we're <em>here</em>.</h2>
       <div class="about-grid">
         <div class="about-prose">
           <p><a class="inline-link" href="https://harsharya7021.github.io/ninety-eight-web/" target="_blank" rel="noopener"><strong>98</strong></a> began on <strong>1st January 2020</strong> — midnight, sober, talking my way into a friend's father's car while everyone else partied at the nightclub he ran. The club was called <strong>Esquire</strong>. They became the first social-media-and-branding client. The name &ldquo;98&rdquo; came later, off a grey wall in some city I was shooting in with a YouTuber friend; somebody had spray-painted &ldquo;98&rdquo; in white<sup class="fn-ref" data-fn="spraywall" data-fn-num="12" data-fn-mount="fn-mount-photo" role="button" tabindex="0" aria-expanded="false" aria-label="Footnote 12 — the grey wall exhibit">12</sup>. The first proper client was <strong>Pratima Singh</strong><sup class="fn-ref" data-fn="pratima" data-fn-num="6" data-fn-mount="fn-mount-about-1" role="button" tabindex="0" aria-expanded="false" aria-label="Footnote 6 — Pratima Singh">6</sup> — former India junior basketball captain, the sports officer at <strong>Bennett</strong>, the one who set up the introduction to her husband, <strong>Ishant Sharma</strong><sup class="fn-ref" data-fn="ishant" data-fn-num="7" data-fn-mount="fn-mount-about-1" role="button" tabindex="0" aria-expanded="false" aria-label="Footnote 7 — Ishant Sharma">7</sup>. First pitch I ever made her was on <strong>26 February 2020</strong>.</p>
@@ -647,7 +647,7 @@
           <p>Got the <strong>ISB</strong> admit in February 2022 — same month I signed Ishant exclusive. Deferred twice. The first time because COVID; the second because the agency was at peak and I knew I couldn't run a 55-client roster and a one-year PGP at the same time. I had already rejected an <strong>NYU</strong> admit straight out of college. By mid-2023, with the deal flow finally running, I wrapped 98 deliberately, took a three-month trip across 11 cities, and walked into <strong>ISB Hyderabad</strong> in April 2024.</p>
           <p>The year there put structure under the practice. The year after, I operated across enterprise GTM and founder's-office work.</p>
           <p>Now I'm restarting Ninety-Eight as <strong>2.0</strong> — a creative-and-strategy practice for founders who need a thinking partner across consulting, marketing, advertising, financial modelling and market research. Not operational consulting. Business partners for hire who've built and scaled the thing themselves.</p>
-          <p>On the side: <a class="inline-link" href="#" data-pending><strong>GenZ Economics</strong></a>, a blog written with Professor Prasanna Tantri at ISB on what India's transition decade looks like through a Gen-Z lens. A documentary on influencer culture in development. A founder playbook in progress, for people my age making sense of less-privileged starts.</p>
+          <p>On the side: <a class="inline-link" data-pending title="Coming soon"><strong>GenZ Economics</strong></a>, a blog written with Professor Prasanna Tantri at ISB on what India's transition decade looks like through a Gen-Z lens. A documentary on influencer culture in development. A founder playbook in progress, for people my age making sense of less-privileged starts.</p>
           <p>Off the clock you'll find me on a golf course (12 handicap, swing still inconsistent), in a notebook designing something, or two books deep — one history, one operator memoir. I keep a watchlist of films from places most people skip past on the festival map. Born in Ratlam (population ~270K, on the Mumbai–Delhi line, on no one's map) and still mildly surprised when people don't know it.</p>
         </div>
         <div class="about-photo">
@@ -1955,11 +1955,17 @@
       /* The badges bleed up to ~88px past the box edge; scale so the box PLUS that
          bleed fits the viewport (718 = 541 box + 2x widest bleed), then size the
          stage to the scaled box so it stays centered and the card never clips. */
-      var s=Math.min(1, (window.innerWidth - 28) / 718);
+      /* Under 480px the two cards stop sharing one centred budget: the ISB badge
+         hangs off the left edge and the BuzzCard off the right, so each stage is
+         pushed to the opposite side and only ONE bleed (629 = 541 + 88) has to fit.
+         That buys the card copy ~14% more size on a phone, where it was ~7px. */
+      var vw=window.innerWidth, narrow=vw<480;
+      var s=Math.min(1, (vw - 28) / (narrow ? 629 : 718));
       for(var i=0;i<stages.length;i++){ var st=stages[i], box=st.querySelector('.lyd-box'); if(!box) continue;
         box.style.transform = s<1 ? 'scale('+s+')' : '';
         st.style.width = s<1 ? (541*s)+'px' : '';
         st.style.height = (470*s)+'px';
+        st.style.margin = narrow ? (box.classList.contains('lyd-box--isb') ? '0 0 0 auto' : '0 auto 0 0') : '';
       }
     }
     window.__fitLyd=fit; fit();
