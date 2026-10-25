@@ -1720,7 +1720,7 @@
     // Downloaded note uses relative ../styles.css (correct in /writing/). For a blob preview that path
     // can't resolve, so point at the live stylesheet + assets so the preview matches the published look.
     var html=buildNote()
-      .split('href="../styles.css?v=23"').join('href="https://harsharya.com/styles.css?v=23"')
+      .split('href="../styles.css?v=24"').join('href="https://harsharya.com/styles.css?v=24"')
       .split('href="../favicon.ico"').join('href="https://harsharya.com/favicon.ico"')
       .split('href="../assets/apple-touch-icon.png"').join('href="https://harsharya.com/assets/apple-touch-icon.png"');
     var blob=new Blob([html],{type:"text/html"}); var url=URL.createObjectURL(blob);
@@ -2401,9 +2401,9 @@
 '  <link rel="preload" href="../assets/fonts/bodoni-moda-latin-standard-italic.woff2" as="font" type="font/woff2" crossorigin>\n'+
 '  <link rel="preload" href="../assets/fonts/inter-latin-standard-normal.woff2" as="font" type="font/woff2" crossorigin>\n'+
 '  <link rel="preload" href="../assets/fonts/space-mono-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>\n'+
-'  <link rel="stylesheet" href="../styles.css?v=23" />\n'+
+'  <link rel="stylesheet" href="../styles.css?v=24" />\n'+
 '  <style>\n'+
-'    .post { padding: 56px 0 88px; max-width: 760px; margin: 0 auto; }\n'+
+'    .post { padding: 56px var(--container-pad) 88px; max-width: calc(760px + 2 * var(--container-pad)); margin: 0 auto; }\n'+
 '    .post-back { display:inline-block; font-family:var(--font-mono); font-size:12px; letter-spacing:0.14em; text-transform:uppercase; background:var(--text); color:var(--bg); padding:6px 12px; border:2px solid var(--text); margin-bottom:36px; }\n'+
 '    .post-back:hover { background:var(--accent); color:var(--text); }\n'+
 '    .post-meta { display:flex; gap:12px; align-items:center; flex-wrap:wrap; font-family:var(--font-mono); font-size:11px; letter-spacing:0.14em; color:var(--muted); text-transform:uppercase; margin-bottom:24px; }\n'+
@@ -2435,7 +2435,7 @@
 '    .post-footer { margin-top:72px; padding-top:32px; border-top:2px solid var(--text); display:flex; justify-content:space-between; gap:16px; flex-wrap:wrap; font-family:var(--font-mono); font-size:12px; letter-spacing:0.12em; text-transform:uppercase; }\n'+
 '    .post-footer a { color:var(--text); border-bottom:2px solid var(--text); padding-bottom:2px; font-weight:700; }\n'+
 '    .post-footer a:hover { color:var(--accent); border-bottom-color:var(--accent); }\n'+
-'    @media (max-width:720px){ .post{padding:32px 0 64px;} .post-title{line-height:1.02;letter-spacing:0;} .post-body{font-size:16px;} .post-body h2{font-size:27px;margin-top:44px;line-height:1.18;letter-spacing:0.02em;} .post-body .pull{font-size:22px;} }\n'+
+'    @media (max-width:720px){ .post{padding:32px var(--container-pad) 64px;} .post-title{line-height:1.02;letter-spacing:0;} .post-body{font-size:16px;} .post-body h2{font-size:27px;margin-top:44px;line-height:1.18;letter-spacing:0.02em;} .post-body .pull{font-size:22px;} }\n'+
 '    .listen{ display:flex; align-items:center; gap:14px; border:2px solid var(--text); padding:12px 14px; margin:0 0 48px; max-width:600px; background:var(--bg); }\n'+
 '    .listen-play{ flex:none; width:58px; height:58px; border:2px solid var(--text); background:var(--accent); color:var(--text); cursor:pointer; display:flex; align-items:center; justify-content:center; transition:background .15s, color .15s; }\n'+
 '    .listen-play:hover{ background:var(--text); color:var(--bg); }\n'+
@@ -2468,7 +2468,7 @@
 '    .sn-note.is-open { display:block; float:none; width:auto; margin:14px 0; padding:12px 14px; background:color-mix(in srgb, var(--accent) 10%, transparent); border-left:3px solid var(--accent-2); }\n'+
 '    /* wide: notes live permanently in the right margin, no clicking */\n'+
 '    @media (min-width:1200px){\n'+
-'      .post.has-sidenotes { max-width:1100px; }\n'+
+'      .post.has-sidenotes { max-width:calc(1100px + 2 * var(--container-pad)); }\n'+
 '      .post.has-sidenotes .post-header, .post.has-sidenotes .listen, .post.has-sidenotes .post-footer, .post.has-sidenotes .post-body > * { max-width:760px; }\n'+
 '      .post.has-sidenotes .post-body figure.align-wide { max-width:none; width:100%; margin-left:0; }\n'+
 '      /* the note floats OUTSIDE the 760px text column — the negative margin is what keeps\n'+
