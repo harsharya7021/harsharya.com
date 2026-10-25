@@ -2994,7 +2994,25 @@ body[data-mode="warhol"] .marquee-track span { font-family: var(--font-display);
 
 body[data-mode="warhol"] .nav-inner { padding: 14px 0; }
 body[data-mode="warhol"] .logo { font-family: var(--font-display); font-size: 26px; letter-spacing: 0.02em; }
+/* Subpages carry the same bracketed footnote mark the home nameplate wears
+   ("Harsh [1]") instead of a plain grey superscript, so the brand mark reads
+   identically on every page. The home's mark is the interactive .fn-ref
+   inside .logo-flip; this only matches a sup that is a direct child. */
+body[data-mode="warhol"] .logo > sup {
+  font-family: var(--font-mono); font-weight: 700; font-size: 0.55em;
+  letter-spacing: 0.03em; color: var(--accent); margin-left: 3px;
+}
+body[data-mode="warhol"] .logo > sup::before,
+body[data-mode="warhol"] .logo > sup::after { color: color-mix(in oklab, currentColor 55%, transparent); font-weight: 500; }
+body[data-mode="warhol"] .logo > sup::before { content: "["; margin-right: 1px; }
+body[data-mode="warhol"] .logo > sup::after  { content: "]"; margin-left: 1px; }
 body[data-mode="warhol"] .nav-links a { font-weight: 600; color: var(--text); }
+/* Touch screens: the 10px links are 16px tall — far under the 44px tap
+   target. Pad the hit area and pull the box back with a negative margin so
+   the bar keeps its height and the links keep their position. */
+@media (hover: none) and (pointer: coarse) {
+  body[data-mode="warhol"] .nav-links a { padding: 14px 0; margin: -14px 0; }
+}
 body[data-mode="warhol"] .nav-links a:hover { color: var(--accent); }
 
 body[data-mode="warhol"] .hero-h1 {
@@ -3831,7 +3849,7 @@ body[data-mode="warhol"] .form-gist::placeholder {
 
 /* ── Movement 1 — pinned hero ── */
 @media (min-width: 821px) {
-  .cine { position: relative; height: 880vh; }
+  .cine { position: relative; height: 700vh; }   /* was 880vh — see remap() in index.html's frame1 */
   .cine-pin {
     position: sticky; top: 0;
     height: 100vh;
@@ -4174,7 +4192,9 @@ body[data-mode="warhol"] .form-gist::placeholder {
 .wk-detail li { font-size: 15px; line-height: 1.55; margin-bottom: 9px; max-width: 74ch; }
 body[data-mode="warhol"] #work .section-title em { transform: rotate(-1.5deg); }
 @media (max-width: 760px) {
-  .wk-stats { grid-template-columns: 1fr 1fr; }
+  .wk-stats { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .wk-stat { min-width: 0; }
+  .wk-stat-num { overflow-wrap: anywhere; }
   .wk-co { font-size: 19px; }
   .wk-detail ul { padding-left: 18px; }
 }
@@ -4426,6 +4446,16 @@ body[data-mode="warhol"] .nav-inner {
 }
 @media (max-width: 380px) {
   body[data-mode="warhol"] .nav-inner { padding-left: 12px; padding-right: 12px; }
+}
+/* 320px-class phones (iPhone SE 1st gen, small Androids): five links at
+   10px no longer fit beside the nameplate; shrink the logo a touch and
+   let the link row sit a hair tighter so nothing spills past the edge. */
+@media (max-width: 345px) {
+  body[data-mode="warhol"] { --type-h1-min: 64px; }   /* "BUSINESSES," fits the column */
+  body[data-mode="warhol"] .logo { font-size: 22px; }
+  .nav-links { gap: 5px; }
+  .nav-links a,
+  body[data-mode="warhol"] .nav-links a { font-size: 9.5px; letter-spacing: 0; }
 }
 
 /* ─── STAGE — the homepage's speaking section (Oct 2026) ─────────────────

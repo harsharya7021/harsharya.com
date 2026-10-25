@@ -1451,8 +1451,15 @@
         },260);
       }
     }
+    /* PACING — the first third of the pin used to move nothing on stage: the
+       roles only began at p=0.33, i.e. ~2.7 screens of scrolling with only the
+       nameplate flipping in the corner. The pin is now 700vh (was 880vh) and
+       the raw progress is remapped so the old 0–0.33 plays out in the first
+       10% of scroll and every beat after it keeps its original scroll
+       distance (±3%). All the thresholds below are unchanged. */
+    function remap(raw){ return raw<0.10 ? raw*3.3 : 0.33+(raw-0.10)*(0.67/0.90); }
     function frame1(){
-      var p=prog_of(cine);
+      var p=remap(prog_of(cine));
       goState( p<0.03 ? 0 : p<0.10 ? 1 : p<0.17 ? 2 : p<0.25 ? 3 : 4 );
       roles.forEach(function(el,i){
         var s=0.33+i*0.070, t=ease(range(p,s,s+0.10));
