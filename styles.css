@@ -2942,6 +2942,8 @@ body[data-mode="warhol"] .foot-socials a:hover { color: var(--accent); }
   box-shadow: 2px 2px 0 var(--text);
   transform: translate(3px, 3px);
 }
+/* home page: steps aside while the BuzzCard hangs in its corner (see index.html) */
+#back-to-top.is-visible.is-yielding { opacity: 0; pointer-events: none; transform: translateY(12px); }
 #back-to-top .b2t-arrow {
   font-family: var(--font-display);
   font-size: 16px;
