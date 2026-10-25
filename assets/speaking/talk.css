@@ -4,7 +4,7 @@
    page wears its talk's colour as --mark.
    ─────────────────────────────────────────────────────────── */
 .tp main { overflow-x: clip; }
-.tp :focus-visible { outline: 3px solid var(--accent-2); outline-offset: 3px; }
+/* keyboard focus: the site-wide ink ring (styles.css) */
 .tp section { padding: 80px 0; }
 .tp .section-title { margin-bottom: 28px; }
 

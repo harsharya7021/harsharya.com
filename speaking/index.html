@@ -9,10 +9,10 @@
   <meta name="robots" content="index, follow, max-image-preview:large, max-snippet:-1" />
   <link rel="canonical" href="https://harsharya.com/speaking/" />
   <link rel="alternate" type="text/plain" href="/llms-full.txt" title="Speaker profile as plain text" />
-
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo+Black&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,700;0,6..96,900;1,6..96,400;1,6..96,500&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400;1,9..144,500&family=Inter:wght@300;400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="preload" href="/assets/fonts/anton-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/fonts/bodoni-moda-latin-standard-italic.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/fonts/inter-latin-standard-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/assets/fonts/space-mono-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="/styles.css?v=23" />
 
   <link rel="icon" href="/favicon.ico" sizes="48x48">
@@ -482,7 +482,7 @@
        loud thing is the four-plate poster in the hero.
        ─────────────────────────────────────────────────────────── */
     .spk main { overflow-x: clip; }
-    .spk :focus-visible { outline: 3px solid var(--accent-2); outline-offset: 3px; }
+    /* keyboard focus: the site-wide ink ring (styles.css) */
     .spk section { padding: 80px 0; }
     .spk .section-title { margin-bottom: 28px; }
     .spk-lead { max-width: 62ch; font-size: 18px; line-height: 1.6; margin: 0 0 40px; }
@@ -932,6 +932,7 @@
   </style>
 </head>
 <body data-mode="warhol" data-density="normal" class="spk">
+  <a class="skip-link" href="#main">Skip to content</a>
 
   <nav class="nav" id="nav">
     <div class="container nav-inner">
@@ -948,7 +949,7 @@
     </div>
   </nav>
 
-  <main>
+  <main id="main">
 
     <!-- ─── HERO ─────────────────────────────────────────── -->
     <header class="spk-hero">

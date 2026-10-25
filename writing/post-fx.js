@@ -75,6 +75,10 @@
     linesClass: 'pl-line',
     wordsClass: 'pl-word',
     autoSplit: true,
+    /* SplitText's default puts an aria-label on the <p>, which ARIA prohibits
+       on a paragraph; the split words are plain text, so screen readers can
+       just read them. */
+    aria: 'none',
     onSplit: function (self) {
       var tl = gsap.timeline();
       var colWidth = lede.clientWidth;

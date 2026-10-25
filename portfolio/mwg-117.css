@@ -3,7 +3,7 @@
    '* {…}' normalize and its 'body {…}' rule are scoped to .mwg_effect117.
    Below that, byte-for-byte the template except where marked 'site theme',
    plus the site edits at the end (each one asked for). */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@500;800&display=swap');
+/* Inter 500/800 come from the site's self-hosted variable Inter (styles.css); the template's Google Fonts @import is dropped. */
 
 /* NORMALIZE */
 .mwg_effect117, .mwg_effect117 * {

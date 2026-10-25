@@ -212,8 +212,11 @@
 
     var isTouch = window.matchMedia('(hover:none)').matches;
     /* file:// taints canvas textures in Chrome — DOM fallback there */
+    /* prefers-reduced-motion: the liquid WebGL layer is pure motion, so those
+       readers get the plain DOM strip (the same one small screens get) */
     var useGL = GL_OK && !opts.forceDom && location.protocol !== 'file:' &&
-                window.matchMedia('(min-width:821px)').matches;
+                window.matchMedia('(min-width:821px)').matches &&
+                !window.matchMedia('(prefers-reduced-motion:reduce)').matches;
 
     /* ----- build DOM ----- */
     var stage = document.createElement('div');

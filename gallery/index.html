@@ -5,9 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Gallery — Harsh Kumar Arya</title>
   <meta name="description" content="Photographic series from places I keep going back to. Film and digital, by Harsh Kumar Arya." />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo+Black&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,700;0,6..96,900;1,6..96,400;1,6..96,500&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400;1,9..144,500&family=Inter:wght@300;400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="preload" href="../assets/fonts/anton-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../assets/fonts/bodoni-moda-latin-standard-italic.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../assets/fonts/inter-latin-standard-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../assets/fonts/space-mono-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="../styles.css?v=23" />
   <link rel="stylesheet" href="series.css?v=12" />
   <link rel="stylesheet" href="globe.css?v=3" />
@@ -33,6 +34,7 @@
   <meta name="twitter:image" content="https://harsharya.com/assets/portrait.jpg">
 </head>
 <body data-mode="warhol" data-density="normal" class="gallery-page">
+  <a class="skip-link" href="#main">Skip to content</a>
 
   <nav class="nav" id="nav">
     <div class="container nav-inner">
@@ -58,12 +60,12 @@
   <!-- photos on the map — built by globe.js; hides itself without WebGL -->
   <section class="gm-hero" id="gm" aria-label="Photo series on a globe"></section>
 
-  <main class="gx-grid">
+  <main id="main" class="gx-grid">
 
     <a class="gx-card" href="kerala.html">
       <div class="gx-card-img">
         <span class="gx-card-no">01</span>
-        <img width="1012" height="1800" src="../assets/life/kerala/varkala-01.jpg" alt="Kerala series — Varkala, the cliffside" loading="lazy" />
+        <img width="405" height="720" src="../assets/life/kerala/varkala-01-cover.webp" alt="Kerala series — Varkala, the cliffside" loading="lazy" />
       </div>
       <div class="gx-card-meta"><h3>Kerala</h3><p>In progress · 06</p></div>
     </a>
@@ -71,7 +73,7 @@
     <a class="gx-card" href="jodhpur.html">
       <div class="gx-card-img">
         <span class="gx-card-no">02</span>
-        <img width="1012" height="1800" src="../assets/life/jodhpur/jodhpur-01.jpg" alt="Jodhpur series — the blue city below Mehrangarh" loading="lazy" />
+        <img width="405" height="720" src="../assets/life/jodhpur/jodhpur-01-cover.webp" alt="Jodhpur series — the blue city below Mehrangarh" loading="lazy" />
       </div>
       <div class="gx-card-meta"><h3>Jodhpur</h3><p>Rajasthan · 07</p></div>
     </a>
@@ -79,7 +81,7 @@
     <a class="gx-card" href="shimla.html">
       <div class="gx-card-img">
         <span class="gx-card-no">03</span>
-        <img width="1800" height="1305" src="../assets/life/shimla/shimla-01.jpg" alt="Shimla series — winter on the ridge" loading="lazy" />
+        <img width="720" height="522" src="../assets/life/shimla/shimla-01-cover.webp" alt="Shimla series — winter on the ridge" loading="lazy" />
       </div>
       <div class="gx-card-meta"><h3>Shimla</h3><p>Himachal · 10</p></div>
     </a>
@@ -87,7 +89,7 @@
     <a class="gx-card" href="malaysia.html">
       <div class="gx-card-img">
         <span class="gx-card-no">04</span>
-        <img width="1012" height="1800" src="../assets/life/malaysia/malaysia-01.jpg" alt="Malaysia series — three frames from Southeast Asia" loading="lazy" />
+        <img width="405" height="720" src="../assets/life/malaysia/malaysia-01-cover.webp" alt="Malaysia series — three frames from Southeast Asia" loading="lazy" />
       </div>
       <div class="gx-card-meta"><h3>Malaysia</h3><p>SE Asia · 03</p></div>
     </a>
@@ -95,7 +97,7 @@
     <a class="gx-card" href="lakshadweep.html">
       <div class="gx-card-img">
         <span class="gx-card-no">05</span>
-        <img width="1012" height="1800" src="../assets/life/lakshadweep/lakshadweep-01.jpg" alt="Lakshadweep series — casuarina shade on the beach" loading="lazy" />
+        <img width="405" height="720" src="../assets/life/lakshadweep/lakshadweep-01-cover.webp" alt="Lakshadweep series — casuarina shade on the beach" loading="lazy" />
       </div>
       <div class="gx-card-meta"><h3>Lakshadweep</h3><p>Arabian Sea · 06</p></div>
     </a>
@@ -146,8 +148,8 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.13.0/gsap.min.js"></script>
   <script src="../assets/mapfx/mapfx.js?v=2"></script>
   <script src="globe-data.js?v=1"></script>
-  <script src="globe.js?v=4"></script>
-  <script src="series.js?v=12"></script>
+  <script src="globe.js?v=5"></script>
+  <script src="series.js?v=13"></script>
   <script src="https://cdn.jsdelivr.net/npm/gsap@3.13.0/dist/InertiaPlugin.min.js"></script>
   <script src="../assets/inertia-grid.js?v=1"></script>
   <script defer src="../assets/site.js?v=1"></script>

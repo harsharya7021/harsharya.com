@@ -5,9 +5,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Kochi — Gallery — Harsh Kumar Arya</title>
   <meta name="description" content="Kochi, Kerala — a 35mm film series by Harsh Kumar Arya. Heritage doorways, fishing boats, palm-shadowed afternoons." />
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Anton&family=Archivo+Black&family=Bodoni+Moda:ital,opsz,wght@0,6..96,400;0,6..96,500;0,6..96,700;0,6..96,900;1,6..96,400;1,6..96,500&family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,500;1,9..144,400;1,9..144,500&family=Inter:wght@300;400;500;600;700&family=Space+Mono:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet">
+  <link rel="preload" href="../assets/fonts/anton-latin-400-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../assets/fonts/bodoni-moda-latin-standard-italic.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../assets/fonts/inter-latin-standard-normal.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="../assets/fonts/space-mono-latin-700-normal.woff2" as="font" type="font/woff2" crossorigin>
   <link rel="stylesheet" href="../styles.css?v=23" />
   <style>
     .series-page header { padding: 56px 0 24px; max-width: 900px; margin: 0 auto; }
@@ -181,6 +182,7 @@
   <meta name="twitter:image" content="https://harsharya.com/assets/portrait.jpg">
 </head>
 <body data-mode="warhol" data-density="normal" class="series-page">
+  <a class="skip-link" href="#main">Skip to content</a>
 
   <nav class="nav" id="nav">
     <div class="container nav-inner">
@@ -204,7 +206,7 @@
     <p class="series-intro">A few rolls shot in Fort Kochi over a long weekend — heritage doorways, fishing boats hauled up at dusk, the green of a window framed by tamarind, a Kathakali performer holding a single beat under a stage light. Sequenced the way I remember the trip, not the way it happened.</p>
   </header>
 
-  <main class="kochi-viewer">
+  <main id="main" class="kochi-viewer">
     <div class="viewer-stage" id="viewer-stage">
       <img width="1076" height="1600" src="../assets/creative/01.jpg" alt="Heritage doorway opening to fishing boats at dusk, Fort Kochi" class="active" />
       <img width="1600" height="900" src="../assets/creative/03.jpg" alt="Heritage building with palm tree, bright daylight" />

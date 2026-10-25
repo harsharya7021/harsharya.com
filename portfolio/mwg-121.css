@@ -6,7 +6,7 @@
    the end: one rule from Lenis's own required CSS, one that keeps the site's
    home-page '.hero' rule out of the template's hero, and the 98 scroll cue
    (see there). */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@500;800&display=swap');
+/* Inter 500/800 come from the site's self-hosted variable Inter (styles.css); the template's Google Fonts @import is dropped. */
 
 /* NORMALIZE */
 .mwg_effect121, .mwg_effect121 * {

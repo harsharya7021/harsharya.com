@@ -26,15 +26,15 @@
     {
       id: 'india', name: 'India', lat: 22.6, lon: 79.3,
       states: [
-        { name: 'Himachal',  href: 'shimla.html',   set: 'shimla',   lat: 31.10, lon: 77.17, count: 10, cover: '../assets/life/shimla/shimla-01.jpg' },
-        { name: 'Rajasthan', href: 'jodhpur.html',  set: 'jodhpur',  lat: 26.24, lon: 73.02, count: 7,  cover: '../assets/life/jodhpur/jodhpur-01.jpg' },
-        { name: 'Kerala',    href: 'kerala.html',   set: 'kerala',   lat: 8.74,  lon: 76.72, count: 6,  cover: '../assets/life/kerala/varkala-01.jpg' },
-        { name: 'Lakshadweep', href: 'lakshadweep.html', set: 'lakshadweep', lat: 10.5593, lon: 72.1925, count: 6, cover: '../assets/life/lakshadweep/lakshadweep-01.jpg' }
+        { name: 'Himachal',  href: 'shimla.html',   set: 'shimla',   lat: 31.10, lon: 77.17, count: 10, cover: '../assets/life/shimla/shimla-01-cover.webp' },
+        { name: 'Rajasthan', href: 'jodhpur.html',  set: 'jodhpur',  lat: 26.24, lon: 73.02, count: 7,  cover: '../assets/life/jodhpur/jodhpur-01-cover.webp' },
+        { name: 'Kerala',    href: 'kerala.html',   set: 'kerala',   lat: 8.74,  lon: 76.72, count: 6,  cover: '../assets/life/kerala/varkala-01-cover.webp' },
+        { name: 'Lakshadweep', href: 'lakshadweep.html', set: 'lakshadweep', lat: 10.5593, lon: 72.1925, count: 6, cover: '../assets/life/lakshadweep/lakshadweep-01-cover.webp' }
       ]
     },
     {
       id: 'malaysia', name: 'Malaysia', lat: 4.2, lon: 102.0,
-      href: 'malaysia.html', set: 'malaysia', count: 3, cover: '../assets/life/malaysia/malaysia-01.jpg',
+      href: 'malaysia.html', set: 'malaysia', count: 3, cover: '../assets/life/malaysia/malaysia-01-cover.webp',
       states: []
     }
   ];
@@ -288,8 +288,16 @@
   window.addEventListener('resize', resize);
 
   var vTmp = new THREE.Vector3();
+  /* Only render while the globe is actually in view: with the page scrolled to
+     the series list or parked in another tab there is nothing to see, and a
+     WebGL frame every 16 ms is the single most expensive thing on this page. */
+  var onScreen = true;
+  if ('IntersectionObserver' in window) {
+    new IntersectionObserver(function (es) { onScreen = es.some(function (e) { return e.isIntersecting; }); }, { rootMargin: '80px 0px' }).observe(host);
+  }
   function tick(now) {
     requestAnimationFrame(tick);
+    if (!onScreen && !dragging && !flying) return;
 
     if (!dragging && !flying) {
       st.yaw += velY; velY *= 0.94;

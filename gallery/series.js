@@ -68,7 +68,7 @@
         '<span class="gnav__ico">' + ICON.back + '</span><span class="gnav__lbl">All series</span></a>' +
       '<span class="gnav__sep"></span>' +
       '<button class="gnav__arrow gnav__prev" type="button" aria-label="Previous series">' + ICON.prev + '</button>' +
-      '<button class="gnav__cat" id="gnavCat" type="button" aria-haspopup="true" aria-expanded="false">' +
+      '<button class="gnav__cat" id="gnavCat" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="gnavMenu">' +
         '<span class="gnav__thumb" style="background-image:url(\'' + s.cover + '\')"></span>' +
         '<span class="gnav__cat-text"><span class="gnav__kicker">Series</span>' +
         '<span class="gnav__name">' + s.name + '<span class="gnav__chev">▲</span></span></span></button>' +
@@ -77,17 +77,17 @@
       '<button class="gnav__btn gnav__layout" id="gnavLayout" type="button" aria-label="Toggle scroll or grid layout">' +
         '<span class="gnav__ico gnav__ico--layout">' + ICON.grid + ICON.scroll + '</span>' +
         '<span class="gnav__lbl gnav__lbl--layout">Grid</span></button>' +
-      '<div class="gnav__menu" id="gnavMenu" role="menu">' + menuItems() + '</div>';
+      '<div class="gnav__menu" id="gnavMenu" role="group" aria-label="Series">' + menuItems() + '</div>';
   } else {
     /* index */
     nav.innerHTML =
       '<a class="gnav__btn gnav__back" href="../life/index.html" aria-label="Back to Life">' +
         '<span class="gnav__ico">' + ICON.back + '</span><span class="gnav__lbl">Life</span></a>' +
       '<span class="gnav__sep"></span>' +
-      '<button class="gnav__cat" id="gnavCat" type="button" aria-haspopup="true" aria-expanded="false">' +
+      '<button class="gnav__cat" id="gnavCat" type="button" aria-haspopup="true" aria-expanded="false" aria-controls="gnavMenu">' +
         '<span class="gnav__cat-text"><span class="gnav__kicker">Gallery</span>' +
         '<span class="gnav__name">All series<span class="gnav__chev">▲</span></span></span></button>' +
-      '<div class="gnav__menu" id="gnavMenu" role="menu">' + menuItems() + '</div>';
+      '<div class="gnav__menu" id="gnavMenu" role="group" aria-label="Series">' + menuItems() + '</div>';
   }
 
   var oldNav = document.querySelector('.gfn');
